@@ -3,24 +3,21 @@
 import json
 import logging
 from enum import Enum
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from spoolman.database import filament as db_filament
-from spoolman.database import setting as db_setting
-from spoolman.database import spool as db_spool
-from spoolman.database import vendor as db_vendor
 from spoolman.exceptions import ItemNotFoundError
 from spoolman.settings import parse_setting
+
+if TYPE_CHECKING:
+    from spoolman.storage.store import JsonStore
 
 logger = logging.getLogger(__name__)
 
 
 class EntityType(Enum):
-    vendor = "vendor"
     filament = "filament"
     spool = "spool"
 
@@ -112,7 +109,6 @@ def validate_extra_field_value(field: ExtraFieldParameters, value: str) -> None:
 
 def validate_extra_field(field: ExtraFieldParameters) -> None:
     """Validate an extra field."""
-    # Validate choices exist if field type is choice
     if field.field_type == ExtraFieldType.choice:
         if field.choices is None:
             raise ValueError("Choices must be set for field type choice.")
@@ -124,7 +120,6 @@ def validate_extra_field(field: ExtraFieldParameters) -> None:
         if field.multi_choice is not None:
             raise ValueError("Multi choice must not be set for field type other than choice.")
 
-    # Validate default value data type
     if field.default_value is not None:
         try:
             validate_extra_field_value(field, field.default_value)
@@ -145,19 +140,17 @@ def validate_extra_field_dict(all_fields: list[ExtraField], fields_input: dict[s
             raise ValueError(f"Invalid extra field for key {key}: {e!s}") from None
 
 
-extra_field_cache = {}
+extra_field_cache: dict = {}
 
 
-async def get_extra_fields(db: AsyncSession, entity_type: EntityType) -> list[ExtraField]:
+def get_extra_fields(store: "JsonStore", entity_type: EntityType) -> list[ExtraField]:
     """Get all extra fields for a specific entity type."""
     if entity_type in extra_field_cache:
         return extra_field_cache[entity_type]
 
     setting_def = parse_setting(f"extra_fields_{entity_type.name}")
-    try:
-        setting = await db_setting.get(db, setting_def)
-        setting_value = setting.value
-    except ItemNotFoundError:
+    setting_value = store.get_setting(setting_def.key)
+    if setting_value is None:
         setting_value = setting_def.default
 
     setting_array = json.loads(setting_value)
@@ -165,28 +158,24 @@ async def get_extra_fields(db: AsyncSession, entity_type: EntityType) -> list[Ex
         logger.warning("Setting %s is not a list, using default.", setting_def.key)
         setting_array = []
 
-    fields = [ExtraField.parse_obj(obj) for obj in setting_array]
+    fields = [ExtraField.model_validate(obj) for obj in setting_array]
     extra_field_cache[entity_type] = fields
     return fields
 
 
-async def add_or_update_extra_field(db: AsyncSession, entity_type: EntityType, extra_field: ExtraField) -> None:
+def add_or_update_extra_field(store: "JsonStore", entity_type: EntityType, extra_field: ExtraField) -> None:
     """Add or update an extra field for a specific entity type."""
     validate_extra_field(extra_field)
 
-    extra_fields = await get_extra_fields(db, entity_type)
+    extra_fields = get_extra_fields(store, entity_type)
 
-    # If the field already exists, verify that we don't do anything that would break existing data
     existing_field = next((field for field in extra_fields if field.key == extra_field.key), None)
     if existing_field is not None:
         if existing_field.field_type != extra_field.field_type:
             raise ValueError("Field type cannot be changed.")
         if extra_field.field_type == ExtraFieldType.choice:
-            # Can't change multi choice since that would break existing data
             if existing_field.multi_choice != extra_field.multi_choice:
                 raise ValueError("Multi choice cannot be changed.")
-
-            # Verify that we have only added new choices, not removed any
             if (
                 existing_field.choices is not None
                 and extra_field.choices is not None
@@ -198,46 +187,40 @@ async def add_or_update_extra_field(db: AsyncSession, entity_type: EntityType, e
     extra_fields.append(extra_field)
 
     setting_def = parse_setting(f"extra_fields_{entity_type.name}")
-    await db_setting.update(db=db, definition=setting_def, value=json.dumps(jsonable_encoder(extra_fields)))
+    store.set_setting(setting_def.key, json.dumps(jsonable_encoder(extra_fields)))
 
-    # Update cache
     extra_field_cache[entity_type] = extra_fields
 
     logger.info("Added/updated extra field %s for entity type %s.", extra_field.key, entity_type.name)
 
 
-async def delete_extra_field(db: AsyncSession, entity_type: EntityType, key: str) -> None:
+def delete_extra_field(store: "JsonStore", entity_type: EntityType, key: str) -> None:
     """Delete an extra field for a specific entity type."""
-    extra_fields = await get_extra_fields(db, entity_type)
+    extra_fields = get_extra_fields(store, entity_type)
 
-    # Check if the field exists
     if not any(field.key == key for field in extra_fields):
         raise ItemNotFoundError(f"Extra field with key {key} does not exist.")
 
     extra_fields = [field for field in extra_fields if field.key != key]
 
     setting_def = parse_setting(f"extra_fields_{entity_type.name}")
-    await db_setting.update(db=db, definition=setting_def, value=json.dumps(jsonable_encoder(extra_fields)))
+    store.set_setting(setting_def.key, json.dumps(jsonable_encoder(extra_fields)))
 
-    # Update cache
     extra_field_cache[entity_type] = extra_fields
 
-    # Delete the extra field for all entities
-    if entity_type == EntityType.vendor:
-        await db_vendor.clear_extra_field(db, key)
-    elif entity_type == EntityType.filament:
-        await db_filament.clear_extra_field(db, key)
+    if entity_type == EntityType.filament:
+        store.clear_extra_field_filaments(key)
     elif entity_type == EntityType.spool:
-        await db_spool.clear_extra_field(db, key)
+        store.clear_extra_field_spools(key)
     else:
         raise ValueError(f"Unknown entity type {entity_type.name}.")
 
     logger.info("Deleted extra field %s for entity type %s.", key, entity_type.name)
 
 
-async def populate_with_defaults(db: AsyncSession, entity_type: EntityType, existing: dict[str, str]) -> None:
-    """Populate the given list of extra fields with defaults."""
-    extra_fields = await get_extra_fields(db, entity_type)
+def populate_with_defaults(store: "JsonStore", entity_type: EntityType, existing: dict[str, str]) -> None:
+    """Populate the given dict of extra fields with defaults."""
+    extra_fields = get_extra_fields(store, entity_type)
     for extra_field in extra_fields:
         if extra_field.default_value is None:
             continue

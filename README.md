@@ -8,12 +8,14 @@
 
 _Keep track of your inventory of 3D-printer filament spools._
 
+# Spoolman
+
 Spoolman is a self-hosted web service designed to help you efficiently manage your 3D printer filament spools and monitor their usage. It acts as a centralized database that seamlessly integrates with popular 3D printing software like [OctoPrint](https://octoprint.org/) and [Klipper](https://www.klipper3d.org/)/[Moonraker](https://moonraker.readthedocs.io/en/latest/). When connected, it automatically updates spool weights as printing progresses, giving you real-time insights into filament usage.
 
 [![Static Badge](https://img.shields.io/badge/Spoolman%20Wiki-blue?link=https%3A%2F%2Fgithub.com%2FDonkie%2FSpoolman%2Fwiki)](https://github.com/Donkie/Spoolman/wiki)
 [![GitHub Release](https://img.shields.io/github/v/release/Donkie/Spoolman)](https://github.com/Donkie/Spoolman/releases)
 
-### Features
+## Features
 * **Filament Management**: Keep comprehensive records of filament types, manufacturers, and individual spools.
 * **API Integration**: The [REST API](https://donkie.github.io/Spoolman/) allows easy integration with other software, facilitating automated workflows and data exchange.
 * **Real-Time Updates**: Stay informed with live spool updates through Websockets, providing immediate feedback during printing operations.
@@ -23,7 +25,7 @@ Spoolman is a self-hosted web service designed to help you efficiently manage yo
   * Add custom fields to tailor information to your specific needs.
   * Print labels with QR codes for easy spool identification and tracking.
   * Contribute to its translation into 18 languages via [Weblate](https://hosted.weblate.org/projects/spoolman/).
-* **Database Support**: SQLite, PostgreSQL, MySQL, and CockroachDB.
+* **Simple Storage**: All data stored in a single JSON file (`spoolman.json`) — no database server required. Configure path via `SPOOLMAN_DATA_FILE`.
 * **Multi-Printer Management**: Handles spool updates from several printers simultaneously.
 * **Advanced Monitoring**: Integrate with [Prometheus](https://prometheus.io/) for detailed historical analysis of filament usage, helping you track and optimize your printing processes. See the [Wiki](https://github.com/Donkie/Spoolman/wiki/Filament-Usage-History) for instructions on how to set it up.
 

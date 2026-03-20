@@ -13,7 +13,6 @@ from ..conftest import URL
 def test_measure_spool(random_filament: dict[str, Any], measurement: float):
     """Test using a spool in the database."""
     # Setup
-    random_filament["weight"]
     spool_weight = 246
     start_weight = 1000
     result = httpx.post(
@@ -60,7 +59,6 @@ def test_measure_spool(random_filament: dict[str, Any], measurement: float):
 def test_measure_spool_higher_initial(random_filament: dict[str, Any], measurement: float):
     """Test using a spool in the database."""
     # Setup
-    random_filament["weight"]
     spool_weight = 246
     start_weight = 1000
     result = httpx.post(
@@ -107,7 +105,6 @@ def test_measure_spool_higher_initial(random_filament: dict[str, Any], measureme
 def test_measure_spool_sequence(random_filament: dict[str, Any], measurements: list[float]):
     """Test using a spool in the database."""
     # Setup
-    random_filament["weight"]
     spool_weight = 246
     start_weight = 1009
     initial_weight = start_weight + spool_weight

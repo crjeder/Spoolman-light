@@ -20,16 +20,15 @@ class Fixture:
 def spools(
     random_filament_mod: dict[str, Any],
     random_empty_filament_mod: dict[str, Any],
-    random_empty_filament_empty_vendor_mod: dict[str, Any],
 ) -> Iterable[Fixture]:
     """Add some spools to the database."""
     result = httpx.post(
         f"{URL}/api/v1/spool",
         json={
             "filament_id": random_filament_mod["id"],
-            "remaining_weight": 1000,
+            "initial_weight": 1000,
+            "used_weight": 0,
             "location": "The Pantry",
-            "lot_nr": "123456789",
         },
     )
     result.raise_for_status()
@@ -39,9 +38,9 @@ def spools(
         f"{URL}/api/v1/spool",
         json={
             "filament_id": random_filament_mod["id"],
-            "remaining_weight": 1000,
+            "initial_weight": 1000,
+            "used_weight": 0,
             "location": "Living Room",
-            "lot_nr": "987654321",
         },
     )
     result.raise_for_status()
@@ -51,7 +50,7 @@ def spools(
         f"{URL}/api/v1/spool",
         json={
             "filament_id": random_filament_mod["id"],
-            "remaining_weight": 1000,
+            "initial_weight": 1000,
             "archived": True,
         },
     )
@@ -68,17 +67,8 @@ def spools(
     result.raise_for_status()
     spool_4 = result.json()
 
-    result = httpx.post(
-        f"{URL}/api/v1/spool",
-        json={
-            "filament_id": random_empty_filament_empty_vendor_mod["id"],
-        },
-    )
-    result.raise_for_status()
-    spool_5 = result.json()
-
     yield Fixture(
-        spools=[spool_1, spool_2, spool_3, spool_4, spool_5],
+        spools=[spool_1, spool_2, spool_3, spool_4],
         filament=random_filament_mod,
     )
 
@@ -86,7 +76,6 @@ def spools(
     httpx.delete(f"{URL}/api/v1/spool/{spool_2['id']}").raise_for_status()
     httpx.delete(f"{URL}/api/v1/spool/{spool_3['id']}").raise_for_status()
     httpx.delete(f"{URL}/api/v1/spool/{spool_4['id']}").raise_for_status()
-    httpx.delete(f"{URL}/api/v1/spool/{spool_5['id']}").raise_for_status()
 
 
 def test_find_all_spools(spools: Fixture):
@@ -94,11 +83,11 @@ def test_find_all_spools(spools: Fixture):
     result = httpx.get(f"{URL}/api/v1/spool")
     result.raise_for_status()
 
-    # Verify
+    # Verify — spool_3 is archived so excluded
     spools_result = result.json()
     assert_lists_compatible(
         spools_result,
-        (spools.spools[0], spools.spools[1], spools.spools[3], spools.spools[4]),
+        (spools.spools[0], spools.spools[1], spools.spools[3]),
     )
 
 
@@ -111,13 +100,7 @@ def test_find_all_spools_including_archived(spools: Fixture):
     spools_result = result.json()
     assert_lists_compatible(
         spools_result,
-        (
-            spools.spools[0],
-            spools.spools[1],
-            spools.spools[2],
-            spools.spools[3],
-            spools.spools[4],
-        ),
+        (spools.spools[0], spools.spools[1], spools.spools[2], spools.spools[3]),
     )
 
 
@@ -148,10 +131,10 @@ def test_find_all_spools_sort_multiple(spools: Fixture):
     result = httpx.get(f"{URL}/api/v1/spool?sort=used_weight:desc,id:asc&allow_archived=true")
     result.raise_for_status()
 
-    # Verify
+    # Verify — spool_4 has used_weight=1000, rest have 0; then sort by id asc
     spools_result = result.json()
     assert len(spools_result) == len(spools.spools)
-    assert spools_result == [spools.spools[3], spools.spools[0], spools.spools[1], spools.spools[2], spools.spools[4]]
+    assert spools_result == [spools.spools[3], spools.spools[0], spools.spools[1], spools.spools[2]]
 
 
 def test_find_all_spools_limit_asc(spools: Fixture):
@@ -159,8 +142,8 @@ def test_find_all_spools_limit_asc(spools: Fixture):
     result = httpx.get(f"{URL}/api/v1/spool?sort=id:asc&limit=2")
     result.raise_for_status()
 
-    # Verify
-    assert result.headers["X-Total-Count"] == "4"
+    # Verify — 3 non-archived spools total
+    assert result.headers["X-Total-Count"] == "3"
     spools_result = result.json()
     assert len(spools_result) == 2
     assert spools_result == [spools.spools[0], spools.spools[1]]
@@ -171,11 +154,11 @@ def test_find_all_spools_limit_desc(spools: Fixture):
     result = httpx.get(f"{URL}/api/v1/spool?sort=id:desc&limit=2")
     result.raise_for_status()
 
-    # Verify
-    assert result.headers["X-Total-Count"] == "4"
+    # Verify — 3 non-archived; in desc order: spool_4, spool_2, spool_1; first 2: spool_4, spool_2
+    assert result.headers["X-Total-Count"] == "3"
     spools_result = result.json()
     assert len(spools_result) == 2
-    assert spools_result == [spools.spools[-1], spools.spools[-2]]
+    assert spools_result == [spools.spools[3], spools.spools[1]]
 
 
 def test_find_all_spools_limit_asc_offset(spools: Fixture):
@@ -184,7 +167,7 @@ def test_find_all_spools_limit_asc_offset(spools: Fixture):
     result.raise_for_status()
 
     # Verify
-    assert result.headers["X-Total-Count"] == "5"
+    assert result.headers["X-Total-Count"] == "4"
     spools_result = result.json()
     assert len(spools_result) == 2
     assert spools_result == [spools.spools[1], spools.spools[2]]
@@ -195,11 +178,11 @@ def test_find_all_spools_limit_desc_offset(spools: Fixture):
     result = httpx.get(f"{URL}/api/v1/spool?sort=id:desc&limit=2&offset=1&allow_archived=true")
     result.raise_for_status()
 
-    # Verify
-    assert result.headers["X-Total-Count"] == "5"
+    # Verify — desc order: spool_4, spool_3, spool_2, spool_1; offset 1 → spool_3, spool_2
+    assert result.headers["X-Total-Count"] == "4"
     spools_result = result.json()
     assert len(spools_result) == 2
-    assert spools_result == [spools.spools[-2], spools.spools[-3]]
+    assert spools_result == [spools.spools[2], spools.spools[1]]
 
 
 def test_find_all_spools_limit_asc_offset_outside_range(spools: Fixture):  # noqa: ARG001
@@ -207,8 +190,8 @@ def test_find_all_spools_limit_asc_offset_outside_range(spools: Fixture):  # noq
     result = httpx.get(f"{URL}/api/v1/spool?sort=id:asc&limit=2&offset=100")
     result.raise_for_status()
 
-    # Verify
-    assert result.headers["X-Total-Count"] == "4"
+    # Verify — 3 non-archived total
+    assert result.headers["X-Total-Count"] == "3"
     spools_result = result.json()
     assert len(spools_result) == 0
 
@@ -226,28 +209,22 @@ def test_find_all_spools_limit_asc_offset_outside_range(spools: Fixture):  # noq
         "used_length",
         "remaining_length",
         "location",
-        "lot_nr",
+        "color_hex",
+        "multi_color_hexes",
+        "multi_color_direction",
+        "price",
         "comment",
         "archived",
         "filament.id",
         "filament.registered",
         "filament.name",
-        "filament.vendor_id",
+        "filament.vendor",
         "filament.material",
-        "filament.price",
         "filament.density",
         "filament.diameter",
-        "filament.weight",
-        "filament.spool_weight",
-        "filament.article_number",
         "filament.comment",
         "filament.settings_extruder_temp",
         "filament.settings_bed_temp",
-        "filament.color_hex",
-        "filament.vendor.id",
-        "filament.vendor.registered",
-        "filament.vendor.name",
-        "filament.vendor.comment",
     ],
 )
 def test_find_all_spools_sort_fields(spools: Fixture, field_name: str):
@@ -261,16 +238,15 @@ def test_find_all_spools_sort_fields(spools: Fixture, field_name: str):
     assert len(spools_result) == len(spools.spools)
 
 
-@pytest.mark.parametrize("field_name", ["filament_name", "filament.name"])
-def test_find_spools_by_filament_name(spools: Fixture, field_name: str):
+def test_find_spools_by_filament_name(spools: Fixture):
     # Execute
     result = httpx.get(
         f"{URL}/api/v1/spool",
-        params={field_name: spools.filament["name"]},
+        params={"filament.name": spools.filament["name"]},
     )
     result.raise_for_status()
 
-    # Verify
+    # Verify — spool_1 and spool_2 use random_filament; spool_3 is archived
     spools_result = result.json()
     assert_lists_compatible(spools_result, (spools.spools[0], spools.spools[1]))
 
@@ -283,17 +259,16 @@ def test_find_spools_by_empty_filament_name(spools: Fixture):
     )
     result.raise_for_status()
 
-    # Verify
+    # Verify — spool_4 uses empty filament (no name)
     spools_result = result.json()
-    assert_lists_compatible(spools_result, (spools.spools[3], spools.spools[4]))
+    assert spools_result == [spools.spools[3]]
 
 
-@pytest.mark.parametrize("field_name", ["filament_id", "filament.id"])
-def test_find_spools_by_filament_id(spools: Fixture, field_name: str):
+def test_find_spools_by_filament_id(spools: Fixture):
     # Execute
     result = httpx.get(
         f"{URL}/api/v1/spool",
-        params={field_name: spools.filament["id"]},
+        params={"filament.id": spools.filament["id"]},
     )
     result.raise_for_status()
 
@@ -318,12 +293,11 @@ def test_find_spools_by_multiple_filament_ids(spools: Fixture):
     assert_lists_compatible(spools_result, (spools.spools[0], spools.spools[1], spools.spools[3]))
 
 
-@pytest.mark.parametrize("field_name", ["filament_material", "filament.material"])
-def test_find_spools_by_filament_material(spools: Fixture, field_name: str):
+def test_find_spools_by_filament_material(spools: Fixture):
     # Execute
     result = httpx.get(
         f"{URL}/api/v1/spool",
-        params={field_name: spools.filament["material"]},
+        params={"filament.material": spools.filament["material"]},
     )
     result.raise_for_status()
 
@@ -342,82 +316,31 @@ def test_find_spools_by_empty_filament_material(spools: Fixture):
 
     # Verify
     spools_result = result.json()
-    assert_lists_compatible(spools_result, (spools.spools[3], spools.spools[4]))
+    assert spools_result == [spools.spools[3]]
 
 
-@pytest.mark.parametrize("field_name", ["vendor_name", "filament.vendor.name"])
-def test_find_spools_by_filament_vendor_name(spools: Fixture, field_name: str):
+def test_find_spools_by_filament_vendor(spools: Fixture):
     # Execute
     result = httpx.get(
         f"{URL}/api/v1/spool",
-        params={field_name: spools.filament["vendor"]["name"]},
+        params={"filament.vendor": spools.filament["vendor"]},
     )
     result.raise_for_status()
 
-    # Verify
+    # Verify — spool_1, spool_2 have vendor "TestVendor"; spool_3 is archived
     spools_result = result.json()
     assert_lists_compatible(spools_result, (spools.spools[0], spools.spools[1]))
 
 
-def test_find_spools_by_empty_filament_vendor_name(spools: Fixture):
+def test_find_spools_by_empty_filament_vendor(spools: Fixture):
     # Execute
     result = httpx.get(
         f"{URL}/api/v1/spool",
-        params={"filament.vendor.name": ""},
+        params={"filament.vendor": ""},
     )
     result.raise_for_status()
 
-    # Verify
-    spools_result = result.json()
-    assert spools_result == [spools.spools[4]]
-
-
-@pytest.mark.parametrize("field_name", ["vendor_id", "filament.vendor.id"])
-def test_find_spools_by_filament_vendor_id(spools: Fixture, field_name: str):
-    # Execute
-    result = httpx.get(
-        f"{URL}/api/v1/spool",
-        params={field_name: spools.filament["vendor"]["id"]},
-    )
-    result.raise_for_status()
-
-    # Verify
-    spools_result = result.json()
-    assert_lists_compatible(spools_result, (spools.spools[0], spools.spools[1]))
-
-
-def test_find_spools_by_multiple_vendor_ids(spools: Fixture):
-    # Execute
-    vendor_1 = spools.spools[0]["filament"]["vendor"]["id"]
-    vendor_2 = spools.spools[4]["filament"]["vendor"]["id"]
-
-    result = httpx.get(
-        f"{URL}/api/v1/spool",
-        params={
-            "filament.vendor.id": f"{vendor_1},{vendor_2}",
-            "allow_archived": True,
-        },
-    )
-    result.raise_for_status()
-
-    # Verify
-    spools_result = result.json()
-    assert len(spools_result) == 4
-    assert_lists_compatible(
-        spools_result,
-        (spools.spools[0], spools.spools[1], spools.spools[2], spools.spools[4]),
-    )
-
-
-def test_find_spools_by_empty_filament_vendor_id(spools: Fixture):
-    # Execute
-    result = httpx.get(
-        f"{URL}/api/v1/spool",
-        params={"filament.vendor.id": -1},
-    )
-    result.raise_for_status()
-
-    # Verify
+    # Verify — spool_4 uses empty filament (no vendor)
     spools_result = result.json()
     assert spools_result == [spools.spools[3]]
 
@@ -443,9 +366,9 @@ def test_find_spools_by_empty_location(spools: Fixture):
     )
     result.raise_for_status()
 
-    # Verify
+    # Verify — spool_4 has no location; spool_3 is archived
     spools_result = result.json()
-    assert_lists_compatible(spools_result, (spools.spools[3], spools.spools[4]))
+    assert spools_result == [spools.spools[3]]
 
 
 def test_find_spools_by_empty_and_filled_location(spools: Fixture):
@@ -456,32 +379,6 @@ def test_find_spools_by_empty_and_filled_location(spools: Fixture):
     )
     result.raise_for_status()
 
-    # Verify
+    # Verify — spool_1 has "The Pantry", spool_4 has no location
     spools_result = result.json()
-    assert_lists_compatible(spools_result, (spools.spools[0], spools.spools[3], spools.spools[4]))
-
-
-def test_find_spools_by_lot_nr(spools: Fixture):
-    # Execute
-    result = httpx.get(
-        f"{URL}/api/v1/spool",
-        params={"lot_nr": "123456789"},
-    )
-    result.raise_for_status()
-
-    # Verify
-    spools_result = result.json()
-    assert spools_result == [spools.spools[0]]
-
-
-def test_find_spools_by_empty_lot_nr(spools: Fixture):
-    # Execute
-    result = httpx.get(
-        f"{URL}/api/v1/spool",
-        params={"lot_nr": ""},
-    )
-    result.raise_for_status()
-
-    # Verify
-    spools_result = result.json()
-    assert_lists_compatible(spools_result, (spools.spools[3], spools.spools[4]))
+    assert_lists_compatible(spools_result, (spools.spools[0], spools.spools[3]))

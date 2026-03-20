@@ -1,15 +1,16 @@
-version: '3.8'
 services:
   spoolman:
     image: donkie/spoolman:test
     environment:
       - SPOOLMAN_LOGGING_LEVEL=INFO
       - TZ=Europe/Stockholm
+    security_opt:
+      - no-new-privileges:true
   tester:
     image: donkie/spoolman-tester:latest
     volumes:
       - ./tests:/tester/tests
-    environment:
-      - DB_TYPE=sqlite
+    security_opt:
+      - no-new-privileges:true
     depends_on:
       - spoolman

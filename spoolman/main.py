@@ -1,23 +1,20 @@
 """Main entrypoint to the server."""
 
 import logging
-import subprocess
 from logging.handlers import TimedRotatingFileHandler
-from pathlib import Path
 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import PlainTextResponse, RedirectResponse, Response
-from prometheus_client import generate_latest
+from fastapi.responses import RedirectResponse, Response
 from scheduler.asyncio.scheduler import Scheduler
 
 from spoolman import env, externaldb
 from spoolman.api.v1.router import app as v1_app
 from spoolman.client import SinglePageApplication
-from spoolman.database import database
-from spoolman.prometheus.metrics import registry
+from spoolman.storage.dependencies import set_store
+from spoolman.storage.store import JsonStore
 
 # Define a console logger
 console_handler = logging.StreamHandler()
@@ -58,34 +55,16 @@ app.add_middleware(GZipMiddleware)
 app.mount(env.get_base_path() + "/api/v1", v1_app)
 
 
-# WA for prometheus /metrics bind with SinglePageApp at root
-@app.get(
-    env.get_base_path() + "/metrics",
-    response_class=PlainTextResponse,
-    name="Get metrics for prometheus",
-    description=(
-        "Get app metrics for prometheusIf enabled SPOOLMAN_METRICS_ENABLED returned metrics by Spools and Filaments"
-    ),
-)
-def get_metrics() -> bytes:
-    """Return prometheus metrics."""
-    return generate_latest(registry)
-
-
 base_path = env.get_base_path()
 if base_path != "":
     logger.info("Base path is: %s", base_path)
 
-    # If base path is set, add a redirect from non-slash suffix to slash
-    # suffix. Otherwise it won't work.
     @app.get(base_path)
     def root_redirect() -> Response:
         """Redirect to base path."""
         return RedirectResponse(base_path + "/")
 
 
-# Return a dynamic js config file
-# This is so that the client side can access the base path variable.
 @app.get(env.get_base_path() + "/config.js")
 def get_configjs() -> Response:
     """Return a dynamic js config file."""
@@ -136,20 +115,43 @@ add_cors_middleware()
 
 def add_file_logging() -> None:
     """Add file logging to the root logger."""
-    # Define a file logger with log rotation
     log_file = env.get_logs_dir().joinpath("spoolman.log")
     file_handler = TimedRotatingFileHandler(log_file, when="midnight", backupCount=5)
     file_handler.setFormatter(logging.Formatter("%(asctime)s:%(levelname)s:%(message)s", "%Y-%m-%d %H:%M:%S"))
     root_logger.addHandler(file_handler)
 
 
+_store: JsonStore | None = None
+
+
+def _backup_task() -> None:
+    if _store is None:
+        return
+    import shutil
+    backups_dir = env.get_backups_dir()
+    num_backups = 5
+    # Rotate existing backups
+    for i in range(num_backups - 1, -1, -1):
+        src = backups_dir / (f"spoolman.json.{i}" if i > 0 else "spoolman.json")
+        dst = backups_dir / f"spoolman.json.{i + 1}"
+        if src.exists():
+            if dst.exists() and i + 1 >= num_backups:
+                dst.unlink()
+            elif not dst.exists():
+                shutil.copy2(src, dst)
+    # Copy current data file as backup
+    data_file = env.get_data_file()
+    if data_file.exists():
+        shutil.copy2(data_file, backups_dir / "spoolman.json")
+    logger.info("Backup complete.")
+
+
 @app.on_event("startup")
 async def startup() -> None:
     """Run the service's startup sequence."""
-    # Check that the data directory is writable
-    env.check_write_permissions()
+    global _store  # noqa: PLW0603
 
-    # Don't add file logging until we have verified that the data directory is writable
+    env.check_write_permissions()
     add_file_logging()
 
     logger.info(
@@ -163,37 +165,35 @@ async def startup() -> None:
     logger.info("Using logs directory: %s", env.get_logs_dir().resolve())
     logger.info("Using backups directory: %s", env.get_backups_dir().resolve())
 
-    logger.info("Setting up database...")
-    database.setup_db(database.get_connection_url())
+    data_file = env.get_data_file()
+    logger.info("Using data file: %s", data_file.resolve())
 
-    logger.info("Performing migrations...")
-    # Run alembic in a subprocess.
-    # There is some issue with the uvicorn worker that causes the process to hang when running alembic directly.
-    # See: https://github.com/sqlalchemy/alembic/discussions/1155
-    project_root = Path(__file__).parent.parent
-    subprocess.run(["alembic", "upgrade", "head"], check=True, cwd=project_root)  # noqa: S603, S607, ASYNC221
+    logger.info("Initializing JSON store...")
+    _store = JsonStore(data_file)
+    _store.load()
+    set_store(_store)
 
     # Setup scheduler
     schedule = Scheduler()
-    database.schedule_tasks(schedule)
+
+    if env.is_automatic_backup_enabled():
+        import datetime as dt
+        logger.info("Scheduling automatic data file backup for midnight.")
+        schedule.daily(dt.time(hour=0, minute=0, second=0), _backup_task)  # type: ignore[arg-type]
+
     externaldb.schedule_tasks(schedule)
 
     logger.info("Startup complete.")
 
     if env.is_docker() and not env.is_data_dir_mounted():
         logger.warning("!!!! WARNING !!!!")
-        logger.warning("!!!! WARNING !!!!")
         logger.warning("The data directory is not mounted.")
         logger.warning(
-            'Spoolman stores its database in the container directory "%s". '
-            "If this directory isn't mounted to the host OS, the database will be lost when the container is stopped.",
+            'Spoolman stores its data in the container directory "%s". '
+            "If this directory isn't mounted to the host OS, data will be lost when the container is stopped.",
             env.get_data_dir(),
         )
-        logger.warning(
-            "Please carefully read the docker part of the README.md file, "
-            "and ensure your docker-compose file matches the example.",
-        )
-        logger.warning("!!!! WARNING !!!!")
+        logger.warning("Please carefully read the docker part of the README.md file.")
         logger.warning("!!!! WARNING !!!!")
 
 

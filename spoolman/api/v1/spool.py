@@ -8,15 +8,14 @@ from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, Query, WebSocket, WebSocketDisconnect
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field, field_validator
-from sqlalchemy.ext.asyncio import AsyncSession
+from pydantic import BaseModel, Field, field_validator, model_validator
 
-from spoolman.api.v1.models import Message, Spool, SpoolEvent
-from spoolman.database import spool
-from spoolman.database.database import get_db_session
-from spoolman.database.utils import SortOrder
+from spoolman.api.v1.models import EventType, Message, MultiColorDirection, Spool, SpoolEvent
 from spoolman.exceptions import ItemCreateError, SpoolMeasureError
 from spoolman.extra_fields import EntityType, get_extra_fields, validate_extra_field_dict
+from spoolman.storage.dependencies import get_store
+from spoolman.storage.models import SpoolModel
+from spoolman.storage.store import JsonStore
 from spoolman.ws import websocket_manager
 
 logger = logging.getLogger(__name__)
@@ -29,65 +28,66 @@ router = APIRouter(
 # ruff: noqa: D103,B008
 
 
+def _spool_to_api(store: JsonStore, item: SpoolModel) -> Spool:
+    filament = store.get_filament(item.filament_id)
+    return Spool.from_db(item, filament)
+
+
 class SpoolParameters(BaseModel):
     first_used: Optional[datetime] = Field(None, description="First logged occurence of spool usage.")
     last_used: Optional[datetime] = Field(None, description="Last logged occurence of spool usage.")
     filament_id: int = Field(description="The ID of the filament type of this spool.")
-    price: Optional[float] = Field(
-        None,
-        ge=0,
-        description="The price of this filament in the system configured currency.",
-        examples=[20.0],
-    )
-    initial_weight: Optional[float] = Field(
-        None,
-        ge=0,
-        description="The initial weight of the filament on the spool, in grams. (net weight)",
-        examples=[200],
-    )
-    spool_weight: Optional[float] = Field(
-        None,
-        ge=0,
-        description="The weight of an empty spool, in grams. (tare weight)",
-        examples=[200],
-    )
-    remaining_weight: Optional[float] = Field(
-        None,
-        ge=0,
-        description=(
-            "Remaining weight of filament on the spool. Can only be used if the filament type has a weight set."
-        ),
-        examples=[800],
-    )
-    used_weight: Optional[float] = Field(
-        None,
-        ge=0,
-        description="Used weight of filament on the spool.",
-        examples=[200],
-    )
-    location: Optional[str] = Field(
-        None,
-        max_length=64,
-        description="Where this spool can be found.",
-        examples=["Shelf A"],
-    )
-    lot_nr: Optional[str] = Field(
-        None,
-        max_length=64,
-        description="Vendor manufacturing lot/batch number of the spool.",
-        examples=["52342"],
-    )
-    comment: Optional[str] = Field(
-        None,
-        max_length=1024,
-        description="Free text comment about this specific spool.",
-        examples=[""],
-    )
+    price: Optional[float] = Field(None, ge=0, examples=[20.0])
+    initial_weight: Optional[float] = Field(None, ge=0, examples=[1000])
+    spool_weight: Optional[float] = Field(None, ge=0, examples=[200])
+    remaining_weight: Optional[float] = Field(None, ge=0, examples=[800])
+    used_weight: Optional[float] = Field(None, ge=0, examples=[200])
+    color_hex: Optional[str] = Field(None, description="Hexadecimal color code, e.g. FF0000 for red.", examples=["FF0000"])
+    multi_color_hexes: Optional[str] = Field(None, description="Multiple hex color codes separated by commas.", examples=["FF0000,00FF00,0000FF"])
+    multi_color_direction: Optional[MultiColorDirection] = Field(None, examples=["coaxial", "longitudinal"])
+    location: Optional[str] = Field(None, max_length=64, examples=["Shelf A"])
+    comment: Optional[str] = Field(None, max_length=1024, examples=[""])
     archived: bool = Field(default=False, description="Whether this spool is archived and should not be used anymore.")
-    extra: Optional[dict[str, str]] = Field(
-        None,
-        description="Extra fields for this spool.",
-    )
+    extra: Optional[dict[str, str]] = Field(None, description="Extra fields for this spool.")
+
+    @field_validator("color_hex")
+    @classmethod
+    def color_hex_validator(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return None
+        clr = v.upper().removeprefix("#")
+        for c in clr:
+            if c not in "0123456789ABCDEF":
+                raise ValueError("Invalid character in color code.")
+        if len(clr) not in (6, 8):  # noqa: PLR2004
+            raise ValueError("Color code must be 6 or 8 characters long.")
+        return clr
+
+    @field_validator("multi_color_hexes")
+    @classmethod
+    def multi_color_hexes_validator(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return None
+        for clr_raw in v.split(","):
+            clr = clr_raw.upper().removeprefix("#")
+            for c in clr:
+                if c not in "0123456789ABCDEF":
+                    raise ValueError("Invalid character in color code.")
+            if len(clr) not in (6, 8):  # noqa: PLR2004
+                raise ValueError("Color code must be 6 or 8 characters long.")
+        return v
+
+    @model_validator(mode="after")
+    def validate(self) -> "SpoolParameters":
+        if self.color_hex and self.multi_color_hexes:
+            raise ValueError("Cannot specify both color_hex and multi_color_hexes.")
+        if self.multi_color_hexes and len(self.multi_color_hexes.split(",")) < 2:  # noqa: PLR2004
+            raise ValueError("Must specify at least two colors in multi_color_hexes.")
+        if self.multi_color_hexes and not self.multi_color_direction:
+            raise ValueError("Multi-color spool must have multi_color_direction set.")
+        if not self.multi_color_hexes and self.multi_color_direction:
+            raise ValueError("Single-color spool must not have multi_color_direction set.")
+        return self
 
 
 class SpoolUpdateParameters(SpoolParameters):
@@ -111,14 +111,25 @@ class SpoolMeasureParameters(BaseModel):
     weight: float = Field(description="Current gross weight of the spool, in g.", examples=[200])
 
 
+async def _spool_changed(store: JsonStore, spool_id: int, typ: EventType) -> None:
+    try:
+        item = store.get_spool(spool_id)
+        await websocket_manager.send(
+            ("spool", str(spool_id)),
+            SpoolEvent(
+                type=typ,
+                resource="spool",
+                date=datetime.utcnow(),
+                payload=_spool_to_api(store, item),
+            ),
+        )
+    except Exception:
+        logger.exception("Failed to send websocket message")
+
+
 @router.get(
     "",
     name="Find spool",
-    description=(
-        "Get a list of spools that matches the search query. "
-        "A websocket is served on the same path to listen for updates to any spool, or added or deleted spools. "
-        "See the HTTP Response code 299 for the content of the websocket messages."
-    ),
     response_model_exclude_none=True,
     responses={
         200: {"model": list[Spool]},
@@ -127,196 +138,70 @@ class SpoolMeasureParameters(BaseModel):
 )
 async def find(
     *,
-    db: Annotated[AsyncSession, Depends(get_db_session)],
-    filament_name_old: Annotated[
-        Optional[str],
-        Query(alias="filament_name", title="Filament Name", description="See filament.name.", deprecated=True),
-    ] = None,
-    filament_id_old: Annotated[
-        Optional[str],
-        Query(
-            alias="filament_id",
-            title="Filament ID",
-            description="See filament.id.",
-            deprecated=True,
-            pattern=r"^-?\d+(,-?\d+)*$",
-        ),
-    ] = None,
-    filament_material_old: Annotated[
-        Optional[str],
-        Query(
-            alias="filament_material",
-            title="Filament Material",
-            description="See filament.material.",
-            deprecated=True,
-        ),
-    ] = None,
-    vendor_name_old: Annotated[
-        Optional[str],
-        Query(alias="vendor_name", title="Vendor Name", description="See filament.vendor.name.", deprecated=True),
-    ] = None,
-    vendor_id_old: Annotated[
-        Optional[str],
-        Query(
-            alias="vendor_id",
-            title="Vendor ID",
-            description="See filament.vendor.id.",
-            deprecated=True,
-            pattern=r"^-?\d+(,-?\d+)*$",
-        ),
-    ] = None,
-    filament_name: Annotated[
-        Optional[str],
-        Query(
-            alias="filament.name",
-            title="Filament Name",
-            description=(
-                "Partial case-insensitive search term for the filament name. Separate multiple terms with a comma. "
-                "Specify an empty string to match spools with no filament name. "
-                "Surround a term with quotes to search for the exact term."
-            ),
-        ),
-    ] = None,
-    filament_id: Annotated[
-        Optional[str],
-        Query(
-            alias="filament.id",
-            title="Filament ID",
-            description="Match an exact filament ID. Separate multiple IDs with a comma.",
-            examples=["1", "1,2"],
-            pattern=r"^-?\d+(,-?\d+)*$",
-        ),
-    ] = None,
-    filament_material: Annotated[
-        Optional[str],
-        Query(
-            alias="filament.material",
-            title="Filament Material",
-            description=(
-                "Partial case-insensitive search term for the filament material. Separate multiple terms with a comma. "
-                "Specify an empty string to match spools with no filament material. "
-                "Surround a term with quotes to search for the exact term."
-            ),
-        ),
-    ] = None,
-    filament_vendor_name: Annotated[
-        Optional[str],
-        Query(
-            alias="filament.vendor.name",
-            title="Vendor Name",
-            description=(
-                "Partial case-insensitive search term for the filament vendor name. "
-                "Separate multiple terms with a comma. "
-                "Specify an empty string to match spools with no vendor name. "
-                "Surround a term with quotes to search for the exact term."
-            ),
-        ),
-    ] = None,
-    filament_vendor_id: Annotated[
-        Optional[str],
-        Query(
-            alias="filament.vendor.id",
-            title="Vendor ID",
-            description=(
-                "Match an exact vendor ID. Separate multiple IDs with a comma. "
-                "Set it to -1 to match spools with filaments with no vendor."
-            ),
-            examples=["1", "1,2"],
-            pattern=r"^-?\d+(,-?\d+)*$",
-        ),
-    ] = None,
-    location: Annotated[
-        Optional[str],
-        Query(
-            title="Location",
-            description=(
-                "Partial case-insensitive search term for the spool location. Separate multiple terms with a comma. "
-                "Specify an empty string to match spools with no location. "
-                "Surround a term with quotes to search for the exact term."
-            ),
-        ),
-    ] = None,
-    lot_nr: Annotated[
-        Optional[str],
-        Query(
-            title="Lot/Batch Number",
-            description=(
-                "Partial case-insensitive search term for the spool lot number. Separate multiple terms with a comma. "
-                "Specify an empty string to match spools with no lot nr. "
-                "Surround a term with quotes to search for the exact term."
-            ),
-        ),
-    ] = None,
-    allow_archived: Annotated[
-        bool,
-        Query(title="Allow Archived", description="Whether to include archived spools in the search results."),
-    ] = False,
-    sort: Annotated[
-        Optional[str],
-        Query(
-            title="Sort",
-            description=(
-                'Sort the results by the given field. Should be a comma-separate string with "field:direction" items.'
-            ),
-            example="filament.name:asc,filament.vendor.id:asc,location:desc",
-        ),
-    ] = None,
-    limit: Annotated[
-        Optional[int],
-        Query(title="Limit", description="Maximum number of items in the response."),
-    ] = None,
-    offset: Annotated[int, Query(title="Offset", description="Offset in the full result set if a limit is set.")] = 0,
+    store: Annotated[JsonStore, Depends(get_store)],
+    filament_name: Annotated[Optional[str], Query(alias="filament.name")] = None,
+    filament_id: Annotated[Optional[str], Query(alias="filament.id", pattern=r"^-?\d+(,-?\d+)*$")] = None,
+    filament_material: Annotated[Optional[str], Query(alias="filament.material")] = None,
+    filament_vendor: Annotated[Optional[str], Query(alias="filament.vendor")] = None,
+    location: Annotated[Optional[str], Query(title="Location")] = None,
+    allow_archived: Annotated[bool, Query(title="Allow Archived")] = False,
+    sort: Annotated[Optional[str], Query(title="Sort")] = None,
+    limit: Annotated[Optional[int], Query(title="Limit")] = None,
+    offset: Annotated[int, Query(title="Offset")] = 0,
 ) -> JSONResponse:
-    sort_by: dict[str, SortOrder] = {}
+    sort_by: dict[str, str] = {}
     if sort is not None:
         for sort_item in sort.split(","):
             field, direction = sort_item.split(":")
-            sort_by[field] = SortOrder[direction.upper()]
+            sort_by[field] = direction
 
-    filament_id = filament_id if filament_id is not None else filament_id_old
-    if filament_id is not None:
-        filament_ids = [int(filament_id_item) for filament_id_item in filament_id.split(",")]
-    else:
-        filament_ids = None
+    filament_ids = [int(v) for v in filament_id.split(",")] if filament_id is not None else None
 
-    filament_vendor_id = filament_vendor_id if filament_vendor_id is not None else vendor_id_old
-    if filament_vendor_id is not None:
-        filament_vendor_ids = [int(vendor_id_item) for vendor_id_item in filament_vendor_id.split(",")]
-    else:
-        filament_vendor_ids = None
-
-    db_items, total_count = await spool.find(
-        db=db,
-        filament_name=filament_name if filament_name is not None else filament_name_old,
+    items, total_count = await asyncio.to_thread(
+        store.find_spools,
+        filament_name=filament_name,
         filament_id=filament_ids,
-        filament_material=filament_material if filament_material is not None else filament_material_old,
-        vendor_name=filament_vendor_name if filament_vendor_name is not None else vendor_name_old,
-        vendor_id=filament_vendor_ids,
+        filament_material=filament_material,
+        filament_vendor=filament_vendor,
         location=location,
-        lot_nr=lot_nr,
         allow_archived=allow_archived,
         sort_by=sort_by,
         limit=limit,
         offset=offset,
     )
 
-    # Set x-total-count header for pagination
     return JSONResponse(
         content=jsonable_encoder(
-            (Spool.from_db(db_item) for db_item in db_items),
+            (_spool_to_api(store, item) for item in items),
             exclude_none=True,
         ),
         headers={"x-total-count": str(total_count)},
     )
 
 
-@router.websocket(
-    "",
-    name="Listen to spool changes",
+@router.get(
+    "/find-by-color",
+    name="Find spools by color",
+    response_model_exclude_none=True,
+    responses={200: {"model": list[Spool]}},
 )
-async def notify_any(
-    websocket: WebSocket,
-) -> None:
+async def find_by_color(
+    *,
+    store: Annotated[JsonStore, Depends(get_store)],
+    color: Annotated[str, Query(description="Hexadecimal color to search for, e.g. FF0000.")],
+    threshold: Annotated[float, Query(description="Similarity threshold (0-100).", ge=0, le=100)] = 20.0,
+) -> JSONResponse:
+    items = await asyncio.to_thread(store.find_spools_by_color, color, threshold)
+    return JSONResponse(
+        content=jsonable_encoder(
+            (_spool_to_api(store, item) for item in items),
+            exclude_none=True,
+        ),
+    )
+
+
+@router.websocket("", name="Listen to spool changes")
+async def notify_any(websocket: WebSocket) -> None:
     await websocket.accept()
     websocket_manager.connect(("spool",), websocket)
     try:
@@ -331,29 +216,19 @@ async def notify_any(
 @router.get(
     "/{spool_id}",
     name="Get spool",
-    description=(
-        "Get a specific spool. A websocket is served on the same path to listen for changes to the spool. "
-        "See the HTTP Response code 299 for the content of the websocket messages."
-    ),
     response_model_exclude_none=True,
     responses={404: {"model": Message}, 299: {"model": SpoolEvent, "description": "Websocket message"}},
 )
 async def get(
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
     spool_id: int,
 ) -> Spool:
-    db_item = await spool.get_by_id(db, spool_id)
-    return Spool.from_db(db_item)
+    item = await asyncio.to_thread(store.get_spool, spool_id)
+    return _spool_to_api(store, item)
 
 
-@router.websocket(
-    "/{spool_id}",
-    name="Listen to spool changes",
-)
-async def notify(
-    websocket: WebSocket,
-    spool_id: int,
-) -> None:
+@router.websocket("/{spool_id}", name="Listen to spool changes")
+async def notify(websocket: WebSocket, spool_id: int) -> None:
     await websocket.accept()
     websocket_manager.connect(("spool", str(spool_id)), websocket)
     try:
@@ -368,37 +243,27 @@ async def notify(
 @router.post(
     "",
     name="Add spool",
-    description=(
-        "Add a new spool to the database. "
-        "Only specify either remaining_weight or used_weight. "
-        "If no weight is set, the spool will be assumed to be full."
-    ),
     response_model_exclude_none=True,
     response_model=Spool,
-    responses={
-        400: {"model": Message},
-    },
+    responses={400: {"model": Message}},
 )
 async def create(  # noqa: ANN201
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
     body: SpoolParameters,
 ):
     if body.remaining_weight is not None and body.used_weight is not None:
-        return JSONResponse(
-            status_code=400,
-            content={"message": "Only specify either remaining_weight or used_weight."},
-        )
+        return JSONResponse(status_code=400, content={"message": "Only specify either remaining_weight or used_weight."})
 
     if body.extra:
-        all_fields = await get_extra_fields(db, EntityType.spool)
+        all_fields = get_extra_fields(store, EntityType.spool)
         try:
             validate_extra_field_dict(all_fields, body.extra)
         except ValueError as e:
-            return JSONResponse(status_code=400, content=Message(message=str(e)).dict())
+            return JSONResponse(status_code=400, content=Message(message=str(e)).model_dump())
 
     try:
-        db_item = await spool.create(
-            db=db,
+        item = await asyncio.to_thread(
+            store.create_spool,
             filament_id=body.filament_id,
             price=body.price,
             initial_weight=body.initial_weight,
@@ -407,147 +272,124 @@ async def create(  # noqa: ANN201
             used_weight=body.used_weight,
             first_used=body.first_used,
             last_used=body.last_used,
+            color_hex=body.color_hex,
+            multi_color_hexes=body.multi_color_hexes,
+            multi_color_direction=body.multi_color_direction.value if body.multi_color_direction is not None else None,
             location=body.location,
-            lot_nr=body.lot_nr,
             comment=body.comment,
             archived=body.archived,
             extra=body.extra,
         )
-        return Spool.from_db(db_item)
+        await _spool_changed(store, item.id, EventType.ADDED)
+        return _spool_to_api(store, item)
     except ItemCreateError:
         logger.exception("Failed to create spool.")
-        return JSONResponse(
-            status_code=400,
-            content={"message": "Failed to create spool, see server logs for more information."},
-        )
+        return JSONResponse(status_code=400, content={"message": "Failed to create spool, see server logs for more information."})
 
 
 @router.patch(
     "/{spool_id}",
     name="Update spool",
-    description=(
-        "Update any attribute of a spool. "
-        "Only fields specified in the request will be affected. "
-        "remaining_weight and used_weight can't be set at the same time. "
-        "If extra is set, all existing extra fields will be removed and replaced with the new ones."
-    ),
     response_model_exclude_none=True,
     response_model=Spool,
-    responses={
-        400: {"model": Message},
-        404: {"model": Message},
-    },
+    responses={400: {"model": Message}, 404: {"model": Message}},
 )
 async def update(  # noqa: ANN201
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
     spool_id: int,
     body: SpoolUpdateParameters,
 ):
     patch_data = body.model_dump(exclude_unset=True)
 
     if body.remaining_weight is not None and body.used_weight is not None:
-        return JSONResponse(
-            status_code=400,
-            content={"message": "Only specify either remaining_weight or used_weight."},
-        )
+        return JSONResponse(status_code=400, content={"message": "Only specify either remaining_weight or used_weight."})
 
     if body.extra:
-        all_fields = await get_extra_fields(db, EntityType.spool)
+        all_fields = get_extra_fields(store, EntityType.spool)
         try:
             validate_extra_field_dict(all_fields, body.extra)
         except ValueError as e:
-            return JSONResponse(status_code=400, content=Message(message=str(e)).dict())
+            return JSONResponse(status_code=400, content=Message(message=str(e)).model_dump())
 
     try:
-        db_item = await spool.update(
-            db=db,
-            spool_id=spool_id,
-            data=patch_data,
-        )
+        item = await asyncio.to_thread(store.update_spool, spool_id, patch_data)
     except ItemCreateError:
         logger.exception("Failed to update spool.")
-        return JSONResponse(
-            status_code=400,
-            content={"message": "Failed to update spool, see server logs for more information."},
-        )
+        return JSONResponse(status_code=400, content={"message": "Failed to update spool, see server logs for more information."})
 
-    return Spool.from_db(db_item)
+    await _spool_changed(store, item.id, EventType.UPDATED)
+    return _spool_to_api(store, item)
 
 
 @router.delete(
     "/{spool_id}",
     name="Delete spool",
-    description="Delete a spool.",
     responses={404: {"model": Message}},
 )
 async def delete(
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
     spool_id: int,
 ) -> Message:
-    await spool.delete(db, spool_id)
+    item = await asyncio.to_thread(store.delete_spool, spool_id)
+    try:
+        await websocket_manager.send(
+            ("spool", str(spool_id)),
+            SpoolEvent(
+                type=EventType.DELETED,
+                resource="spool",
+                date=datetime.utcnow(),
+                payload=_spool_to_api(store, item),
+            ),
+        )
+    except Exception:
+        logger.exception("Failed to send websocket message")
     return Message(message="Success!")
 
 
 @router.put(
     "/{spool_id}/use",
     name="Use spool filament",
-    description=(
-        "Use some length or weight of filament from the spool. Specify either a length or a weight, not both."
-    ),
     response_model_exclude_none=True,
     response_model=Spool,
-    responses={
-        400: {"model": Message},
-        404: {"model": Message},
-    },
+    responses={400: {"model": Message}, 404: {"model": Message}},
 )
 async def use(  # noqa: ANN201
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
     spool_id: int,
     body: SpoolUseParameters,
 ):
     if body.use_weight is not None and body.use_length is not None:
-        return JSONResponse(
-            status_code=400,
-            content={"message": "Only specify either use_weight or use_length."},
-        )
+        return JSONResponse(status_code=400, content={"message": "Only specify either use_weight or use_length."})
 
     if body.use_weight is not None:
-        db_item = await spool.use_weight(db, spool_id, body.use_weight)
-        return Spool.from_db(db_item)
+        item = await asyncio.to_thread(store.use_weight, spool_id, body.use_weight)
+        await _spool_changed(store, item.id, EventType.UPDATED)
+        return _spool_to_api(store, item)
 
     if body.use_length is not None:
-        db_item = await spool.use_length(db, spool_id, body.use_length)
-        return Spool.from_db(db_item)
+        item = await asyncio.to_thread(store.use_length, spool_id, body.use_length)
+        await _spool_changed(store, item.id, EventType.UPDATED)
+        return _spool_to_api(store, item)
 
-    return JSONResponse(
-        status_code=400,
-        content={"message": "Either use_weight or use_length must be specified."},
-    )
+    return JSONResponse(status_code=400, content={"message": "Either use_weight or use_length must be specified."})
 
 
 @router.put(
     "/{spool_id}/measure",
     name="Use spool filament based on the current weight measurement",
-    description=("Use some weight of filament from the spool. Specify the current gross weight of the spool."),
     response_model_exclude_none=True,
     response_model=Spool,
-    responses={
-        400: {"model": Message},
-        404: {"model": Message},
-    },
+    responses={400: {"model": Message}, 404: {"model": Message}},
 )
 async def measure(  # noqa: ANN201
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
     spool_id: int,
     body: SpoolMeasureParameters,
 ):
     try:
-        db_item = await spool.measure(db, spool_id, body.weight)
-        return Spool.from_db(db_item)
+        item = await asyncio.to_thread(store.measure_spool, spool_id, body.weight)
+        await _spool_changed(store, item.id, EventType.UPDATED)
+        return _spool_to_api(store, item)
     except SpoolMeasureError as e:
         logger.exception("Failed to update spool measurement.")
-        return JSONResponse(
-            status_code=400,
-            content={"message": e.args[0]},
-        )
+        return JSONResponse(status_code=400, content={"message": e.args[0]})

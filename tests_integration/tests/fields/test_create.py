@@ -43,23 +43,6 @@ def test_add_text_field_filament():
     assert_httpx_success(result)
 
 
-def test_add_text_field_vendor():
-    """Test adding a text field for vendors."""
-    result = httpx.post(
-        f"{URL}/api/v1/field/vendor/mytextfield",
-        json={
-            "name": "My text field",
-            "field_type": "text",
-            "default_value": json.dumps("Hello World"),
-        },
-    )
-    assert_httpx_success(result)
-
-    # Clean up
-    result = httpx.delete(f"{URL}/api/v1/field/vendor/mytextfield")
-    assert_httpx_success(result)
-
-
 def test_add_integer_field():
     """Test adding an integer field for spools."""
     result = httpx.post(

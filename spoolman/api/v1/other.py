@@ -1,14 +1,14 @@
-"""Filament related endpoints."""
+"""Other utility endpoints (materials, locations, etc.)."""
 
+import asyncio
 import logging
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field, RootModel
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from spoolman.database import filament, spool
-from spoolman.database.database import get_db_session
+from spoolman.storage.dependencies import get_store
+from spoolman.storage.store import JsonStore
 
 logger = logging.getLogger(__name__)
 
@@ -28,23 +28,15 @@ router = APIRouter(
     responses={
         200: {
             "description": "A list of all filament materials.",
-            "content": {
-                "application/json": {
-                    "example": [
-                        "PLA",
-                        "ABS",
-                        "PETG",
-                    ],
-                },
-            },
+            "content": {"application/json": {"example": ["PLA", "ABS", "PETG"]}},
         },
     },
 )
 async def find_materials(
     *,
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
 ) -> list[str]:
-    return await filament.find_materials(db=db)
+    return await asyncio.to_thread(store.find_materials)
 
 
 @router.get(
@@ -55,22 +47,15 @@ async def find_materials(
     responses={
         200: {
             "description": "A list of all article numbers.",
-            "content": {
-                "application/json": {
-                    "example": [
-                        "123456",
-                        "987654",
-                    ],
-                },
-            },
+            "content": {"application/json": {"example": ["123456", "987654"]}},
         },
     },
 )
 async def find_article_numbers(
     *,
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
 ) -> list[str]:
-    return await filament.find_article_numbers(db=db)
+    return await asyncio.to_thread(store.find_article_numbers)
 
 
 @router.get(
@@ -81,22 +66,15 @@ async def find_article_numbers(
     responses={
         200: {
             "description": "A list of all lot numbers.",
-            "content": {
-                "application/json": {
-                    "example": [
-                        "123456",
-                        "987654",
-                    ],
-                },
-            },
+            "content": {"application/json": {"example": ["123456", "987654"]}},
         },
     },
 )
 async def find_lot_numbers(
     *,
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
 ) -> list[str]:
-    return await spool.find_lot_numbers(db=db)
+    return await asyncio.to_thread(store.find_lot_numbers)
 
 
 @router.get(
@@ -107,23 +85,15 @@ async def find_lot_numbers(
     responses={
         200: {
             "description": "A list of all spool locations.",
-            "content": {
-                "application/json": {
-                    "example": [
-                        "Printer 1",
-                        "Printer 2",
-                        "Storage Shelf A",
-                    ],
-                },
-            },
+            "content": {"application/json": {"example": ["Printer 1", "Printer 2", "Storage Shelf A"]}},
         },
     },
 )
 async def find_locations(
     *,
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
 ) -> list[str]:
-    return await spool.find_locations(db=db)
+    return await asyncio.to_thread(store.find_locations)
 
 
 class RenameLocationBody(BaseModel):
@@ -140,9 +110,9 @@ class RenameLocationBody(BaseModel):
 async def rename_location(
     location: str,
     *,
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
     body: RenameLocationBody,
 ) -> str:
     logger.info("Renaming location %s to %s", location, body.name)
-    await spool.rename_location(db=db, current_name=location, new_name=body.name)
+    await asyncio.to_thread(store.rename_location, location, body.name)
     return body.name

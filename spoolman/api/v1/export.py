@@ -1,17 +1,16 @@
 """Functions for exporting data."""
 
+import asyncio
 import io
-from collections.abc import Iterable
 from enum import Enum
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Response
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from spoolman.database import filament, spool, vendor
-from spoolman.database.database import get_db_session
-from spoolman.database.models import Base
+from spoolman.api.v1.models import Filament, Spool
 from spoolman.export import dump_as_csv, dump_as_json
+from spoolman.storage.dependencies import get_store
+from spoolman.storage.store import JsonStore
 
 # ruff: noqa: D103,B008
 router = APIRouter(
@@ -28,57 +27,50 @@ class ExportFormat(Enum):
 @router.get(
     "/spools",
     name="Export spools",
-    description="Export the list of spools in various formats. Filament and vendor data is included.",
+    description="Export the list of spools in various formats. Filament data is included.",
 )
 async def export_spools(
     *,
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
     fmt: ExportFormat,
 ) -> Response:
-
-    all_spools, _ = await spool.find(db=db)
-    return await _export(all_spools, fmt)
+    all_spools, _ = await asyncio.to_thread(store.find_spools)
+    filament_map = {f.id: f for f in store._data.filaments}  # noqa: SLF001
+    api_spools = []
+    for s in all_spools:
+        f = filament_map.get(s.filament_id)
+        if f is None:
+            continue
+        api_spools.append(Spool.from_db(s, f))
+    return _export(api_spools, fmt)
 
 
 @router.get(
     "/filaments",
     name="Export filaments",
-    description="Export the list of filaments in various formats. Vendor data is included.",
+    description="Export the list of filaments in various formats.",
 )
 async def export_filaments(
     *,
-    db: Annotated[AsyncSession, Depends(get_db_session)],
+    store: Annotated[JsonStore, Depends(get_store)],
     fmt: ExportFormat,
 ) -> Response:
-    all_filaments, _ = await filament.find(db=db)
-    return await _export(all_filaments, fmt)
+    all_filaments, _ = await asyncio.to_thread(store.find_filaments)
+    api_filaments = [Filament.from_db(f) for f in all_filaments]
+    return _export(api_filaments, fmt)
 
 
-@router.get(
-    "/vendors",
-    name="Export vendors",
-    description="Export the list of vendors in various formats.",
-)
-async def export_vendors(
-    *,
-    db: Annotated[AsyncSession, Depends(get_db_session)],
-    fmt: ExportFormat,
-) -> Response:
-    all_vendors, _ = await vendor.find(db=db)
-    return await _export(all_vendors, fmt)
-
-
-async def _export(objects: Iterable[Base], fmt: ExportFormat) -> Response:
-    """Export the objects in various formats."""
+def _export(objects: list, fmt: ExportFormat) -> Response:
+    """Export objects in various formats."""
     buffer = io.StringIO()
     media_type = ""
 
     if fmt == ExportFormat.CSV:
         media_type = "text/csv"
-        await dump_as_csv(objects, buffer)
+        dump_as_csv(objects, buffer)
     elif fmt == ExportFormat.JSON:
         media_type = "application/json"
-        await dump_as_json(objects, buffer)
+        dump_as_json(objects, buffer)
     else:
         raise ValueError(f"Unknown export format: {fmt}")
 

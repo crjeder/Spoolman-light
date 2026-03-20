@@ -6,37 +6,49 @@
 
 <br/>
 
-_Keep track of your inventory of 3D-printer filament spools._
+_A lightweight filament tracker for home 3D printing._
 
-# Spoolman
+# Spoolman (light)
 
-Spoolman is a self-hosted web service designed to help you efficiently manage your 3D printer filament spools and monitor their usage. It acts as a centralized database that seamlessly integrates with popular 3D printing software like [OctoPrint](https://octoprint.org/) and [Klipper](https://www.klipper3d.org/)/[Moonraker](https://moonraker.readthedocs.io/en/latest/). When connected, it automatically updates spool weights as printing progresses, giving you real-time insights into filament usage.
-
-[![Static Badge](https://img.shields.io/badge/Spoolman%20Wiki-blue?link=https%3A%2F%2Fgithub.com%2FDonkie%2FSpoolman%2Fwiki)](https://github.com/Donkie/Spoolman/wiki)
-[![GitHub Release](https://img.shields.io/github/v/release/Donkie/Spoolman)](https://github.com/Donkie/Spoolman/releases)
+Spoolman light is a self-hosted web service for tracking your 3D printer filament spools. It is a simplified fork of [Donkie/Spoolman](https://github.com/Donkie/Spoolman) designed for home use — one or two printers and a shelf of spools — with no database server, no vendor management, and no external integrations required.
 
 ## Features
-* **Filament Management**: Keep comprehensive records of filament types, manufacturers, and individual spools.
-* **API Integration**: The [REST API](https://donkie.github.io/Spoolman/) allows easy integration with other software, facilitating automated workflows and data exchange.
-* **Real-Time Updates**: Stay informed with live spool updates through Websockets, providing immediate feedback during printing operations.
-* **Central Filament Database**: A community-supported database of manufacturers and filaments simplify adding new spools to your inventory. Contribute by heading to [SpoolmanDB](https://github.com/Donkie/SpoolmanDB).
-* **Web-Based Client**: Spoolman includes a built-in web client that lets you manage data effortlessly:
-  * View, create, edit, and delete filament data.
-  * Add custom fields to tailor information to your specific needs.
-  * Print labels with QR codes for easy spool identification and tracking.
-  * Contribute to its translation into 18 languages via [Weblate](https://hosted.weblate.org/projects/spoolman/).
-* **Simple Storage**: All data stored in a single JSON file (`spoolman.json`) — no database server required. Configure path via `SPOOLMAN_DATA_FILE`.
-* **Multi-Printer Management**: Handles spool updates from several printers simultaneously.
-* **Advanced Monitoring**: Integrate with [Prometheus](https://prometheus.io/) for detailed historical analysis of filament usage, helping you track and optimize your printing processes. See the [Wiki](https://github.com/Donkie/Spoolman/wiki/Filament-Usage-History) for instructions on how to set it up.
 
-**Spoolman integrates with:**
-  * [Moonraker](https://moonraker.readthedocs.io/en/latest/configuration/#spoolman) and most front-ends (Fluidd, KlipperScreen, Mainsail, ...)
-  * [OctoPrint](https://github.com/mdziekon/octoprint-spoolman)
-  * [OctoEverywhere](https://octoeverywhere.com/spoolman?source=github_spoolman)
-  * [Homeassistant](https://github.com/Disane87/spoolman-homeassistant)
+* **Filament & Spool Tracking**: Keep records of filament types and individual spools, including color and price directly on the spool.
+* **REST API**: A clean [REST API](https://donkie.github.io/Spoolman/) for reading and updating spool data.
+* **Web Client**: Built-in browser UI to view, create, edit, and delete filaments and spools.
+* **Simple Storage**: All data stored in a single JSON file — no database server required. Configure the path via `SPOOLMAN_DATA_FILE`.
+
+## Integrations
+
+Any Spoolman-compatible REST API client can connect to this service using its standard API endpoints.
 
 **Web client preview:**
 ![image](https://github.com/Donkie/Spoolman/assets/2332094/33928d5e-440f-4445-aca9-456c4370ad0d)
 
 ## Installation
-Please see the [Installation page on the Wiki](https://github.com/Donkie/Spoolman/wiki/Installation) for details how to install Spoolman.
+
+Clone the repository and install dependencies with `pdm` or `uv`:
+
+```bash
+pdm install
+pdm run app
+```
+
+The web client will be available at `http://localhost:8000`.
+
+## Configuration
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `SPOOLMAN_DATA_FILE` | `<data_dir>/spoolman.json` | Path to JSON data file |
+| `SPOOLMAN_DIR_DATA` | platform default | Data directory |
+| `SPOOLMAN_DIR_LOGS` | platform default | Logs directory |
+| `SPOOLMAN_DIR_BACKUPS` | platform default | Backups directory |
+| `SPOOLMAN_HOST` | `0.0.0.0` | Bind host |
+| `SPOOLMAN_PORT` | `8000` | Bind port |
+| `SPOOLMAN_CORS_ORIGIN` | `FALSE` | CORS origin (set to frontend URL if needed) |
+| `SPOOLMAN_BASE_PATH` | `""` | URL base path prefix |
+| `SPOOLMAN_DEBUG_MODE` | `FALSE` | Enable debug mode |
+| `SPOOLMAN_LOGGING_LEVEL` | `INFO` | Log level |
+| `SPOOLMAN_AUTOMATIC_BACKUP` | `TRUE` | Automatic data backup |

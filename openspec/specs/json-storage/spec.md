@@ -7,7 +7,7 @@ The system SHALL create a new, empty JSON data file on first startup if none exi
 
 #### Scenario: First run with no data file
 - **WHEN** the application starts and no data file exists at `SPOOLMAN_DATA_FILE`
-- **THEN** the system creates a valid empty JSON file with `{"meta": {"schema_version": 1}, "vendors": [], "filaments": [], "spools": [], "settings": {}}`
+- **THEN** the system creates a valid empty JSON file with `{"meta": {"schema_version": 2}, "filaments": [], "spools": [], "settings": {}}`
 
 #### Scenario: Subsequent run with existing file
 - **WHEN** the application starts and a data file already exists
@@ -50,7 +50,7 @@ The system SHALL maintain an in-memory representation of all data, loading from 
 The system SHALL assign auto-incrementing integer IDs to new entities, tracking the next available ID per entity type in the JSON file.
 
 #### Scenario: New entity gets next sequential ID
-- **WHEN** a new vendor, filament, or spool is created
+- **WHEN** a new filament or spool is created
 - **THEN** it receives an integer ID one greater than the current maximum ID for that entity type
 
 #### Scenario: IDs remain stable after deletion
@@ -58,7 +58,7 @@ The system SHALL assign auto-incrementing integer IDs to new entities, tracking 
 - **THEN** the new entity receives a new ID higher than any previously assigned ID (no ID reuse)
 
 ### Requirement: Extra fields stored as inline dict
-The system SHALL store `extra` fields for vendors, filaments, and spools as a `dict[str, str]` directly on the entity object in JSON, not as a separate relation.
+The system SHALL store `extra` fields for filaments and spools as a `dict[str, str]` directly on the entity object in JSON, not as a separate relation.
 
 #### Scenario: Create entity with extra fields
 - **WHEN** a POST request includes `extra` key-value pairs
@@ -68,20 +68,16 @@ The system SHALL store `extra` fields for vendors, filaments, and spools as a `d
 - **WHEN** an entity with extra fields is retrieved via GET
 - **THEN** the response contains the same extra key-value pairs that were set
 
-### Requirement: API contract unchanged
-The system SHALL preserve all existing REST API routes, request schemas, and response schemas so that API clients and the frontend require no changes.
+### Requirement: API contract reflects simplified model
+The system SHALL expose only Filament and Spool resources. Filament fields SHALL be limited to material properties. Spool fields SHALL include color, weight, and price.
 
-#### Scenario: Vendor CRUD operations work identically
-- **WHEN** any vendor API endpoint is called with a valid request
-- **THEN** the response matches the existing API contract (same fields, same HTTP status codes)
-
-#### Scenario: Filament CRUD operations work identically
+#### Scenario: Filament CRUD operations use simplified schema
 - **WHEN** any filament API endpoint is called with a valid request
-- **THEN** the response matches the existing API contract
+- **THEN** the response contains only material-formula fields (no color, price, weight, article_number, external_id)
 
-#### Scenario: Spool CRUD operations work identically
+#### Scenario: Spool CRUD operations include color and price
 - **WHEN** any spool API endpoint is called with a valid request
-- **THEN** the response matches the existing API contract
+- **THEN** the response includes color_hex, initial_weight, spool_weight, and price fields
 
 ### Requirement: Settings persistence
 The system SHALL persist application settings as a flat `dict[str, str]` under the `settings` key in the JSON file.

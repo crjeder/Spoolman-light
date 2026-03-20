@@ -99,6 +99,7 @@ After every change, update [CHANGELOG.md](CHANGELOG.md):
 - Put entries under `## [Unreleased]` in the appropriate section (`Added`, `Changed`, `Fixed`, `Removed`, `Security`, `Deprecated`)
 - Follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format — write for humans, not diffs
 - Use [TODO.md](TODO.md) to track pending work
+- Never push to the upstream repository unless specifically instructed
 
 ## Gotchas
 

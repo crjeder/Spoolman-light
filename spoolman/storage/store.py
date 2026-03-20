@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -23,6 +24,7 @@ class JsonStore:
     def __init__(self, path: Path) -> None:
         self._path = path
         self._data = DataStore()
+        self._lock = threading.RLock()
 
     def load(self) -> None:
         """Load data from disk, or create a new empty file if none exists."""
@@ -42,11 +44,12 @@ class JsonStore:
 
     def _flush(self) -> None:
         """Atomically write data to disk."""
-        tmp = self._path.with_suffix(".tmp")
-        self._path.parent.mkdir(parents=True, exist_ok=True)
-        with tmp.open("w", encoding="utf-8") as f:
-            f.write(self._data.model_dump_json(indent=2))
-        os.replace(tmp, self._path)
+        with self._lock:
+            tmp = self._path.with_suffix(".tmp")
+            self._path.parent.mkdir(parents=True, exist_ok=True)
+            with tmp.open("w", encoding="utf-8") as f:
+                f.write(self._data.model_dump_json(indent=2))
+            os.replace(tmp, self._path)
 
     # ── Filament ──────────────────────────────────────────────────────────────
 

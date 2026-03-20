@@ -44,7 +44,7 @@
 - [x] 6.2 Update filament test fixtures to use new field set (remove color, price, weight; add vendor string)
 - [x] 6.3 Update spool test fixtures to include color fields, remove lot_nr
 - [x] 6.4 Add tests for color filtering on spools
-- [ ] 6.5 Run full integration test suite and fix any remaining failures
+- [x] 6.5 Run full integration test suite and fix any remaining failures
 
 ## 7. Documentation and Changelog
 

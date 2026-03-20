@@ -27,6 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `/api/v1/info` response field `db_type` has been replaced with `data_file` (the resolved path to the JSON file).
 - Docker volume mounts previously pointing at `/home/app/.local/share/spoolman` (for `spoolman.db`) still work — the JSON file is written to the same directory as `spoolman.json`.
 
+### Fixed
+
+- `entrypoint.sh` had Windows-style CRLF line endings, causing the Docker container to fail to start on Linux with "no such file or directory".
+- `JsonStore._flush` could raise `FileNotFoundError` under concurrent requests due to multiple threads racing to rename the same `.tmp` file; writes are now serialized with a reentrant lock.
+
 ### Deprecated
 
 ### Removed

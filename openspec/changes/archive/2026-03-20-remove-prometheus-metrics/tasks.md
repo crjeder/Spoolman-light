@@ -24,6 +24,6 @@
 ## 5. Verify & Clean Up
 
 - [x] 5.1 Run `ruff check .` and fix any lint errors
-- [ ] 5.2 Run integration tests (`python tests_integration/run.py sqlite`) to confirm nothing is broken
+- [x] 5.2 Run integration tests (`python tests_integration/run.py sqlite`) to confirm nothing is broken
 - [x] 5.3 Remove `SPOOLMAN_METRICS_ENABLED` row from the env var table in `CLAUDE.md`
 - [x] 5.4 Add CHANGELOG entry under `## [Unreleased] > Removed` for the metrics endpoint and env var

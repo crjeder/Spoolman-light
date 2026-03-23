@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Full Rust rewrite: Axum backend + Leptos WASM frontend in a Cargo workspace (`crates/spoolman-types`, `crates/spoolman-server`, `crates/spoolman-client`).
+- Full Rust rewrite: Axum backend + Leptos WASM frontend in a Cargo workspace (`crates/spoolman-types`, `crates/spoolman-server`, `crates/spoolman-client`). Build with `LEPTOS_WASM_BINDGEN_VERSION=0.2.114 cargo leptos build`.
+- `docker-compose.yml` at repo root for quick local deployment; data persisted in a named Docker volume at `/data/spoolman.json`.
+- `rust-toolchain.toml` declares the stable toolchain with `wasm32-unknown-unknown` target so `rustup` installs it automatically.
 - `spoolman-types` shared crate: `Spool`, `Filament`, `Location`, `DataStore` types used by both server and client, ensuring compile-time API contract consistency.
 - `Location` as a first-class entity with full CRUD — replaces the previous freeform string field on Spool.
 - `GET /api/v1/filament/search?q=` endpoint: proxies SpoolmanDB on demand (no background scheduler or local cache).
@@ -31,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BREAKING**: Backup download endpoint removed (backup still runs automatically in background).
 - Spool NFC Online Data URL maps to `/api/v1/spool/<id>` (OpenTag3D-compatible).
 - README updated with Rust build instructions and revised environment variable reference.
+- Dockerfile: `SPOOLMAN_DATA_FILE` defaults to `/data/spoolman.json` and `LEPTOS_SITE_ROOT` defaults to `/site` in the container, matching the volume mount convention.
+- Static asset path in the server is now read from `LEPTOS_SITE_ROOT` env var (fallback: `target/site`), enabling the production Docker layout without recompilation.
 
 ### Fixed
 

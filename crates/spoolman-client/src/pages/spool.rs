@@ -101,7 +101,7 @@ pub fn SpoolList() -> impl IntoView {
                                     <td>{sr.spool.location_id.map(|l| l.to_string()).unwrap_or_default()}</td>
                                     <td>{sr.spool.registered.format("%Y-%m-%d").to_string()}</td>
                                     <td class="actions">
-                                        <a href=format!("/spools/{id}/edit")">"Edit"</a>
+                                        <a href=format!("/spools/{id}/edit")>"Edit"</a>
                                     </td>
                                 </tr>
                             }
@@ -123,25 +123,28 @@ pub fn SpoolShow() -> impl IntoView {
     let spool = create_resource(id, |id| async move { api::get_spool(id).await });
     let navigate = use_navigate();
 
-    let on_delete = move |_| {
+    // store_value gives Copy semantics so these handlers can be captured
+    // by the reactive `move ||` closure inside view! without making it FnOnce.
+    let nav1 = navigate.clone();
+    let on_delete = store_value(move |_: web_sys::MouseEvent| {
         let id = id();
-        let navigate = navigate.clone();
+        let nav = nav1.clone();
         spawn_local(async move {
             if api::delete_spool(id).await.is_ok() {
-                navigate("/spools", Default::default());
+                nav("/spools", Default::default());
             }
         });
-    };
+    });
 
-    let on_clone = move |_| {
+    let on_clone = store_value(move |_: web_sys::MouseEvent| {
         let id = id();
-        let navigate = navigate.clone();
+        let nav = navigate.clone();
         spawn_local(async move {
             if let Ok(new) = api::clone_spool(id).await {
-                navigate(&format!("/spools/{}", new.spool.id), Default::default());
+                nav(&format!("/spools/{}", new.spool.id), Default::default());
             }
         });
-    };
+    });
 
     view! {
         <div class="page spool-show">
@@ -153,8 +156,8 @@ pub fn SpoolShow() -> impl IntoView {
                             <h1>"Spool #"{sr.spool.id}</h1>
                             <div class="page-actions">
                                 <a href=format!("/spools/{}/edit", sr.spool.id) class="btn">"Edit"</a>
-                                <button on:click=on_clone class="btn">"Clone"</button>
-                                <button on:click=on_delete class="btn btn-danger">"Delete"</button>
+                                <button on:click=move |e| on_clone.with_value(|f| f(e)) class="btn">"Clone"</button>
+                                <button on:click=move |e| on_delete.with_value(|f| f(e)) class="btn btn-danger">"Delete"</button>
                             </div>
                         </div>
                         <dl class="detail-grid">

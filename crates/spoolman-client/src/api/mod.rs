@@ -23,7 +23,7 @@ pub use spool::*;
 
 // ── Error type ────────────────────────────────────────────────────────────────
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct ApiError {
     pub status: u16,
     pub message: String,

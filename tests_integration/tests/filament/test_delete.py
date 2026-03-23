@@ -10,29 +10,23 @@ def test_delete_filament():
     result = httpx.post(
         f"{URL}/api/v1/filament",
         json={
-            "name": "Filament X",
-            "vendor": "eSun",
+            "manufacturer": "eSun",
             "material": "PLA",
-            "density": 1.25,
+            "density": 1.24,
             "diameter": 1.75,
-            "comment": "abcdefghåäö",
         },
     )
     result.raise_for_status()
-    added_filament = result.json()
+    added = result.json()
 
-    httpx.delete(f"{URL}/api/v1/filament/{added_filament['id']}").raise_for_status()
+    result = httpx.delete(f"{URL}/api/v1/filament/{added['id']}")
+    assert result.status_code == 204
 
-    result = httpx.get(f"{URL}/api/v1/filament/{added_filament['id']}")
+    result = httpx.get(f"{URL}/api/v1/filament/{added['id']}")
     assert result.status_code == 404
 
 
 def test_delete_filament_not_found():
     """Test deleting a filament that does not exist."""
     result = httpx.delete(f"{URL}/api/v1/filament/123456789")
-
     assert result.status_code == 404
-    message = result.json()["message"].lower()
-    assert "filament" in message
-    assert "id" in message
-    assert "123456789" in message

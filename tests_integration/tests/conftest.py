@@ -1,6 +1,5 @@
 """Test fixtures for integration tests."""
 
-import math
 import os
 import time
 from collections.abc import Iterable
@@ -13,6 +12,8 @@ import pytest
 TIMEOUT = 30
 
 URL = "http://spoolman:" + os.environ.get("SPOOLMAN_PORT", "8000")
+
+RED = {"r": 255, "g": 0, "b": 0, "a": 255}
 
 
 def pytest_sessionstart(session):  # noqa: ARG001, ANN001
@@ -38,13 +39,12 @@ def random_filament_impl():
     result = httpx.post(
         f"{URL}/api/v1/filament",
         json={
-            "name": "Filament X",
-            "vendor": "TestVendor",
+            "manufacturer": "TestBrand",
             "material": "PLA",
-            "density": 1.25,
+            "density": 1.24,
             "diameter": 1.75,
-            "settings_extruder_temp": 210,
-            "settings_bed_temp": 60,
+            "print_temp": 210,
+            "bed_temp": 60,
             "comment": "abcdefghåäö",
         },
     )
@@ -62,7 +62,7 @@ def random_empty_filament_impl():
     result = httpx.post(
         f"{URL}/api/v1/filament",
         json={
-            "density": 1.25,
+            "density": 1.24,
             "diameter": 1.75,
         },
     )
@@ -75,17 +75,14 @@ def random_empty_filament_impl():
 
 
 @contextmanager
-def random_spool_impl(filament_id: int, *, initial_weight: float = 1000, spool_weight: float = 250):
+def random_spool_impl(filament_id: int, *, initial_weight: float = 1250):
     """Return a random spool."""
     result = httpx.post(
         f"{URL}/api/v1/spool",
         json={
             "filament_id": filament_id,
             "initial_weight": initial_weight,
-            "spool_weight": spool_weight,
-            "color_hex": "FF0000",
-            "price": 25.0,
-            "location": "Shelf A",
+            "colors": [RED],
             "comment": "Test spool",
         },
     )
@@ -95,6 +92,21 @@ def random_spool_impl(filament_id: int, *, initial_weight: float = 1000, spool_w
     yield spool
 
     httpx.delete(f"{URL}/api/v1/spool/{spool['id']}").raise_for_status()
+
+
+@contextmanager
+def random_location_impl():
+    """Return a random location."""
+    result = httpx.post(
+        f"{URL}/api/v1/location",
+        json={"name": "Test Location"},
+    )
+    result.raise_for_status()
+
+    location: dict[str, Any] = result.json()
+    yield location
+
+    httpx.delete(f"{URL}/api/v1/location/{location['id']}").raise_for_status()
 
 
 @pytest.fixture
@@ -125,35 +137,22 @@ def random_empty_filament_mod():
         yield filament
 
 
-def length_from_weight(*, weight: float, diameter: float, density: float) -> float:
-    """Calculate the length of a piece of filament.
+@pytest.fixture
+def random_location():
+    """Return a random location."""
+    with random_location_impl() as location:
+        yield location
 
-    Args:
-        weight (float): Filament weight in g
-        diameter (float): Filament diameter in mm
-        density (float): Density of filament material in g/cm3
 
-    Returns:
-        float: Length in mm
-
-    """
-    volume_cm3 = weight / density
-    volume_mm3 = volume_cm3 * 1000
-    return volume_mm3 / (math.pi * (diameter / 2) ** 2)
+@pytest.fixture(scope="module")
+def random_location_mod():
+    """Return a random location."""
+    with random_location_impl() as location:
+        yield location
 
 
 def assert_dicts_compatible(actual: Any, expected: Any, path: str = "") -> None:  # noqa: ANN401
-    """Assert that two dictionaries are compatible for unit testing a REST API.
-
-    Args:
-        actual (dict): The actual dictionary.
-        expected (dict): The expected dictionary.
-        path (str): The path to the current level in the dictionary (used for error messages).
-
-    Raises:
-        AssertionError: If dictionaries are not compatible.
-
-    """
+    """Assert that two dictionaries are compatible for unit testing a REST API."""
     if not (isinstance(actual, dict) and isinstance(expected, dict)):
         raise TypeError(f"At {path}: Actual and expected values must be dictionaries.")
 

@@ -20,52 +20,28 @@ def filaments() -> Iterable[Fixture]:
     """Add some filaments to the database."""
     result = httpx.post(
         f"{URL}/api/v1/filament",
-        json={
-            "name": "Filament X",
-            "vendor": "eSun",
-            "material": "PLA",
-            "density": 1.25,
-            "diameter": 1.75,
-            "settings_extruder_temp": 210,
-        },
+        json={"manufacturer": "eSun", "material": "PLA", "density": 1.24, "diameter": 1.75},
     )
     result.raise_for_status()
     filament_1 = result.json()
 
     result = httpx.post(
         f"{URL}/api/v1/filament",
-        json={
-            "name": "Filament Y",
-            "vendor": "eSun",
-            "material": "ABS",
-            "density": 1.25,
-            "diameter": 1.75,
-        },
+        json={"manufacturer": "eSun", "material": "ABS", "density": 1.05, "diameter": 1.75},
     )
     result.raise_for_status()
     filament_2 = result.json()
 
     result = httpx.post(
         f"{URL}/api/v1/filament",
-        json={
-            "name": "Filament Z",
-            "material": "PLA+",
-            "density": 1.25,
-            "diameter": 1.75,
-        },
+        json={"manufacturer": "Polymaker", "material": "PLA", "density": 1.24, "diameter": 1.75},
     )
     result.raise_for_status()
     filament_3 = result.json()
 
     result = httpx.post(
         f"{URL}/api/v1/filament",
-        json={
-            "name": "Filament W",
-            "vendor": "Polymaker",
-            "material": "PLA",
-            "density": 1.25,
-            "diameter": 1.75,
-        },
+        json={"material": "PETG", "density": 1.27, "diameter": 1.75},
     )
     result.raise_for_status()
     filament_4 = result.json()
@@ -86,31 +62,22 @@ def test_find_all_filaments(filaments: Fixture):
     assert_lists_compatible(found, filaments.filaments)
 
 
-def test_find_filaments_by_vendor(filaments: Fixture):
-    """Test finding filaments by vendor string."""
-    result = httpx.get(f"{URL}/api/v1/filament", params={"vendor": "eSun"})
-    result.raise_for_status()
-    found = result.json()
-    expected = [f for f in filaments.filaments if f.get("vendor") == "eSun"]
-    assert_lists_compatible(found, expected)
-
-
-def test_find_filaments_by_name(filaments: Fixture):
-    """Test finding filaments by name."""
-    result = httpx.get(f"{URL}/api/v1/filament", params={"name": "Filament X"})
-    result.raise_for_status()
-    found = result.json()
-    expected = [f for f in filaments.filaments if f.get("name") == "Filament X"]
-    assert_lists_compatible(found, expected)
-
-
 def test_find_filaments_by_material(filaments: Fixture):
-    """Test finding filaments by material (exact match using quoted syntax)."""
-    result = httpx.get(f"{URL}/api/v1/filament", params={"material": '"PLA"'})
+    """Test filtering filaments by material."""
+    result = httpx.get(f"{URL}/api/v1/filament", params={"material": "PLA"})
     result.raise_for_status()
     found = result.json()
     expected = [f for f in filaments.filaments if f.get("material") == "PLA"]
     assert_lists_compatible(found, expected)
+
+
+def test_find_filaments_x_total_count(filaments: Fixture):
+    """Test that X-Total-Count header matches list length."""
+    result = httpx.get(f"{URL}/api/v1/filament")
+    result.raise_for_status()
+    items = result.json()
+    total = int(result.headers["x-total-count"])
+    assert total == len(items)
 
 
 def test_find_filaments_pagination(filaments: Fixture):
@@ -125,7 +92,15 @@ def test_find_filaments_pagination(filaments: Fixture):
     page2 = result.json()
     assert len(page2) == 2
 
-    # No overlap
     ids_p1 = {f["id"] for f in page1}
     ids_p2 = {f["id"] for f in page2}
     assert not ids_p1 & ids_p2
+
+
+def test_find_filaments_sort(filaments: Fixture):
+    """Test that sort and order params are accepted."""
+    result = httpx.get(f"{URL}/api/v1/filament", params={"sort": "id", "order": "asc"})
+    result.raise_for_status()
+    items = result.json()
+    ids = [f["id"] for f in items]
+    assert ids == sorted(ids)

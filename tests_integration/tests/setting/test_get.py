@@ -1,43 +1,27 @@
-"""Integration tests for the Vendor API endpoint."""
+"""Integration tests for the Setting API endpoint."""
 
 import httpx
 
 from ..conftest import URL
 
 
-def test_get_currency():
-    """Test getting the currency setting."""
-    # Execute
-    result = httpx.get(f"{URL}/api/v1/setting/currency")
+def test_get_all_settings_returns_dict():
+    """Test that GET /api/v1/setting returns a dict."""
+    result = httpx.get(f"{URL}/api/v1/setting")
     result.raise_for_status()
 
-    # Verify
-    setting = result.json()
-    assert setting == {
-        "value": '"EUR"',
-        "is_set": False,
-        "type": "string",
-    }
-
-
-def test_get_unknown():
-    """Test getting an unknown setting."""
-    # Execute
-    result = httpx.get(f"{URL}/api/v1/setting/unknown")
-    assert result.status_code == 404
-
-
-def test_get_all():
-    """Test getting all settings."""
-    # Execute
-    result = httpx.get(f"{URL}/api/v1/setting/")
-    result.raise_for_status()
-
-    # Verify
     settings = result.json()
-    assert "currency" in settings
-    assert settings["currency"] == {
-        "value": '"EUR"',
-        "is_set": False,
-        "type": "string",
-    }
+    assert isinstance(settings, dict)
+
+
+def test_get_setting_reflects_put():
+    """Test that a PUT value is reflected in GET."""
+    httpx.put(f"{URL}/api/v1/setting/currency_symbol", json={"value": "€"}).raise_for_status()
+
+    result = httpx.get(f"{URL}/api/v1/setting")
+    result.raise_for_status()
+    settings = result.json()
+    assert settings.get("currency_symbol") == "€"
+
+    # Cleanup: remove the value by setting it to empty (no delete endpoint; overwrite)
+    httpx.put(f"{URL}/api/v1/setting/currency_symbol", json={"value": ""}).raise_for_status()

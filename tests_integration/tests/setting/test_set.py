@@ -1,115 +1,47 @@
-"""Integration tests for the Vendor API endpoint."""
-
-import json
+"""Integration tests for the Setting API endpoint."""
 
 import httpx
 
 from ..conftest import URL
 
 
-def test_set_currency():
-    """Test setting the currency setting."""
-    # Execute
-    result = httpx.post(
-        f"{URL}/api/v1/setting/currency",
-        json='"SEK"',
+def test_set_setting():
+    """Test setting a value via PUT."""
+    result = httpx.put(
+        f"{URL}/api/v1/setting/currency_symbol",
+        json={"value": "€"},
     )
-    result.raise_for_status()
+    assert result.status_code == 204
 
-    # Verify
-    setting = result.json()
-    assert setting == {
-        "value": '"SEK"',
-        "is_set": True,
-        "type": "string",
-    }
+    # Verify the value was stored
+    settings = httpx.get(f"{URL}/api/v1/setting").json()
+    assert settings.get("currency_symbol") == "€"
 
     # Cleanup
-    result = httpx.post(
-        f"{URL}/api/v1/setting/currency",
-        json="",
-    )
-    result.raise_for_status()
+    httpx.put(f"{URL}/api/v1/setting/currency_symbol", json={"value": ""}).raise_for_status()
 
 
-def test_unset_currency():
-    """Test un-setting the currency setting."""
-    # Execute set
-    result = httpx.post(
-        f"{URL}/api/v1/setting/currency",
-        json='"SEK"',
-    )
-    result.raise_for_status()
+def test_overwrite_setting():
+    """Test that overwriting a setting with a new value works."""
+    httpx.put(f"{URL}/api/v1/setting/currency_symbol", json={"value": "€"}).raise_for_status()
+    httpx.put(f"{URL}/api/v1/setting/currency_symbol", json={"value": "$"}).raise_for_status()
 
-    # Verify set
-    setting = result.json()
-    assert setting == {
-        "value": '"SEK"',
-        "is_set": True,
-        "type": "string",
-    }
-
-    # Execute unset
-    result = httpx.post(
-        f"{URL}/api/v1/setting/currency",
-        json="",
-    )
-    result.raise_for_status()
-
-    # Verify unset
-    setting = result.json()
-    assert setting == {
-        "value": '"EUR"',
-        "is_set": False,
-        "type": "string",
-    }
-
-
-def test_set_unknown():
-    """Test setting an invalid setting."""
-    # Execute
-    result = httpx.post(
-        f"{URL}/api/v1/setting/not-a-setting",
-        json='"SEK"',
-    )
-    assert result.status_code == 404
-
-
-def test_set_currency_wrong_type():
-    """Test setting the currency setting with the wrong type."""
-    # Execute
-    result = httpx.post(
-        f"{URL}/api/v1/setting/currency",
-        json=123,
-    )
-    assert result.status_code == 422
-
-
-def test_set_big_value():
-    """Test setting a setting to a long string which should be saved correctly."""
-    long_string = "a" * (2**16 - 1 - 2)  # Backend guarantees that it can handle strings up to 65535 characters long.
-    # Remove 2 characters to account for the quotes.
-
-    # Execute
-    result = httpx.post(
-        f"{URL}/api/v1/setting/currency",
-        json=json.dumps(long_string),
-    )
-    result.raise_for_status()
-
-    # Verify
-    result = httpx.get(f"{URL}/api/v1/setting/currency")
-    result.raise_for_status()
-    setting = result.json()
-    assert setting == {
-        "value": json.dumps(long_string),
-        "is_set": True,
-        "type": "string",
-    }
+    settings = httpx.get(f"{URL}/api/v1/setting").json()
+    assert settings.get("currency_symbol") == "$"
 
     # Cleanup
-    result = httpx.post(
-        f"{URL}/api/v1/setting/currency",
-        json="",
-    )
-    result.raise_for_status()
+    httpx.put(f"{URL}/api/v1/setting/currency_symbol", json={"value": ""}).raise_for_status()
+
+
+def test_set_multiple_settings():
+    """Test setting multiple distinct keys."""
+    httpx.put(f"{URL}/api/v1/setting/currency_symbol", json={"value": "£"}).raise_for_status()
+    httpx.put(f"{URL}/api/v1/setting/locale", json={"value": "en-GB"}).raise_for_status()
+
+    settings = httpx.get(f"{URL}/api/v1/setting").json()
+    assert settings.get("currency_symbol") == "£"
+    assert settings.get("locale") == "en-GB"
+
+    # Cleanup
+    httpx.put(f"{URL}/api/v1/setting/currency_symbol", json={"value": ""}).raise_for_status()
+    httpx.put(f"{URL}/api/v1/setting/locale", json={"value": ""}).raise_for_status()

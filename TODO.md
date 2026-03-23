@@ -4,24 +4,13 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 
 ## Pending
 
-### In Progress
-- [ ] Remove DB (SQLAlchemy/Alembic) — replace with JSON storage (`openspec/changes/remove-db-use-json-storage/`)
-- [ ] Run full integration test suite to verify `simplify-data-model` changes (`openspec/changes/simplify-data-model/`) — requires Docker Desktop running
-
 ### Enhancements
-- [ ] Support `.env` files
-- [ ] NFC or QR code stickers to identify spools and autmate update [OpenSpoolMan](https://github.com/drndos/openspoolman) or [Spoolman QR](https://github.com/Donkie/Spoolman/wiki/Printing-Labels)
-- [ ] make the Spool view default
-- [ ] color search
-- [ ] add type field to filament (eg. "PLA")
-- [ ] add a "light" theme which matches the logo
+- [ ] Support `.env` files for local development (`dotenvy` crate, load at startup in `spoolman-server/src/main.rs`)
+- [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
+- [ ] Make the Spool list the default landing page
+- [ ] Color search on spool list (filter by RGBA proximity)
+- [ ] Add `filament_type` field to Filament (e.g. "PLA", "PETG", "ABS")
+- [ ] Light theme matching the logo
 
-### Simplification
-- [ ] Drop export endpoints (`spoolman/api/v1/export.py`) — replace with a simple JSON data-file download
-- [ ] Drop extra fields system — remove `/field/*` endpoints, `spoolman/extra_fields.py`, field management UI; keep raw `extra: dict[str, str]` on entities as-is
-- [ ] Drop WebSocket support (`spoolman/ws.py`, WebSocket routes in spool/filament/vendor)
-- [ ] Drop QR code / label printing page (`client/src/pages/printing/`)
-- [ ] Remove deprecated query param aliases in `GET /spool` (`filament_name`, `filament_id` old-style underscore params — dotted form is now canonical)
-
-### Refactor
-- [ ] translate Python code to Rust
+### Testing
+- [ ] Update integration tests (`tests_integration/`) for the Rust stack (currently written for the Python backend)

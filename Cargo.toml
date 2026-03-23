@@ -5,3 +5,27 @@ members = [
     "crates/spoolman-server",
     "crates/spoolman-client",
 ]
+
+[[workspace.metadata.leptos]]
+# The name of the project (must match the server binary name).
+name = "spoolman-server"
+bin-package = "spoolman-server"
+lib-package = "spoolman-client"
+
+# cargo-leptos places compiled WASM assets here.
+site-root = "target/site"
+site-pkg-dir = "pkg"
+
+# Dev server address (used by `cargo leptos watch`).
+site-addr = "127.0.0.1:3000"
+reload-port = 3001
+
+# CSS browserlist target.
+browserquery = "defaults"
+
+env = "DEV"
+
+bin-features = []
+bin-default-features = true
+lib-features = []
+lib-default-features = true

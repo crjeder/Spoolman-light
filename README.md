@@ -13,17 +13,14 @@ Spoolman light is a self-hosted web service for tracking your 3D printer filamen
 
 ## Features
 
-* **Filament & Spool Tracking**: Keep records of filament types and individual spools, including color and price directly on the spool.
-* **REST API**: A clean [REST API](https://donkie.github.io/Spoolman/) for reading and updating spool data.
-* **Web Client**: Built-in browser UI to view, create, edit, and delete filaments and spools.
-* **Simple Storage**: All data stored in a single JSON file — no database server required. Configure the path via `SPOOLMAN_DATA_FILE`.
-
-## Integrations
-
-Any Spoolman-compatible REST API client can connect to this service using its standard API endpoints.
-
-**Web client preview:**
-![image](https://github.com/Donkie/Spoolman/assets/2332094/33928d5e-440f-4445-aca9-456c4370ad0d)
+* **Filament & Spool Tracking**: Keep records of filament types and individual spools, including RGBA color(s) on the spool.
+* **Location Management**: Organise spools into named locations (shelves, dry boxes, etc.) with live spool counts.
+* **Weight Tracking**: Record initial and current weight (scale readings); used weight and remaining percentage are derived automatically.
+* **SpoolmanDB Search**: Filament lookup via the SpoolmanDB online database (`GET /api/v1/filament/search`).
+* **Data Export**: Download the full data store as JSON via `GET /api/v1/export`.
+* **REST API**: Clean REST API compatible with Spoolman-aware clients (Klipper plugins, OrcaSlicer, etc.).
+* **Web Client**: Built-in browser UI with dark mode support.
+* **Simple Storage**: All data stored in a single JSON file — no database server required.
 
 ## Installation
 
@@ -31,16 +28,20 @@ Any Spoolman-compatible REST API client can connect to this service using its st
 
 ```bash
 docker build -t spoolman-light .
-docker run -p 8000:8000 -v /path/to/data:/data \
-  -e SPOOLMAN_DATA_FILE=/data/spoolman.json \
-  spoolman-light
+docker run -p 8000:8000 -v spoolman_data:/data spoolman-light
+```
+
+Or use the included `docker-compose.yml`:
+
+```bash
+docker compose up
 ```
 
 The web UI is available at `http://localhost:8000`.
 
 ### Build from source
 
-Requirements: Rust stable ≥ 1.82, `cargo-leptos`, `wasm32-unknown-unknown` target.
+Requirements: Rust stable (see `rust-toolchain.toml`), `cargo-leptos`, `wasm32-unknown-unknown` target.
 
 ```bash
 rustup target add wasm32-unknown-unknown
@@ -54,14 +55,16 @@ cargo leptos build --release
 
 | Layer | Technology |
 |-------|-----------|
-| Backend | Rust, Axum, Tokio |
-| Frontend | Rust, Leptos (WASM), compiled into single binary |
+| Backend | Rust 1.82+, Axum, Tokio |
+| Frontend | Rust, Leptos (WASM), compiled into the server binary |
 | Storage | JSON file (`spoolman.json`) — no database |
 | Types | `spoolman-types` crate shared by server and client |
 
 The entire application ships as a **single self-contained binary** with no Python runtime, no Node.js, and no external database.
 
 ## Configuration
+
+All variables can also be set in a `.env` file in the working directory — the server loads it silently on startup (a missing file is not an error).
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
@@ -73,3 +76,33 @@ The entire application ships as a **single self-contained binary** with no Pytho
 | `SPOOLMAN_DEBUG_MODE` | `FALSE` | Enable debug mode |
 | `SPOOLMAN_LOGGING_LEVEL` | `info` | Log level (`trace`/`debug`/`info`/`warn`/`error`) |
 | `SPOOLMAN_AUTOMATIC_BACKUP` | `TRUE` | Enable daily backup rotation |
+
+## API
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET/POST | `/api/v1/filament` | List / create filaments |
+| GET/PATCH/DELETE | `/api/v1/filament/:id` | Get / update / delete a filament |
+| GET | `/api/v1/filament/search` | Search SpoolmanDB |
+| GET/POST | `/api/v1/spool` | List / create spools |
+| GET/PATCH/DELETE | `/api/v1/spool/:id` | Get / update / delete a spool |
+| POST | `/api/v1/spool/:id/clone` | Clone a spool |
+| GET/POST | `/api/v1/location` | List / create locations |
+| GET/PATCH/DELETE | `/api/v1/location/:id` | Get / update / delete a location |
+| GET | `/api/v1/material` | List distinct filament materials |
+| GET | `/api/v1/export` | Full data store JSON download |
+| GET | `/api/v1/setting` | List all settings |
+| PUT | `/api/v1/setting/:key` | Set a key-value setting |
+| GET | `/health` | Health check |
+| GET | `/info` | Server version and data file path |
+
+## What's removed vs upstream Spoolman
+
+This fork deliberately omits features that add complexity without value for home use:
+
+- No Vendor entity (vendor is a plain string on Filament)
+- No extra-fields system
+- No WebSocket live-updates (use polling)
+- No Prometheus metrics
+- No multi-database support (JSON file only)
+- No QR / label printing page

@@ -1,15 +1,51 @@
 use leptos::*;
 use leptos_router::use_params_map;
-use spoolman_types::requests::{CreateFilament, UpdateFilament};
+use spoolman_types::{
+    models::MaterialType,
+    requests::{CreateFilament, UpdateFilament},
+};
 
 use crate::{api, components::{pagination::Pagination, table::ColHeader}, state::use_table_state};
+
+// ── Shared material <select> helper ────────────────────────────────────────────
+
+/// Renders a `<select>` element for choosing a `MaterialType`.
+/// Writes the selected abbreviation (or empty string for none) into `value`.
+#[component]
+fn MaterialSelect(value: RwSignal<String>) -> impl IntoView {
+    view! {
+        <select
+            prop:value=move || value.get()
+            on:change=move |ev| value.set(event_target_value(&ev))
+        >
+            <option value="">"— Select material —"</option>
+            {MaterialType::all_known().into_iter().map(|m| {
+                let abbr = m.abbreviation().to_string();
+                let label = if let Some(name) = m.full_name() {
+                    format!("{abbr} – {name}")
+                } else {
+                    abbr.clone()
+                };
+                view! { <option value=abbr.clone()>{label}</option> }
+            }).collect_view()}
+        </select>
+    }
+}
 
 // ── List ───────────────────────────────────────────────────────────────────────
 
 #[component]
 pub fn FilamentList() -> impl IntoView {
     let ts = use_table_state("filaments");
-    let filaments = create_resource(|| (), |_| async { api::list_filaments().await });
+    let material_filter = create_rw_signal(String::new());
+
+    let filaments = create_resource(
+        move || material_filter.get(),
+        |mat| async move {
+            let mat_opt = if mat.is_empty() { None } else { Some(mat) };
+            api::list_filaments(mat_opt.as_deref()).await
+        },
+    );
 
     let filtered = move || {
         let f = ts.filter.get().to_lowercase();
@@ -31,6 +67,18 @@ pub fn FilamentList() -> impl IntoView {
             <div class="page-header">
                 <h1>"Filaments"</h1>
                 <div class="page-actions">
+                    <select
+                        on:change=move |ev| {
+                            material_filter.set(event_target_value(&ev));
+                            ts.page.set(0);
+                        }
+                    >
+                        <option value="">"All materials"</option>
+                        {MaterialType::all_known().iter().map(|m| {
+                            let abbr = m.abbreviation().to_string();
+                            view! { <option value=abbr.clone()>{abbr}</option> }
+                        }).collect_view()}
+                    </select>
                     <input type="text" placeholder="Filter…"
                         on:input=move |ev| ts.filter.set(event_target_value(&ev)) />
                     <a href="/filaments/new" class="btn btn-primary">"+ New Filament"</a>
@@ -56,7 +104,7 @@ pub fn FilamentList() -> impl IntoView {
                             view! {
                                 <tr>
                                     <td>{f.manufacturer.clone().unwrap_or_default()}</td>
-                                    <td>{f.material.clone().unwrap_or_default()}</td>
+                                    <td>{f.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default()}</td>
                                     <td>{f.material_modifier.clone().unwrap_or_default()}</td>
                                     <td>{format!("{:.2}mm", f.diameter)}</td>
                                     <td>{f.net_weight.map(|w| format!("{:.0}g", w)).unwrap_or_default()}</td>
@@ -98,7 +146,13 @@ pub fn FilamentShow() -> impl IntoView {
                         </div>
                         <dl class="detail-grid">
                             <dt>"Manufacturer"</dt><dd>{f.manufacturer.clone().unwrap_or_default()}</dd>
-                            <dt>"Material"</dt><dd>{f.material.clone().unwrap_or_default()}</dd>
+                            <dt>"Material"</dt><dd>{
+                                f.material.as_ref().map(|m| {
+                                    let abbr = m.abbreviation().to_string();
+                                    let name = m.full_name().unwrap_or("");
+                                    if name.is_empty() { abbr } else { format!("{abbr} – {name}") }
+                                }).unwrap_or_default()
+                            }</dd>
                             <dt>"Modifier"</dt><dd>{f.material_modifier.clone().unwrap_or_default()}</dd>
                             <dt>"Diameter"</dt><dd>{format!("{:.2}mm", f.diameter)}</dd>
                             <dt>"Net weight"</dt><dd>{f.net_weight.map(|w| format!("{:.0}g", w)).unwrap_or_default()}</dd>
@@ -135,9 +189,10 @@ pub fn FilamentCreate() -> impl IntoView {
         ev.prevent_default();
         let navigate = navigate.clone();
         spawn_local(async move {
+            let mat = material.get();
             let body = CreateFilament {
                 manufacturer: Some(manufacturer.get()).filter(|s| !s.is_empty()),
-                material: Some(material.get()).filter(|s| !s.is_empty()),
+                material: if mat.is_empty() { None } else { Some(MaterialType::from_abbreviation(&mat)) },
                 material_modifier: Some(modifier.get()).filter(|s| !s.is_empty()),
                 diameter: diameter.get().parse().unwrap_or(1.75),
                 net_weight: net_weight.get().parse().ok(),
@@ -162,7 +217,9 @@ pub fn FilamentCreate() -> impl IntoView {
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
             <form on:submit=on_submit>
                 <label>"Manufacturer"<input type="text" on:input=move |ev| manufacturer.set(event_target_value(&ev)) /></label>
-                <label>"Material"<input type="text" on:input=move |ev| material.set(event_target_value(&ev)) /></label>
+                <label>"Material"
+                    <MaterialSelect value=material />
+                </label>
                 <label>"Modifier"<input type="text" on:input=move |ev| modifier.set(event_target_value(&ev)) /></label>
                 <label>"Diameter (mm)"<input type="number" step="0.01" prop:value=move || diameter.get() on:input=move |ev| diameter.set(event_target_value(&ev)) /></label>
                 <label>"Net weight (g)"<input type="number" step="1" on:input=move |ev| net_weight.set(event_target_value(&ev)) /></label>
@@ -200,7 +257,7 @@ pub fn FilamentEdit() -> impl IntoView {
     create_effect(move |_| {
         if let Some(Ok(f)) = filament.get() {
             manufacturer.set(f.manufacturer.clone().unwrap_or_default());
-            material.set(f.material.clone().unwrap_or_default());
+            material.set(f.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default());
             modifier.set(f.material_modifier.clone().unwrap_or_default());
             diameter.set(f.diameter.to_string());
             net_weight.set(f.net_weight.map(|w| w.to_string()).unwrap_or_default());
@@ -216,9 +273,10 @@ pub fn FilamentEdit() -> impl IntoView {
         let navigate = navigate.clone();
         let id = id();
         spawn_local(async move {
+            let mat = material.get();
             let body = UpdateFilament {
                 manufacturer: Some(manufacturer.get()).filter(|s| !s.is_empty()),
-                material: Some(material.get()).filter(|s| !s.is_empty()),
+                material: if mat.is_empty() { None } else { Some(MaterialType::from_abbreviation(&mat)) },
                 material_modifier: Some(modifier.get()).filter(|s| !s.is_empty()),
                 diameter: diameter.get().parse().ok(),
                 net_weight: net_weight.get().parse().ok(),
@@ -241,7 +299,9 @@ pub fn FilamentEdit() -> impl IntoView {
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
             <form on:submit=on_submit>
                 <label>"Manufacturer"<input type="text" prop:value=move || manufacturer.get() on:input=move |ev| manufacturer.set(event_target_value(&ev)) /></label>
-                <label>"Material"<input type="text" prop:value=move || material.get() on:input=move |ev| material.set(event_target_value(&ev)) /></label>
+                <label>"Material"
+                    <MaterialSelect value=material />
+                </label>
                 <label>"Modifier"<input type="text" prop:value=move || modifier.get() on:input=move |ev| modifier.set(event_target_value(&ev)) /></label>
                 <label>"Diameter (mm)"<input type="number" step="0.01" prop:value=move || diameter.get() on:input=move |ev| diameter.set(event_target_value(&ev)) /></label>
                 <label>"Net weight (g)"<input type="number" step="1" prop:value=move || net_weight.get() on:input=move |ev| net_weight.set(event_target_value(&ev)) /></label>

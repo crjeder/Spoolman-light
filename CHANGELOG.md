@@ -9,11 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Full Rust rewrite: Axum backend + Leptos WASM frontend in a Cargo workspace (`crates/spoolman-types`, `crates/spoolman-server`, `crates/spoolman-client`).
+- `MaterialType` enum in `spoolman-types` based on the OpenPrintTag `material_type_enum` spec (42 named variants + `Other(String)` catch-all). Serializes as uppercase abbreviation (e.g. `"PLA"`); unknown strings round-trip without error.
+- Material `<select>` on filament create/edit forms — replaces free-text input with a dropdown of all 42 spec-defined types plus a "select" blank option.
+- Material filter dropdown on the Filament list page; filters are applied server-side via `?material=` query param.
+- Spool list text filter now also matches on `filament.material` abbreviation (e.g. typing "PLA" narrows spool results).
+- `GET /api/v1/material` client wrapper (`api::list_materials`) for future datalist/autocomplete use.
+- `.env` file support via `dotenvy`: the server silently loads a `.env` file from the working directory on startup, before reading environment variables. Missing file is not an error.
+
+## [1.0.0] - 2026-03-23
+
+### Added
+
+- Full Rust rewrite: Axum backend + Leptos WASM frontend in a Cargo workspace (`crates/spoolman-types`, `crates/spoolman-server`, `crates/spoolman-client`). Build with `cargo leptos build --release`.
+- `docker-compose.yml` at repo root for quick local deployment; data persisted in a named Docker volume at `/data/spoolman.json`.
+- `rust-toolchain.toml` declares the stable toolchain with `wasm32-unknown-unknown` target so `rustup` installs it automatically.
 - `spoolman-types` shared crate: `Spool`, `Filament`, `Location`, `DataStore` types used by both server and client, ensuring compile-time API contract consistency.
-- `Location` as a first-class entity with full CRUD — replaces the previous freeform string field on Spool.
+- `Location` as a first-class entity with full CRUD (`GET/POST/PATCH/DELETE /api/v1/location`) — replaces the previous freeform string field on Spool.
 - `GET /api/v1/filament/search?q=` endpoint: proxies SpoolmanDB on demand (no background scheduler or local cache).
-- `GET /api/v1/export` endpoint: downloads the full data store as JSON.
+- `GET /api/v1/export` endpoint: downloads the full data store as JSON (useful for backup and migration).
 - Dark mode toggle with CSS variable switching, persisted in localStorage.
 - Spool clone action (`POST /api/v1/spool/<id>/clone`).
 - `SPOOLMAN_DATA_FILE` environment variable to configure the path of the JSON data file (default: `~/.local/share/spoolman/spoolman.json`).
@@ -30,29 +43,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BREAKING**: WebSocket live-update endpoint removed.
 - **BREAKING**: Backup download endpoint removed (backup still runs automatically in background).
 - Spool NFC Online Data URL maps to `/api/v1/spool/<id>` (OpenTag3D-compatible).
-- README updated with Rust build instructions and revised environment variable reference.
+- Dockerfile: `SPOOLMAN_DATA_FILE` defaults to `/data/spoolman.json` and `LEPTOS_SITE_ROOT` defaults to `/site` in the container, matching the volume mount convention.
+- Static asset path in the server is now read from `LEPTOS_SITE_ROOT` env var (fallback: `target/site`), enabling the production Docker layout without recompilation.
+- Integration test suite (`tests_integration/`) rewritten for the Rust API: new Filament/Spool/Location models, RGBA color schema, `current_weight` weight tracking, new Location CRUD tests, settings tests updated for `PUT /api/v1/setting/:key`, `fields/` tests deleted, `test_use.py` and `test_find_by_color.py` deleted, `test_measure.py` rewritten as `current_weight` PATCH tests, `test_backup.py` replaced with export test.
 
 ### Fixed
 
 - `entrypoint.sh` had Windows-style CRLF line endings, causing the Docker container to fail to start on Linux with "no such file or directory".
 - `JsonStore._flush` could raise `FileNotFoundError` under concurrent requests due to multiple threads racing to rename the same `.tmp` file; writes are now serialized with a reentrant lock.
-
-### Deprecated
+- Filtering spools by empty `filament.name`, `filament.material`, or `filament.vendor` now correctly returns spools whose filament has no value set for that field.
 
 ### Removed
 
 - `Vendor` entity and all `/api/v1/vendor` endpoints.
-- `color_hex`, `multi_color_hexes`, `multi_color_direction` from Filament (moved to Spool).
+- `color_hex`, `multi_color_hexes`, `multi_color_direction` from Filament (moved to Spool as `colors: Vec<RGBA>`).
 - `price`, `weight`, `spool_weight`, `article_number`, `external_id` from Filament.
 - `lot_nr`, `external_id` from Spool.
-- `/api/v1/filament/find-by-color` endpoint (moved to `/api/v1/spool/find-by-color`).
+- `/api/v1/spool/find-by-color` endpoint (no replacement; color filter is a planned enhancement).
+- `/api/v1/field/*` extra-fields system.
 - Database backends: SQLite, PostgreSQL, MySQL, CockroachDB.
 - Python dependencies: `SQLAlchemy`, `alembic`, `aiosqlite`, `asyncpg`, `aiomysql`, `psycopg2-binary`, `sqlalchemy-cockroachdb`.
 - Alembic migration directory (`migrations/`) and `alembic.ini`.
-- Prometheus metrics endpoint (`GET /metrics`) and the `SPOOLMAN_METRICS_ENABLED` environment variable. The `prometheus-client` dependency has been removed.
-- **BREAKING**: WebSocket support has been removed. The endpoints `GET /api/v1/` (root), `/api/v1/spool`, `/api/v1/spool/{id}`, `/api/v1/filament`, `/api/v1/filament/{id}`, `/api/v1/setting`, and `/api/v1/setting/{key}` no longer accept WebSocket connections. Use polling on the corresponding REST endpoints instead.
+- Prometheus metrics endpoint (`GET /metrics`) and the `SPOOLMAN_METRICS_ENABLED` environment variable.
+- WebSocket support on all REST endpoints — use polling instead.
 
-### Fixed
-
-- Filtering spools by empty `filament.name`, `filament.material`, or `filament.vendor` now correctly returns spools whose filament has no value set for that field.
-
+[Unreleased]: https://github.com/crjeder/Spoolman-light/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/crjeder/Spoolman-light/compare/v0.22.1...v1.0.0

@@ -5,7 +5,7 @@
 import subprocess
 import sys
 
-VALID_TARGETS = ["postgres", "sqlite", "mariadb", "cockroachdb"]
+COMPOSE_FILE = "tests_integration/docker-compose-sqlite.yml"
 
 
 def run(args: list[str]) -> int:
@@ -24,28 +24,15 @@ if __name__ == "__main__":
         print("Failed to build Spoolman tester!")
         sys.exit(1)
 
-    # Support input arguments for running only specific tests
-    if len(sys.argv) > 1:
-        targets = sys.argv[1:]
-        for target in targets:
-            if target not in VALID_TARGETS:
-                print(f"Unknown target: {target}")
-                sys.exit(1)
-    else:
-        print("No targets specified, running all tests...")
-        targets = list(VALID_TARGETS)
-
-    for target in targets:
-        compose_file = f"tests_integration/docker-compose-{target}.yml"
-        print(f"Running integration tests against {target}...")
-        run(["docker", "compose", "-f", compose_file, "down", "-v"])
-        result = run([
-            "docker", "compose", "-f", compose_file,
-            "up", "--abort-on-container-exit", "--exit-code-from", "tester",
-        ])
-        run(["docker", "compose", "-f", compose_file, "down", "-v"])
-        if result != 0:
-            print(f"Integration tests against {target} failed!")
-            sys.exit(1)
+    print("Running integration tests...")
+    run(["docker", "compose", "-f", COMPOSE_FILE, "down", "-v"])
+    result = run([
+        "docker", "compose", "-f", COMPOSE_FILE,
+        "up", "--abort-on-container-exit", "--exit-code-from", "tester",
+    ])
+    run(["docker", "compose", "-f", COMPOSE_FILE, "down", "-v"])
+    if result != 0:
+        print("Integration tests failed!")
+        sys.exit(1)
 
     print("Integration tests passed!")

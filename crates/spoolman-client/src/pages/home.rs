@@ -4,7 +4,7 @@ use crate::api;
 #[component]
 pub fn HomePage() -> impl IntoView {
     let spools = create_resource(|| (), |_| async { api::list_spools(false).await });
-    let filaments = create_resource(|| (), |_| async { api::list_filaments().await });
+    let filaments = create_resource(|| (), |_| async { api::list_filaments(None).await });
 
     view! {
         <div class="page home-page">

@@ -81,6 +81,7 @@ pub fn LocationList() -> impl IntoView {
                             Ok(ls) => ls.into_iter().map(|loc| {
                                 let id = loc.location.id;
                                 let name = loc.location.name.clone();
+                                let name2 = name.clone(); // for second reactive closure
                                 let count = loc.spool_count;
                                 let is_editing = move || editing.get().map(|(eid, _)| eid) == Some(id);
                                 view! {
@@ -112,7 +113,7 @@ pub fn LocationList() -> impl IntoView {
                                                     <button class="btn" on:click=move |_| editing.set(None)>"Cancel"</button>
                                                 }.into_view()
                                             } else {
-                                                let n = name.clone();
+                                                let n = name2.clone();
                                                 view! {
                                                     <button class="btn" on:click=move |_| editing.set(Some((id, n.clone())))>"Edit"</button>
                                                     " "

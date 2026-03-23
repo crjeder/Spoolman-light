@@ -2,8 +2,10 @@ services:
   spoolman:
     image: donkie/spoolman:test
     environment:
+      - SPOOLMAN_DATA_FILE=/data/spoolman.json
       - SPOOLMAN_LOGGING_LEVEL=INFO
-      - TZ=Europe/Stockholm
+    volumes:
+      - spoolman_data:/data
     security_opt:
       - no-new-privileges:true
   tester:
@@ -14,3 +16,6 @@ services:
       - no-new-privileges:true
     depends_on:
       - spoolman
+
+volumes:
+  spoolman_data:

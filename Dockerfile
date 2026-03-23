@@ -3,7 +3,7 @@
 # Replaces the previous Python/Node multi-stage build.
 
 # ── Stage 1: build ────────────────────────────────────────────────────────────
-FROM rust:1.82-bookworm AS builder
+FROM rust:1-bookworm AS builder
 
 # Install cargo-leptos build tool and the WASM compilation target.
 RUN rustup target add wasm32-unknown-unknown \
@@ -40,7 +40,9 @@ LABEL org.opencontainers.image.description="Keep track of your inventory of 3D-p
 LABEL org.opencontainers.image.licenses=MIT
 
 ENV SPOOLMAN_HOST=0.0.0.0 \
-    SPOOLMAN_PORT=8000
+    SPOOLMAN_PORT=8000 \
+    SPOOLMAN_DATA_FILE=/data/spoolman.json \
+    LEPTOS_SITE_ROOT=/site
 
 EXPOSE 8000
 VOLUME ["/data"]

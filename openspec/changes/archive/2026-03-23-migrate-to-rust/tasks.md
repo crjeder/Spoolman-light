@@ -4,7 +4,7 @@
 - [x] 1.2 Create `crates/spoolman-types/` crate skeleton (`Cargo.toml`, `src/lib.rs`)
 - [x] 1.3 Create `crates/spoolman-server/` crate skeleton (`Cargo.toml`, `src/main.rs`)
 - [x] 1.4 Create `crates/spoolman-client/` crate skeleton (`Cargo.toml`, `src/main.rs`)
-- [ ] 1.5 Add `cargo-leptos` to dev toolchain and verify `cargo leptos build` runs
+- [x] 1.5 Add `cargo-leptos` to dev toolchain and verify `cargo leptos build` runs
 
 ## 2. Shared Types Crate (`spoolman-types`)
 
@@ -110,7 +110,7 @@
 ## 12. Docker & Deployment
 
 - [x] 12.1 Write `Dockerfile` using multi-stage build: Rust build stage → minimal runtime image
-- [ ] 12.2 Verify single binary serves both API and static WASM assets
-- [ ] 12.3 Update `docker-compose.yml` (if present) for new binary entrypoint
-- [ ] 12.4 Verify `SPOOLMAN_DATA_FILE` env var mounts correctly in container
+- [x] 12.2 Verify single binary serves both API and static WASM assets
+- [x] 12.3 Update `docker-compose.yml` (if present) for new binary entrypoint
+- [x] 12.4 Verify `SPOOLMAN_DATA_FILE` env var mounts correctly in container
 - [x] 12.5 Update `README.md` with new stack, build instructions, and env var reference

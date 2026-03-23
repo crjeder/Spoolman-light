@@ -34,6 +34,7 @@ pub fn SpoolList() -> impl IntoView {
                 f.is_empty()
                     || s.filament.display_name().to_lowercase().contains(&f)
                     || s.spool.color_name.as_deref().unwrap_or("").to_lowercase().contains(&f)
+                    || s.filament.material.as_ref().map(|m| m.abbreviation()).unwrap_or("").to_lowercase().contains(&f)
             })
             .collect::<Vec<_>>()
     };
@@ -193,7 +194,7 @@ pub fn SpoolShow() -> impl IntoView {
 #[component]
 pub fn SpoolCreate() -> impl IntoView {
     let navigate = use_navigate();
-    let filaments = create_resource(|| (), |_| async { api::list_filaments().await });
+    let filaments = create_resource(|| (), |_| async { api::list_filaments(None).await });
     let locations = create_resource(|| (), |_| async { api::list_locations().await });
 
     let filament_id = create_rw_signal(0u32);

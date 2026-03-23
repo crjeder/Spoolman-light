@@ -1,4 +1,4 @@
-use crate::models::Rgba;
+use crate::models::{MaterialType, Rgba};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct CreateFilament {
     pub manufacturer: Option<String>,
-    pub material: Option<String>,
+    pub material: Option<MaterialType>,
     pub material_modifier: Option<String>,
     #[serde(default = "default_diameter")]
     pub diameter: f32,
@@ -26,7 +26,7 @@ pub struct CreateFilament {
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct UpdateFilament {
     pub manufacturer: Option<String>,
-    pub material: Option<String>,
+    pub material: Option<MaterialType>,
     pub material_modifier: Option<String>,
     pub diameter: Option<f32>,
     pub net_weight: Option<f32>,

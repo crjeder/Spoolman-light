@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Material filter dropdown on the Filament list page; filters are applied server-side via `?material=` query param.
 - Spool list text filter now also matches on `filament.material` abbreviation (e.g. typing "PLA" narrows spool results).
 - `GET /api/v1/material` client wrapper (`api::list_materials`) for future datalist/autocomplete use.
+- `.env` file support via `dotenvy`: the server silently loads a `.env` file from the working directory on startup, before reading environment variables. Missing file is not an error.
 
 ## [1.0.0] - 2026-03-23
 

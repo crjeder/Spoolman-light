@@ -8,6 +8,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]
 async fn main() {
+    dotenvy::dotenv().ok();
     let cfg = config::Config::from_env();
 
     // Initialise structured logging.

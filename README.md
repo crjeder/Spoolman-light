@@ -64,6 +64,8 @@ The entire application ships as a **single self-contained binary** with no Pytho
 
 ## Configuration
 
+All variables can also be set in a `.env` file in the working directory — the server loads it silently on startup (a missing file is not an error).
+
 | Variable | Default | Purpose |
 |----------|---------|---------|
 | `SPOOLMAN_DATA_FILE` | `<platform data dir>/spoolman.json` | Path to JSON data file |

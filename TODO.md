@@ -9,7 +9,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] Run full integration test suite to verify `simplify-data-model` changes (`openspec/changes/simplify-data-model/`) — requires Docker Desktop running
 
 ### Enhancements
-- [ ] Support `.env` files via `python-dotenv` (`load_dotenv()` at startup in `spoolman/env.py`)
+- [ ] Support `.env` files
 - [ ] NFC or QR code stickers to identify spools and autmate update [OpenSpoolMan](https://github.com/drndos/openspoolman) or [Spoolman QR](https://github.com/Donkie/Spoolman/wiki/Printing-Labels)
 - [ ] make the Spool view default
 - [ ] color search

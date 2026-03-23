@@ -9,5 +9,4 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman), [OpenPrintTag](https://openprinttag.org/) or [OpenTag3D](https://opentag3d.info/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
 - [ ] Make the Spool list the default landing page
 - [ ] Color search on spool list (filter by RGBA proximity)
-- [ ] Add `filament_type` field to Filament (e.g. "PLA", "PETG", "ABS") like [specified in OpenPrintTag](https://specs.openprinttag.org/#/material_types)
 - [ ] Light theme matching the logo

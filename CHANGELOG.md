@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `MaterialType` enum in `spoolman-types` based on the OpenPrintTag `material_type_enum` spec (42 named variants + `Other(String)` catch-all). Serializes as uppercase abbreviation (e.g. `"PLA"`); unknown strings round-trip without error.
+- Material `<select>` on filament create/edit forms — replaces free-text input with a dropdown of all 42 spec-defined types plus a "select" blank option.
+- Material filter dropdown on the Filament list page; filters are applied server-side via `?material=` query param.
+- Spool list text filter now also matches on `filament.material` abbreviation (e.g. typing "PLA" narrows spool results).
+- `GET /api/v1/material` client wrapper (`api::list_materials`) for future datalist/autocomplete use.
+
 ## [1.0.0] - 2026-03-23
 
 ### Added

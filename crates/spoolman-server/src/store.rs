@@ -137,7 +137,7 @@ impl JsonStore {
             .iter()
             .filter(|f| {
                 if let Some(m) = material {
-                    f.material.as_deref() == Some(m)
+                    f.material.as_ref().map(|mt| mt.abbreviation()) == Some(m)
                 } else {
                     true
                 }
@@ -147,7 +147,7 @@ impl JsonStore {
 
         sort_items(&mut items, sort, order, |f, field| match field {
             "manufacturer" => f.manufacturer.as_deref().unwrap_or("").to_string(),
-            "material" => f.material.as_deref().unwrap_or("").to_string(),
+            "material" => f.material.as_ref().map(|m| m.abbreviation()).unwrap_or("").to_string(),
             "registered" => f.registered.to_rfc3339(),
             _ => f.registered.to_rfc3339(),
         });
@@ -533,7 +533,7 @@ impl JsonStore {
         let mut materials: Vec<String> = store
             .filaments
             .iter()
-            .filter_map(|f| f.material.clone())
+            .filter_map(|f| f.material.as_ref().map(|m| m.abbreviation().to_string()))
             .collect::<HashSet<_>>()
             .into_iter()
             .collect();

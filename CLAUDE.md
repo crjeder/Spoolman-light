@@ -1,6 +1,6 @@
 # Spoolman
 
-Self-hosted web service for tracking 3D printing filament spools. Python (FastAPI) backend + React/TypeScript frontend.
+Self-hosted web service for tracking 3D printing filament spools. Python (FastAPI) backend + React/TypeScript frontend. **A full Rust rewrite (Axum + Leptos WASM) is in progress** — see `crates/` and `openspec/changes/migrate-to-rust/`.
 
 ## Commands
 
@@ -34,13 +34,35 @@ npm run build      # TypeScript check + production build → client/dist/
 npm run check-i18n # Verify translation keys are consistent
 ```
 
+### Rust (new stack)
+```bash
+# Type-check entire workspace (no build needed)
+cargo check -p spoolman-types
+cargo check -p spoolman-server
+# cargo check -p spoolman-client  # requires wasm32 target
+
+# Full release build (use WSL/Linux/Docker — blocked on Windows by OpenSSL)
+# cargo leptos build --release
+```
+
 ### Integration Tests (Docker required)
 ```bash
 # Only sqlite target has a compose file
 python tests_integration/run.py sqlite
 ```
 
-## Architecture
+## Rust Workspace Layout
+
+```
+crates/
+  spoolman-types/   # Shared types: Spool, Filament, Location, DataStore, requests, responses
+  spoolman-server/  # Axum backend — routes, JsonStore (Arc<RwLock>), config, backup stub
+  spoolman-client/  # Leptos WASM frontend — pages, components, API wrappers, table state
+Cargo.toml          # Workspace root
+Leptos.toml         # cargo-leptos build config
+```
+
+## Architecture (Python stack — being replaced)
 
 ```
 spoolman/           # Python backend (FastAPI, no ORM)
@@ -86,13 +108,17 @@ tests_integration/  # Docker-based integration tests (pytest)
 ## Workflow
 
 After every change, update [CHANGELOG.md](CHANGELOG.md):
-- Put entries under `## [Unreleased]` in the appropriate section (`Added`, `Changed`, `Fixed`, `Removed`, `Security`, `Deprecated`)
+- Put entries under a new version 
 - Follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format — write for humans, not diffs
 - Use [TODO.md](TODO.md) to track pending work
 - Never push to the upstream repository unless specifically instructed
 
 ## Gotchas
 
+- **Rust rewrite in progress** — do not add features to `spoolman/` (Python) or `client/` (React); those will be removed after the Rust stack is verified.
+- **cargo-leptos blocked on Windows** — `cargo leptos build` fails because `openssl-sys` needs OpenSSL dev headers. Build in WSL, Linux, or Docker (`docker build .`).
+- **Semgrep path-traversal false positive** — the "Path Traversal with Actix" rule fires on any `std::fs` op whose path originates from a function parameter, even after `canonicalize()`. `// nosemgrep` and `.semgrepignore` are ignored by the MCP hook (`semgrep mcp -k post-tool-cli-scan`). Scope suppressions carefully; don't restructure valid path code to avoid them.
+- **Do not add `leptos` to `spoolman-server/Cargo.toml`** — Leptos is a client-only dependency. The server crate must not depend on it.
 - **Frontend framework is Refine** — data fetching, CRUD, and routing follow Refine conventions, not plain React patterns.
 - **No unit tests** — only Docker-based integration tests exist. Running `pdm run itest` builds Docker images first.
 - **JSON file storage** — data stored in `spoolman.json` in platform user-data dir; no DB env vars needed.

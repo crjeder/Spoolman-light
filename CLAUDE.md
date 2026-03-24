@@ -1,6 +1,6 @@
 # Spoolman
 
-Self-hosted web service for tracking 3D printing filament spools. Python (FastAPI) backend + React/TypeScript frontend. **A full Rust rewrite (Axum + Leptos WASM) is in progress** — see `crates/` and `openspec/changes/migrate-to-rust/`.
+Self-hosted web service for tracking 3D printing filament spools. Python (FastAPI) backend being replaced by a full Rust rewrite (Axum + Leptos WASM) — see `crates/` and `openspec/changes/migrate-to-rust/`.
 
 ## Commands
 
@@ -21,17 +21,6 @@ ruff check .
 black .
 
 # Unit tests (none currently — integration tests only)
-```
-
-### Frontend
-```bash
-cd client
-
-npm install
-
-npm run dev        # Dev server (Vite, proxies API to localhost:8000)
-npm run build      # TypeScript check + production build → client/dist/
-npm run check-i18n # Verify translation keys are consistent
 ```
 
 ### Rust (new stack)
@@ -77,13 +66,6 @@ spoolman/           # Python backend (FastAPI, no ORM)
   settings.py       # Runtime settings
   ws.py             # WebSocket support
 
-client/             # React 19 + TypeScript frontend (Vite + Refine)
-  src/
-    pages/          # Route-level components
-    components/     # Shared UI components
-    utils/          # Helpers
-  public/           # Static assets
-
 tests_integration/  # Docker-based integration tests (pytest)
 ```
 
@@ -106,8 +88,8 @@ tests_integration/  # Docker-based integration tests (pytest)
 ## Stack Details
 
 - **Backend:** Python 3.9–3.12, FastAPI 0.115, JSON file storage (no ORM), Pydantic v2, uvicorn
-- **Frontend:** React 19, TypeScript, Vite 7, Refine framework, Ant Design, TanStack Query, react-router 7, i18next, Zustand
-- **Package managers:** `pdm` or `uv` (Python), `npm` (frontend, Node 20.x required)
+- **New stack:** Rust (Axum + Leptos WASM), cargo-leptos build system
+- **Package managers:** `pdm` or `uv` (Python), `cargo` (Rust)
 
 ## Workflow
 
@@ -122,16 +104,14 @@ After every change, update [CHANGELOG.md](CHANGELOG.md):
 
 ## Gotchas
 
-- **Rust rewrite in progress** — do not add features to `spoolman/` (Python) or `client/` (React); those will be removed after the Rust stack is verified.
+- **Rust rewrite in progress** — do not add features to `spoolman/` (Python); it will be removed after the Rust stack is verified.
 - **cargo-leptos blocked on Windows** — `cargo leptos build` fails because `openssl-sys` needs OpenSSL dev headers. Build in WSL, Linux, or Docker (`docker build .`).
 - **Semgrep path-traversal false positive** — the "Path Traversal with Actix" rule fires on any `std::fs` op whose path originates from a function parameter, even after `canonicalize()`. `// nosemgrep` and `.semgrepignore` are ignored by the MCP hook (`semgrep mcp -k post-tool-cli-scan`). Scope suppressions carefully; don't restructure valid path code to avoid them.
 - **Do not add `leptos` to `spoolman-server/Cargo.toml`** — Leptos is a client-only dependency. The server crate must not depend on it.
-- **Frontend framework is Refine** — data fetching, CRUD, and routing follow Refine conventions, not plain React patterns.
 - **No unit tests** — only Docker-based integration tests exist. Running `pdm run itest` builds Docker images first.
 - **JSON file storage** — data stored in `spoolman.json` in platform user-data dir; no DB env vars needed.
 - **JsonStore uses threading.RLock** — concurrent writes are serialized; don't bypass the store's flush mechanism.
 - **uvloop disabled on Windows/armv7l** — don't assume uvloop is available in cross-platform code.
 - **Shell scripts must use LF line endings** — `entrypoint.sh` and other scripts must be LF (not CRLF) or Docker containers fail on Linux. Verify when editing on Windows.
-- **i18n required for UI strings** — all user-visible frontend text must go through i18next (`t()` calls); run `npm run check-i18n` to verify.
 - **NFC tag URL format** — Spool Online Data URL is `<host>/api/v1/spool/<id>` without `https://` (OpenTag3D / OpenPrintTag spec).
 - **Random u32 IDs** — Rust data model uses random u32 IDs with collision check on insert (not sequential).

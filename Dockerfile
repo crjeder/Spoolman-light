@@ -15,6 +15,15 @@ COPY . .
 # Build the full workspace: spoolman-server binary + spoolman-client WASM.
 RUN cargo leptos build --release
 
+# cargo-leptos 0.3.x renames spoolman-server_bg.wasm → spoolman-server.wasm in
+# the site output, but the generated JS still references the _bg name. Alias it.
+RUN cp target/site/pkg/spoolman-server.wasm target/site/pkg/spoolman-server_bg.wasm
+
+# cargo-leptos skips index.html generation when a server binary is present (SSR
+# assumption). Since spoolman-server is a plain Axum file server, generate the
+# CSR bootstrap HTML manually.
+RUN printf '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1" />\n  <title>Spoolman</title>\n  <link rel="icon" type="image/png" href="/spoolman-light-logo.png" />\n  <link rel="stylesheet" href="/pkg/spoolman-server.css" />\n</head>\n<body>\n  <script type="module">\n    import init from "/pkg/spoolman-server.js";\n    init();\n  </script>\n</body>\n</html>\n' > target/site/index.html
+
 # ── Stage 2: runtime ──────────────────────────────────────────────────────────
 FROM debian:bookworm-slim AS runtime
 

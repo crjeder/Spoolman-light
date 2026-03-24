@@ -23,4 +23,4 @@
 
 - [x] 5.1 Confirm `client/` directory no longer exists at the repository root
 - [x] 5.2 Confirm `CLAUDE.md` contains no references to `npm`, `cd client`, or the React stack
-- [ ] 5.3 Run `git status` to verify the working tree is clean after committing
+- [x] 5.3 Run `git status` to verify the working tree is clean after committing

@@ -410,6 +410,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "deltae"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5729f5117e208430e437df2f4843f5e5952997175992d1414f94c57d61e270b4"
+
+[[package]]
 name = "derive-where"
 version = "1.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2262,6 +2268,7 @@ name = "spoolman-client"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
+ "deltae",
  "gloo-net 0.5.0",
  "leptos",
  "leptos_router",

@@ -6,7 +6,7 @@ use crate::{
     api,
     components::{pagination::Pagination, table::ColHeader},
     state::use_table_state,
-    utils::color::{hex_to_rgba, rgb_distance},
+    utils::color::{color_distance, hex_to_rgba},
 };
 
 // ── List ───────────────────────────────────────────────────────────────────────
@@ -16,7 +16,7 @@ pub fn SpoolList() -> impl IntoView {
     let ts = use_table_state("spools");
     let show_archived = create_rw_signal(false);
     let color_pick: RwSignal<Option<String>> = create_rw_signal(None);
-    let threshold: RwSignal<u8> = create_rw_signal(60u8);
+    let threshold: RwSignal<u8> = create_rw_signal(10u8);
     let visible_cols = create_rw_signal(vec![
         "filament", "color", "remaining_pct", "remaining_weight", "location", "registered",
     ]);
@@ -42,7 +42,7 @@ pub fn SpoolList() -> impl IntoView {
                     || s.filament.material.as_ref().map(|m| m.abbreviation()).unwrap_or("").to_lowercase().contains(&f);
                 let color_ok = match pick.as_deref().and_then(hex_to_rgba) {
                     None => true,
-                    Some(target) => s.spool.colors.iter().any(|c| rgb_distance(c, &target) <= thresh),
+                    Some(target) => s.spool.colors.iter().any(|c| color_distance(c, &target) <= thresh),
                 };
                 text_ok && color_ok
             })

@@ -1,0 +1,140 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - complementary [ref=e5]:
+      - generic [ref=e6]:
+        - link "Spoolman" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e9]:
+            - img [ref=e12]
+            - heading "Spoolman" [level=1] [ref=e30]
+        - menu [ref=e31]:
+          - menuitem "home Home" [ref=e32] [cursor=pointer]:
+            - img "home" [ref=e33]:
+              - img [ref=e34]
+            - link "Home" [ref=e37]:
+              - /url: /
+          - menuitem "file Spools" [ref=e38] [cursor=pointer]:
+            - img "file" [ref=e39]:
+              - img [ref=e40]
+            - link "Spools" [ref=e43]:
+              - /url: /spool
+          - menuitem "highlight Filaments" [ref=e44] [cursor=pointer]:
+            - img "highlight" [ref=e45]:
+              - img [ref=e46]
+            - link "Filaments" [ref=e49]:
+              - /url: /filament
+          - menuitem "user Manufacturers" [ref=e50] [cursor=pointer]:
+            - img "user" [ref=e51]:
+              - img [ref=e52]
+            - link "Manufacturers" [ref=e55]:
+              - /url: /vendor
+          - menuitem "table Locations" [ref=e56] [cursor=pointer]:
+            - img "table" [ref=e57]:
+              - img [ref=e58]
+            - link "Locations" [ref=e61]:
+              - /url: /locations
+          - menuitem "tool Settings" [ref=e62] [cursor=pointer]:
+            - img "tool" [ref=e63]:
+              - img [ref=e64]
+            - link "Settings" [ref=e67]:
+              - /url: /settings
+          - menuitem "question Help" [ref=e68] [cursor=pointer]:
+            - img "question" [ref=e69]:
+              - img [ref=e70]
+            - link "Help" [ref=e73]:
+              - /url: /help
+      - button "left" [ref=e75] [cursor=pointer]:
+        - img "left" [ref=e76]:
+          - img [ref=e77]
+    - generic [ref=e79]:
+      - banner [ref=e80]:
+        - generic [ref=e81]:
+          - button "English down" [ref=e83] [cursor=pointer]:
+            - generic [ref=e84]:
+              - generic [ref=e85]: English
+              - img "down" [ref=e87]:
+                - img [ref=e88]
+          - switch "🌛 🔆" [ref=e91] [cursor=pointer]:
+            - generic [ref=e93]:
+              - generic: 🌛
+              - generic: 🔆
+          - button "camera" [ref=e94] [cursor=pointer]:
+            - img "camera" [ref=e98]:
+              - img [ref=e99]
+      - main [ref=e101]:
+        - main [ref=e103]:
+          - heading "Spoolman" [level=1] [ref=e104]:
+            - img [ref=e106]
+            - text: Spoolman
+          - generic [ref=e123]:
+            - generic [ref=e125]:
+              - generic [ref=e127]:
+                - generic [ref=e128]: Spools
+                - generic [ref=e129]:
+                  - img "file" [ref=e131]:
+                    - img [ref=e132]
+                  - generic [ref=e134]: "0"
+              - list [ref=e135]:
+                - listitem [ref=e136]:
+                  - link "unordered-list" [ref=e138] [cursor=pointer]:
+                    - /url: /spool
+                    - img "unordered-list" [ref=e139]:
+                      - img [ref=e140]
+                - listitem [ref=e142]:
+                  - link "plus" [ref=e144] [cursor=pointer]:
+                    - /url: /spool/create
+                    - img "plus" [ref=e145]:
+                      - img [ref=e146]
+            - generic [ref=e150]:
+              - generic [ref=e152]:
+                - generic [ref=e153]: Filaments
+                - generic [ref=e154]:
+                  - img "highlight" [ref=e156]:
+                    - img [ref=e157]
+                  - generic [ref=e159]: "0"
+              - list [ref=e160]:
+                - listitem [ref=e161]:
+                  - link "unordered-list" [ref=e163] [cursor=pointer]:
+                    - /url: /filament
+                    - img "unordered-list" [ref=e164]:
+                      - img [ref=e165]
+                - listitem [ref=e167]:
+                  - link "plus" [ref=e169] [cursor=pointer]:
+                    - /url: /filament/create
+                    - img "plus" [ref=e170]:
+                      - img [ref=e171]
+            - generic [ref=e175]:
+              - generic [ref=e177]:
+                - generic [ref=e178]: Manufacturers
+                - generic [ref=e179]:
+                  - img "user" [ref=e181]:
+                    - img [ref=e182]
+                  - generic [ref=e184]: "0"
+              - list [ref=e185]:
+                - listitem [ref=e186]:
+                  - link "unordered-list" [ref=e188] [cursor=pointer]:
+                    - /url: /vendor
+                    - img "unordered-list" [ref=e189]:
+                      - img [ref=e190]
+                - listitem [ref=e192]:
+                  - link "plus" [ref=e194] [cursor=pointer]:
+                    - /url: /vendor/create
+                    - img "plus" [ref=e195]:
+                      - img [ref=e196]
+          - paragraph [ref=e199]: Welcome to your Spoolman instance!
+          - paragraph [ref=e200]:
+            - text: It looks like you haven't added any spools yet. See the
+            - link "Help page" [ref=e201] [cursor=pointer]:
+              - /url: /help
+            - text: for help getting started.
+      - contentinfo [ref=e202]:
+        - generic [ref=e203]:
+          - generic [ref=e204]: Version Unknown
+          - link "Tip me on Ko-fi" [ref=e206] [cursor=pointer]:
+            - /url: https://ko-fi.com/donkie
+            - img [ref=e208]
+            - generic [ref=e209]: Tip me on Ko-fi
+  - generic [ref=e210]:
+    - img [ref=e212]
+    - button "Open Tanstack query devtools" [ref=e260] [cursor=pointer]:
+      - img [ref=e261]

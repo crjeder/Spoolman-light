@@ -1,0 +1,206 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - complementary [ref=e5]:
+        - generic [ref=e6]:
+          - link "Spoolman" [ref=e8] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e9]:
+              - img [ref=e12]
+              - heading "Spoolman" [level=1] [ref=e30]
+          - menu [ref=e31]:
+            - menuitem "home Home" [ref=e32] [cursor=pointer]:
+              - img "home" [ref=e33]:
+                - img [ref=e34]
+              - link "Home" [ref=e37]:
+                - /url: /
+            - menuitem "file Spools" [ref=e38] [cursor=pointer]:
+              - img "file" [ref=e39]:
+                - img [ref=e40]
+              - link "Spools" [ref=e43]:
+                - /url: /spool
+            - menuitem "highlight Filaments" [ref=e44] [cursor=pointer]:
+              - img "highlight" [ref=e45]:
+                - img [ref=e46]
+              - link "Filaments" [ref=e49]:
+                - /url: /filament
+            - menuitem "user Manufacturers" [ref=e50] [cursor=pointer]:
+              - img "user" [ref=e51]:
+                - img [ref=e52]
+              - link "Manufacturers" [ref=e55]:
+                - /url: /vendor
+            - menuitem "table Locations" [ref=e56] [cursor=pointer]:
+              - img "table" [ref=e57]:
+                - img [ref=e58]
+              - link "Locations" [ref=e61]:
+                - /url: /locations
+            - menuitem "tool Settings" [ref=e62] [cursor=pointer]:
+              - img "tool" [ref=e63]:
+                - img [ref=e64]
+              - link "Settings" [ref=e67]:
+                - /url: /settings
+            - menuitem "question Help" [ref=e68] [cursor=pointer]:
+              - img "question" [ref=e69]:
+                - img [ref=e70]
+              - link "Help" [ref=e73]:
+                - /url: /help
+        - button "left" [ref=e75] [cursor=pointer]:
+          - img "left" [ref=e76]:
+            - img [ref=e77]
+      - generic [ref=e79]:
+        - banner [ref=e80]:
+          - generic [ref=e81]:
+            - button "English down" [ref=e83] [cursor=pointer]:
+              - generic [ref=e84]:
+                - generic [ref=e85]: English
+                - img "down" [ref=e87]:
+                  - img [ref=e88]
+            - switch "🌛 🔆" [checked] [ref=e91] [cursor=pointer]:
+              - generic [ref=e93]:
+                - generic: 🌛
+                - generic: 🔆
+            - button "camera" [ref=e94] [cursor=pointer]:
+              - img "camera" [ref=e98]:
+                - img [ref=e99]
+        - main [ref=e101]:
+          - generic [ref=e104]:
+            - navigation [ref=e105]:
+              - list [ref=e106]:
+                - listitem [ref=e107]:
+                  - link "home" [ref=e109] [cursor=pointer]:
+                    - /url: /
+                    - img "home" [ref=e110]:
+                      - img [ref=e111]
+                - listitem [ref=e113]: /
+                - listitem [ref=e114]:
+                  - generic [ref=e116]:
+                    - img "file" [ref=e117]:
+                      - img [ref=e118]
+                    - link "Spools" [ref=e120] [cursor=pointer]:
+                      - /url: /spool
+                - listitem [ref=e121]: /
+                - listitem [ref=e122]:
+                  - generic [ref=e125]: Show
+            - generic [ref=e126]:
+              - generic [ref=e127]:
+                - button "back" [ref=e129] [cursor=pointer]:
+                  - button "arrow-left" [ref=e130]:
+                    - img "arrow-left" [ref=e132]:
+                      - img [ref=e133]
+                - 'heading "[Spool #2787341110] ID: 1001120597 - PLA" [level=4] [ref=e136]'
+                - generic:
+                  - heading [level=5]
+              - generic [ref=e140]:
+                - button "tool Adjust Spool Filament" [ref=e142] [cursor=pointer]:
+                  - img "tool" [ref=e144]:
+                    - img [ref=e145]
+                  - generic [ref=e147]: Adjust Spool Filament
+                - link "printer Print Labels" [ref=e149] [cursor=pointer]:
+                  - /url: /spool/print?spools=2787341110&return=%2Fspool%2Fshow%2F2787341110
+                  - img "printer" [ref=e151]:
+                    - img [ref=e152]
+                  - generic [ref=e154]: Print Labels
+                - button "inbox Archive" [ref=e156] [cursor=pointer]:
+                  - img "inbox" [ref=e158]:
+                    - img [ref=e159]
+                  - generic [ref=e161]: Archive
+                - link "bars Spools" [ref=e163] [cursor=pointer]:
+                  - /url: /spool
+                  - button "bars Spools" [ref=e164]:
+                    - img "bars" [ref=e166]:
+                      - img [ref=e167]
+                    - generic [ref=e169]: Spools
+                - link "edit Edit" [ref=e171] [cursor=pointer]:
+                  - /url: /spool/edit/2787341110
+                  - button "edit Edit" [ref=e172]:
+                    - img "edit" [ref=e174]:
+                      - img [ref=e175]
+                    - generic [ref=e177]: Edit
+                - button "delete Delete" [ref=e179] [cursor=pointer]:
+                  - img "delete" [ref=e181]:
+                    - img [ref=e182]
+                  - generic [ref=e184]: Delete
+                - button "redo Refresh" [ref=e186] [cursor=pointer]:
+                  - img "redo" [ref=e188]:
+                    - img [ref=e189]
+                  - generic [ref=e191]: Refresh
+            - generic [ref=e196]:
+              - heading "ID" [level=5] [ref=e197]
+              - text: 2.787.341.110
+              - heading "Filament" [level=5] [ref=e198]
+              - 'link "ID: 1001120597 - PLA" [ref=e200] [cursor=pointer]':
+                - /url: /filament/show/1001120597
+              - heading "Price" [level=5] [ref=e201]
+              - heading "Registered" [level=5] [ref=e202]
+              - text: 2026-03-24 11:18:29
+              - heading "First Used" [level=5] [ref=e203]
+              - heading "Last Used" [level=5] [ref=e204]
+              - heading "Remaining Length" [level=5] [ref=e205]
+              - generic [ref=e206]: 0,0 mm
+              - heading "Used Length" [level=5] [ref=e207]
+              - generic [ref=e208]: 0,0 mm
+              - heading "Remaining Weight" [level=5] [ref=e209]
+              - generic [ref=e210]: 0,0 g
+              - heading "Used Weight" [level=5] [ref=e211]
+              - generic [ref=e212]: 0,0 g
+              - heading "Location" [level=5] [ref=e213]
+              - heading "Lot Nr" [level=5] [ref=e214]
+              - heading "Comment" [level=5] [ref=e215]
+              - heading "Archived" [level=5] [ref=e216]
+              - text: "No"
+              - heading "Extra Fields" [level=4] [ref=e217]
+        - contentinfo [ref=e218]:
+          - generic [ref=e219]:
+            - generic [ref=e220]: Version Unknown
+            - link "Tip me on Ko-fi" [ref=e229] [cursor=pointer]:
+              - /url: https://ko-fi.com/donkie
+              - img [ref=e231]
+              - generic [ref=e232]: Tip me on Ko-fi
+    - generic [ref=e233]:
+      - img [ref=e235]
+      - button "Open Tanstack query devtools" [ref=e283] [cursor=pointer]:
+        - img [ref=e284]
+  - generic [ref=e332]:
+    - dialog "Adjust Spool Filament":
+      - generic [ref=e333]:
+        - button "Close" [ref=e334] [cursor=pointer]:
+          - generic "Close" [ref=e335]:
+            - img "close" [ref=e336]:
+              - img [ref=e337]
+        - generic [ref=e340]: Adjust Spool Filament
+        - generic [ref=e341]:
+          - paragraph [ref=e342]: Here you can directly add or subtract filament from the spool. A positive value will consume filament, a negative value will add it.
+          - generic [ref=e343]:
+            - generic [ref=e345]:
+              - generic "Measurement Type" [ref=e347]: "Measurement Type :"
+              - generic [ref=e351]:
+                - generic [ref=e352] [cursor=pointer]:
+                  - generic [ref=e353]:
+                    - radio "Length" [checked]
+                  - text: Length
+                - generic [ref=e354] [cursor=pointer]:
+                  - generic [ref=e355]:
+                    - radio "Weight"
+                  - text: Weight
+                - generic [ref=e356] [cursor=pointer]:
+                  - generic [ref=e357]:
+                    - radio "Measured Weight"
+                  - text: Measured Weight
+            - generic [ref=e359]:
+              - generic "Consume Amount" [ref=e361]: "Consume Amount :"
+              - generic [ref=e366]:
+                - generic [ref=e367]:
+                  - generic:
+                    - button "Increase Value" [ref=e368] [cursor=pointer]:
+                      - img "up" [ref=e369]:
+                        - img [ref=e370]
+                    - button "Decrease Value" [ref=e372] [cursor=pointer]:
+                      - img "down" [ref=e373]:
+                        - img [ref=e374]
+                  - spinbutton "Consume Amount :" [active] [ref=e377]
+                - generic [ref=e378]: mm
+        - generic [ref=e379]:
+          - button "Cancel" [ref=e380] [cursor=pointer]:
+            - generic [ref=e381]: Cancel
+          - button "OK" [ref=e382] [cursor=pointer]:
+            - generic [ref=e383]: OK

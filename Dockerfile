@@ -26,8 +26,8 @@ RUN apt-get update \
 RUN groupmod -g 1000 users \
  && useradd -u 1000 -U app \
  && usermod -G users app \
- && mkdir -p /home/app/.local/share/spoolman \
- && chown -R app:app /home/app/.local/share/spoolman
+ && mkdir -p /data \
+ && chown -R app:app /data
 
 # Copy the compiled server binary.
 COPY --from=builder --chown=app:app /build/target/release/spoolman-server /spoolman

@@ -49,16 +49,14 @@ pub fn build_router(store: JsonStore, cfg: &Config) -> Router {
         );
     }
 
-    // Serve compiled WASM frontend assets.  The directory is resolved from the
-    // LEPTOS_SITE_ROOT env var (set to /site in the Docker image) with a fallback
-    // to "target/site" for local `cargo leptos watch` development.
-    let site_dir = std::env::var("LEPTOS_SITE_ROOT")
-        .map(std::path::PathBuf::from)
-        .unwrap_or_else(|_| std::path::PathBuf::from("target/site"));
+    // Serve compiled WASM frontend assets.  The directory is read from
+    // LEPTOS_SITE_ROOT (set in the container) or defaults to `target/site`
+    // for local dev.  Falls back gracefully when the directory doesn't exist.
+    let site_dir = &cfg.site_root;
     if site_dir.exists() {
         let index = site_dir.join("index.html");
         app = app.fallback_service(
-            tower_http::services::ServeDir::new(&site_dir)
+            tower_http::services::ServeDir::new(site_dir)
                 .fallback(tower_http::services::ServeFile::new(index)),
         );
     }

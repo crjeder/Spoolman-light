@@ -1,7 +1,4 @@
-use std::{
-    env,
-    path::{Path, PathBuf},
-};
+use std::{env, path::PathBuf};
 
 /// All server configuration, parsed from environment variables at startup.
 #[derive(Debug, Clone)]
@@ -24,6 +21,10 @@ pub struct Config {
     pub automatic_backup: bool,
     /// App version string (from Cargo.toml via env at compile time).
     pub version: String,
+    /// Path to the compiled WASM frontend assets directory.
+    /// Defaults to `target/site` (cargo-leptos dev output).
+    /// Set `LEPTOS_SITE_ROOT` in production/container deployments.
+    pub site_root: PathBuf,
 }
 
 impl Config {
@@ -64,6 +65,12 @@ impl Config {
 
         let version = env!("CARGO_PKG_VERSION").to_string();
 
+        // cargo-leptos sets LEPTOS_SITE_ROOT in production builds.
+        // Defaults to `target/site` for local dev.
+        let site_root = env_var("LEPTOS_SITE_ROOT")
+            .map(PathBuf::from)
+            .unwrap_or_else(|| PathBuf::from("target/site"));
+
         Self {
             data_file,
             host,
@@ -74,6 +81,7 @@ impl Config {
             cors_origin,
             automatic_backup,
             version,
+            site_root,
         }
     }
 }
@@ -105,7 +113,7 @@ fn default_data_dir() -> PathBuf {
             .unwrap_or_else(|_| PathBuf::from("/tmp"));
         // Follow XDG_DATA_HOME if set.
         env::var("XDG_DATA_HOME")
-            .map(|d| Path::new(&d).join("spoolman"))
+            .map(|d| PathBuf::from(d).join("spoolman"))
             .unwrap_or_else(|_| home.join(".local/share/spoolman"))
     }
 }

@@ -51,6 +51,10 @@ cargo check -p spoolman-server
 python tests_integration/run.py sqlite
 ```
 
+## OpenSpec
+
+The Rust rewrite proposal lives at `openspec/changes/rust-rewrite/`. Design is complete — do not re-explore architecture decisions; implement from the spec.
+
 ## Rust Workspace Layout
 
 ```
@@ -126,3 +130,5 @@ After every change, update [CHANGELOG.md](CHANGELOG.md):
 - **uvloop disabled on Windows/armv7l** — don't assume uvloop is available in cross-platform code.
 - **Shell scripts must use LF line endings** — `entrypoint.sh` and other scripts must be LF (not CRLF) or Docker containers fail on Linux. Verify when editing on Windows.
 - **i18n required for UI strings** — all user-visible frontend text must go through i18next (`t()` calls); run `npm run check-i18n` to verify.
+- **NFC tag URL format** — Spool Online Data URL is `<host>/api/v1/spool/<id>` without `https://` (OpenTag3D / OpenPrintTag spec).
+- **Random u32 IDs** — Rust data model uses random u32 IDs with collision check on insert (not sequential).

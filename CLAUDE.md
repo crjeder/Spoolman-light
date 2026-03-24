@@ -112,6 +112,7 @@ tests_integration/  # Docker-based integration tests (pytest)
 ## Workflow
 
 Use git worktrees for feature work to keep changes isolated from the current workspace. Before starting any non-trivial implementation, create a worktree on a new branch rather than working directly on the checked-out branch.
+For every non-trivial implementation check crates.io if there is already a crate implementing the functionality.
 
 After every change, update [CHANGELOG.md](CHANGELOG.md):
 - Put entries under a new version 

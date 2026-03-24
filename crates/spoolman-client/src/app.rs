@@ -4,7 +4,6 @@ use leptos_router::*;
 use crate::pages::{
     filament::{FilamentCreate, FilamentEdit, FilamentList, FilamentShow},
     help::HelpPage,
-    home::HomePage,
     location::LocationList,
     settings::SettingsPage,
     spool::{SpoolCreate, SpoolEdit, SpoolList, SpoolShow},
@@ -20,7 +19,7 @@ pub fn App() -> impl IntoView {
         <Router>
             <crate::components::layout::Layout>
                 <Routes>
-                    <Route path="/"              view=HomePage />
+                    <Route path="/"              view=SpoolList />
                     <Route path="/spools"        view=SpoolList />
                     <Route path="/spools/new"    view=SpoolCreate />
                     <Route path="/spools/:id"    view=SpoolShow />

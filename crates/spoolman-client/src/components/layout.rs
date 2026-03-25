@@ -1,5 +1,5 @@
 use leptos::*;
-use leptos_router::A;
+use leptos_router::{use_location, A};
 
 #[component]
 pub fn Layout(children: Children) -> impl IntoView {
@@ -38,6 +38,11 @@ pub fn Layout(children: Children) -> impl IntoView {
 #[component]
 fn Sidebar() -> impl IntoView {
     let dark = use_context::<RwSignal<bool>>().expect("dark mode signal");
+    let location = use_location();
+    let spools_active = move || {
+        let path = location.pathname.get();
+        path == "/" || path.starts_with("/spools")
+    };
 
     view! {
         <nav class="sidebar">
@@ -45,8 +50,7 @@ fn Sidebar() -> impl IntoView {
                 <span class="logo ">"Spoolman"</span>
             </div>
             <ul class="nav-links">
-                <li><A href="/">"Home"</A></li>
-                <li><A href="/spools">"Spools"</A></li>
+                <li class=move || if spools_active() { "active" } else { "" }><A href="/spools">"Spools"</A></li>
                 <li><A href="/filaments">"Filaments"</A></li>
                 <li><A href="/locations">"Locations"</A></li>
                 <li><A href="/settings">"Settings"</A></li>

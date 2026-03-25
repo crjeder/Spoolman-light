@@ -54,9 +54,54 @@ pub fn FilamentList() -> impl IntoView {
             .collect::<Vec<_>>()
     };
 
+    let sort_field = ts.sort_field;
+    let sort_asc = ts.sort_asc;
+    let sorted = move || {
+        let mut items = filtered();
+        let field = sort_field.get();
+        let asc = sort_asc.get();
+        items.sort_by(|a, b| {
+            use std::cmp::Ordering;
+            match field.as_str() {
+                "manufacturer" => match (a.manufacturer.as_deref(), b.manufacturer.as_deref()) {
+                    (None, None) => Ordering::Equal,
+                    (None, _) => Ordering::Greater,
+                    (_, None) => Ordering::Less,
+                    (Some(av), Some(bv)) => {
+                        let ord = av.to_lowercase().cmp(&bv.to_lowercase());
+                        if asc { ord } else { ord.reverse() }
+                    }
+                },
+                "material" => {
+                    let am = a.material.as_ref().map(|m| m.abbreviation().to_string());
+                    let bm = b.material.as_ref().map(|m| m.abbreviation().to_string());
+                    match (am, bm) {
+                        (None, None) => Ordering::Equal,
+                        (None, _) => Ordering::Greater,
+                        (_, None) => Ordering::Less,
+                        (Some(av), Some(bv)) => {
+                            let ord = av.cmp(&bv);
+                            if asc { ord } else { ord.reverse() }
+                        }
+                    }
+                },
+                "density" => {
+                    let ord = a.density.partial_cmp(&b.density).unwrap_or(Ordering::Equal);
+                    if asc { ord } else { ord.reverse() }
+                },
+                "registered" => {
+                    let ord = a.registered.cmp(&b.registered);
+                    if asc { ord } else { ord.reverse() }
+                },
+                _ => Ordering::Equal,
+            }
+        });
+        items
+    };
+
     let total = Signal::derive(move || filtered().len());
     let page_items = move || {
-        let items = filtered();
+        let items = sorted();
         let start = ts.page.get() * ts.page_size.get();
         items.into_iter().skip(start).take(ts.page_size.get()).collect::<Vec<_>>()
     };
@@ -92,7 +137,7 @@ pub fn FilamentList() -> impl IntoView {
                             <th>"Modifier"</th>
                             <th>"Diameter"</th>
                             <th>"Net weight"</th>
-                            <th>"Density"</th>
+                            <ColHeader label="Density" field="density" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Actions"</th>
                         </tr>

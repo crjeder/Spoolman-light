@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Filament list sorting was completely non-functional — same root cause as spool list (sort signals tracked for display only, never applied to data). Added `sorted` closure with numeric comparison for density and date comparison for registered. Added `ColHeader` for the Density column (was a plain `<th>`). Manufacturer and Material sort by case-insensitive string; `None` values sort last regardless of direction (fixes B11).
+
+- Spool list sorting was completely non-functional — `sort_field`/`sort_asc` state was tracked for display but never applied to the data. Added a `sorted` closure that sorts the filtered items before pagination using numeric comparison for IDs, weights, and percentages (not lexicographic), and string comparison for filament names. `Remaining (g)` and `Location` columns previously had no sort button (`<th>` with no `ColHeader`); replaced with `ColHeader` wired to `remaining_weight` and `location` fields respectively. `None` values always sort last regardless of direction (fixes B6, B10).
+
 - Locations Delete button rendered raw Leptos macro source as its label (`0 on : click = move | _ | on_delete(id) >Delete`) — `>` in `disabled=move || count > 0` was parsed as the closing `>` of the `<button` tag; extracted to `let delete_disabled = count > 0` before the `view!` block (same fix pattern as Pagination "Next →"). Also added `.btn:disabled` CSS rule so disabled buttons keep their color identity rather than looking like unstyled pagination buttons (fixes B5).
 
 - Pagination "Next →" button rendered raw Leptos macro code as text due to `>=` being parsed as closing `>` of the button tag — extracted to a derived signal before the `view!` block.

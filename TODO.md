@@ -49,6 +49,10 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - **Fix:** Create `assets/style.css` (cargo-leptos copies it to `target/site/`) and reference it from `index.html` as `/style.css`. Key classes to define: `.app-shell` (flex row), `.sidebar` (fixed left nav), `.main-content` (flex-grow), `.data-table`, `.color-swatch` (inline-block colored square), `.dark` body overrides.
   - Or use the `style-file` option in `Leptos.toml` to point to a CSS source file that cargo-leptos will compile and embed into `spoolman-server.css`.
 
+### Testing
+
+- [ ] Add Rust integration tests — the Docker-based Python/pytest suite has been removed. A Rust-based test suite (e.g. using `reqwest` against a running server) is needed for API regression coverage.
+
 ### Docker / Build Notes (context for resuming)
 - Test image: `spoolman-light:test` (built from current branch `feat/color-search-spool-list`)
 - Running container: `spoolman-test` on `localhost:8000`

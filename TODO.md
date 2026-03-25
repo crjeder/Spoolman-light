@@ -29,10 +29,9 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 #### ~~B11 Filament view — sort~~ (Fixed)
 - **Fix applied:** Same pattern as B6 — added `sorted` closure, wired `page_items` to `sorted()`, added `ColHeader` for Density column.
 
-### B17 Help
-- Help page mentions a info endpoint and the ling goes to setting API endpoint. 
-- The setting endpoint does not show any data
-- correct /api/v1/spool/&lt;id&gt;
+#### ~~B17 Help~~ (Fixed)
+- **Root cause:** Link pointed to `/api/v1/setting` (returns empty map by default); NFC URL used `&lt;id&gt;` string literal which Leptos double-escapes, showing raw `&lt;id&gt;` instead of `<id>`; no `/info` endpoint existed.
+- **Fix applied:** Added `GET /api/v1/info` returning `{ version, data_file }`; updated Help page link to `/api/v1/info`; fixed NFC URL string to `<id>`.
 
 ### B12 Create does not work
 - when crating any new instance I get a "HTTP 500: Internal Server Error"

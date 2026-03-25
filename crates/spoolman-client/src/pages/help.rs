@@ -19,14 +19,14 @@ pub fn HelpPage() -> impl IntoView {
             <section>
                 <h2>"NFC tags (OpenTag3D / OpenPrintTag)"</h2>
                 <p>"Write your spool URL to an NFC tag so you can scan it directly from the printer. "
-                   "The spool detail URL is "<code>"/api/v1/spool/&lt;id&gt;"</code>
+                   "The spool detail URL is "<code>"/api/v1/spool/<id>"</code>
                    " — use this as the Online Data URL field in your NFC writer."</p>
             </section>
             <section>
                 <h2>"Data file"</h2>
                 <p>"All data is stored in "<code>"spoolman.json"</code>" in the platform data directory. "
-                   "The path is shown on the "
-                   <a href="/api/v1/setting">"/info endpoint"</a>"."</p>
+                   "The path is shown at "
+                   <a href="/api/v1/info">"/api/v1/info"</a>"."</p>
             </section>
             <section>
                 <h2>"Environment variables"</h2>

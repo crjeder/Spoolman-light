@@ -3,17 +3,25 @@ use axum::{
     extract::{Path, State},
     routing::{get, put},
 };
-use serde_json::Value;
+use serde_json::{Value, json};
 
 use crate::{routes::error::Result, store::JsonStore};
 use spoolman_types::requests::PutSetting;
 
 pub fn router() -> Router<JsonStore> {
     Router::new()
+        .route("/info", get(info))
         .route("/material", get(list_materials))
         .route("/export", get(export))
         .route("/setting", get(list_settings))
         .route("/setting/:key", put(put_setting))
+}
+
+async fn info(State(store): State<JsonStore>) -> Json<Value> {
+    Json(json!({
+        "version": env!("CARGO_PKG_VERSION"),
+        "data_file": store.get_data_file_path().to_string_lossy(),
+    }))
 }
 
 async fn list_materials(State(store): State<JsonStore>) -> Json<Vec<String>> {

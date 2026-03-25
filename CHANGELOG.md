@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-03-24
+
+### Removed
+
+- Python/FastAPI backend (`spoolman/`) — the Rust/Axum server is now the sole backend. No API changes for consumers.
+- Docker-based Python integration test suite (`tests_integration/`) — no longer applicable to the Rust stack. Rust integration tests are tracked as a follow-up.
+- `entrypoint.sh` — the uvicorn launcher is not needed; the Rust binary binds `SPOOLMAN_HOST`/`SPOOLMAN_PORT` directly.
+- `scripts/install.sh` and `scripts/start.sh` — Python/venv install helpers; superseded by `docker compose up` or `cargo leptos build`.
+- `pyproject.toml`, `pdm.lock`, `uv.lock` — Python package management files.
+- CI jobs `style` (Python pre-commit) and `build-client` (Node/pdm) replaced by `cargo check` and `cargo clippy` jobs.
+
+### Changed
+
+- `PUID`/`PGID` env vars no longer supported — the Docker image runs as a fixed `app` user (uid 1000). Ensure volume mounts are accessible by uid 1000.
+
 ## [1.3.0] - 2026-03-24
 
 ### Removed

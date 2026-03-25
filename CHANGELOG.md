@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Rust integration test suite — 24 tests covering health, filament, spool, location, and settings endpoints via in-process Axum dispatch; runs with `cargo test -p spoolman-server`, no Docker required.
+
+### Fixed
+
+- Pagination "Next →" button rendered raw Leptos macro code as text due to `>=` being parsed as closing `>` of the button tag — extracted to a derived signal before the `view!` block.
+- Spool create form sent `filament_id: 0` causing a 404 — added a `create_effect` that initializes the signal to the first loaded filament's ID when the resource resolves.
+- Spool create and edit forms always sent an empty `colors` array — added `<input type="color">` picker wired through `hex_to_rgba`; edit form pre-fills the picker from the spool's existing first color.
+
 ## [1.4.0] - 2026-03-24
 
 ### Removed

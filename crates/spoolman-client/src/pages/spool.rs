@@ -231,11 +231,20 @@ pub fn SpoolCreate() -> impl IntoView {
     let locations = create_resource(|| (), |_| async { api::list_locations().await });
 
     let filament_id = create_rw_signal(0u32);
+    let color_hex = create_rw_signal(String::from("#000000"));
     let color_name = create_rw_signal(String::new());
     let initial_weight = create_rw_signal(String::new());
     let location_id = create_rw_signal(Option::<u32>::None);
     let comment = create_rw_signal(String::new());
     let error = create_rw_signal(Option::<String>::None);
+
+    create_effect(move |_| {
+        if let Some(Ok(fs)) = filaments.get() {
+            if let Some(first) = fs.first() {
+                filament_id.set(first.id);
+            }
+        }
+    });
 
     let on_submit = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();
@@ -244,7 +253,7 @@ pub fn SpoolCreate() -> impl IntoView {
             let weight = initial_weight.get().parse::<f32>().unwrap_or(0.0);
             let body = CreateSpool {
                 filament_id: filament_id.get(),
-                colors: vec![],
+                colors: hex_to_rgba(&color_hex.get()).map(|c| vec![c]).unwrap_or_default(),
                 color_name: Some(color_name.get()).filter(|s| !s.is_empty()),
                 location_id: location_id.get(),
                 initial_weight: weight,
@@ -277,6 +286,12 @@ pub fn SpoolCreate() -> impl IntoView {
                             })}
                         </select>
                     </Suspense>
+                </label>
+                <label>
+                    "Color"
+                    <input type="color"
+                        prop:value=move || color_hex.get()
+                        on:input=move |ev| color_hex.set(event_target_value(&ev)) />
                 </label>
                 <label>
                     "Color name"
@@ -325,6 +340,7 @@ pub fn SpoolEdit() -> impl IntoView {
     let navigate = use_navigate();
 
     let current_weight = create_rw_signal(String::new());
+    let color_hex = create_rw_signal(String::from("#000000"));
     let color_name = create_rw_signal(String::new());
     let location_id = create_rw_signal(Option::<u32>::None);
     let comment = create_rw_signal(String::new());
@@ -334,6 +350,9 @@ pub fn SpoolEdit() -> impl IntoView {
     create_effect(move |_| {
         if let Some(Ok(sr)) = spool.get() {
             current_weight.set(sr.spool.current_weight.to_string());
+            if let Some(c) = sr.spool.colors.as_deref().and_then(|v| v.first()) {
+                color_hex.set(format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b));
+            }
             color_name.set(sr.spool.color_name.clone().unwrap_or_default());
             location_id.set(sr.spool.location_id);
             comment.set(sr.spool.comment.clone().unwrap_or_default());
@@ -347,6 +366,7 @@ pub fn SpoolEdit() -> impl IntoView {
         spawn_local(async move {
             let body = UpdateSpool {
                 current_weight: current_weight.get().parse::<f32>().ok(),
+                colors: Some(hex_to_rgba(&color_hex.get()).map(|c| vec![c]).unwrap_or_default()),
                 color_name: Some(color_name.get()),
                 location_id: location_id.get(),
                 comment: Some(comment.get()),
@@ -369,6 +389,12 @@ pub fn SpoolEdit() -> impl IntoView {
                     <input type="number" step="0.1"
                         prop:value=move || current_weight.get()
                         on:input=move |ev| current_weight.set(event_target_value(&ev)) />
+                </label>
+                <label>
+                    "Color"
+                    <input type="color"
+                        prop:value=move || color_hex.get()
+                        on:input=move |ev| color_hex.set(event_target_value(&ev)) />
                 </label>
                 <label>
                     "Color name"

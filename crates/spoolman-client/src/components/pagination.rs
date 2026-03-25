@@ -11,6 +11,8 @@ pub fn Pagination(
         if ps == 0 { 1 } else { (total.get() + ps - 1) / ps }
     };
 
+    let next_disabled = Signal::derive(move || page.get() + 1 >= total_pages());
+
     view! {
         <div class="pagination">
             <button
@@ -19,7 +21,7 @@ pub fn Pagination(
             >"← Prev"</button>
             <span>{move || format!("Page {} / {}", page.get() + 1, total_pages())}</span>
             <button
-                disabled=move || page.get() + 1 >= total_pages()
+                disabled=next_disabled
                 on:click=move |_| page.update(|p| *p += 1)
             >"Next →"</button>
             <select

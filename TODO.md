@@ -7,8 +7,8 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 ### Bugs (found via Playwright Docker test, 2026-03-24)
 
 #### ~~B5 Delete Button in Locations~~ (Fixed)
-- **Root cause:** No `.btn:disabled` rule — a disabled `btn-danger` button lost its red styling and looked like the plain, unstyled pagination "← Prev" button.
-- **Fix applied:** Added `.btn:disabled` rule in `style/spoolman.css` that keeps `opacity: 0.45` and `cursor: not-allowed` while preserving the button's color/shape.
+- **Root cause:** `disabled=move || count > 0` inside `view!` — the `>` in `count > 0` was parsed as the closing `>` of the `<button` opening tag, so `on:click=...>"Delete"` became raw text content of the button (same class of bug as Pagination "Next →").
+- **Fix applied:** Extracted to `let delete_disabled = count > 0;` before the `view!` block; used `disabled=delete_disabled`. Also added `.btn:disabled` CSS rule so disabled buttons stay visually distinct from unstyled pagination buttons.
 
 ### B6 Spools view
 - sorting on remainig (g) not possible
@@ -17,11 +17,14 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 ### B7 Color's alpha value is not used anywhere
 - the color picker should allow to select an alpha value. if that's not possible add an extra selector elsewhere
 
-### B8 server error in spool edig
+### B8 server error in spool edit
 - "HTTP 500: Internal Server Error" when saving changes
 
 ### B9 jumps to spool details after edit spool
 - should jump to spool list
+
+### B10 Sort in list view does not work
+- clicking on the column heading must sort the table according to the values in the column. numbers must be sorted numerically and not treated as a string e. g. 1, 2, 9, 10 and not 10, 1, 2, ..
 
 #### ~~B4 — No CSS: app is completely unstyled~~ (Fixed in feat/add-css-styling-stylers)
 - **Fix applied:** Added `stylers = "0.3.2"` for scoped component CSS and `style-file = "style/spoolman.css"` in `Leptos.toml` for global CSS (variables, reset, dark mode, buttons, shared page classes). All major components now have `style!` blocks.

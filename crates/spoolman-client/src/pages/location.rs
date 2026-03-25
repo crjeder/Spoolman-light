@@ -115,11 +115,12 @@ pub fn LocationList() -> impl IntoView {
                                                 }.into_view()
                                             } else {
                                                 let n = name_for_actions.clone();
+                                                let delete_disabled = count > 0;
                                                 view! {
                                                     <button class="btn " on:click=move |_| editing.set(Some((id, n.clone())))>"Edit"</button>
                                                     " "
                                                     <button class="btn btn-danger "
-                                                        disabled=move || count > 0
+                                                        disabled=delete_disabled
                                                         on:click=move |_| on_delete(id)>"Delete"</button>
                                                 }.into_view()
                                             }}

@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Locations Delete button (disabled state) now retains its `btn-danger` red appearance instead of rendering as a plain unstyled button visually indistinguishable from the pagination "← Prev" button — added `.btn:disabled` rule in `spoolman.css` (fixes B5).
+- Locations Delete button rendered raw Leptos macro source as its label (`0 on : click = move | _ | on_delete(id) >Delete`) — `>` in `disabled=move || count > 0` was parsed as the closing `>` of the `<button` tag; extracted to `let delete_disabled = count > 0` before the `view!` block (same fix pattern as Pagination "Next →"). Also added `.btn:disabled` CSS rule so disabled buttons keep their color identity rather than looking like unstyled pagination buttons (fixes B5).
+
 - Pagination "Next →" button rendered raw Leptos macro code as text due to `>=` being parsed as closing `>` of the button tag — extracted to a derived signal before the `view!` block.
 - Spool create form sent `filament_id: 0` causing a 404 — added a `create_effect` that initializes the signal to the first loaded filament's ID when the resource resolves.
 - Spool create and edit forms always sent an empty `colors` array — added `<input type="color">` picker wired through `hex_to_rgba`; edit form pre-fills the picker from the spool's existing first color.

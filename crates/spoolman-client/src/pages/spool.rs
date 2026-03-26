@@ -151,11 +151,11 @@ pub fn SpoolList() -> impl IntoView {
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <ColHeader label="ID"       field="id"         sort_field=ts.sort_field sort_asc=ts.sort_asc />
+                            <ColHeader label="ID"       field="id"         sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Filament" field="filament"   sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Color"</th>
-                            <ColHeader label="Remaining%" field="remaining_pct" sort_field=ts.sort_field sort_asc=ts.sort_asc />
-                            <ColHeader label="Remaining (g)" field="remaining_weight" sort_field=ts.sort_field sort_asc=ts.sort_asc />
+                            <ColHeader label="Remaining%" field="remaining_pct" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
+                            <ColHeader label="Remaining (g)" field="remaining_weight" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Location"      field="location"          sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Actions"</th>
@@ -171,7 +171,7 @@ pub fn SpoolList() -> impl IntoView {
                             let rem = sr.remaining_filament.map(|w| format!("{:.0}g", w)).unwrap_or_default();
                             view! {
                                 <tr class=if sr.spool.archived { "archived" } else { "" }>
-                                    <td><a href=format!("/spools/{id}")>{id}</a></td>
+                                    <td class="num"><a href=format!("/spools/{id}")>{id}</a></td>
                                     <td>{name}</td>
                                     <td>
                                         <span class="color-swatch"
@@ -180,8 +180,8 @@ pub fn SpoolList() -> impl IntoView {
                                         </span>
                                         {sr.spool.color_name.clone().unwrap_or_default()}
                                     </td>
-                                    <td>{pct}</td>
-                                    <td>{rem}</td>
+                                    <td class="num">{pct}</td>
+                                    <td class="num">{rem}</td>
                                     <td>{sr.spool.location_id.map(|l| l.to_string()).unwrap_or_default()}</td>
                                     <td>{sr.spool.registered.format("%Y-%m-%d").to_string()}</td>
                                     <td class="actions">
@@ -428,7 +428,7 @@ pub fn SpoolEdit() -> impl IntoView {
                 ..Default::default()
             };
             match api::update_spool(id, &body).await {
-                Ok(_) => navigate(&format!("/spools/{id}"), Default::default()),
+                Ok(_) => navigate("/spools", Default::default()),
                 Err(e) => error.set(Some(e.to_string())),
             }
         });

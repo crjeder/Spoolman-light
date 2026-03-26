@@ -17,11 +17,12 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 ### B7 Color's alpha value is not used anywhere
 - the color picker should allow to select an alpha value. if that's not possible add an extra selector elsewhere
 
-### B8 server error in spool edit
-- "HTTP 500: Internal Server Error" when saving changes
+#### ~~B8 server error in spool edit~~ (Fixed)
+- **Root cause:** `SpoolResponse::new` computed `remaining_pct = (nw - used_weight) / nw * 100.0`; when `filament.net_weight = Some(0.0)` this produces `NaN`/`±inf`, which `serde_json` cannot serialize, causing Axum to return HTTP 500.
+- **Fix applied:** Added `.filter(|&nw| nw > 0.0)` before `.map()` in `SpoolResponse::new` so `remaining_pct` is `None` when `net_weight` is zero or absent.
 
-### B9 jumps to spool details after edit spool
-- should jump to spool list
+#### ~~B9 jumps to spool details after edit spool~~ (Fixed)
+- **Fix applied:** Changed `navigate(&format!("/spools/{id}"), ...)` to `navigate("/spools", ...)` in the `SpoolEdit` submit handler.
 
 ### B10 "Filter" actually means "search"
 - the text box at the top displays "Filter" but it's free-text search. change the label to "search"

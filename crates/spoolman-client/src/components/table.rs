@@ -8,6 +8,7 @@ pub fn ColHeader(
     sort_field: RwSignal<String>,
     sort_asc: RwSignal<bool>,
     #[prop(optional)] filter: Option<RwSignal<String>>,
+    #[prop(optional)] num: bool,
 ) -> impl IntoView {
     let is_active = move || sort_field.get() == field;
     let indicator = move || {
@@ -27,7 +28,11 @@ pub fn ColHeader(
     };
 
     view! {
-        <th class=move || if is_active() { "col-header active" } else { "col-header" }>
+        <th class=move || {
+            let mut cls = if is_active() { "col-header active" } else { "col-header" }.to_string();
+            if num { cls.push_str(" num"); }
+            cls
+        }>
             <button class="sort-btn" on:click=toggle_sort>
                 {label}{indicator}
             </button>

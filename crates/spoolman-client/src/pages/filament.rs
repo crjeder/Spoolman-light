@@ -135,9 +135,9 @@ pub fn FilamentList() -> impl IntoView {
                             <ColHeader label="Manufacturer" field="manufacturer" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <ColHeader label="Material"     field="material"     sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Modifier"</th>
-                            <th>"Diameter"</th>
-                            <th>"Net weight"</th>
-                            <ColHeader label="Density" field="density" sort_field=ts.sort_field sort_asc=ts.sort_asc />
+                            <th class="num">"Diameter"</th>
+                            <th class="num">"Net weight"</th>
+                            <ColHeader label="Density" field="density" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Actions"</th>
                         </tr>
@@ -150,9 +150,9 @@ pub fn FilamentList() -> impl IntoView {
                                     <td>{f.manufacturer.clone().unwrap_or_default()}</td>
                                     <td>{f.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default()}</td>
                                     <td>{f.material_modifier.clone().unwrap_or_default()}</td>
-                                    <td>{format!("{:.2}mm", f.diameter)}</td>
-                                    <td>{f.net_weight.map(|w| format!("{:.0}g", w)).unwrap_or_default()}</td>
-                                    <td>{format!("{:.3}", f.density)}</td>
+                                    <td class="num">{format!("{:.2}mm", f.diameter)}</td>
+                                    <td class="num">{f.net_weight.map(|w| format!("{:.0}g", w)).unwrap_or_default()}</td>
+                                    <td class="num">{format!("{:.3}", f.density)}</td>
                                     <td>{f.registered.format("%Y-%m-%d").to_string()}</td>
                                     <td class="actions">
                                         <a href=format!("/filaments/{id}")>"View"</a>

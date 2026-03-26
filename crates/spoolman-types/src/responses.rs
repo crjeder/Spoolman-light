@@ -22,6 +22,7 @@ impl SpoolResponse {
         let remaining_filament = filament.net_weight.map(|nw| nw - used_weight);
         let remaining_pct = filament
             .net_weight
+            .filter(|&nw| nw > 0.0)
             .map(|nw| (nw - used_weight) / nw * 100.0);
         Self {
             spool,

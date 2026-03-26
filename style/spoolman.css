@@ -393,6 +393,11 @@ body.dark .success {
     white-space: nowrap;
 }
 
+.data-table th.num,
+.data-table td.num {
+    text-align: right;
+}
+
 /* ── Color swatch ──────────────────────────────────────────────────────────── */
 
 .color-swatch {

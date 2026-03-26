@@ -303,6 +303,10 @@ pub fn SpoolCreate() -> impl IntoView {
 
     let on_submit = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();
+        if location_id.get().is_none() {
+            error.set(Some("Location is required.".into()));
+            return;
+        }
         let navigate = navigate.clone();
         spawn_local(async move {
             let weight = initial_weight.get().parse::<f32>().unwrap_or(0.0);
@@ -416,6 +420,10 @@ pub fn SpoolEdit() -> impl IntoView {
 
     let on_submit = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();
+        if location_id.get().is_none() {
+            error.set(Some("Location is required.".into()));
+            return;
+        }
         let navigate = navigate.clone();
         let id = id();
         spawn_local(async move {

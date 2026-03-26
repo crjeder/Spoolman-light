@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Spool create and edit dialogs now reject the form with an error message when no location is selected — previously the form submitted with `location_id: None` silently (fixes B16).
+
 - Help page had three issues: the "Data file" section linked to `/api/v1/setting` (returns an empty map) with misleading text; the NFC section displayed the literal text `&lt;id&gt;` instead of `<id>` due to double-escaping in the Leptos text node; and no `/info` endpoint existed. Added `GET /api/v1/info` (returns `{ version, data_file }`), updated the link and label to point to `/api/v1/info`, and corrected the NFC URL string (fixes B17).
 
 - Spool create and edit both returned HTTP 500 when the selected filament had `net_weight = Some(0.0)` — division by zero in `SpoolResponse::new` produced `NaN`/`±inf` for `remaining_pct`, which `serde_json` cannot serialize, causing Axum to return 500 instead of the expected 201/200. Added `.filter(|&nw| nw > 0.0)` before the `.map()` so `remaining_pct` is `None` when `net_weight` is zero or absent. Regression test `create_spool_with_zero_net_weight_filament_returns_201` added (fixes B8, B12). Also fixed spool edit navigation: after a successful save the client now navigates to `/spools` (list) instead of `/spools/{id}` (detail) (fixes B9).

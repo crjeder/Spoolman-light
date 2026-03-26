@@ -50,8 +50,9 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - when the delete button of a location is pressed, it does not disappear until reload. before removal add a "Sure?" dialog. same for the other entities
 - when deleting a spool / filament in detail view "HTTP 404: Not Found" is shown. (because the element was just deleted) jump to list view instead.
 
-### B16 Location must not be "none"
-- Spool edit / create dialogs allow save, despite no Location is selected
+#### ~~B16 Location must not be "none"~~ (Fixed)
+- **Root cause:** No client-side guard — `on_submit` proceeded even when `location_id` was `None`.
+- **Fix applied:** Added an early-return guard in both `SpoolCreate` and `SpoolEdit` `on_submit` handlers: if `location_id.get().is_none()`, set the error signal with "Location is required." and return before spawning the async request.
 
 #### ~~B4 — No CSS: app is completely unstyled~~ (Fixed in feat/add-css-styling-stylers)
 - **Fix applied:** Added `stylers = "0.3.2"` for scoped component CSS and `style-file = "style/spoolman.css"` in `Leptos.toml` for global CSS (variables, reset, dark mode, buttons, shared page classes). All major components now have `style!` blocks.

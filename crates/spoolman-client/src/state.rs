@@ -3,6 +3,23 @@
 use leptos::*;
 use web_sys::window;
 
+// ── Diameter settings ──────────────────────────────────────────────────────────
+
+/// Reactive diameter settings provided via Leptos context from `App`.
+/// `uniform` — when true, all filaments share one diameter.
+/// `default_mm` — the diameter used when uniform mode is on.
+#[derive(Clone, Copy)]
+pub struct DiameterSettings {
+    pub uniform: RwSignal<bool>,
+    pub default_mm: RwSignal<f64>,
+}
+
+/// Read the `DiameterSettings` from context.  Panics if not provided (i.e. if
+/// called outside of the `App` component tree).
+pub fn diameter_settings() -> DiameterSettings {
+    expect_context::<DiameterSettings>()
+}
+
 #[derive(Clone, Debug)]
 pub struct TableState {
     pub sort_field: RwSignal<String>,

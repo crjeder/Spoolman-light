@@ -4,7 +4,7 @@ use spoolman_types::{
     models::MaterialType,
     requests::{CreateFilament, UpdateFilament},
 };
-use crate::{api, components::{pagination::Pagination, table::ColHeader}, state::use_table_state};
+use crate::{api, components::{pagination::Pagination, table::ColHeader}, state::{diameter_settings, use_table_state}};
 
 // ── Shared material <select> helper ────────────────────────────────────────────
 
@@ -37,6 +37,8 @@ fn MaterialSelect(value: RwSignal<String>) -> impl IntoView {
 pub fn FilamentList() -> impl IntoView {
     let ts = use_table_state("filaments");
     let material_filter = create_rw_signal(String::new());
+    let ds = diameter_settings();
+    let show_diameter = move || !ds.uniform.get();
 
     let filaments = create_resource(
         move || material_filter.get(),
@@ -135,7 +137,7 @@ pub fn FilamentList() -> impl IntoView {
                             <ColHeader label="Manufacturer" field="manufacturer" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <ColHeader label="Material"     field="material"     sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Modifier"</th>
-                            <th class="num">"Diameter"</th>
+                            {move || show_diameter().then(|| view! { <th class="num">"Diameter"</th> })}
                             <th class="num">"Net weight"</th>
                             <ColHeader label="Density" field="density" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />
@@ -150,7 +152,7 @@ pub fn FilamentList() -> impl IntoView {
                                     <td>{f.manufacturer.clone().unwrap_or_default()}</td>
                                     <td>{f.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default()}</td>
                                     <td>{f.material_modifier.clone().unwrap_or_default()}</td>
-                                    <td class="num">{format!("{:.2}mm", f.diameter)}</td>
+                                    {show_diameter().then(|| { let d = f.diameter; view! { <td class="num">{format!("{:.2}mm", d)}</td> } })}
                                     <td class="num">{f.net_weight.map(|w| format!("{:.0}g", w)).unwrap_or_default()}</td>
                                     <td class="num">{format!("{:.3}", f.density)}</td>
                                     <td>{f.registered.format("%Y-%m-%d").to_string()}</td>
@@ -218,10 +220,12 @@ pub fn FilamentShow() -> impl IntoView {
 #[component]
 pub fn FilamentCreate() -> impl IntoView {
     let navigate = leptos_router::use_navigate();
+    let ds = diameter_settings();
     let manufacturer = create_rw_signal(String::new());
     let material = create_rw_signal(String::new());
     let modifier = create_rw_signal(String::new());
-    let diameter = create_rw_signal("1.75".to_string());
+    // Initialise diameter from the configured default.
+    let diameter = create_rw_signal(ds.default_mm.get_untracked().to_string());
     let net_weight = create_rw_signal(String::new());
     let density = create_rw_signal("1.24".to_string());
     let print_temp = create_rw_signal(String::new());
@@ -234,11 +238,17 @@ pub fn FilamentCreate() -> impl IntoView {
         let navigate = navigate.clone();
         spawn_local(async move {
             let mat = material.get();
+            // When uniform mode is on, use the configured default diameter.
+            let resolved_diameter = if ds.uniform.get() {
+                ds.default_mm.get()
+            } else {
+                diameter.get().parse().unwrap_or(ds.default_mm.get())
+            };
             let body = CreateFilament {
                 manufacturer: Some(manufacturer.get()).filter(|s| !s.is_empty()),
                 material: if mat.is_empty() { None } else { Some(MaterialType::from_abbreviation(&mat)) },
                 material_modifier: Some(modifier.get()).filter(|s| !s.is_empty()),
-                diameter: diameter.get().parse().unwrap_or(1.75),
+                diameter: resolved_diameter,
                 net_weight: net_weight.get().parse().ok(),
                 density: density.get().parse().unwrap_or(1.24),
                 print_temp: print_temp.get().parse().ok(),
@@ -265,7 +275,9 @@ pub fn FilamentCreate() -> impl IntoView {
                     <MaterialSelect value=material />
                 </label>
                 <label>"Modifier"<input type="text" on:input=move |ev| modifier.set(event_target_value(&ev)) /></label>
-                <label>"Diameter (mm)"<input type="number" step="0.01" prop:value=move || diameter.get() on:input=move |ev| diameter.set(event_target_value(&ev)) /></label>
+                {move || (!ds.uniform.get()).then(|| view! {
+                    <label>"Diameter (mm)"<input type="number" step="0.01" prop:value=move || diameter.get() on:input=move |ev| diameter.set(event_target_value(&ev)) /></label>
+                })}
                 <label>"Net weight (g)"<input type="number" step="1" on:input=move |ev| net_weight.set(event_target_value(&ev)) /></label>
                 <label>"Density (g/cm³)"<input type="number" step="0.001" prop:value=move || density.get() on:input=move |ev| density.set(event_target_value(&ev)) /></label>
                 <label>"Print temp (°C)"<input type="number" on:input=move |ev| print_temp.set(event_target_value(&ev)) /></label>
@@ -286,6 +298,7 @@ pub fn FilamentEdit() -> impl IntoView {
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
     let filament = create_resource(id, |id| async move { api::get_filament(id).await });
     let navigate = leptos_router::use_navigate();
+    let ds = diameter_settings();
 
     let manufacturer = create_rw_signal(String::new());
     let material = create_rw_signal(String::new());
@@ -347,7 +360,9 @@ pub fn FilamentEdit() -> impl IntoView {
                     <MaterialSelect value=material />
                 </label>
                 <label>"Modifier"<input type="text" prop:value=move || modifier.get() on:input=move |ev| modifier.set(event_target_value(&ev)) /></label>
-                <label>"Diameter (mm)"<input type="number" step="0.01" prop:value=move || diameter.get() on:input=move |ev| diameter.set(event_target_value(&ev)) /></label>
+                {move || (!ds.uniform.get()).then(|| view! {
+                    <label>"Diameter (mm)"<input type="number" step="0.01" prop:value=move || diameter.get() on:input=move |ev| diameter.set(event_target_value(&ev)) /></label>
+                })}
                 <label>"Net weight (g)"<input type="number" step="1" prop:value=move || net_weight.get() on:input=move |ev| net_weight.set(event_target_value(&ev)) /></label>
                 <label>"Density (g/cm³)"<input type="number" step="0.001" prop:value=move || density.get() on:input=move |ev| density.set(event_target_value(&ev)) /></label>
                 <label>"Print temp (°C)"<input type="number" prop:value=move || print_temp.get() on:input=move |ev| print_temp.set(event_target_value(&ev)) /></label>

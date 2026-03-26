@@ -11,7 +11,7 @@ pub fn Pagination(
         if ps == 0 { 1 } else { (total.get() + ps - 1) / ps }
     };
 
-    let next_disabled = Signal::derive(move || page.get() + 1 >= total_pages());
+    let next_disabled = move || page.get() + 1 >= total_pages();
 
     view! {
         <div class="pagination">

@@ -93,6 +93,25 @@ async fn clone_spool_returns_201_with_different_id() {
     assert_eq!(body["filament_id"].as_u64().unwrap(), fid);
 }
 
+/// Regression test for B12 / B8: creating a spool whose filament has
+/// net_weight=0 previously produced NaN in remaining_pct, causing serde_json
+/// to fail and Axum to return HTTP 500 instead of 201.
+#[tokio::test]
+async fn create_spool_with_zero_net_weight_filament_returns_201() {
+    let (app, _dir) = common::make_app();
+    let (_, fil) = common::request(
+        &app,
+        Method::POST,
+        "/api/v1/filament",
+        Some(json!({ "density": 1.24, "net_weight": 0.0 })),
+    ).await;
+    let fid = fil["id"].as_u64().unwrap();
+
+    let (status, body) = common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+    assert_eq!(status, StatusCode::CREATED, "body: {body}");
+    assert!(body["remaining_pct"].is_null(), "remaining_pct should be None when net_weight=0");
+}
+
 #[tokio::test]
 async fn delete_spool_returns_204_and_subsequent_get_404() {
     let (app, _dir) = common::make_app();

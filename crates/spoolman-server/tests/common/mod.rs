@@ -5,6 +5,32 @@ use std::path::PathBuf;
 use tempfile::TempDir;
 use tower::ServiceExt;
 
+/// Creates an isolated router backed by the seeded `assets/spoolman.json` test data.
+/// Simulates the Docker test environment where the server starts with pre-existing data.
+pub fn make_app_with_test_data() -> (Router, TempDir) {
+    let dir = TempDir::new().unwrap();
+    let data_path = dir.path().join("data.json");
+    // Copy the test fixture into the writable temp dir.
+    let fixture = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../assets/spoolman.json");
+    std::fs::copy(&fixture, &data_path).expect("failed to copy test fixture");
+    let store = JsonStore::load(&data_path).unwrap();
+    let cfg = Config {
+        data_file: data_path,
+        host: "127.0.0.1".to_string(),
+        port: 0,
+        base_path: String::new(),
+        debug_mode: false,
+        logging_level: "error".to_string(),
+        cors_origin: None,
+        automatic_backup: false,
+        version: "test".to_string(),
+        site_root: PathBuf::from("/nonexistent-test-site"),
+    };
+    let router = routes::build_router(store, &cfg);
+    (router, dir)
+}
+
 /// Creates an isolated router backed by an empty in-memory store in a temp dir.
 /// The returned `TempDir` must be kept alive for the duration of the test.
 pub fn make_app() -> (Router, TempDir) {

@@ -34,11 +34,13 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - **Root cause:** Link pointed to `/api/v1/setting` (returns empty map by default); NFC URL used `&lt;id&gt;` string literal which Leptos double-escapes, showing raw `&lt;id&gt;` instead of `<id>`; no `/info` endpoint existed.
 - **Fix applied:** Added `GET /api/v1/info` returning `{ version, data_file }`; updated Help page link to `/api/v1/info`; fixed NFC URL string to `<id>`.
 
-### B12 Create does not work
-- when crating any new instance I get a "HTTP 500: Internal Server Error"
+#### ~~B12 Create does not work~~ (Fixed — covered by B8 fix)
+- **Root cause:** Same as B8 — `SpoolResponse::new` divided by `net_weight` without guarding against zero, producing `NaN` that `serde_json` cannot serialize. Affected spool create when the selected filament had `net_weight = Some(0.0)` (user entered "0" in the net-weight field). Axum catches the JSON serialization failure and returns HTTP 500.
+- **Fix applied:** The `.filter(|&nw| nw > 0.0)` guard added for B8 also covers the create path. Regression test added: `create_spool_with_zero_net_weight_filament_returns_201`.
 
-### B13 Pagination broken
-- prev and next buttons are allways greyed out
+#### ~~B13 Pagination broken~~ (Fixed)
+- **Root cause:** `next_disabled` was `Signal::derive(…)` (`Signal<bool>`). Leptos 0.6 does not create a reactive attribute binding for a bare `Signal<bool>` passed by name in `view!` — it reads the initial value once (`true` before data loads) and never re-evaluates. The Prev button used the correct `disabled=move || …` closure pattern; Next did not.
+- **Fix applied:** Changed `let next_disabled = Signal::derive(…)` to a plain `move || …` closure so `disabled=next_disabled` in `view!` gets a reactive `Fn() -> bool` binding. The `>=` operator stays outside `view!` to avoid the earlier tag-close parsing issue.
 
 ### B14 no date in Spool view
 - does not show date information (creation, last use)
@@ -70,7 +72,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] Make the Spool list the default landing page
 - [ ] Light theme matching the logo
 - [x] Add CSS Styles using  [stylers = "0.3.2"](https://github.com/abishekatp/stylers)
-- [ ] align numbers in columns on right
+- [x] align numbers in columns on right
 - [ ] make Diameter column optional. configured in settings "Same diameter for all Filaments / Spools". add a default diameter setting, too. in filament creation / edit only display the diameter input if above setting is false.
 
 ### Data Model

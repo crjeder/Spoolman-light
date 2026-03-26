@@ -54,9 +54,54 @@ pub fn FilamentList() -> impl IntoView {
             .collect::<Vec<_>>()
     };
 
+    let sort_field = ts.sort_field;
+    let sort_asc = ts.sort_asc;
+    let sorted = move || {
+        let mut items = filtered();
+        let field = sort_field.get();
+        let asc = sort_asc.get();
+        items.sort_by(|a, b| {
+            use std::cmp::Ordering;
+            match field.as_str() {
+                "manufacturer" => match (a.manufacturer.as_deref(), b.manufacturer.as_deref()) {
+                    (None, None) => Ordering::Equal,
+                    (None, _) => Ordering::Greater,
+                    (_, None) => Ordering::Less,
+                    (Some(av), Some(bv)) => {
+                        let ord = av.to_lowercase().cmp(&bv.to_lowercase());
+                        if asc { ord } else { ord.reverse() }
+                    }
+                },
+                "material" => {
+                    let am = a.material.as_ref().map(|m| m.abbreviation().to_string());
+                    let bm = b.material.as_ref().map(|m| m.abbreviation().to_string());
+                    match (am, bm) {
+                        (None, None) => Ordering::Equal,
+                        (None, _) => Ordering::Greater,
+                        (_, None) => Ordering::Less,
+                        (Some(av), Some(bv)) => {
+                            let ord = av.cmp(&bv);
+                            if asc { ord } else { ord.reverse() }
+                        }
+                    }
+                },
+                "density" => {
+                    let ord = a.density.partial_cmp(&b.density).unwrap_or(Ordering::Equal);
+                    if asc { ord } else { ord.reverse() }
+                },
+                "registered" => {
+                    let ord = a.registered.cmp(&b.registered);
+                    if asc { ord } else { ord.reverse() }
+                },
+                _ => Ordering::Equal,
+            }
+        });
+        items
+    };
+
     let total = Signal::derive(move || filtered().len());
     let page_items = move || {
-        let items = filtered();
+        let items = sorted();
         let start = ts.page.get() * ts.page_size.get();
         items.into_iter().skip(start).take(ts.page_size.get()).collect::<Vec<_>>()
     };
@@ -90,9 +135,9 @@ pub fn FilamentList() -> impl IntoView {
                             <ColHeader label="Manufacturer" field="manufacturer" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <ColHeader label="Material"     field="material"     sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Modifier"</th>
-                            <th>"Diameter"</th>
-                            <th>"Net weight"</th>
-                            <th>"Density"</th>
+                            <th class="num">"Diameter"</th>
+                            <th class="num">"Net weight"</th>
+                            <ColHeader label="Density" field="density" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Actions"</th>
                         </tr>
@@ -105,9 +150,9 @@ pub fn FilamentList() -> impl IntoView {
                                     <td>{f.manufacturer.clone().unwrap_or_default()}</td>
                                     <td>{f.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default()}</td>
                                     <td>{f.material_modifier.clone().unwrap_or_default()}</td>
-                                    <td>{format!("{:.2}mm", f.diameter)}</td>
-                                    <td>{f.net_weight.map(|w| format!("{:.0}g", w)).unwrap_or_default()}</td>
-                                    <td>{format!("{:.3}", f.density)}</td>
+                                    <td class="num">{format!("{:.2}mm", f.diameter)}</td>
+                                    <td class="num">{f.net_weight.map(|w| format!("{:.0}g", w)).unwrap_or_default()}</td>
+                                    <td class="num">{format!("{:.3}", f.density)}</td>
                                     <td>{f.registered.format("%Y-%m-%d").to_string()}</td>
                                     <td class="actions">
                                         <a href=format!("/filaments/{id}")>"View"</a>

@@ -1,0 +1,3066 @@
+{
+  "meta": {
+    "schema_version": 2
+  },
+  "filaments": [
+    {
+      "id": 1001,
+      "manufacturer": "Prusament",
+      "material": "PLA",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.24,
+      "print_temp": 215,
+      "bed_temp": 60,
+      "min_print_temp": 205,
+      "max_print_temp": 230,
+      "min_bed_temp": 50,
+      "max_bed_temp": 70,
+      "registered": "2025-01-10T10:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1002,
+      "manufacturer": "eSUN",
+      "material": "PETG",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.27,
+      "print_temp": 235,
+      "bed_temp": 80,
+      "min_print_temp": 220,
+      "max_print_temp": 250,
+      "min_bed_temp": 70,
+      "max_bed_temp": 90,
+      "registered": "2025-02-15T08:30:00Z",
+      "comment": "Clear PETG"
+    },
+    {
+      "id": 1003,
+      "manufacturer": "Polymaker",
+      "material": "TPU",
+      "material_modifier": "95A",
+      "diameter": 1.75,
+      "density": 1.21,
+      "print_temp": 220,
+      "bed_temp": 30,
+      "min_print_temp": 210,
+      "max_print_temp": 230,
+      "min_bed_temp": null,
+      "max_bed_temp": null,
+      "registered": "2025-03-01T14:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1004,
+      "manufacturer": "Bambu",
+      "material": "PLA",
+      "material_modifier": "Basic",
+      "diameter": 1.75,
+      "density": 1.24,
+      "print_temp": 220,
+      "bed_temp": 35,
+      "min_print_temp": 190,
+      "max_print_temp": 230,
+      "min_bed_temp": 35,
+      "max_bed_temp": 45,
+      "registered": "2025-01-20T09:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1005,
+      "manufacturer": "Hatchbox",
+      "material": "ABS",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.04,
+      "print_temp": 230,
+      "bed_temp": 100,
+      "min_print_temp": 220,
+      "max_print_temp": 250,
+      "min_bed_temp": 90,
+      "max_bed_temp": 110,
+      "registered": "2024-11-05T11:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1006,
+      "manufacturer": "Overture",
+      "material": "PLA",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.24,
+      "print_temp": 210,
+      "bed_temp": 60,
+      "min_print_temp": 200,
+      "max_print_temp": 225,
+      "min_bed_temp": 50,
+      "max_bed_temp": 70,
+      "registered": "2025-01-05T08:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1007,
+      "manufacturer": "Sunlu",
+      "material": "PETG",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.27,
+      "print_temp": 240,
+      "bed_temp": 80,
+      "min_print_temp": 220,
+      "max_print_temp": 250,
+      "min_bed_temp": 70,
+      "max_bed_temp": 90,
+      "registered": "2025-02-01T10:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1008,
+      "manufacturer": "Prusament",
+      "material": "PETG",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.27,
+      "print_temp": 240,
+      "bed_temp": 85,
+      "min_print_temp": 230,
+      "max_print_temp": 250,
+      "min_bed_temp": 80,
+      "max_bed_temp": 90,
+      "registered": "2025-01-15T13:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1009,
+      "manufacturer": "ColorFabb",
+      "material": "PLA",
+      "material_modifier": "Economy",
+      "diameter": 1.75,
+      "density": 1.24,
+      "print_temp": 210,
+      "bed_temp": 60,
+      "min_print_temp": 195,
+      "max_print_temp": 225,
+      "min_bed_temp": 50,
+      "max_bed_temp": 70,
+      "registered": "2025-02-20T09:30:00Z",
+      "comment": null
+    },
+    {
+      "id": 1010,
+      "manufacturer": "Fiberlogy",
+      "material": "ASA",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.07,
+      "print_temp": 245,
+      "bed_temp": 100,
+      "min_print_temp": 235,
+      "max_print_temp": 260,
+      "min_bed_temp": 90,
+      "max_bed_temp": 110,
+      "registered": "2025-03-05T11:00:00Z",
+      "comment": "UV resistant"
+    },
+    {
+      "id": 1011,
+      "manufacturer": "Bambu",
+      "material": "ABS",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.04,
+      "print_temp": 250,
+      "bed_temp": 90,
+      "min_print_temp": 240,
+      "max_print_temp": 270,
+      "min_bed_temp": 80,
+      "max_bed_temp": 100,
+      "registered": "2025-02-10T14:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1012,
+      "manufacturer": "eSUN",
+      "material": "PLA",
+      "material_modifier": "Silk",
+      "diameter": 1.75,
+      "density": 1.24,
+      "print_temp": 215,
+      "bed_temp": 60,
+      "min_print_temp": 200,
+      "max_print_temp": 230,
+      "min_bed_temp": 50,
+      "max_bed_temp": 70,
+      "registered": "2025-01-25T10:00:00Z",
+      "comment": "Silk sheen finish"
+    },
+    {
+      "id": 1013,
+      "manufacturer": "Polymaker",
+      "material": "PLA",
+      "material_modifier": "Matte",
+      "diameter": 1.75,
+      "density": 1.24,
+      "print_temp": 210,
+      "bed_temp": 60,
+      "min_print_temp": 200,
+      "max_print_temp": 225,
+      "min_bed_temp": 50,
+      "max_bed_temp": 70,
+      "registered": "2025-02-28T09:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1014,
+      "manufacturer": "Fillamentum",
+      "material": "CPE",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.28,
+      "print_temp": 255,
+      "bed_temp": 90,
+      "min_print_temp": 245,
+      "max_print_temp": 265,
+      "min_bed_temp": 85,
+      "max_bed_temp": 100,
+      "registered": "2025-03-10T12:00:00Z",
+      "comment": "Chemical resistant"
+    },
+    {
+      "id": 1015,
+      "manufacturer": "3DJake",
+      "material": "PETG",
+      "material_modifier": "CF",
+      "diameter": 1.75,
+      "density": 1.36,
+      "print_temp": 250,
+      "bed_temp": 80,
+      "min_print_temp": 240,
+      "max_print_temp": 260,
+      "min_bed_temp": 70,
+      "max_bed_temp": 90,
+      "registered": "2025-03-12T14:30:00Z",
+      "comment": "Carbon fiber reinforced"
+    },
+    {
+      "id": 1016,
+      "manufacturer": "Hatchbox",
+      "material": "PLA",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.24,
+      "print_temp": 210,
+      "bed_temp": 60,
+      "min_print_temp": 200,
+      "max_print_temp": 225,
+      "min_bed_temp": 50,
+      "max_bed_temp": 70,
+      "registered": "2024-12-15T10:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1017,
+      "manufacturer": "Overture",
+      "material": "PETG",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.27,
+      "print_temp": 235,
+      "bed_temp": 80,
+      "min_print_temp": 220,
+      "max_print_temp": 250,
+      "min_bed_temp": 70,
+      "max_bed_temp": 90,
+      "registered": "2025-01-08T09:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1018,
+      "manufacturer": "Prusament",
+      "material": "ASA",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.07,
+      "print_temp": 250,
+      "bed_temp": 100,
+      "min_print_temp": 240,
+      "max_print_temp": 260,
+      "min_bed_temp": 90,
+      "max_bed_temp": 110,
+      "registered": "2025-02-05T13:00:00Z",
+      "comment": null
+    },
+    {
+      "id": 1019,
+      "manufacturer": "Sunlu",
+      "material": "PLA",
+      "material_modifier": "Silk",
+      "diameter": 1.75,
+      "density": 1.24,
+      "print_temp": 215,
+      "bed_temp": 60,
+      "min_print_temp": 200,
+      "max_print_temp": 230,
+      "min_bed_temp": 50,
+      "max_bed_temp": 70,
+      "registered": "2025-02-22T11:00:00Z",
+      "comment": "Rainbow silk"
+    },
+    {
+      "id": 1020,
+      "manufacturer": "FormFutura",
+      "material": "HIPS",
+      "material_modifier": null,
+      "diameter": 1.75,
+      "density": 1.04,
+      "print_temp": 235,
+      "bed_temp": 100,
+      "min_print_temp": 220,
+      "max_print_temp": 250,
+      "min_bed_temp": 90,
+      "max_bed_temp": 110,
+      "registered": "2025-03-08T10:00:00Z",
+      "comment": "Support material"
+    }
+  ],
+  "spools": [
+    {
+      "id": 2001,
+      "filament_id": 1001,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 255,
+          "g": 80,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Prusa Orange",
+      "initial_weight": 1201.0,
+      "current_weight": 850.0,
+      "registered": "2025-01-10T10:05:00Z",
+      "first_used": "2025-01-12T09:00:00Z",
+      "last_used": "2025-03-20T18:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2002,
+      "filament_id": 1002,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 220,
+          "g": 220,
+          "b": 220,
+          "a": 200
+        }
+      ],
+      "color_name": "Clear",
+      "initial_weight": 1220.0,
+      "current_weight": 1220.0,
+      "registered": "2025-02-15T08:35:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": "Unopened",
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2003,
+      "filament_id": 1001,
+      "location_id": null,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Galaxy Black",
+      "initial_weight": 1201.0,
+      "current_weight": 45.0,
+      "registered": "2024-11-01T12:00:00Z",
+      "first_used": "2024-11-05T10:00:00Z",
+      "last_used": "2025-01-08T16:00:00Z",
+      "comment": "Nearly empty",
+      "archived": true,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2004,
+      "filament_id": 1003,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        },
+        {
+          "r": 50,
+          "g": 100,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "White/Blue",
+      "initial_weight": 930.0,
+      "current_weight": 600.0,
+      "registered": "2025-03-01T14:10:00Z",
+      "first_used": "2025-03-10T11:00:00Z",
+      "last_used": "2025-03-22T09:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2005,
+      "filament_id": 1004,
+      "location_id": 3003,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Bambu White",
+      "initial_weight": 1250.0,
+      "current_weight": 1100.0,
+      "registered": "2025-01-20T09:10:00Z",
+      "first_used": "2025-01-25T10:00:00Z",
+      "last_used": "2025-02-10T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2006,
+      "filament_id": 1004,
+      "location_id": 3003,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Bambu Black",
+      "initial_weight": 1250.0,
+      "current_weight": 750.0,
+      "registered": "2025-01-20T09:15:00Z",
+      "first_used": "2025-01-22T08:00:00Z",
+      "last_used": "2025-03-18T17:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2007,
+      "filament_id": 1005,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 200,
+          "g": 200,
+          "b": 200,
+          "a": 255
+        }
+      ],
+      "color_name": "Natural",
+      "initial_weight": 1230.0,
+      "current_weight": 980.0,
+      "registered": "2024-11-05T11:10:00Z",
+      "first_used": "2024-11-20T09:00:00Z",
+      "last_used": "2024-12-15T16:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2008,
+      "filament_id": 1005,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 255,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Red",
+      "initial_weight": 1230.0,
+      "current_weight": 1230.0,
+      "registered": "2024-12-01T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": "Unopened",
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2009,
+      "filament_id": 1006,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 0,
+          "g": 120,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Royal Blue",
+      "initial_weight": 1195.0,
+      "current_weight": 640.0,
+      "registered": "2025-01-05T08:10:00Z",
+      "first_used": "2025-01-10T11:00:00Z",
+      "last_used": "2025-03-15T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2010,
+      "filament_id": 1006,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 50,
+          "g": 200,
+          "b": 50,
+          "a": 255
+        }
+      ],
+      "color_name": "Grass Green",
+      "initial_weight": 1195.0,
+      "current_weight": 920.0,
+      "registered": "2025-01-05T08:15:00Z",
+      "first_used": "2025-02-01T09:00:00Z",
+      "last_used": "2025-03-01T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2011,
+      "filament_id": 1007,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 180,
+          "g": 0,
+          "b": 200,
+          "a": 255
+        }
+      ],
+      "color_name": "Purple",
+      "initial_weight": 1215.0,
+      "current_weight": 1215.0,
+      "registered": "2025-02-01T10:10:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2012,
+      "filament_id": 1007,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 255,
+          "g": 165,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Orange",
+      "initial_weight": 1215.0,
+      "current_weight": 310.0,
+      "registered": "2024-10-15T12:00:00Z",
+      "first_used": "2024-10-20T10:00:00Z",
+      "last_used": "2025-02-28T16:00:00Z",
+      "comment": "Running low",
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2013,
+      "filament_id": 1008,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 0,
+          "g": 180,
+          "b": 180,
+          "a": 255
+        }
+      ],
+      "color_name": "Cyan",
+      "initial_weight": 1201.0,
+      "current_weight": 870.0,
+      "registered": "2025-01-15T13:10:00Z",
+      "first_used": "2025-01-20T10:00:00Z",
+      "last_used": "2025-03-10T11:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2014,
+      "filament_id": 1008,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 220,
+          "g": 180,
+          "b": 140,
+          "a": 255
+        }
+      ],
+      "color_name": "Beige",
+      "initial_weight": 1201.0,
+      "current_weight": 1201.0,
+      "registered": "2025-03-01T09:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2015,
+      "filament_id": 1009,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 255,
+          "g": 230,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Yellow",
+      "initial_weight": 920.0,
+      "current_weight": 720.0,
+      "registered": "2025-02-20T09:40:00Z",
+      "first_used": "2025-03-01T10:00:00Z",
+      "last_used": "2025-03-20T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2016,
+      "filament_id": 1010,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 80,
+          "g": 80,
+          "b": 80,
+          "a": 255
+        }
+      ],
+      "color_name": "Slate Grey",
+      "initial_weight": 1060.0,
+      "current_weight": 1060.0,
+      "registered": "2025-03-05T11:10:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 850.0
+    },
+    {
+      "id": 2017,
+      "filament_id": 1011,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 30,
+          "g": 30,
+          "b": 30,
+          "a": 255
+        }
+      ],
+      "color_name": "Matte Black",
+      "initial_weight": 1250.0,
+      "current_weight": 900.0,
+      "registered": "2025-02-10T14:10:00Z",
+      "first_used": "2025-02-15T09:00:00Z",
+      "last_used": "2025-03-22T16:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2018,
+      "filament_id": 1012,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 255,
+          "g": 215,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Gold Silk",
+      "initial_weight": 1220.0,
+      "current_weight": 1050.0,
+      "registered": "2025-01-25T10:10:00Z",
+      "first_used": "2025-02-05T11:00:00Z",
+      "last_used": "2025-03-05T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2019,
+      "filament_id": 1012,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 192,
+          "g": 192,
+          "b": 192,
+          "a": 255
+        }
+      ],
+      "color_name": "Silver Silk",
+      "initial_weight": 1220.0,
+      "current_weight": 780.0,
+      "registered": "2025-01-25T10:15:00Z",
+      "first_used": "2025-02-01T08:00:00Z",
+      "last_used": "2025-03-18T11:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2020,
+      "filament_id": 1013,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 255,
+          "g": 105,
+          "b": 180,
+          "a": 255
+        }
+      ],
+      "color_name": "Pink Matte",
+      "initial_weight": 1195.0,
+      "current_weight": 1195.0,
+      "registered": "2025-02-28T09:10:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2021,
+      "filament_id": 1013,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 100,
+          "g": 149,
+          "b": 237,
+          "a": 255
+        }
+      ],
+      "color_name": "Cornflower Matte",
+      "initial_weight": 1195.0,
+      "current_weight": 560.0,
+      "registered": "2025-01-18T11:00:00Z",
+      "first_used": "2025-01-25T10:00:00Z",
+      "last_used": "2025-03-12T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2022,
+      "filament_id": 1014,
+      "location_id": 3006,
+      "colors": [
+        {
+          "r": 245,
+          "g": 245,
+          "b": 245,
+          "a": 255
+        }
+      ],
+      "color_name": "Natural CPE",
+      "initial_weight": 935.0,
+      "current_weight": 935.0,
+      "registered": "2025-03-10T12:10:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2023,
+      "filament_id": 1015,
+      "location_id": 3006,
+      "colors": [
+        {
+          "r": 40,
+          "g": 40,
+          "b": 40,
+          "a": 255
+        }
+      ],
+      "color_name": "Carbon Black",
+      "initial_weight": 660.0,
+      "current_weight": 420.0,
+      "registered": "2025-03-12T14:40:00Z",
+      "first_used": "2025-03-15T10:00:00Z",
+      "last_used": "2025-03-24T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 500.0
+    },
+    {
+      "id": 2024,
+      "filament_id": 1016,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 255,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "True Red",
+      "initial_weight": 1230.0,
+      "current_weight": 1230.0,
+      "registered": "2024-12-15T10:10:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2025,
+      "filament_id": 1016,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 0,
+          "g": 100,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Dark Green",
+      "initial_weight": 1230.0,
+      "current_weight": 580.0,
+      "registered": "2024-12-01T09:00:00Z",
+      "first_used": "2024-12-10T10:00:00Z",
+      "last_used": "2025-02-20T13:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2026,
+      "filament_id": 1017,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 139,
+          "a": 255
+        }
+      ],
+      "color_name": "Navy Blue",
+      "initial_weight": 1195.0,
+      "current_weight": 895.0,
+      "registered": "2025-01-08T09:10:00Z",
+      "first_used": "2025-01-15T10:00:00Z",
+      "last_used": "2025-03-08T16:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2027,
+      "filament_id": 1017,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 210,
+          "g": 105,
+          "b": 30,
+          "a": 255
+        }
+      ],
+      "color_name": "Chocolate",
+      "initial_weight": 1195.0,
+      "current_weight": 1195.0,
+      "registered": "2025-03-01T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2028,
+      "filament_id": 1018,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      ],
+      "color_name": "Urban Grey ASA",
+      "initial_weight": 1051.0,
+      "current_weight": 780.0,
+      "registered": "2025-02-05T13:10:00Z",
+      "first_used": "2025-02-12T09:00:00Z",
+      "last_used": "2025-03-20T17:00:00Z",
+      "comment": "Outdoor parts",
+      "archived": false,
+      "net_weight": 850.0
+    },
+    {
+      "id": 2029,
+      "filament_id": 1018,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "White ASA",
+      "initial_weight": 1051.0,
+      "current_weight": 1051.0,
+      "registered": "2025-03-01T11:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 850.0
+    },
+    {
+      "id": 2030,
+      "filament_id": 1019,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 255,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        },
+        {
+          "r": 255,
+          "g": 165,
+          "b": 0,
+          "a": 255
+        },
+        {
+          "r": 255,
+          "g": 255,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Sunset Silk",
+      "initial_weight": 1215.0,
+      "current_weight": 900.0,
+      "registered": "2025-02-22T11:10:00Z",
+      "first_used": "2025-03-01T10:00:00Z",
+      "last_used": "2025-03-22T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2031,
+      "filament_id": 1020,
+      "location_id": 3006,
+      "colors": [
+        {
+          "r": 230,
+          "g": 230,
+          "b": 230,
+          "a": 255
+        }
+      ],
+      "color_name": "White HIPS",
+      "initial_weight": 930.0,
+      "current_weight": 650.0,
+      "registered": "2025-03-08T10:10:00Z",
+      "first_used": "2025-03-12T10:00:00Z",
+      "last_used": "2025-03-24T16:00:00Z",
+      "comment": "Support material for ABS",
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2032,
+      "filament_id": 1001,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 200,
+          "g": 0,
+          "b": 200,
+          "a": 255
+        }
+      ],
+      "color_name": "Galaxy Purple",
+      "initial_weight": 1201.0,
+      "current_weight": 1201.0,
+      "registered": "2025-03-20T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2033,
+      "filament_id": 1001,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Pristine White",
+      "initial_weight": 1201.0,
+      "current_weight": 430.0,
+      "registered": "2024-09-15T10:00:00Z",
+      "first_used": "2024-09-20T09:00:00Z",
+      "last_used": "2025-01-10T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2034,
+      "filament_id": 1004,
+      "location_id": 3003,
+      "colors": [
+        {
+          "r": 0,
+          "g": 200,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Sky Blue",
+      "initial_weight": 1250.0,
+      "current_weight": 875.0,
+      "registered": "2025-02-01T09:00:00Z",
+      "first_used": "2025-02-08T10:00:00Z",
+      "last_used": "2025-03-15T12:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2035,
+      "filament_id": 1004,
+      "location_id": 3003,
+      "colors": [
+        {
+          "r": 220,
+          "g": 20,
+          "b": 60,
+          "a": 255
+        }
+      ],
+      "color_name": "Crimson",
+      "initial_weight": 1250.0,
+      "current_weight": 1250.0,
+      "registered": "2025-03-15T09:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2036,
+      "filament_id": 1006,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 255,
+          "g": 20,
+          "b": 147,
+          "a": 255
+        }
+      ],
+      "color_name": "Deep Pink",
+      "initial_weight": 1195.0,
+      "current_weight": 700.0,
+      "registered": "2025-01-12T10:00:00Z",
+      "first_used": "2025-01-18T11:00:00Z",
+      "last_used": "2025-03-05T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2037,
+      "filament_id": 1006,
+      "location_id": null,
+      "colors": [
+        {
+          "r": 139,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Dark Red",
+      "initial_weight": 1195.0,
+      "current_weight": 20.0,
+      "registered": "2024-07-01T10:00:00Z",
+      "first_used": "2024-07-05T09:00:00Z",
+      "last_used": "2024-10-30T15:00:00Z",
+      "comment": "Essentially empty",
+      "archived": true,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2038,
+      "filament_id": 1009,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 255,
+          "g": 140,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Dark Orange",
+      "initial_weight": 920.0,
+      "current_weight": 920.0,
+      "registered": "2025-03-10T09:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2039,
+      "filament_id": 1010,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Jet Black ASA",
+      "initial_weight": 1060.0,
+      "current_weight": 560.0,
+      "registered": "2025-01-20T11:00:00Z",
+      "first_used": "2025-01-25T10:00:00Z",
+      "last_used": "2025-03-20T16:00:00Z",
+      "comment": "Outdoor enclosure parts",
+      "archived": false,
+      "net_weight": 850.0
+    },
+    {
+      "id": 2040,
+      "filament_id": 1011,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "White ABS",
+      "initial_weight": 1250.0,
+      "current_weight": 1250.0,
+      "registered": "2025-03-01T14:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2041,
+      "filament_id": 1012,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 184,
+          "g": 115,
+          "b": 51,
+          "a": 255
+        }
+      ],
+      "color_name": "Copper Silk",
+      "initial_weight": 1220.0,
+      "current_weight": 890.0,
+      "registered": "2025-02-10T10:00:00Z",
+      "first_used": "2025-02-18T11:00:00Z",
+      "last_used": "2025-03-15T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2042,
+      "filament_id": 1013,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 0,
+          "g": 128,
+          "b": 128,
+          "a": 255
+        }
+      ],
+      "color_name": "Teal Matte",
+      "initial_weight": 1195.0,
+      "current_weight": 1195.0,
+      "registered": "2025-03-22T09:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2043,
+      "filament_id": 1013,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 128,
+          "g": 0,
+          "b": 128,
+          "a": 255
+        }
+      ],
+      "color_name": "Purple Matte",
+      "initial_weight": 1195.0,
+      "current_weight": 340.0,
+      "registered": "2024-10-01T10:00:00Z",
+      "first_used": "2024-10-08T11:00:00Z",
+      "last_used": "2025-02-15T13:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2044,
+      "filament_id": 1016,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Lemon Yellow",
+      "initial_weight": 1230.0,
+      "current_weight": 1230.0,
+      "registered": "2025-01-28T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2045,
+      "filament_id": 1016,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 0,
+          "g": 191,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Deep Sky Blue",
+      "initial_weight": 1230.0,
+      "current_weight": 670.0,
+      "registered": "2024-11-20T10:00:00Z",
+      "first_used": "2024-11-25T09:00:00Z",
+      "last_used": "2025-02-10T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2046,
+      "filament_id": 1019,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 255,
+          "a": 255
+        },
+        {
+          "r": 0,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Ocean Silk",
+      "initial_weight": 1215.0,
+      "current_weight": 1215.0,
+      "registered": "2025-03-18T11:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2047,
+      "filament_id": 1007,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 0,
+          "g": 128,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Forest Green PETG",
+      "initial_weight": 1215.0,
+      "current_weight": 850.0,
+      "registered": "2025-01-15T10:00:00Z",
+      "first_used": "2025-01-22T11:00:00Z",
+      "last_used": "2025-03-10T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2048,
+      "filament_id": 1008,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 255,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Red PETG",
+      "initial_weight": 1201.0,
+      "current_weight": 460.0,
+      "registered": "2024-12-10T10:00:00Z",
+      "first_used": "2024-12-15T11:00:00Z",
+      "last_used": "2025-03-01T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2049,
+      "filament_id": 1003,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Black TPU",
+      "initial_weight": 930.0,
+      "current_weight": 930.0,
+      "registered": "2025-03-15T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2050,
+      "filament_id": 1003,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 255,
+          "g": 165,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Orange TPU",
+      "initial_weight": 930.0,
+      "current_weight": 290.0,
+      "registered": "2024-09-01T10:00:00Z",
+      "first_used": "2024-09-10T11:00:00Z",
+      "last_used": "2025-01-20T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2051,
+      "filament_id": 1001,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 0,
+          "g": 255,
+          "b": 127,
+          "a": 255
+        }
+      ],
+      "color_name": "Spring Green",
+      "initial_weight": 1201.0,
+      "current_weight": 1201.0,
+      "registered": "2025-03-22T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2052,
+      "filament_id": 1001,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 138,
+          "g": 43,
+          "b": 226,
+          "a": 255
+        }
+      ],
+      "color_name": "Blue Violet",
+      "initial_weight": 1201.0,
+      "current_weight": 780.0,
+      "registered": "2025-01-30T10:00:00Z",
+      "first_used": "2025-02-05T11:00:00Z",
+      "last_used": "2025-03-18T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2053,
+      "filament_id": 1005,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 128,
+          "a": 255
+        }
+      ],
+      "color_name": "Navy ABS",
+      "initial_weight": 1230.0,
+      "current_weight": 1230.0,
+      "registered": "2025-02-28T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2054,
+      "filament_id": 1005,
+      "location_id": null,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 240,
+          "a": 255
+        }
+      ],
+      "color_name": "Ivory ABS",
+      "initial_weight": 1230.0,
+      "current_weight": 60.0,
+      "registered": "2024-06-01T10:00:00Z",
+      "first_used": "2024-06-10T11:00:00Z",
+      "last_used": "2024-09-15T14:00:00Z",
+      "comment": "Nearly empty",
+      "archived": true,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2055,
+      "filament_id": 1017,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 0,
+          "g": 255,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Lime Green PETG",
+      "initial_weight": 1195.0,
+      "current_weight": 950.0,
+      "registered": "2025-02-15T10:00:00Z",
+      "first_used": "2025-02-22T11:00:00Z",
+      "last_used": "2025-03-10T13:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2056,
+      "filament_id": 1014,
+      "location_id": 3006,
+      "colors": [
+        {
+          "r": 0,
+          "g": 100,
+          "b": 200,
+          "a": 255
+        }
+      ],
+      "color_name": "Blue CPE",
+      "initial_weight": 935.0,
+      "current_weight": 500.0,
+      "registered": "2025-02-20T10:00:00Z",
+      "first_used": "2025-02-25T11:00:00Z",
+      "last_used": "2025-03-20T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2057,
+      "filament_id": 1015,
+      "location_id": 3006,
+      "colors": [
+        {
+          "r": 50,
+          "g": 50,
+          "b": 50,
+          "a": 255
+        }
+      ],
+      "color_name": "Graphite CF-PETG",
+      "initial_weight": 660.0,
+      "current_weight": 660.0,
+      "registered": "2025-03-20T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 500.0
+    },
+    {
+      "id": 2058,
+      "filament_id": 1009,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 135,
+          "g": 206,
+          "b": 235,
+          "a": 255
+        }
+      ],
+      "color_name": "Sky Blue PLA",
+      "initial_weight": 920.0,
+      "current_weight": 690.0,
+      "registered": "2025-01-15T10:00:00Z",
+      "first_used": "2025-01-22T11:00:00Z",
+      "last_used": "2025-03-05T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2059,
+      "filament_id": 1020,
+      "location_id": 3006,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Black HIPS",
+      "initial_weight": 930.0,
+      "current_weight": 930.0,
+      "registered": "2025-03-15T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2060,
+      "filament_id": 1002,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Black PETG",
+      "initial_weight": 1220.0,
+      "current_weight": 740.0,
+      "registered": "2024-12-05T10:00:00Z",
+      "first_used": "2024-12-12T11:00:00Z",
+      "last_used": "2025-02-28T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2061,
+      "filament_id": 1002,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 50,
+          "g": 150,
+          "b": 50,
+          "a": 255
+        }
+      ],
+      "color_name": "Green PETG",
+      "initial_weight": 1220.0,
+      "current_weight": 1220.0,
+      "registered": "2025-03-10T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2062,
+      "filament_id": 1018,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 255,
+          "g": 80,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Orange ASA",
+      "initial_weight": 1051.0,
+      "current_weight": 620.0,
+      "registered": "2024-12-20T10:00:00Z",
+      "first_used": "2024-12-28T11:00:00Z",
+      "last_used": "2025-03-15T16:00:00Z",
+      "comment": "Traffic cone parts",
+      "archived": false,
+      "net_weight": 850.0
+    },
+    {
+      "id": 2063,
+      "filament_id": 1011,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 0,
+          "g": 128,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Green ABS",
+      "initial_weight": 1250.0,
+      "current_weight": 500.0,
+      "registered": "2024-11-15T10:00:00Z",
+      "first_used": "2024-11-22T11:00:00Z",
+      "last_used": "2025-02-20T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2064,
+      "filament_id": 1001,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 255,
+          "g": 215,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Signal Yellow",
+      "initial_weight": 1201.0,
+      "current_weight": 1201.0,
+      "registered": "2025-03-18T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2065,
+      "filament_id": 1004,
+      "location_id": 3003,
+      "colors": [
+        {
+          "r": 200,
+          "g": 160,
+          "b": 120,
+          "a": 255
+        }
+      ],
+      "color_name": "Khaki",
+      "initial_weight": 1250.0,
+      "current_weight": 820.0,
+      "registered": "2025-02-18T10:00:00Z",
+      "first_used": "2025-02-25T11:00:00Z",
+      "last_used": "2025-03-22T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2066,
+      "filament_id": 1004,
+      "location_id": 3003,
+      "colors": [
+        {
+          "r": 64,
+          "g": 224,
+          "b": 208,
+          "a": 255
+        }
+      ],
+      "color_name": "Turquoise",
+      "initial_weight": 1250.0,
+      "current_weight": 1250.0,
+      "registered": "2025-03-25T09:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2067,
+      "filament_id": 1016,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 128,
+          "g": 128,
+          "b": 128,
+          "a": 255
+        }
+      ],
+      "color_name": "Grey",
+      "initial_weight": 1230.0,
+      "current_weight": 940.0,
+      "registered": "2025-01-10T10:00:00Z",
+      "first_used": "2025-01-18T11:00:00Z",
+      "last_used": "2025-03-12T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2068,
+      "filament_id": 1006,
+      "location_id": null,
+      "colors": [
+        {
+          "r": 160,
+          "g": 82,
+          "b": 45,
+          "a": 255
+        }
+      ],
+      "color_name": "Sienna Brown",
+      "initial_weight": 1195.0,
+      "current_weight": 80.0,
+      "registered": "2024-05-01T10:00:00Z",
+      "first_used": "2024-05-10T11:00:00Z",
+      "last_used": "2024-08-20T14:00:00Z",
+      "comment": "Last bits",
+      "archived": true,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2069,
+      "filament_id": 1008,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Black PETG Prusament",
+      "initial_weight": 1201.0,
+      "current_weight": 1201.0,
+      "registered": "2025-03-20T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2070,
+      "filament_id": 1010,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "White ASA Fiberlogy",
+      "initial_weight": 1060.0,
+      "current_weight": 730.0,
+      "registered": "2025-02-01T10:00:00Z",
+      "first_used": "2025-02-10T11:00:00Z",
+      "last_used": "2025-03-20T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 850.0
+    },
+    {
+      "id": 2071,
+      "filament_id": 1012,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 255,
+          "g": 20,
+          "b": 147,
+          "a": 255
+        },
+        {
+          "r": 255,
+          "g": 165,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Flamingo Silk",
+      "initial_weight": 1220.0,
+      "current_weight": 1220.0,
+      "registered": "2025-03-22T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2072,
+      "filament_id": 1007,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "White Sunlu PETG",
+      "initial_weight": 1215.0,
+      "current_weight": 580.0,
+      "registered": "2024-12-01T10:00:00Z",
+      "first_used": "2024-12-08T11:00:00Z",
+      "last_used": "2025-02-15T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2073,
+      "filament_id": 1013,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "White Matte",
+      "initial_weight": 1195.0,
+      "current_weight": 800.0,
+      "registered": "2025-01-22T10:00:00Z",
+      "first_used": "2025-01-30T11:00:00Z",
+      "last_used": "2025-03-08T13:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2074,
+      "filament_id": 1013,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Black Matte",
+      "initial_weight": 1195.0,
+      "current_weight": 1195.0,
+      "registered": "2025-03-12T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2075,
+      "filament_id": 1019,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 255,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        },
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        },
+        {
+          "r": 0,
+          "g": 0,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Tricolor Silk",
+      "initial_weight": 1215.0,
+      "current_weight": 660.0,
+      "registered": "2025-01-20T10:00:00Z",
+      "first_used": "2025-01-28T11:00:00Z",
+      "last_used": "2025-03-15T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2076,
+      "filament_id": 1009,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Black ColorFabb PLA",
+      "initial_weight": 920.0,
+      "current_weight": 920.0,
+      "registered": "2025-03-25T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2077,
+      "filament_id": 1003,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 255,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Red TPU",
+      "initial_weight": 930.0,
+      "current_weight": 740.0,
+      "registered": "2025-02-10T10:00:00Z",
+      "first_used": "2025-02-18T11:00:00Z",
+      "last_used": "2025-03-10T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2078,
+      "filament_id": 1020,
+      "location_id": 3006,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Black HIPS 2",
+      "initial_weight": 930.0,
+      "current_weight": 200.0,
+      "registered": "2024-08-01T10:00:00Z",
+      "first_used": "2024-08-10T11:00:00Z",
+      "last_used": "2024-12-20T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2079,
+      "filament_id": 1018,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 128,
+          "a": 255
+        }
+      ],
+      "color_name": "Navy ASA",
+      "initial_weight": 1051.0,
+      "current_weight": 1051.0,
+      "registered": "2025-03-20T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 850.0
+    },
+    {
+      "id": 2080,
+      "filament_id": 1015,
+      "location_id": 3006,
+      "colors": [
+        {
+          "r": 70,
+          "g": 130,
+          "b": 180,
+          "a": 255
+        }
+      ],
+      "color_name": "Steel Blue CF-PETG",
+      "initial_weight": 660.0,
+      "current_weight": 300.0,
+      "registered": "2025-01-05T10:00:00Z",
+      "first_used": "2025-01-12T11:00:00Z",
+      "last_used": "2025-03-20T16:00:00Z",
+      "comment": "Structural parts",
+      "archived": false,
+      "net_weight": 500.0
+    },
+    {
+      "id": 2081,
+      "filament_id": 1001,
+      "location_id": 3008,
+      "colors": [
+        {
+          "r": 255,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Tomato Red",
+      "initial_weight": 1201.0,
+      "current_weight": 1201.0,
+      "registered": "2025-03-25T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2082,
+      "filament_id": 1001,
+      "location_id": 3008,
+      "colors": [
+        {
+          "r": 0,
+          "g": 206,
+          "b": 209,
+          "a": 255
+        }
+      ],
+      "color_name": "Dark Turquoise",
+      "initial_weight": 1201.0,
+      "current_weight": 830.0,
+      "registered": "2025-02-08T10:00:00Z",
+      "first_used": "2025-02-15T11:00:00Z",
+      "last_used": "2025-03-20T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2083,
+      "filament_id": 1004,
+      "location_id": 3008,
+      "colors": [
+        {
+          "r": 102,
+          "g": 51,
+          "b": 153,
+          "a": 255
+        }
+      ],
+      "color_name": "Royal Purple",
+      "initial_weight": 1250.0,
+      "current_weight": 990.0,
+      "registered": "2025-02-20T10:00:00Z",
+      "first_used": "2025-02-28T11:00:00Z",
+      "last_used": "2025-03-18T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2084,
+      "filament_id": 1006,
+      "location_id": 3008,
+      "colors": [
+        {
+          "r": 255,
+          "g": 228,
+          "b": 196,
+          "a": 255
+        }
+      ],
+      "color_name": "Bisque",
+      "initial_weight": 1195.0,
+      "current_weight": 1195.0,
+      "registered": "2025-03-15T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2085,
+      "filament_id": 1007,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 173,
+          "g": 216,
+          "b": 230,
+          "a": 255
+        }
+      ],
+      "color_name": "Light Blue PETG",
+      "initial_weight": 1215.0,
+      "current_weight": 760.0,
+      "registered": "2025-01-28T10:00:00Z",
+      "first_used": "2025-02-05T11:00:00Z",
+      "last_used": "2025-03-22T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2086,
+      "filament_id": 1008,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "White PETG Prusament",
+      "initial_weight": 1201.0,
+      "current_weight": 1080.0,
+      "registered": "2025-03-01T10:00:00Z",
+      "first_used": "2025-03-10T11:00:00Z",
+      "last_used": "2025-03-24T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2087,
+      "filament_id": 1011,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 178,
+          "g": 34,
+          "b": 34,
+          "a": 255
+        }
+      ],
+      "color_name": "Firebrick ABS",
+      "initial_weight": 1250.0,
+      "current_weight": 650.0,
+      "registered": "2024-10-20T10:00:00Z",
+      "first_used": "2024-10-28T11:00:00Z",
+      "last_used": "2025-01-30T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2088,
+      "filament_id": 1016,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 255,
+          "g": 99,
+          "b": 71,
+          "a": 255
+        }
+      ],
+      "color_name": "Tomato Hatchbox",
+      "initial_weight": 1230.0,
+      "current_weight": 860.0,
+      "registered": "2025-01-15T10:00:00Z",
+      "first_used": "2025-01-22T11:00:00Z",
+      "last_used": "2025-03-10T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2089,
+      "filament_id": 1013,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 255,
+          "g": 140,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Orange Matte",
+      "initial_weight": 1195.0,
+      "current_weight": 1195.0,
+      "registered": "2025-03-22T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2090,
+      "filament_id": 1012,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 75,
+          "g": 0,
+          "b": 130,
+          "a": 255
+        },
+        {
+          "r": 0,
+          "g": 0,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Indigo Blue Silk",
+      "initial_weight": 1220.0,
+      "current_weight": 720.0,
+      "registered": "2025-01-10T10:00:00Z",
+      "first_used": "2025-01-18T11:00:00Z",
+      "last_used": "2025-03-15T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2091,
+      "filament_id": 1017,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 255,
+          "g": 192,
+          "b": 203,
+          "a": 255
+        }
+      ],
+      "color_name": "Pink PETG",
+      "initial_weight": 1195.0,
+      "current_weight": 1195.0,
+      "registered": "2025-03-20T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2092,
+      "filament_id": 1010,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 255,
+          "g": 165,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Orange ASA Fiberlogy",
+      "initial_weight": 1060.0,
+      "current_weight": 390.0,
+      "registered": "2024-09-10T10:00:00Z",
+      "first_used": "2024-09-18T11:00:00Z",
+      "last_used": "2025-01-25T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 850.0
+    },
+    {
+      "id": 2093,
+      "filament_id": 1009,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "White ColorFabb PLA",
+      "initial_weight": 920.0,
+      "current_weight": 480.0,
+      "registered": "2024-11-01T10:00:00Z",
+      "first_used": "2024-11-08T11:00:00Z",
+      "last_used": "2025-02-20T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2094,
+      "filament_id": 1019,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 0,
+          "g": 128,
+          "b": 0,
+          "a": 255
+        },
+        {
+          "r": 50,
+          "g": 205,
+          "b": 50,
+          "a": 255
+        }
+      ],
+      "color_name": "Forest Silk",
+      "initial_weight": 1215.0,
+      "current_weight": 870.0,
+      "registered": "2025-02-05T10:00:00Z",
+      "first_used": "2025-02-12T11:00:00Z",
+      "last_used": "2025-03-18T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2095,
+      "filament_id": 1003,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 50,
+          "g": 205,
+          "b": 50,
+          "a": 255
+        }
+      ],
+      "color_name": "Lime TPU",
+      "initial_weight": 930.0,
+      "current_weight": 550.0,
+      "registered": "2025-01-25T10:00:00Z",
+      "first_used": "2025-02-01T11:00:00Z",
+      "last_used": "2025-03-15T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2096,
+      "filament_id": 1005,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 139,
+          "g": 69,
+          "b": 19,
+          "a": 255
+        }
+      ],
+      "color_name": "Saddle Brown ABS",
+      "initial_weight": 1230.0,
+      "current_weight": 820.0,
+      "registered": "2024-12-10T10:00:00Z",
+      "first_used": "2024-12-18T11:00:00Z",
+      "last_used": "2025-02-28T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2097,
+      "filament_id": 1014,
+      "location_id": 3006,
+      "colors": [
+        {
+          "r": 255,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Red CPE",
+      "initial_weight": 935.0,
+      "current_weight": 935.0,
+      "registered": "2025-03-22T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2098,
+      "filament_id": 1001,
+      "location_id": 3008,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Ultramarine",
+      "initial_weight": 1201.0,
+      "current_weight": 1201.0,
+      "registered": "2025-03-24T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2099,
+      "filament_id": 1002,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 255,
+          "g": 0,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Magenta PETG",
+      "initial_weight": 1220.0,
+      "current_weight": 670.0,
+      "registered": "2025-01-18T10:00:00Z",
+      "first_used": "2025-01-25T11:00:00Z",
+      "last_used": "2025-03-10T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2100,
+      "filament_id": 1006,
+      "location_id": 3008,
+      "colors": [
+        {
+          "r": 255,
+          "g": 127,
+          "b": 80,
+          "a": 255
+        }
+      ],
+      "color_name": "Coral",
+      "initial_weight": 1195.0,
+      "current_weight": 750.0,
+      "registered": "2025-02-12T10:00:00Z",
+      "first_used": "2025-02-20T11:00:00Z",
+      "last_used": "2025-03-22T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2101,
+      "filament_id": 1008,
+      "location_id": 3001,
+      "colors": [
+        {
+          "r": 75,
+          "g": 0,
+          "b": 130,
+          "a": 255
+        }
+      ],
+      "color_name": "Indigo PETG",
+      "initial_weight": 1201.0,
+      "current_weight": 1201.0,
+      "registered": "2025-03-25T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2102,
+      "filament_id": 1004,
+      "location_id": 3003,
+      "colors": [
+        {
+          "r": 255,
+          "g": 140,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Dark Orange Bambu",
+      "initial_weight": 1250.0,
+      "current_weight": 550.0,
+      "registered": "2024-12-20T10:00:00Z",
+      "first_used": "2024-12-28T11:00:00Z",
+      "last_used": "2025-03-18T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2103,
+      "filament_id": 1011,
+      "location_id": null,
+      "colors": [
+        {
+          "r": 255,
+          "g": 215,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Gold ABS",
+      "initial_weight": 1250.0,
+      "current_weight": 30.0,
+      "registered": "2024-04-01T10:00:00Z",
+      "first_used": "2024-04-08T11:00:00Z",
+      "last_used": "2024-07-20T14:00:00Z",
+      "comment": "Used up",
+      "archived": true,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2104,
+      "filament_id": 1013,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 0,
+          "g": 255,
+          "b": 127,
+          "a": 255
+        }
+      ],
+      "color_name": "Mint Matte",
+      "initial_weight": 1195.0,
+      "current_weight": 880.0,
+      "registered": "2025-02-15T10:00:00Z",
+      "first_used": "2025-02-22T11:00:00Z",
+      "last_used": "2025-03-18T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2105,
+      "filament_id": 1016,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 128,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Maroon",
+      "initial_weight": 1230.0,
+      "current_weight": 1230.0,
+      "registered": "2025-03-22T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2106,
+      "filament_id": 1018,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 0,
+          "g": 128,
+          "b": 128,
+          "a": 255
+        }
+      ],
+      "color_name": "Teal ASA",
+      "initial_weight": 1051.0,
+      "current_weight": 640.0,
+      "registered": "2025-01-25T10:00:00Z",
+      "first_used": "2025-02-01T11:00:00Z",
+      "last_used": "2025-03-20T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 850.0
+    },
+    {
+      "id": 2107,
+      "filament_id": 1012,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 0,
+          "g": 255,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Green Silk",
+      "initial_weight": 1220.0,
+      "current_weight": 1220.0,
+      "registered": "2025-03-20T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2108,
+      "filament_id": 1017,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Yellow PETG Overture",
+      "initial_weight": 1195.0,
+      "current_weight": 430.0,
+      "registered": "2024-10-15T10:00:00Z",
+      "first_used": "2024-10-22T11:00:00Z",
+      "last_used": "2025-02-10T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2109,
+      "filament_id": 1007,
+      "location_id": 3002,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Black Sunlu PETG",
+      "initial_weight": 1215.0,
+      "current_weight": 1215.0,
+      "registered": "2025-03-18T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2110,
+      "filament_id": 1009,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 255,
+          "g": 182,
+          "b": 193,
+          "a": 255
+        }
+      ],
+      "color_name": "Light Pink PLA",
+      "initial_weight": 920.0,
+      "current_weight": 620.0,
+      "registered": "2025-02-01T10:00:00Z",
+      "first_used": "2025-02-08T11:00:00Z",
+      "last_used": "2025-03-12T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2111,
+      "filament_id": 1001,
+      "location_id": 3008,
+      "colors": [
+        {
+          "r": 255,
+          "g": 165,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Pumpkin Orange",
+      "initial_weight": 1201.0,
+      "current_weight": 970.0,
+      "registered": "2025-02-28T10:00:00Z",
+      "first_used": "2025-03-05T11:00:00Z",
+      "last_used": "2025-03-22T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2112,
+      "filament_id": 1006,
+      "location_id": 3008,
+      "colors": [
+        {
+          "r": 0,
+          "g": 250,
+          "b": 154,
+          "a": 255
+        }
+      ],
+      "color_name": "Medium Spring Green",
+      "initial_weight": 1195.0,
+      "current_weight": 1195.0,
+      "registered": "2025-03-22T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2113,
+      "filament_id": 1015,
+      "location_id": 3006,
+      "colors": [
+        {
+          "r": 60,
+          "g": 60,
+          "b": 60,
+          "a": 255
+        }
+      ],
+      "color_name": "Dark Grey CF-PETG",
+      "initial_weight": 660.0,
+      "current_weight": 380.0,
+      "registered": "2024-12-05T10:00:00Z",
+      "first_used": "2024-12-12T11:00:00Z",
+      "last_used": "2025-02-25T14:00:00Z",
+      "comment": "Functional brackets",
+      "archived": false,
+      "net_weight": 500.0
+    },
+    {
+      "id": 2114,
+      "filament_id": 1004,
+      "location_id": 3003,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Pure White Bambu",
+      "initial_weight": 1250.0,
+      "current_weight": 1250.0,
+      "registered": "2025-03-25T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2115,
+      "filament_id": 1002,
+      "location_id": null,
+      "colors": [
+        {
+          "r": 0,
+          "g": 128,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Green PETG eSUN",
+      "initial_weight": 1220.0,
+      "current_weight": 10.0,
+      "registered": "2024-03-01T10:00:00Z",
+      "first_used": "2024-03-10T11:00:00Z",
+      "last_used": "2024-06-20T14:00:00Z",
+      "comment": "Empty",
+      "archived": true,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2116,
+      "filament_id": 1010,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": "Blue ASA Fiberlogy",
+      "initial_weight": 1060.0,
+      "current_weight": 810.0,
+      "registered": "2025-01-08T10:00:00Z",
+      "first_used": "2025-01-15T11:00:00Z",
+      "last_used": "2025-03-05T15:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 850.0
+    },
+    {
+      "id": 2117,
+      "filament_id": 1019,
+      "location_id": 3005,
+      "colors": [
+        {
+          "r": 148,
+          "g": 0,
+          "b": 211,
+          "a": 255
+        },
+        {
+          "r": 255,
+          "g": 20,
+          "b": 147,
+          "a": 255
+        }
+      ],
+      "color_name": "Violet Pink Silk",
+      "initial_weight": 1215.0,
+      "current_weight": 1215.0,
+      "registered": "2025-03-25T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2118,
+      "filament_id": 1011,
+      "location_id": 3004,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 139,
+          "a": 255
+        }
+      ],
+      "color_name": "Dark Blue ABS",
+      "initial_weight": 1250.0,
+      "current_weight": 720.0,
+      "registered": "2025-01-05T10:00:00Z",
+      "first_used": "2025-01-12T11:00:00Z",
+      "last_used": "2025-03-10T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    },
+    {
+      "id": 2119,
+      "filament_id": 1014,
+      "location_id": 3006,
+      "colors": [
+        {
+          "r": 128,
+          "g": 128,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": "Olive CPE",
+      "initial_weight": 935.0,
+      "current_weight": 670.0,
+      "registered": "2025-02-10T10:00:00Z",
+      "first_used": "2025-02-18T11:00:00Z",
+      "last_used": "2025-03-15T14:00:00Z",
+      "comment": null,
+      "archived": false,
+      "net_weight": 750.0
+    },
+    {
+      "id": 2120,
+      "filament_id": 1013,
+      "location_id": 3007,
+      "colors": [
+        {
+          "r": 34,
+          "g": 139,
+          "b": 34,
+          "a": 255
+        }
+      ],
+      "color_name": "Forest Green Matte",
+      "initial_weight": 1195.0,
+      "current_weight": 1195.0,
+      "registered": "2025-03-25T10:00:00Z",
+      "first_used": null,
+      "last_used": null,
+      "comment": null,
+      "archived": false,
+      "net_weight": 1000.0
+    }
+  ],
+  "locations": [
+    {
+      "id": 3001,
+      "name": "Dry Box 1"
+    },
+    {
+      "id": 3002,
+      "name": "Printer AMS"
+    },
+    {
+      "id": 3003,
+      "name": "Bambu AMS"
+    },
+    {
+      "id": 3004,
+      "name": "Engineering Shelf"
+    },
+    {
+      "id": 3005,
+      "name": "Specialty Rack"
+    },
+    {
+      "id": 3006,
+      "name": "Technical Materials"
+    },
+    {
+      "id": 3007,
+      "name": "Dry Box 2"
+    },
+    {
+      "id": 3008,
+      "name": "New Arrivals"
+    }
+  ],
+  "settings": {
+    "currency_symbol": "\u00e2\u201a\u00ac"
+  }
+}

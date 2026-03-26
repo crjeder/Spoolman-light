@@ -211,6 +211,12 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 0.88;
     background: var(--danger);
 }
+.btn:disabled,
+.btn[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
 
 /* ── Form elements ─────────────────────────────────────────────────────────── */
 
@@ -385,6 +391,11 @@ body.dark .success {
 
 .data-table td.actions {
     white-space: nowrap;
+}
+
+.data-table th.num,
+.data-table td.num {
+    text-align: right;
 }
 
 /* ── Color swatch ──────────────────────────────────────────────────────────── */

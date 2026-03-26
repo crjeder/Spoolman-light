@@ -49,9 +49,64 @@ pub fn SpoolList() -> impl IntoView {
             .collect::<Vec<_>>()
     };
 
+    let sort_field = ts.sort_field;
+    let sort_asc = ts.sort_asc;
+    let sorted = move || {
+        let mut items = filtered();
+        let field = sort_field.get();
+        let asc = sort_asc.get();
+        items.sort_by(|a, b| {
+            use std::cmp::Ordering;
+            match field.as_str() {
+                "id" => {
+                    let ord = a.spool.id.cmp(&b.spool.id);
+                    if asc { ord } else { ord.reverse() }
+                }
+                "filament" => {
+                    let ord = a.filament.display_name().to_lowercase()
+                        .cmp(&b.filament.display_name().to_lowercase());
+                    if asc { ord } else { ord.reverse() }
+                }
+                "remaining_pct" => match (a.remaining_pct, b.remaining_pct) {
+                    (None, None) => Ordering::Equal,
+                    (None, _) => Ordering::Greater,
+                    (_, None) => Ordering::Less,
+                    (Some(av), Some(bv)) => {
+                        let ord = av.partial_cmp(&bv).unwrap_or(Ordering::Equal);
+                        if asc { ord } else { ord.reverse() }
+                    }
+                },
+                "remaining_weight" => match (a.remaining_filament, b.remaining_filament) {
+                    (None, None) => Ordering::Equal,
+                    (None, _) => Ordering::Greater,
+                    (_, None) => Ordering::Less,
+                    (Some(av), Some(bv)) => {
+                        let ord = av.partial_cmp(&bv).unwrap_or(Ordering::Equal);
+                        if asc { ord } else { ord.reverse() }
+                    }
+                },
+                "location" => match (a.spool.location_id, b.spool.location_id) {
+                    (None, None) => Ordering::Equal,
+                    (None, _) => Ordering::Greater,
+                    (_, None) => Ordering::Less,
+                    (Some(av), Some(bv)) => {
+                        let ord = av.cmp(&bv);
+                        if asc { ord } else { ord.reverse() }
+                    }
+                },
+                "registered" => {
+                    let ord = a.spool.registered.cmp(&b.spool.registered);
+                    if asc { ord } else { ord.reverse() }
+                }
+                _ => Ordering::Equal,
+            }
+        });
+        items
+    };
+
     let total = Signal::derive(move || filtered().len());
     let page_items = move || {
-        let items = filtered();
+        let items = sorted();
         let start = ts.page.get() * ts.page_size.get();
         items.into_iter().skip(start).take(ts.page_size.get()).collect::<Vec<_>>()
     };
@@ -96,12 +151,12 @@ pub fn SpoolList() -> impl IntoView {
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <ColHeader label="ID"       field="id"         sort_field=ts.sort_field sort_asc=ts.sort_asc />
+                            <ColHeader label="ID"       field="id"         sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Filament" field="filament"   sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Color"</th>
-                            <ColHeader label="Remaining%" field="remaining_pct" sort_field=ts.sort_field sort_asc=ts.sort_asc />
-                            <th>"Remaining (g)"</th>
-                            <th>"Location"</th>
+                            <ColHeader label="Remaining%" field="remaining_pct" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
+                            <ColHeader label="Remaining (g)" field="remaining_weight" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
+                            <ColHeader label="Location"      field="location"          sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Actions"</th>
                         </tr>
@@ -116,7 +171,7 @@ pub fn SpoolList() -> impl IntoView {
                             let rem = sr.remaining_filament.map(|w| format!("{:.0}g", w)).unwrap_or_default();
                             view! {
                                 <tr class=if sr.spool.archived { "archived" } else { "" }>
-                                    <td><a href=format!("/spools/{id}")>{id}</a></td>
+                                    <td class="num"><a href=format!("/spools/{id}")>{id}</a></td>
                                     <td>{name}</td>
                                     <td>
                                         <span class="color-swatch"
@@ -125,8 +180,8 @@ pub fn SpoolList() -> impl IntoView {
                                         </span>
                                         {sr.spool.color_name.clone().unwrap_or_default()}
                                     </td>
-                                    <td>{pct}</td>
-                                    <td>{rem}</td>
+                                    <td class="num">{pct}</td>
+                                    <td class="num">{rem}</td>
                                     <td>{sr.spool.location_id.map(|l| l.to_string()).unwrap_or_default()}</td>
                                     <td>{sr.spool.registered.format("%Y-%m-%d").to_string()}</td>
                                     <td class="actions">
@@ -373,7 +428,7 @@ pub fn SpoolEdit() -> impl IntoView {
                 ..Default::default()
             };
             match api::update_spool(id, &body).await {
-                Ok(_) => navigate(&format!("/spools/{id}"), Default::default()),
+                Ok(_) => navigate("/spools", Default::default()),
                 Err(e) => error.set(Some(e.to_string())),
             }
         });

@@ -553,6 +553,10 @@ impl JsonStore {
         self.inner.read().unwrap().settings.clone()
     }
 
+    pub fn get_data_file_path(&self) -> &PathBuf {
+        &self.path
+    }
+
     pub fn put_setting(&self, key: String, value: String) -> Result<()> {
         let mut store = self.inner.write().unwrap();
         store.settings.insert(key, value);

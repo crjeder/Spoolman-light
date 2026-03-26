@@ -206,16 +206,51 @@ pub fn FilamentShow() -> impl IntoView {
     let params = use_params_map();
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
     let filament = create_resource(id, |id| async move { api::get_filament(id).await });
+    let navigate = leptos_router::use_navigate();
+    let confirm_delete = create_rw_signal(false);
+
+    let nav_delete = navigate.clone();
+    let nav_err = navigate.clone();
+
+    let on_delete = store_value(move |_: web_sys::MouseEvent| {
+        let id = id();
+        let nav = nav_delete.clone();
+        spawn_local(async move {
+            if api::delete_filament(id).await.is_ok() {
+                nav("/filaments", Default::default());
+            }
+        });
+    });
 
     view! {
         <div class="page filament-show">
             <Suspense fallback=|| view! { <p>"Loading…"</p> }>
                 {move || filament.get().map(|r| match r {
-                    Err(e) => view! { <p class="error">{e.to_string()}</p> }.into_view(),
+                    Err(e) => {
+                        if e.status == 404 {
+                            nav_err("/filaments", Default::default());
+                            view! { <></> }.into_view()
+                        } else {
+                            view! { <p class="error">{e.to_string()}</p> }.into_view()
+                        }
+                    }
                     Ok(f) => view! {
                         <div class="page-header">
                             <h1>{f.display_name()}</h1>
-                            <a href=format!("/filaments/{}/edit", f.id) class="btn ">"Edit"</a>
+                            <div class="page-actions">
+                                <a href=format!("/filaments/{}/edit", f.id) class="btn ">"Edit"</a>
+                                {move || if confirm_delete.get() {
+                                    view! {
+                                        <button on:click=move |e| on_delete.with_value(|f| f(e)) class="btn btn-danger ">"Sure?"</button>
+                                        " "
+                                        <button on:click=move |_| confirm_delete.set(false) class="btn ">"Cancel"</button>
+                                    }.into_view()
+                                } else {
+                                    view! {
+                                        <button on:click=move |_| confirm_delete.set(true) class="btn btn-danger ">"Delete"</button>
+                                    }.into_view()
+                                }}
+                            </div>
                         </div>
                         <dl class="detail-grid">
                             <dt>"Manufacturer"</dt><dd>{f.manufacturer.clone().unwrap_or_default()}</dd>

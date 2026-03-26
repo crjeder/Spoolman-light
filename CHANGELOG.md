@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **B15** Delete buttons now show inline "Sure?" / "Cancel" confirmation before removing any entity.
+- **B15** Location list rows disappear immediately after delete (replaced `refetch()` with a version-counter reactive source).
+- **B15** Spool and Filament list pages now have Delete buttons per row.
+- **B15** FilamentShow now has a Delete button.
+- **B15** Navigating to a deleted spool or filament (HTTP 404) redirects to the list view instead of showing an error.
+
 - Spool create and edit dialogs now reject the form with an error message when no location is selected — previously the form submitted with `location_id: None` silently (fixes B16).
 
 - Help page had three issues: the "Data file" section linked to `/api/v1/setting` (returns an empty map) with misleading text; the NFC section displayed the literal text `&lt;id&gt;` instead of `<id>` due to double-escaping in the Leptos text node; and no `/info` endpoint existed. Added `GET /api/v1/info` (returns `{ version, data_file }`), updated the link and label to point to `/api/v1/info`, and corrected the NFC URL string (fixes B17).

@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Spool detail view now shows `first_used` alongside `registered` and `last_used`, with dates formatted as human-readable `YYYY-MM-DD HH:MM UTC` instead of raw RFC 3339. The edit form gains `First used` and `Last used` datetime-local inputs that round-trip dates through the `UpdateSpool` API (fixes B14).
+
 - Spool create and edit dialogs now reject the form with an error message when no location is selected — previously the form submitted with `location_id: None` silently (fixes B16).
 
 - Help page had three issues: the "Data file" section linked to `/api/v1/setting` (returns an empty map) with misleading text; the NFC section displayed the literal text `&lt;id&gt;` instead of `<id>` due to double-escaping in the Leptos text node; and no `/info` endpoint existed. Added `GET /api/v1/info` (returns `{ version, data_file }`), updated the link and label to point to `/api/v1/info`, and corrected the NFC URL string (fixes B17).

@@ -1,3 +1,4 @@
+use chrono::{DateTime, NaiveDateTime, Utc};
 use leptos::*;
 use leptos_router::{use_navigate, use_params_map};
 use spoolman_types::{models::Rgba, requests::{CreateSpool, UpdateSpool}};
@@ -264,8 +265,9 @@ pub fn SpoolShow() -> impl IntoView {
                             <dt>"Used"</dt><dd>{format!("{:.1}g", sr.used_weight)}</dd>
                             <dt>"Remaining filament"</dt><dd>{sr.remaining_filament.map(|w| format!("{:.1}g", w)).unwrap_or_else(|| "unknown".into())}</dd>
                             <dt>"Remaining %"</dt><dd>{sr.remaining_pct.map(|p| format!("{:.0}%", p)).unwrap_or_else(|| "unknown".into())}</dd>
-                            <dt>"Registered"</dt><dd>{sr.spool.registered.to_rfc3339()}</dd>
-                            <dt>"Last used"</dt><dd>{sr.spool.last_used.map(|d| d.to_rfc3339()).unwrap_or_default()}</dd>
+                            <dt>"Registered"</dt><dd>{sr.spool.registered.format("%Y-%m-%d %H:%M UTC").to_string()}</dd>
+                            <dt>"First used"</dt><dd>{sr.spool.first_used.map(|d| d.format("%Y-%m-%d %H:%M UTC").to_string()).unwrap_or_default()}</dd>
+                            <dt>"Last used"</dt><dd>{sr.spool.last_used.map(|d| d.format("%Y-%m-%d %H:%M UTC").to_string()).unwrap_or_default()}</dd>
                             <dt>"Comment"</dt><dd>{sr.spool.comment.clone().unwrap_or_default()}</dd>
                             <dt>"Archived"</dt><dd>{if sr.spool.archived { "Yes" } else { "No" }}</dd>
                         </dl>
@@ -402,6 +404,8 @@ pub fn SpoolEdit() -> impl IntoView {
     let color_hex = create_rw_signal(String::from("#000000"));
     let color_name = create_rw_signal(String::new());
     let location_id = create_rw_signal(Option::<u32>::None);
+    let first_used = create_rw_signal(String::new());
+    let last_used = create_rw_signal(String::new());
     let comment = create_rw_signal(String::new());
     let error = create_rw_signal(Option::<String>::None);
 
@@ -414,6 +418,8 @@ pub fn SpoolEdit() -> impl IntoView {
             }
             color_name.set(sr.spool.color_name.clone().unwrap_or_default());
             location_id.set(sr.spool.location_id);
+            first_used.set(sr.spool.first_used.map(|d| d.format("%Y-%m-%dT%H:%M").to_string()).unwrap_or_default());
+            last_used.set(sr.spool.last_used.map(|d| d.format("%Y-%m-%dT%H:%M").to_string()).unwrap_or_default());
             comment.set(sr.spool.comment.clone().unwrap_or_default());
         }
     });
@@ -427,11 +433,17 @@ pub fn SpoolEdit() -> impl IntoView {
         let navigate = navigate.clone();
         let id = id();
         spawn_local(async move {
+            let parse_dt = |s: String| -> Option<DateTime<Utc>> {
+                if s.is_empty() { return None; }
+                NaiveDateTime::parse_from_str(&s, "%Y-%m-%dT%H:%M").ok().map(|ndt| ndt.and_utc())
+            };
             let body = UpdateSpool {
                 current_weight: current_weight.get().parse::<f32>().ok(),
                 colors: Some(hex_to_rgba(&color_hex.get()).map(|c| vec![c]).unwrap_or_default()),
                 color_name: Some(color_name.get()),
                 location_id: location_id.get(),
+                first_used: parse_dt(first_used.get()),
+                last_used: parse_dt(last_used.get()),
                 comment: Some(comment.get()),
                 ..Default::default()
             };
@@ -483,6 +495,18 @@ pub fn SpoolEdit() -> impl IntoView {
                             })}
                         </select>
                     </Suspense>
+                </label>
+                <label>
+                    "First used"
+                    <input type="datetime-local"
+                        prop:value=move || first_used.get()
+                        on:input=move |ev| first_used.set(event_target_value(&ev)) />
+                </label>
+                <label>
+                    "Last used"
+                    <input type="datetime-local"
+                        prop:value=move || last_used.get()
+                        on:input=move |ev| last_used.set(event_target_value(&ev)) />
                 </label>
                 <label>
                     "Comment"

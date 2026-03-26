@@ -47,18 +47,22 @@ Leptos.toml         # cargo-leptos build config
 - **Stack:** Rust (Axum + Leptos WASM), cargo-leptos build system
 - **Package manager:** `cargo`
 
+## Testing
+- use docker to run the code
+- Test data is in assets/spoolman.json
+- Use playwright to test front-end
+
 ## Workflow
 
 Use git worktrees for feature work to keep changes isolated from the current workspace. Before starting any non-trivial implementation, create a worktree on a new branch rather than working directly on the checked-out branch.
 For every non-trivial implementation check crates.io if there is already a crate implementing the functionality.
-Test data is in assets/spoolman.json
-Use playwright to test front-end
 
-After every change, update [CHANGELOG.md](CHANGELOG.md):
+when archiving the change, update [CHANGELOG.md](CHANGELOG.md):
 - Put entries under a new version
 - Follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format — write for humans, not diffs
 - Use [TODO.md](TODO.md) to track pending work
 - Never push to the upstream repository unless specifically instructed
+- update this Claude.md with important learnings
 
 ## Gotchas
 

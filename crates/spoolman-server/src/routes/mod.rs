@@ -28,14 +28,22 @@ async fn serve_index() -> Html<&'static str> {
 
 /// Build the full Axum router with all middleware applied.
 pub fn build_router(store: JsonStore, cfg: &Config) -> Router {
-    let api = Router::new()
-        .route("/", get(serve_index))
+    let site_dir = &cfg.site_root;
+
+    // Only add the embedded index.html fallback when the cargo-leptos site
+    // directory doesn't exist.  When it does exist, ServeDir below serves
+    // the generated index.html (which contains the correct WASM init call).
+    let mut api = Router::new()
         .nest("/api/v1/filament", filament::router())
         .nest("/api/v1/spool", spool::router())
         .nest("/api/v1/location", location::router())
         .nest("/api/v1", other::router())
         .merge(health::router())
         .with_state(store);
+
+    if !site_dir.exists() {
+        api = api.route("/", get(serve_index));
+    }
 
     let mut app = api.layer(CompressionLayer::new()).layer(TraceLayer::new_for_http());
 
@@ -63,7 +71,6 @@ pub fn build_router(store: JsonStore, cfg: &Config) -> Router {
     // Serve compiled WASM frontend assets.  The directory is read from
     // LEPTOS_SITE_ROOT (set in the container) or defaults to `target/site`
     // for local dev.  Falls back gracefully when the directory doesn't exist.
-    let site_dir = &cfg.site_root;
     if site_dir.exists() {
         let index = site_dir.join("index.html");
         app = app.fallback_service(

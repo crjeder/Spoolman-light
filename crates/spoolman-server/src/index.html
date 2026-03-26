@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spoolman</title>
-    <link rel="stylesheet" href="/pkg/spoolman-server.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spoolman</title>
+  <link rel="icon" type="image/png" href="/spoolman-light-logo.png" />
+  <link rel="stylesheet" href="/pkg/spoolman-server.css" />
 </head>
 <body>
-    <script type="module" src="/pkg/spoolman-server.js"></script>
+  <script type="module">
+    import init from "/pkg/spoolman-server.js";
+    init();
+  </script>
 </body>
 </html>

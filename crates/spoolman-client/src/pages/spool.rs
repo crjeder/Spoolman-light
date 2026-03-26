@@ -21,10 +21,22 @@ pub fn SpoolList() -> impl IntoView {
         "filament", "color", "remaining_pct", "remaining_weight", "location", "registered",
     ]);
 
+    let version = create_rw_signal(0u32);
+    let confirm_delete: RwSignal<Option<u32>> = create_rw_signal(None);
+
     let spools = create_resource(
-        move || show_archived.get(),
-        |archived| async move { api::list_spools(archived).await },
+        move || (show_archived.get(), version.get()),
+        |(archived, _)| async move { api::list_spools(archived).await },
     );
+
+    let on_delete = move |id: u32| {
+        spawn_local(async move {
+            if api::delete_spool(id).await.is_ok() {
+                version.update(|v| *v += 1);
+                confirm_delete.set(None);
+            }
+        });
+    };
 
     let filtered = move || {
         let f = ts.filter.get().to_lowercase();
@@ -186,6 +198,21 @@ pub fn SpoolList() -> impl IntoView {
                                     <td>{sr.spool.registered.format("%Y-%m-%d").to_string()}</td>
                                     <td class="actions">
                                         <a href=format!("/spools/{id}/edit")>"Edit"</a>
+                                        " "
+                                        {move || if confirm_delete.get() == Some(id) {
+                                            view! {
+                                                <button class="btn btn-danger "
+                                                    on:click=move |_| on_delete(id)>"Sure?"</button>
+                                                " "
+                                                <button class="btn "
+                                                    on:click=move |_| confirm_delete.set(None)>"Cancel"</button>
+                                            }.into_view()
+                                        } else {
+                                            view! {
+                                                <button class="btn btn-danger "
+                                                    on:click=move |_| confirm_delete.set(Some(id))>"Delete"</button>
+                                            }.into_view()
+                                        }}
                                     </td>
                                 </tr>
                             }

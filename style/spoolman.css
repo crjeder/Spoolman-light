@@ -410,6 +410,13 @@ body.dark .success {
     border: 1px solid var(--border);
 }
 
+/* ── Inline delete confirmation ────────────────────────────────────────────── */
+
+.confirm-prompt {
+    font-weight: 600;
+    color: var(--danger);
+}
+
 /* ── Color + alpha row (form) ──────────────────────────────────────────────── */
 
 .color-alpha-row {

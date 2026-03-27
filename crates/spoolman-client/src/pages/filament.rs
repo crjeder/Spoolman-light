@@ -40,13 +40,25 @@ pub fn FilamentList() -> impl IntoView {
     let ds = diameter_settings();
     let show_diameter = move || !ds.uniform.get();
 
+    let version = create_rw_signal(0u32);
+    let confirm_delete: RwSignal<Option<u32>> = create_rw_signal(None);
+
     let filaments = create_resource(
-        move || material_filter.get(),
-        |mat| async move {
+        move || (material_filter.get(), version.get()),
+        |(mat, _)| async move {
             let mat_opt = if mat.is_empty() { None } else { Some(mat) };
             api::list_filaments(mat_opt.as_deref()).await
         },
     );
+
+    let on_delete = move |id: u32| {
+        spawn_local(async move {
+            if api::delete_filament(id).await.is_ok() {
+                version.update(|v| *v += 1);
+                confirm_delete.set(None);
+            }
+        });
+    };
 
     let filtered = move || {
         let f = ts.filter.get().to_lowercase();
@@ -160,6 +172,21 @@ pub fn FilamentList() -> impl IntoView {
                                         <a href=format!("/filaments/{id}")>"View"</a>
                                         " · "
                                         <a href=format!("/filaments/{id}/edit")>"Edit"</a>
+                                        " · "
+                                        {move || if confirm_delete.get() == Some(id) {
+                                            view! {
+                                                <button class="btn btn-danger "
+                                                    on:click=move |_| on_delete(id)>"Sure?"</button>
+                                                " "
+                                                <button class="btn "
+                                                    on:click=move |_| confirm_delete.set(None)>"Cancel"</button>
+                                            }.into_view()
+                                        } else {
+                                            view! {
+                                                <button class="btn btn-danger "
+                                                    on:click=move |_| confirm_delete.set(Some(id))>"Delete"</button>
+                                            }.into_view()
+                                        }}
                                     </td>
                                 </tr>
                             }
@@ -179,16 +206,51 @@ pub fn FilamentShow() -> impl IntoView {
     let params = use_params_map();
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
     let filament = create_resource(id, |id| async move { api::get_filament(id).await });
+    let navigate = leptos_router::use_navigate();
+    let confirm_delete = create_rw_signal(false);
+
+    let nav_delete = navigate.clone();
+    let nav_err = navigate.clone();
+
+    let on_delete = store_value(move |_: web_sys::MouseEvent| {
+        let id = id();
+        let nav = nav_delete.clone();
+        spawn_local(async move {
+            if api::delete_filament(id).await.is_ok() {
+                nav("/filaments", Default::default());
+            }
+        });
+    });
 
     view! {
         <div class="page filament-show">
             <Suspense fallback=|| view! { <p>"Loading…"</p> }>
                 {move || filament.get().map(|r| match r {
-                    Err(e) => view! { <p class="error">{e.to_string()}</p> }.into_view(),
+                    Err(e) => {
+                        if e.status == 404 {
+                            nav_err("/filaments", Default::default());
+                            view! { <></> }.into_view()
+                        } else {
+                            view! { <p class="error">{e.to_string()}</p> }.into_view()
+                        }
+                    }
                     Ok(f) => view! {
                         <div class="page-header">
                             <h1>{f.display_name()}</h1>
-                            <a href=format!("/filaments/{}/edit", f.id) class="btn ">"Edit"</a>
+                            <div class="page-actions">
+                                <a href=format!("/filaments/{}/edit", f.id) class="btn ">"Edit"</a>
+                                {move || if confirm_delete.get() {
+                                    view! {
+                                        <button on:click=move |e| on_delete.with_value(|f| f(e)) class="btn btn-danger ">"Sure?"</button>
+                                        " "
+                                        <button on:click=move |_| confirm_delete.set(false) class="btn ">"Cancel"</button>
+                                    }.into_view()
+                                } else {
+                                    view! {
+                                        <button on:click=move |_| confirm_delete.set(true) class="btn btn-danger ">"Delete"</button>
+                                    }.into_view()
+                                }}
+                            </div>
                         </div>
                         <dl class="detail-grid">
                             <dt>"Manufacturer"</dt><dd>{f.manufacturer.clone().unwrap_or_default()}</dd>

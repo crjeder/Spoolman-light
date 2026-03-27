@@ -5,8 +5,8 @@ use crate::api;
 
 #[component]
 pub fn LocationList() -> impl IntoView {
-    let locations = create_resource(|| (), |_| async { api::list_locations().await });
-    let locations_refetch = locations;
+    let version = create_rw_signal(0u32);
+    let locations = create_resource(move || version.get(), |_| async { api::list_locations().await });
 
     // Inline create form state.
     let new_name = create_rw_signal(String::new());
@@ -26,7 +26,7 @@ pub fn LocationList() -> impl IntoView {
             match api::create_location(&body).await {
                 Ok(_) => {
                     new_name.set(String::new());
-                    locations_refetch.refetch();
+                    version.update(|v| *v += 1);
                 }
                 Err(e) => create_error.set(Some(e.to_string())),
             }
@@ -40,7 +40,7 @@ pub fn LocationList() -> impl IntoView {
                 match api::update_location(id, &body).await {
                     Ok(_) => {
                         editing.set(None);
-                        locations_refetch.refetch();
+                        version.update(|v| *v += 1);
                     }
                     Err(e) => edit_error.set(Some(e.to_string())),
                 }
@@ -49,10 +49,10 @@ pub fn LocationList() -> impl IntoView {
     };
 
     let on_delete = move |id: u32| {
-        confirm_delete.set(None);
         spawn_local(async move {
             if api::delete_location(id).await.is_ok() {
-                locations_refetch.refetch();
+                confirm_delete.set(None);
+                version.update(|v| *v += 1);
             }
         });
     };
@@ -115,7 +115,15 @@ pub fn LocationList() -> impl IntoView {
                                                 view! {
                                                     <button class="btn " on:click=on_save_edit>"Save"</button>
                                                     " "
-                                                    <button class="btn " on:click=move |_| editing.set(None)>"Cancel"</button>
+                                                    <button class="btn " on:click=move |_| { editing.set(None); confirm_delete.set(None); }>"Cancel"</button>
+                                                }.into_view()
+                                            } else if confirm_delete.get() == Some(id) {
+                                                view! {
+                                                    <button class="btn btn-danger "
+                                                        on:click=move |_| on_delete(id)>"Sure?"</button>
+                                                    " "
+                                                    <button class="btn "
+                                                        on:click=move |_| confirm_delete.set(None)>"Cancel"</button>
                                                 }.into_view()
                                             } else if confirm_delete.get() == Some(id) {
                                                 view! {
@@ -129,7 +137,11 @@ pub fn LocationList() -> impl IntoView {
                                                 let n = name_for_actions.clone();
                                                 let delete_disabled = count > 0;
                                                 view! {
-                                                    <button class="btn " on:click=move |_| editing.set(Some((id, n.clone())))>"Edit"</button>
+                                                    <button class="btn "
+                                                        on:click=move |_| {
+                                                            confirm_delete.set(None);
+                                                            editing.set(Some((id, n.clone())));
+                                                        }>"Edit"</button>
                                                     " "
                                                     <button class="btn btn-danger "
                                                         disabled=delete_disabled

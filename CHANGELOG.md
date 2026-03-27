@@ -16,12 +16,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Spool detail view now shows `first_used` alongside `registered` and `last_used`, with dates formatted as human-readable `YYYY-MM-DD HH:MM UTC` instead of raw RFC 3339. The edit form gains `First used` and `Last used` datetime-local inputs that round-trip dates through the `UpdateSpool` API (fixes B14).
+- **B15** Delete buttons now show inline "Sure?" / "Cancel" confirmation before removing any entity.
+- **B15** Location list rows disappear immediately after delete (replaced `refetch()` with a version-counter reactive source).
+- **B15** Spool and Filament list pages now have Delete buttons per row.
+- **B15** FilamentShow now has a Delete button.
+- **B15** Navigating to a deleted spool or filament (HTTP 404) redirects to the list view instead of showing an error.
 
 - Spool create and edit dialogs now reject the form with an error message when no location is selected — previously the form submitted with `location_id: None` silently (fixes B16).
 
 - Help page had three issues: the "Data file" section linked to `/api/v1/setting` (returns an empty map) with misleading text; the NFC section displayed the literal text `&lt;id&gt;` instead of `<id>` due to double-escaping in the Leptos text node; and no `/info` endpoint existed. Added `GET /api/v1/info` (returns `{ version, data_file }`), updated the link and label to point to `/api/v1/info`, and corrected the NFC URL string (fixes B17).
-
-- Delete buttons now require a two-step confirmation: clicking "Delete" reveals an inline "Sure? / Yes, delete / Cancel" prompt in place of the button. On the Locations page the row updates immediately without a full reload; on the Spool detail view it navigates to the list. Previously, deleting a location required a page reload to disappear, and the spool detail view could show an HTTP 404 error if the resource re-fetched before navigation completed (fixes B15).
 
 - Opacity (alpha) of spool colours was hardcoded to 255 — the native `<input type="color">` element has no alpha channel. Added an `<input type="range">` opacity slider (0–255) next to the colour picker in both the create and edit spool forms. The current percentage is shown as a label; the edit form pre-fills the slider from the saved colour's alpha value (fixes B7).
 

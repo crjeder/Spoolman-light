@@ -226,7 +226,7 @@ pub fn FilamentShow() -> impl IntoView {
                 {move || filament.get().map(|r| match r {
                     Err(e) => {
                         if e.status == 404 {
-                            nav_err("/filaments", Default::default());
+                            nav_err.clone()("/filaments", Default::default());
                             view! { <></> }.into_view()
                         } else {
                             view! { <p class="error">{e.to_string()}</p> }.into_view()

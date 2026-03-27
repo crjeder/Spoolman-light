@@ -291,7 +291,7 @@ pub fn SpoolShow() -> impl IntoView {
                 {move || spool.get().map(|r| match r {
                     Err(e) => {
                         if e.status == 404 {
-                            nav_err("/spools", Default::default());
+                            nav_err.clone()("/spools", Default::default());
                             view! { <></> }.into_view()
                         } else {
                             view! { <p class="error">{e.to_string()}</p> }.into_view()

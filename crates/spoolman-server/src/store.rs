@@ -1,7 +1,7 @@
 use chrono::Utc;
 use rand::Rng;
 use spoolman_types::{
-    models::{DataStore, Filament, Location, Spool, StoreMeta},
+    models::{DataStore, Filament, Location, Spool},
     requests::{CreateFilament, CreateLocation, CreateSpool, UpdateFilament, UpdateLocation, UpdateSpool},
     responses::{LocationResponse, SpoolResponse},
 };
@@ -45,21 +45,48 @@ impl JsonStore {
         // canonicalize only the parent directory (creating it first if needed)
         // and append the filename so the resolved path is still fully anchored.
         let resolved = Self::resolve_data_path(path)?;
-        let data = if resolved.exists() {
+        let mut data: DataStore = if resolved.exists() {
             // `resolved` is the canonicalized output of resolve_data_path; the
             // original path is operator-configured (env var), not user input.
             let contents = std::fs::read_to_string(&resolved)?; // nosemgrep: path-traversal
             serde_json::from_str(&contents)?
         } else {
-            DataStore {
-                meta: StoreMeta { schema_version: 1 },
-                ..Default::default()
-            }
+            DataStore::default()
         };
-        Ok(Self {
-            inner: Arc::new(RwLock::new(data)),
+        let store = Self {
+            inner: Arc::new(RwLock::new(DataStore::default())),
             path: resolved,
-        })
+        };
+        // Run any pending schema migrations before exposing the store.
+        store.migrate(&mut data)?;
+        *store.inner.write().unwrap() = data;
+        Ok(store)
+    }
+
+    /// Migrate the store to the current schema version if needed.
+    ///
+    /// v1 → v2: move `net_weight` from each `Filament` onto its referencing `Spool`s.
+    fn migrate(&self, data: &mut DataStore) -> Result<()> {
+        if data.meta.schema_version < 2 {
+            tracing::info!("migrating data store from schema v1 to v2 (net_weight → spool)");
+            let filament_nw: HashMap<u32, Option<f32>> = data
+                .filaments
+                .iter()
+                .map(|f| (f.id, f.net_weight))
+                .collect();
+            for spool in &mut data.spools {
+                if spool.net_weight.is_none() {
+                    spool.net_weight = filament_nw.get(&spool.filament_id).copied().flatten();
+                }
+            }
+            for filament in &mut data.filaments {
+                filament.net_weight = None;
+            }
+            data.meta.schema_version = 2;
+            self.flush(data)?;
+            tracing::info!("migration to schema v2 complete");
+        }
+        Ok(())
     }
 
     /// Resolve `path` to a canonicalized, absolute `PathBuf`.
@@ -178,7 +205,7 @@ impl JsonStore {
             material: req.material,
             material_modifier: req.material_modifier,
             diameter: req.diameter,
-            net_weight: req.net_weight,
+            net_weight: None,
             density: req.density,
             print_temp: req.print_temp,
             bed_temp: req.bed_temp,
@@ -206,7 +233,6 @@ impl JsonStore {
         apply_option(&mut filament.material, req.material);
         apply_option(&mut filament.material_modifier, req.material_modifier);
         if let Some(v) = req.diameter { filament.diameter = v; }
-        apply_option(&mut filament.net_weight, req.net_weight);
         if let Some(v) = req.density { filament.density = v; }
         apply_option(&mut filament.print_temp, req.print_temp);
         apply_option(&mut filament.bed_temp, req.bed_temp);
@@ -336,6 +362,7 @@ impl JsonStore {
             color_name: req.color_name,
             initial_weight: req.initial_weight,
             current_weight: req.initial_weight,
+            net_weight: req.net_weight,
             registered: Utc::now(),
             first_used: req.first_used,
             last_used: req.last_used,
@@ -360,6 +387,7 @@ impl JsonStore {
         apply_option_nullable(&mut spool.color_name, req.color_name);
         apply_option_nullable_u32(&mut spool.location_id, req.location_id);
         if let Some(w) = req.current_weight { spool.current_weight = w; }
+        if let Some(nw) = req.net_weight { spool.net_weight = Some(nw); }
         apply_option_nullable_dt(&mut spool.first_used, req.first_used);
         apply_option_nullable_dt(&mut spool.last_used, req.last_used);
         apply_option_nullable(&mut spool.comment, req.comment);
@@ -418,6 +446,7 @@ impl JsonStore {
             color_name: spool.color_name.clone(),
             initial_weight: spool.initial_weight,
             current_weight: spool.initial_weight,
+            net_weight: spool.net_weight,
             registered: Utc::now(),
             first_used: None,
             last_used: None,

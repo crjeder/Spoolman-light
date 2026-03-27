@@ -381,7 +381,8 @@ pub struct Filament {
     pub material_modifier: Option<String>,
     /// Filament diameter in mm. Default 1.75.
     pub diameter: f32,
-    /// Net weight of filament only (no spool tare), in grams.
+    /// Legacy field — present in schema v1 JSON, read during migration only, never written.
+    #[serde(default, skip_serializing)]
     pub net_weight: Option<f32>,
     /// Density in g/cm³.
     pub density: f32,
@@ -413,6 +414,8 @@ pub struct Spool {
     pub initial_weight: f32,
     /// Latest scale reading (spool + filament), in grams.
     pub current_weight: f32,
+    /// Net weight of filament only (no spool tare), in grams. Specific to this spool purchase.
+    pub net_weight: Option<f32>,
     pub registered: DateTime<Utc>,
     pub first_used: Option<DateTime<Utc>>,
     pub last_used: Option<DateTime<Utc>>,
@@ -447,7 +450,7 @@ pub struct DataStore {
 
 impl Default for StoreMeta {
     fn default() -> Self {
-        Self { schema_version: 1 }
+        Self { schema_version: 2 }
     }
 }
 

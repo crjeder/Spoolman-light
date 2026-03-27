@@ -341,6 +341,7 @@ pub fn SpoolCreate() -> impl IntoView {
     let color_alpha = create_rw_signal(255u8);
     let color_name = create_rw_signal(String::new());
     let initial_weight = create_rw_signal(String::new());
+    let net_weight = create_rw_signal(String::new());
     let location_id = create_rw_signal(Option::<u32>::None);
     let comment = create_rw_signal(String::new());
     let error = create_rw_signal(Option::<String>::None);
@@ -368,6 +369,7 @@ pub fn SpoolCreate() -> impl IntoView {
                 color_name: Some(color_name.get()).filter(|s| !s.is_empty()),
                 location_id: location_id.get(),
                 initial_weight: weight,
+                net_weight: net_weight.get().parse().ok(),
                 first_used: None,
                 last_used: None,
                 comment: Some(comment.get()).filter(|s| !s.is_empty()),
@@ -420,6 +422,11 @@ pub fn SpoolCreate() -> impl IntoView {
                         on:input=move |ev| initial_weight.set(event_target_value(&ev)) />
                 </label>
                 <label>
+                    "Net weight (g)"
+                    <input type="number" step="1"
+                        on:input=move |ev| net_weight.set(event_target_value(&ev)) />
+                </label>
+                <label>
                     "Location"
                     <Suspense fallback=|| view! { <select><option>"Loading…"</option></select> }>
                         <select on:change=move |ev| {
@@ -457,6 +464,7 @@ pub fn SpoolEdit() -> impl IntoView {
     let navigate = use_navigate();
 
     let current_weight = create_rw_signal(String::new());
+    let net_weight = create_rw_signal(String::new());
     let color_hex = create_rw_signal(String::from("#000000"));
     let color_alpha = create_rw_signal(255u8);
     let color_name = create_rw_signal(String::new());
@@ -470,6 +478,7 @@ pub fn SpoolEdit() -> impl IntoView {
     create_effect(move |_| {
         if let Some(Ok(sr)) = spool.get() {
             current_weight.set(sr.spool.current_weight.to_string());
+            net_weight.set(sr.spool.net_weight.map(|w| w.to_string()).unwrap_or_default());
             if let Some(c) = sr.spool.colors.first() {
                 color_hex.set(format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b));
                 color_alpha.set(c.a);
@@ -497,6 +506,7 @@ pub fn SpoolEdit() -> impl IntoView {
             };
             let body = UpdateSpool {
                 current_weight: current_weight.get().parse::<f32>().ok(),
+                net_weight: net_weight.get().parse::<f32>().ok(),
                 colors: Some(hex_to_rgba(&color_hex.get()).map(|mut c| { c.a = color_alpha.get(); vec![c] }).unwrap_or_default()),
                 color_name: Some(color_name.get()),
                 location_id: location_id.get(),
@@ -522,6 +532,12 @@ pub fn SpoolEdit() -> impl IntoView {
                     <input type="number" step="0.1"
                         prop:value=move || current_weight.get()
                         on:input=move |ev| current_weight.set(event_target_value(&ev)) />
+                </label>
+                <label>
+                    "Net weight (g)"
+                    <input type="number" step="1"
+                        prop:value=move || net_weight.get()
+                        on:input=move |ev| net_weight.set(event_target_value(&ev)) />
                 </label>
                 <label>
                     "Color"

@@ -150,7 +150,6 @@ pub fn FilamentList() -> impl IntoView {
                             <ColHeader label="Material"     field="material"     sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Modifier"</th>
                             {move || show_diameter().then(|| view! { <th class="num">"Diameter"</th> })}
-                            <th class="num">"Net weight"</th>
                             <ColHeader label="Density" field="density" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Actions"</th>
@@ -165,7 +164,6 @@ pub fn FilamentList() -> impl IntoView {
                                     <td>{f.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default()}</td>
                                     <td>{f.material_modifier.clone().unwrap_or_default()}</td>
                                     {show_diameter().then(|| { let d = f.diameter; view! { <td class="num">{format!("{:.2}mm", d)}</td> } })}
-                                    <td class="num">{f.net_weight.map(|w| format!("{:.0}g", w)).unwrap_or_default()}</td>
                                     <td class="num">{format!("{:.3}", f.density)}</td>
                                     <td>{f.registered.format("%Y-%m-%d").to_string()}</td>
                                     <td class="actions">
@@ -263,7 +261,6 @@ pub fn FilamentShow() -> impl IntoView {
                             }</dd>
                             <dt>"Modifier"</dt><dd>{f.material_modifier.clone().unwrap_or_default()}</dd>
                             <dt>"Diameter"</dt><dd>{format!("{:.2}mm", f.diameter)}</dd>
-                            <dt>"Net weight"</dt><dd>{f.net_weight.map(|w| format!("{:.0}g", w)).unwrap_or_default()}</dd>
                             <dt>"Density"</dt><dd>{format!("{:.3} g/cm³", f.density)}</dd>
                             <dt>"Print temp"</dt><dd>{f.print_temp.map(|t| format!("{}°C", t)).unwrap_or_default()}</dd>
                             <dt>"Bed temp"</dt><dd>{f.bed_temp.map(|t| format!("{}°C", t)).unwrap_or_default()}</dd>
@@ -288,7 +285,6 @@ pub fn FilamentCreate() -> impl IntoView {
     let modifier = create_rw_signal(String::new());
     // Initialise diameter from the configured default.
     let diameter = create_rw_signal(ds.default_mm.get_untracked().to_string());
-    let net_weight = create_rw_signal(String::new());
     let density = create_rw_signal("1.24".to_string());
     let print_temp = create_rw_signal(String::new());
     let bed_temp = create_rw_signal(String::new());
@@ -311,7 +307,6 @@ pub fn FilamentCreate() -> impl IntoView {
                 material: if mat.is_empty() { None } else { Some(MaterialType::from_abbreviation(&mat)) },
                 material_modifier: Some(modifier.get()).filter(|s| !s.is_empty()),
                 diameter: resolved_diameter,
-                net_weight: net_weight.get().parse().ok(),
                 density: density.get().parse().unwrap_or(1.24),
                 print_temp: print_temp.get().parse().ok(),
                 bed_temp: bed_temp.get().parse().ok(),
@@ -340,7 +335,6 @@ pub fn FilamentCreate() -> impl IntoView {
                 {move || (!ds.uniform.get()).then(|| view! {
                     <label>"Diameter (mm)"<input type="number" step="0.01" prop:value=move || diameter.get() on:input=move |ev| diameter.set(event_target_value(&ev)) /></label>
                 })}
-                <label>"Net weight (g)"<input type="number" step="1" on:input=move |ev| net_weight.set(event_target_value(&ev)) /></label>
                 <label>"Density (g/cm³)"<input type="number" step="0.001" prop:value=move || density.get() on:input=move |ev| density.set(event_target_value(&ev)) /></label>
                 <label>"Print temp (°C)"<input type="number" on:input=move |ev| print_temp.set(event_target_value(&ev)) /></label>
                 <label>"Bed temp (°C)"<input type="number" on:input=move |ev| bed_temp.set(event_target_value(&ev)) /></label>
@@ -366,7 +360,6 @@ pub fn FilamentEdit() -> impl IntoView {
     let material = create_rw_signal(String::new());
     let modifier = create_rw_signal(String::new());
     let diameter = create_rw_signal("1.75".to_string());
-    let net_weight = create_rw_signal(String::new());
     let density = create_rw_signal("1.24".to_string());
     let print_temp = create_rw_signal(String::new());
     let bed_temp = create_rw_signal(String::new());
@@ -379,7 +372,6 @@ pub fn FilamentEdit() -> impl IntoView {
             material.set(f.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default());
             modifier.set(f.material_modifier.clone().unwrap_or_default());
             diameter.set(f.diameter.to_string());
-            net_weight.set(f.net_weight.map(|w| w.to_string()).unwrap_or_default());
             density.set(f.density.to_string());
             print_temp.set(f.print_temp.map(|t| t.to_string()).unwrap_or_default());
             bed_temp.set(f.bed_temp.map(|t| t.to_string()).unwrap_or_default());
@@ -398,7 +390,6 @@ pub fn FilamentEdit() -> impl IntoView {
                 material: if mat.is_empty() { None } else { Some(MaterialType::from_abbreviation(&mat)) },
                 material_modifier: Some(modifier.get()).filter(|s| !s.is_empty()),
                 diameter: diameter.get().parse().ok(),
-                net_weight: net_weight.get().parse().ok(),
                 density: density.get().parse().ok(),
                 print_temp: print_temp.get().parse().ok(),
                 bed_temp: bed_temp.get().parse().ok(),
@@ -425,7 +416,6 @@ pub fn FilamentEdit() -> impl IntoView {
                 {move || (!ds.uniform.get()).then(|| view! {
                     <label>"Diameter (mm)"<input type="number" step="0.01" prop:value=move || diameter.get() on:input=move |ev| diameter.set(event_target_value(&ev)) /></label>
                 })}
-                <label>"Net weight (g)"<input type="number" step="1" prop:value=move || net_weight.get() on:input=move |ev| net_weight.set(event_target_value(&ev)) /></label>
                 <label>"Density (g/cm³)"<input type="number" step="0.001" prop:value=move || density.get() on:input=move |ev| density.set(event_target_value(&ev)) /></label>
                 <label>"Print temp (°C)"<input type="number" prop:value=move || print_temp.get() on:input=move |ev| print_temp.set(event_target_value(&ev)) /></label>
                 <label>"Bed temp (°C)"<input type="number" prop:value=move || bed_temp.get() on:input=move |ev| bed_temp.set(event_target_value(&ev)) /></label>

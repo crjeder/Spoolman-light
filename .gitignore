@@ -212,3 +212,11 @@ data/
 
 # Git worktrees
 .worktrees/
+
+# Playwright CLI session artifacts
+.playwright-cli/
+
+# Test screenshots
+*.png
+*.jpeg
+*.jpg

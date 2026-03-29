@@ -35,6 +35,13 @@ export class SpoolsPage {
     return this.rows.count();
   }
 
+  /** Returns the total spool count from the X-Total-Count response header. */
+  async getSpoolCount(): Promise<number> {
+    const response = await this.page.request.get('/api/v1/spool');
+    const header = response.headers()['x-total-count'];
+    return parseInt(header, 10);
+  }
+
   /**
    * Navigate to the new-spool form, fill it in, and submit.
    * The form requires a location; `locationIndex` (0-based) selects from the location dropdown.

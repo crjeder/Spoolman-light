@@ -20,23 +20,23 @@ test.describe('Spools', () => {
 
     const spools = new SpoolsPage(page);
     await spools.goto();
-    const before = await spools.getSpoolRows();
+    const before = await spools.getSpoolCount();
 
     await spools.addSpool({ initialWeight: '1000', colorName: 'E2E Test Color' });
 
-    const after = await spools.getSpoolRows();
+    const after = await spools.getSpoolCount();
     expect(after).toBe(before + 1);
   });
 
   test('delete spool removes it from list', async ({ page }) => {
     const spools = new SpoolsPage(page);
     await spools.goto();
-    const before = await spools.getSpoolRows();
+    const before = await spools.getSpoolCount();
     expect(before).toBeGreaterThanOrEqual(1);
 
     await spools.deleteFirstSpool();
 
-    const after = await spools.getSpoolRows();
+    const after = await spools.getSpoolCount();
     expect(after).toBe(before - 1);
   });
 });

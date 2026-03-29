@@ -15,7 +15,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 
 ### Bugs (found via Playwright E2E test run, 2026-03-28)
 ~~9. **E2E: location delete UI doesn't update after confirm** — fixed: `deleteLocation` helper now waits for the deleted row to become detached instead of `waitForLoadState('networkidle')`.~~
-10. **E2E: spool/filament add|delete tests always see 25 rows** — Fixture has 200 spools and 40 filaments; default page size is 25. Adding a new spool/filament does not change the visible row count on page 1 (25 items before and after). Deleting from page 1 pulls in the next item, keeping count at 25. Tests `add spool appears in list` / `delete spool removes it from list` / `add filament appears in list` / `delete filament removes it from list` all fail with expected ±1. Fix: either reduce fixture to < 25 items per entity, or rewrite tests to check total count via `X-Total-Count` header instead of DOM row count.
+~~10. **E2E: spool/filament add|delete tests always see 25 rows** — Fixed: rewritten to use `X-Total-Count` response header via `getSpoolCount()`/`getFilamentCount()` instead of DOM row count.~~
 
 ### Infrastructure fixes (2026-03-28)
 - ~~`docker-compose.test.yml` `command:` string was split by Docker Compose into individual words when combined with `entrypoint: ["/bin/sh", "-c"]`, causing `cp: missing file operand`. Fixed by moving the full command into the entrypoint array.~~

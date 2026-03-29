@@ -33,6 +33,13 @@ export class FilamentsPage {
     return this.rows.count();
   }
 
+  /** Returns the total filament count from the X-Total-Count response header. */
+  async getFilamentCount(): Promise<number> {
+    const response = await this.page.request.get('/api/v1/filament');
+    const header = response.headers()['x-total-count'];
+    return parseInt(header, 10);
+  }
+
   /**
    * Navigate to the new-filament form, fill it in, and submit.
    */

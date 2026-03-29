@@ -56,6 +56,9 @@ export class LocationsPage {
     const confirmBtn = row.locator('button.btn-danger').first();
     await confirmBtn.waitFor({ state: 'visible' });
     await confirmBtn.click();                                     // "Sure?"
-    await this.page.waitForLoadState('networkidle');
+    // Wait for the row to be removed from the DOM. waitForLoadState('networkidle')
+    // is not reliable here: spawn_local defers the DELETE fetch so the network
+    // can appear idle before the request even starts.
+    await row.waitFor({ state: 'detached' });
   }
 }

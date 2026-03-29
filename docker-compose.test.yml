@@ -9,8 +9,7 @@ services:
       # so each test run starts from the same fixture state.
       - ./assets/spoolman.json:/fixtures/spoolman.json:ro
     # Copy fixture into the writable /data dir, then start the server.
-    entrypoint: ["/bin/sh", "-c"]
-    command: "cp /fixtures/spoolman.json /data/spoolman.json && exec /spoolman"
+    entrypoint: ["/bin/sh", "-c", "cp /fixtures/spoolman.json /data/spoolman.json && exec /spoolman"]
     environment:
       - SPOOLMAN_DATA_FILE=/data/spoolman.json
       - SPOOLMAN_LOGGING_LEVEL=INFO

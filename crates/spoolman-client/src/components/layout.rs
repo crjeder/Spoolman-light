@@ -17,8 +17,7 @@ pub fn Layout(children: Children) -> impl IntoView {
                 let _ = body.class_list().remove_1("dark");
             }
             // Persist preference.
-            if let Some(storage) = web_sys::window()
-                .and_then(|w| w.local_storage().ok().flatten())
+            if let Some(storage) = web_sys::window().and_then(|w| w.local_storage().ok().flatten())
             {
                 let _ = storage.set_item("dark_mode", if dark.get() { "true" } else { "false" });
             }

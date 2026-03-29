@@ -6,7 +6,10 @@ use crate::api;
 #[component]
 pub fn LocationList() -> impl IntoView {
     let version = create_rw_signal(0u32);
-    let locations = create_resource(move || version.get(), |_| async { api::list_locations().await });
+    let locations = create_resource(
+        move || version.get(),
+        |_| async { api::list_locations().await },
+    );
 
     // Inline create form state.
     let new_name = create_rw_signal(String::new());
@@ -23,7 +26,9 @@ pub fn LocationList() -> impl IntoView {
     let on_create = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();
         spawn_local(async move {
-            let body = CreateLocation { name: new_name.get() };
+            let body = CreateLocation {
+                name: new_name.get(),
+            };
             match api::create_location(&body).await {
                 Ok(_) => {
                     new_name.set(String::new());

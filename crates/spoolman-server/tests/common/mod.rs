@@ -1,4 +1,8 @@
-use axum::{Router, body::Body, http::{Method, Request, StatusCode}};
+use axum::{
+    body::Body,
+    http::{Method, Request, StatusCode},
+    Router,
+};
 use http_body_util::BodyExt;
 use spoolman_server::{config::Config, routes, store::JsonStore};
 use std::path::PathBuf;
@@ -11,8 +15,7 @@ pub fn make_app_with_test_data() -> (Router, TempDir) {
     let dir = TempDir::new().unwrap();
     let data_path = dir.path().join("data.json");
     // Copy the test fixture into the writable temp dir.
-    let fixture = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../assets/spoolman.json");
+    let fixture = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../assets/spoolman.json");
     std::fs::copy(&fixture, &data_path).expect("failed to copy test fixture");
     let store = JsonStore::load(&data_path).unwrap();
     let cfg = Config {

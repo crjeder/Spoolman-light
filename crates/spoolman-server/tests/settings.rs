@@ -12,7 +12,8 @@ async fn put_and_get_setting() {
         Method::PUT,
         "/api/v1/setting/theme",
         Some(json!({ "value": "dark" })),
-    ).await;
+    )
+    .await;
     assert_eq!(status, StatusCode::NO_CONTENT);
 
     let (status, body) = common::request(&app, Method::GET, "/api/v1/setting", None).await;

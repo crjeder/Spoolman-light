@@ -1,9 +1,15 @@
-use spoolman_types::{requests::{CreateFilament, UpdateFilament}, responses::FilamentResponse};
-use super::{ApiError, delete, get, patch_json, post_json};
+use super::{delete, get, patch_json, post_json, ApiError};
+use spoolman_types::{
+    requests::{CreateFilament, UpdateFilament},
+    responses::FilamentResponse,
+};
 
 pub async fn list_filaments(material: Option<&str>) -> Result<Vec<FilamentResponse>, ApiError> {
     let url = match material {
-        Some(m) => format!("/api/v1/filament?order=asc&sort=manufacturer&material={}", m),
+        Some(m) => format!(
+            "/api/v1/filament?order=asc&sort=manufacturer&material={}",
+            m
+        ),
         None => "/api/v1/filament?order=asc&sort=manufacturer".to_string(),
     };
     get(&url).await

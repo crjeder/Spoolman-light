@@ -1,8 +1,8 @@
 use axum::{
-    Json, Router,
     extract::{Path, Query, State},
     http::{HeaderMap, HeaderValue, StatusCode},
     routing::{get, post},
+    Json, Router,
 };
 use serde::Deserialize;
 use spoolman_types::{
@@ -48,10 +48,7 @@ async fn list(
     Ok((headers, Json(items)))
 }
 
-async fn show(
-    State(store): State<JsonStore>,
-    Path(id): Path<u32>,
-) -> Result<Json<SpoolResponse>> {
+async fn show(State(store): State<JsonStore>, Path(id): Path<u32>) -> Result<Json<SpoolResponse>> {
     Ok(Json(store.get_spool(id)?))
 }
 
@@ -71,10 +68,7 @@ async fn update(
     Ok(Json(store.update_spool(id, body)?))
 }
 
-async fn destroy(
-    State(store): State<JsonStore>,
-    Path(id): Path<u32>,
-) -> Result<StatusCode> {
+async fn destroy(State(store): State<JsonStore>, Path(id): Path<u32>) -> Result<StatusCode> {
     store.delete_spool(id)?;
     Ok(StatusCode::NO_CONTENT)
 }

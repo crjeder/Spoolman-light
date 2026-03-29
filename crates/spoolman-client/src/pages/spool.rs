@@ -1,11 +1,15 @@
 use chrono::{DateTime, NaiveDate, Utc};
 use leptos::*;
 use leptos_router::{use_navigate, use_params_map};
-use spoolman_types::{models::Rgba, requests::{CreateSpool, UpdateSpool}};
+use spoolman_types::{
+    models::Rgba,
+    requests::{CreateSpool, UpdateSpool},
+};
 
 use crate::{
     api,
     components::{pagination::Pagination, table::ColHeader},
+    format,
     state::use_table_state,
     utils::color::{color_distance, hex_to_rgba},
 };
@@ -20,7 +24,11 @@ pub fn SpoolList() -> impl IntoView {
     let threshold: RwSignal<u8> = create_rw_signal(10u8);
     let color_input_ref = create_node_ref::<html::Input>();
     let _visible_cols = create_rw_signal(vec![
-        "filament", "color", "remaining_weight", "location", "registered",
+        "filament",
+        "color",
+        "remaining_weight",
+        "location",
+        "registered",
     ]);
 
     let version = create_rw_signal(0u32);
@@ -52,11 +60,26 @@ pub fn SpoolList() -> impl IntoView {
             .filter(|s| {
                 let text_ok = f.is_empty()
                     || s.filament.display_name().to_lowercase().contains(&f)
-                    || s.spool.color_name.as_deref().unwrap_or("").to_lowercase().contains(&f)
-                    || s.filament.material.as_ref().map(|m| m.abbreviation()).unwrap_or("").to_lowercase().contains(&f);
+                    || s.spool
+                        .color_name
+                        .as_deref()
+                        .unwrap_or("")
+                        .to_lowercase()
+                        .contains(&f)
+                    || s.filament
+                        .material
+                        .as_ref()
+                        .map(|m| m.abbreviation())
+                        .unwrap_or("")
+                        .to_lowercase()
+                        .contains(&f);
                 let color_ok = match pick.as_deref().and_then(hex_to_rgba) {
                     None => true,
-                    Some(target) => s.spool.colors.iter().any(|c| color_distance(c, &target) <= thresh),
+                    Some(target) => s
+                        .spool
+                        .colors
+                        .iter()
+                        .any(|c| color_distance(c, &target) <= thresh),
                 };
                 text_ok && color_ok
             })
@@ -74,12 +97,23 @@ pub fn SpoolList() -> impl IntoView {
             match field.as_str() {
                 "id" => {
                     let ord = a.spool.id.cmp(&b.spool.id);
-                    if asc { ord } else { ord.reverse() }
+                    if asc {
+                        ord
+                    } else {
+                        ord.reverse()
+                    }
                 }
                 "filament" => {
-                    let ord = a.filament.display_name().to_lowercase()
+                    let ord = a
+                        .filament
+                        .display_name()
+                        .to_lowercase()
                         .cmp(&b.filament.display_name().to_lowercase());
-                    if asc { ord } else { ord.reverse() }
+                    if asc {
+                        ord
+                    } else {
+                        ord.reverse()
+                    }
                 }
                 "remaining_weight" => match (a.remaining_filament, b.remaining_filament) {
                     (None, None) => Ordering::Equal,
@@ -87,7 +121,11 @@ pub fn SpoolList() -> impl IntoView {
                     (_, None) => Ordering::Less,
                     (Some(av), Some(bv)) => {
                         let ord = av.partial_cmp(&bv).unwrap_or(Ordering::Equal);
-                        if asc { ord } else { ord.reverse() }
+                        if asc {
+                            ord
+                        } else {
+                            ord.reverse()
+                        }
                     }
                 },
                 "location" => match (a.spool.location_id, b.spool.location_id) {
@@ -96,12 +134,20 @@ pub fn SpoolList() -> impl IntoView {
                     (_, None) => Ordering::Less,
                     (Some(av), Some(bv)) => {
                         let ord = av.cmp(&bv);
-                        if asc { ord } else { ord.reverse() }
+                        if asc {
+                            ord
+                        } else {
+                            ord.reverse()
+                        }
                     }
                 },
                 "registered" => {
                     let ord = a.spool.registered.cmp(&b.spool.registered);
-                    if asc { ord } else { ord.reverse() }
+                    if asc {
+                        ord
+                    } else {
+                        ord.reverse()
+                    }
                 }
                 _ => Ordering::Equal,
             }
@@ -113,7 +159,11 @@ pub fn SpoolList() -> impl IntoView {
     let page_items = move || {
         let items = sorted();
         let start = ts.page.get() * ts.page_size.get();
-        items.into_iter().skip(start).take(ts.page_size.get()).collect::<Vec<_>>()
+        items
+            .into_iter()
+            .skip(start)
+            .take(ts.page_size.get())
+            .collect::<Vec<_>>()
     };
 
     view! {
@@ -186,7 +236,7 @@ pub fn SpoolList() -> impl IntoView {
                             let name = sr.filament.display_name();
                             let color = sr.spool.colors.first().cloned()
                                 .unwrap_or(Rgba { r: 200, g: 200, b: 200, a: 255 });
-                            let rem = sr.remaining_filament.map(|w| format!("{:.0}g", w)).unwrap_or_default();
+                            let rem = sr.remaining_filament.map(format::format_weight).unwrap_or_default();
                             view! {
                                 <tr class=if sr.spool.archived { "archived" } else { "" }>
                                     <td class="num"><a href=format!("/spools/{id}")>{id}</a></td>
@@ -200,7 +250,7 @@ pub fn SpoolList() -> impl IntoView {
                                     </td>
                                     <td class="num">{rem}</td>
                                     <td>{sr.spool.location_id.map(|l| l.to_string()).unwrap_or_default()}</td>
-                                    <td>{sr.spool.registered.format("%Y-%m-%d").to_string()}</td>
+                                    <td>{format::format_date(sr.spool.registered)}</td>
                                     <td class="actions">
                                         <a href=format!("/spools/{id}/edit")>"Edit"</a>
                                         " "
@@ -324,13 +374,13 @@ pub fn SpoolShow() -> impl IntoView {
                                 }
                             }).collect_view()}</dd>
                             <dt>"Color name"</dt><dd>{sr.spool.color_name.clone().unwrap_or_default()}</dd>
-                            <dt>"Initial weight"</dt><dd>{format!("{:.1}g", sr.spool.initial_weight)}</dd>
-                            <dt>"Current weight"</dt><dd>{format!("{:.1}g", sr.spool.current_weight)}</dd>
-                            <dt>"Used"</dt><dd>{format!("{:.1}g", sr.used_weight)}</dd>
-                            <dt>"Remaining filament"</dt><dd>{sr.remaining_filament.map(|w| format!("{:.1}g", w)).unwrap_or_else(|| "unknown".into())}</dd>
-                            <dt>"Registered"</dt><dd>{sr.spool.registered.format("%Y-%m-%d").to_string()}</dd>
-                            <dt>"First used"</dt><dd>{sr.spool.first_used.map(|d| d.format("%Y-%m-%d").to_string()).unwrap_or_default()}</dd>
-                            <dt>"Last used"</dt><dd>{sr.spool.last_used.map(|d| d.format("%Y-%m-%d").to_string()).unwrap_or_default()}</dd>
+                            <dt>"Initial weight"</dt><dd>{format::format_weight(sr.spool.initial_weight)}</dd>
+                            <dt>"Current weight"</dt><dd>{format::format_weight(sr.spool.current_weight)}</dd>
+                            <dt>"Used"</dt><dd>{format::format_weight(sr.used_weight)}</dd>
+                            <dt>"Remaining filament"</dt><dd>{sr.remaining_filament.map(format::format_weight).unwrap_or_else(|| "unknown".into())}</dd>
+                            <dt>"Registered"</dt><dd>{format::format_date(sr.spool.registered)}</dd>
+                            <dt>"First used"</dt><dd>{sr.spool.first_used.map(format::format_date).unwrap_or_default()}</dd>
+                            <dt>"Last used"</dt><dd>{sr.spool.last_used.map(format::format_date).unwrap_or_default()}</dd>
                             <dt>"Comment"</dt><dd>{sr.spool.comment.clone().unwrap_or_default()}</dd>
                             <dt>"Archived"</dt><dd>{if sr.spool.archived { "Yes" } else { "No" }}</dd>
                         </dl>
@@ -340,7 +390,6 @@ pub fn SpoolShow() -> impl IntoView {
         </div>
     }
 }
-
 
 // ── Create ─────────────────────────────────────────────────────────────────────
 
@@ -379,7 +428,12 @@ pub fn SpoolCreate() -> impl IntoView {
             let weight = initial_weight.get().parse::<f32>().unwrap_or(0.0);
             let body = CreateSpool {
                 filament_id: filament_id.get(),
-                colors: hex_to_rgba(&color_hex.get()).map(|mut c| { c.a = color_alpha.get(); vec![c] }).unwrap_or_default(),
+                colors: hex_to_rgba(&color_hex.get())
+                    .map(|mut c| {
+                        c.a = color_alpha.get();
+                        vec![c]
+                    })
+                    .unwrap_or_default(),
                 color_name: Some(color_name.get()).filter(|s| !s.is_empty()),
                 location_id: location_id.get(),
                 initial_weight: weight,
@@ -492,15 +546,30 @@ pub fn SpoolEdit() -> impl IntoView {
     create_effect(move |_| {
         if let Some(Ok(sr)) = spool.get() {
             current_weight.set(sr.spool.current_weight.to_string());
-            net_weight.set(sr.spool.net_weight.map(|w| w.to_string()).unwrap_or_default());
+            net_weight.set(
+                sr.spool
+                    .net_weight
+                    .map(|w| w.to_string())
+                    .unwrap_or_default(),
+            );
             if let Some(c) = sr.spool.colors.first() {
                 color_hex.set(format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b));
                 color_alpha.set(c.a);
             }
             color_name.set(sr.spool.color_name.clone().unwrap_or_default());
             location_id.set(sr.spool.location_id);
-            first_used.set(sr.spool.first_used.map(|d| d.format("%Y-%m-%d").to_string()).unwrap_or_default());
-            last_used.set(sr.spool.last_used.map(|d| d.format("%Y-%m-%d").to_string()).unwrap_or_default());
+            first_used.set(
+                sr.spool
+                    .first_used
+                    .map(|d| d.format("%Y-%m-%d").to_string())
+                    .unwrap_or_default(),
+            );
+            last_used.set(
+                sr.spool
+                    .last_used
+                    .map(|d| d.format("%Y-%m-%d").to_string())
+                    .unwrap_or_default(),
+            );
             comment.set(sr.spool.comment.clone().unwrap_or_default());
         }
     });
@@ -515,15 +584,25 @@ pub fn SpoolEdit() -> impl IntoView {
         let id = id();
         spawn_local(async move {
             let parse_dt = |s: String| -> Option<DateTime<Utc>> {
-                if s.is_empty() { return None; }
-                NaiveDate::parse_from_str(&s, "%Y-%m-%d").ok()
+                if s.is_empty() {
+                    return None;
+                }
+                NaiveDate::parse_from_str(&s, "%Y-%m-%d")
+                    .ok()
                     .and_then(|d| d.and_hms_opt(0, 5, 0))
                     .map(|ndt| ndt.and_utc())
             };
             let body = UpdateSpool {
                 current_weight: current_weight.get().parse::<f32>().ok(),
                 net_weight: net_weight.get().parse::<f32>().ok(),
-                colors: Some(hex_to_rgba(&color_hex.get()).map(|mut c| { c.a = color_alpha.get(); vec![c] }).unwrap_or_default()),
+                colors: Some(
+                    hex_to_rgba(&color_hex.get())
+                        .map(|mut c| {
+                            c.a = color_alpha.get();
+                            vec![c]
+                        })
+                        .unwrap_or_default(),
+                ),
                 color_name: Some(color_name.get()),
                 location_id: location_id.get(),
                 first_used: parse_dt(first_used.get()),

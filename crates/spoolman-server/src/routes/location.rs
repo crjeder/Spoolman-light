@@ -1,8 +1,8 @@
 use axum::{
-    Json, Router,
     extract::{Path, State},
     http::StatusCode,
     routing::get,
+    Json, Router,
 };
 use spoolman_types::{
     requests::{CreateLocation, UpdateLocation},
@@ -44,10 +44,7 @@ async fn update(
     Ok(Json(store.update_location(id, body)?))
 }
 
-async fn destroy(
-    State(store): State<JsonStore>,
-    Path(id): Path<u32>,
-) -> Result<StatusCode> {
+async fn destroy(State(store): State<JsonStore>, Path(id): Path<u32>) -> Result<StatusCode> {
     store.delete_location(id)?;
     Ok(StatusCode::NO_CONTENT)
 }

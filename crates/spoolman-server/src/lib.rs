@@ -1,7 +1,7 @@
+mod backup;
 pub mod config;
 pub mod routes;
 pub mod store;
-mod backup;
 
 use std::net::SocketAddr;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};

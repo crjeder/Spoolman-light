@@ -1,6 +1,7 @@
 pub mod api;
 pub mod app;
 pub mod components;
+pub mod format;
 pub mod pages;
 pub mod state;
 pub mod utils;

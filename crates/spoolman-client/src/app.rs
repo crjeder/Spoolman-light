@@ -9,7 +9,7 @@ use crate::{
         settings::SettingsPage,
         spool::{SpoolCreate, SpoolEdit, SpoolList, SpoolShow},
     },
-    state::DiameterSettings,
+    state::{CurrencySymbol, DiameterSettings},
 };
 
 #[component]
@@ -21,18 +21,32 @@ pub fn App() -> impl IntoView {
     // Provide diameter settings globally (defaults: uniform=true, 1.75 mm).
     let diam_uniform = create_rw_signal(true);
     let diam_default = create_rw_signal(1.75f64);
-    provide_context(DiameterSettings { uniform: diam_uniform, default_mm: diam_default });
+    provide_context(DiameterSettings {
+        uniform: diam_uniform,
+        default_mm: diam_default,
+    });
 
-    // Fetch persisted settings and update the diameter signals.
+    // Provide currency symbol globally (default: "€").
+    let currency_sym = create_rw_signal("€".to_string());
+    provide_context(CurrencySymbol(currency_sym));
+
+    // Fetch persisted settings and update the diameter + currency signals.
     let settings_res = create_resource(|| (), |_| async { crate::api::fetch_settings().await });
     create_effect(move |_| {
         if let Some(Ok(s)) = settings_res.get() {
-            diam_uniform.set(s.get("uniform_diameter").map(|v| v == "true").unwrap_or(true));
+            diam_uniform.set(
+                s.get("uniform_diameter")
+                    .map(|v| v == "true")
+                    .unwrap_or(true),
+            );
             diam_default.set(
                 s.get("default_diameter")
                     .and_then(|v| v.parse().ok())
                     .unwrap_or(1.75),
             );
+            if let Some(sym) = s.get("currency_symbol") {
+                currency_sym.set(sym.clone());
+            }
         }
     });
 

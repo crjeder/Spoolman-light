@@ -20,6 +20,19 @@ pub fn diameter_settings() -> DiameterSettings {
     expect_context::<DiameterSettings>()
 }
 
+// ── Currency symbol ────────────────────────────────────────────────────────────
+
+/// Reactive currency symbol provided via Leptos context from `App`.
+/// Mirrors the `currency_symbol` setting (default `"€"`).
+/// Passed to `crate::format::format_currency` at display sites.
+#[derive(Clone, Copy)]
+pub struct CurrencySymbol(pub RwSignal<String>);
+
+/// Read the `CurrencySymbol` from context.
+pub fn currency_symbol() -> CurrencySymbol {
+    expect_context::<CurrencySymbol>()
+}
+
 #[derive(Clone, Debug)]
 pub struct TableState {
     pub sort_field: RwSignal<String>,
@@ -33,18 +46,13 @@ pub struct TableState {
 /// under keys like `table.<namespace>.sort_field` etc.
 pub fn use_table_state(namespace: &'static str) -> TableState {
     let load = |key: &str, default: &str| -> String {
-        storage_get(&format!("table.{namespace}.{key}"))
-            .unwrap_or_else(|| default.to_string())
+        storage_get(&format!("table.{namespace}.{key}")).unwrap_or_else(|| default.to_string())
     };
 
     let sort_field = create_rw_signal(load("sort_field", "registered"));
     let sort_asc = create_rw_signal(load("sort_asc", "false") == "true");
-    let page = create_rw_signal(
-        load("page", "0").parse::<usize>().unwrap_or(0),
-    );
-    let page_size = create_rw_signal(
-        load("page_size", "25").parse::<usize>().unwrap_or(25),
-    );
+    let page = create_rw_signal(load("page", "0").parse::<usize>().unwrap_or(0));
+    let page_size = create_rw_signal(load("page_size", "25").parse::<usize>().unwrap_or(25));
     let filter = create_rw_signal(String::new()); // filters are session-only
 
     // Persist changes back to localStorage.
@@ -63,11 +71,20 @@ pub fn use_table_state(namespace: &'static str) -> TableState {
             storage_set(&format!("table.{ns}.page"), &page.get().to_string());
         });
         create_effect(move |_| {
-            storage_set(&format!("table.{ns}.page_size"), &page_size.get().to_string());
+            storage_set(
+                &format!("table.{ns}.page_size"),
+                &page_size.get().to_string(),
+            );
         });
     }
 
-    TableState { sort_field, sort_asc, page, page_size, filter }
+    TableState {
+        sort_field,
+        sort_asc,
+        page,
+        page_size,
+        filter,
+    }
 }
 
 fn storage_get(key: &str) -> Option<String> {

@@ -35,14 +35,20 @@ impl std::fmt::Display for ApiError {
 // ── Generic helpers ───────────────────────────────────────────────────────────
 
 pub async fn get<T: serde::de::DeserializeOwned>(path: &str) -> Result<T, ApiError> {
-    let resp = Request::get(path)
-        .send()
-        .await
-        .map_err(|e| ApiError { status: 0, message: e.to_string() })?;
+    let resp = Request::get(path).send().await.map_err(|e| ApiError {
+        status: 0,
+        message: e.to_string(),
+    })?;
     if resp.ok() {
-        resp.json().await.map_err(|e| ApiError { status: 0, message: e.to_string() })
+        resp.json().await.map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })
     } else {
-        Err(ApiError { status: resp.status(), message: resp.status_text().to_string() })
+        Err(ApiError {
+            status: resp.status(),
+            message: resp.status_text().to_string(),
+        })
     }
 }
 
@@ -52,14 +58,26 @@ pub async fn post_json<B: serde::Serialize, T: serde::de::DeserializeOwned>(
 ) -> Result<T, ApiError> {
     let resp = Request::post(path)
         .json(body)
-        .map_err(|e| ApiError { status: 0, message: e.to_string() })?
+        .map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })?
         .send()
         .await
-        .map_err(|e| ApiError { status: 0, message: e.to_string() })?;
+        .map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })?;
     if resp.ok() {
-        resp.json().await.map_err(|e| ApiError { status: 0, message: e.to_string() })
+        resp.json().await.map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })
     } else {
-        Err(ApiError { status: resp.status(), message: resp.status_text().to_string() })
+        Err(ApiError {
+            status: resp.status(),
+            message: resp.status_text().to_string(),
+        })
     }
 }
 
@@ -69,26 +87,41 @@ pub async fn patch_json<B: serde::Serialize, T: serde::de::DeserializeOwned>(
 ) -> Result<T, ApiError> {
     let resp = Request::patch(path)
         .json(body)
-        .map_err(|e| ApiError { status: 0, message: e.to_string() })?
+        .map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })?
         .send()
         .await
-        .map_err(|e| ApiError { status: 0, message: e.to_string() })?;
+        .map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })?;
     if resp.ok() {
-        resp.json().await.map_err(|e| ApiError { status: 0, message: e.to_string() })
+        resp.json().await.map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })
     } else {
-        Err(ApiError { status: resp.status(), message: resp.status_text().to_string() })
+        Err(ApiError {
+            status: resp.status(),
+            message: resp.status_text().to_string(),
+        })
     }
 }
 
 pub async fn delete(path: &str) -> Result<(), ApiError> {
-    let resp = Request::delete(path)
-        .send()
-        .await
-        .map_err(|e| ApiError { status: 0, message: e.to_string() })?;
+    let resp = Request::delete(path).send().await.map_err(|e| ApiError {
+        status: 0,
+        message: e.to_string(),
+    })?;
     if resp.ok() || resp.status() == 204 {
         Ok(())
     } else {
-        Err(ApiError { status: resp.status(), message: resp.status_text().to_string() })
+        Err(ApiError {
+            status: resp.status(),
+            message: resp.status_text().to_string(),
+        })
     }
 }
 
@@ -108,21 +141,34 @@ pub async fn put_setting(key: &str, value: String) -> Result<(), ApiError> {
     let body = PutSetting { value };
     let resp = Request::put(&format!("/api/v1/setting/{key}"))
         .json(&body)
-        .map_err(|e| ApiError { status: 0, message: e.to_string() })?
+        .map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })?
         .send()
         .await
-        .map_err(|e| ApiError { status: 0, message: e.to_string() })?;
+        .map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })?;
     if resp.ok() || resp.status() == 204 {
         Ok(())
     } else {
-        Err(ApiError { status: resp.status(), message: resp.status_text().to_string() })
+        Err(ApiError {
+            status: resp.status(),
+            message: resp.status_text().to_string(),
+        })
     }
 }
 
 // ── SpoolmanDB search proxy ────────────────────────────────────────────────────
 
 pub async fn search_spoolmandb(q: &str) -> Result<Vec<SpoolmanDbEntry>, ApiError> {
-    get(&format!("/api/v1/filament/search?q={}", urlencoding_encode(q))).await
+    get(&format!(
+        "/api/v1/filament/search?q={}",
+        urlencoding_encode(q)
+    ))
+    .await
 }
 
 fn urlencoding_encode(s: &str) -> String {

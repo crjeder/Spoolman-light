@@ -2,7 +2,9 @@ use chrono::Utc;
 use rand::Rng;
 use spoolman_types::{
     models::{DataStore, Filament, Location, Spool},
-    requests::{CreateFilament, CreateLocation, CreateSpool, UpdateFilament, UpdateLocation, UpdateSpool},
+    requests::{
+        CreateFilament, CreateLocation, CreateSpool, UpdateFilament, UpdateLocation, UpdateSpool,
+    },
     responses::{LocationResponse, SpoolResponse},
 };
 use std::{
@@ -175,7 +177,12 @@ impl JsonStore {
         sort_items(&mut items, sort, order, |f, field| match field {
             "id" => format!("{:010}", f.id),
             "manufacturer" => f.manufacturer.as_deref().unwrap_or("").to_string(),
-            "material" => f.material.as_ref().map(|m| m.abbreviation()).unwrap_or("").to_string(),
+            "material" => f
+                .material
+                .as_ref()
+                .map(|m| m.abbreviation())
+                .unwrap_or("")
+                .to_string(),
             "registered" => f.registered.to_rfc3339(),
             _ => f.registered.to_rfc3339(),
         });
@@ -232,8 +239,12 @@ impl JsonStore {
         apply_option(&mut filament.manufacturer, req.manufacturer);
         apply_option(&mut filament.material, req.material);
         apply_option(&mut filament.material_modifier, req.material_modifier);
-        if let Some(v) = req.diameter { filament.diameter = v; }
-        if let Some(v) = req.density { filament.density = v; }
+        if let Some(v) = req.diameter {
+            filament.diameter = v;
+        }
+        if let Some(v) = req.density {
+            filament.density = v;
+        }
         apply_option(&mut filament.print_temp, req.print_temp);
         apply_option(&mut filament.bed_temp, req.bed_temp);
         apply_option(&mut filament.spool_weight, req.spool_weight);
@@ -383,15 +394,23 @@ impl JsonStore {
             .ok_or(StoreError::NotFound)?;
 
         let weight_changed = req.current_weight.is_some();
-        if let Some(colors) = req.colors { spool.colors = colors; }
+        if let Some(colors) = req.colors {
+            spool.colors = colors;
+        }
         apply_option_nullable(&mut spool.color_name, req.color_name);
         apply_option_nullable_u32(&mut spool.location_id, req.location_id);
-        if let Some(w) = req.current_weight { spool.current_weight = w; }
-        if let Some(nw) = req.net_weight { spool.net_weight = Some(nw); }
+        if let Some(w) = req.current_weight {
+            spool.current_weight = w;
+        }
+        if let Some(nw) = req.net_weight {
+            spool.net_weight = Some(nw);
+        }
         apply_option_nullable_dt(&mut spool.first_used, req.first_used);
         apply_option_nullable_dt(&mut spool.last_used, req.last_used);
         apply_option_nullable(&mut spool.comment, req.comment);
-        if let Some(archived) = req.archived { spool.archived = archived; }
+        if let Some(archived) = req.archived {
+            spool.archived = archived;
+        }
         if weight_changed && req.last_used.is_none() {
             spool.last_used = Some(Utc::now());
         }
@@ -509,7 +528,10 @@ impl JsonStore {
         let location = Location { id, name: req.name };
         store.locations.push(location.clone());
         self.flush(&store)?;
-        Ok(LocationResponse { location, spool_count: 0 })
+        Ok(LocationResponse {
+            location,
+            spool_count: 0,
+        })
     }
 
     pub fn update_location(&self, id: u32, req: UpdateLocation) -> Result<LocationResponse> {
@@ -530,7 +552,10 @@ impl JsonStore {
             .filter(|s| s.location_id == Some(id))
             .count();
         self.flush(&store)?;
-        Ok(LocationResponse { location: loc, spool_count })
+        Ok(LocationResponse {
+            location: loc,
+            spool_count,
+        })
     }
 
     pub fn delete_location(&self, id: u32) -> Result<()> {
@@ -609,11 +634,17 @@ where
     F: Fn(&T, &str) -> String,
 {
     let field = sort.unwrap_or("registered");
-    let desc = order.map(|o| o.eq_ignore_ascii_case("desc")).unwrap_or(true);
+    let desc = order
+        .map(|o| o.eq_ignore_ascii_case("desc"))
+        .unwrap_or(true);
     items.sort_by(|a, b| {
         let ka = key_fn(a, field);
         let kb = key_fn(b, field);
-        if desc { kb.cmp(&ka) } else { ka.cmp(&kb) }
+        if desc {
+            kb.cmp(&ka)
+        } else {
+            ka.cmp(&kb)
+        }
     });
 }
 

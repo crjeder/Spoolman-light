@@ -5,9 +5,13 @@
 # ── Stage 1: build ────────────────────────────────────────────────────────────
 FROM rust:1-bookworm AS builder
 
-# Install cargo-leptos build tool and the WASM compilation target.
+# Install cargo-leptos build tool, the WASM compilation target, and
+# wasm-bindgen-cli. cargo-leptos downloads wasm-bindgen as a pre-built binary
+# from GitHub Releases at build time — pre-installing it via cargo puts it on
+# $PATH so cargo-leptos uses it directly without a network download.
 RUN rustup target add wasm32-unknown-unknown \
- && cargo install cargo-leptos --locked
+ && cargo install cargo-leptos --locked \
+ && cargo install wasm-bindgen-cli --version 0.2.114 --locked
 
 WORKDIR /build
 COPY . .

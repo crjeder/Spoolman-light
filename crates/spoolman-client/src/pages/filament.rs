@@ -1,10 +1,15 @@
+use crate::{
+    api,
+    components::{pagination::Pagination, table::ColHeader},
+    format,
+    state::{diameter_settings, use_table_state},
+};
 use leptos::*;
 use leptos_router::use_params_map;
 use spoolman_types::{
     models::MaterialType,
     requests::{CreateFilament, UpdateFilament},
 };
-use crate::{api, components::{pagination::Pagination, table::ColHeader}, state::{diameter_settings, use_table_state}};
 
 // ── Shared material <select> helper ────────────────────────────────────────────
 
@@ -62,7 +67,10 @@ pub fn FilamentList() -> impl IntoView {
 
     let filtered = move || {
         let f = ts.filter.get().to_lowercase();
-        filaments.get().and_then(|r| r.ok()).unwrap_or_default()
+        filaments
+            .get()
+            .and_then(|r| r.ok())
+            .unwrap_or_default()
             .into_iter()
             .filter(|fil| f.is_empty() || fil.display_name().to_lowercase().contains(&f))
             .collect::<Vec<_>>()
@@ -83,7 +91,11 @@ pub fn FilamentList() -> impl IntoView {
                     (_, None) => Ordering::Less,
                     (Some(av), Some(bv)) => {
                         let ord = av.to_lowercase().cmp(&bv.to_lowercase());
-                        if asc { ord } else { ord.reverse() }
+                        if asc {
+                            ord
+                        } else {
+                            ord.reverse()
+                        }
                     }
                 },
                 "material" => {
@@ -95,18 +107,30 @@ pub fn FilamentList() -> impl IntoView {
                         (_, None) => Ordering::Less,
                         (Some(av), Some(bv)) => {
                             let ord = av.cmp(&bv);
-                            if asc { ord } else { ord.reverse() }
+                            if asc {
+                                ord
+                            } else {
+                                ord.reverse()
+                            }
                         }
                     }
-                },
+                }
                 "density" => {
                     let ord = a.density.partial_cmp(&b.density).unwrap_or(Ordering::Equal);
-                    if asc { ord } else { ord.reverse() }
-                },
+                    if asc {
+                        ord
+                    } else {
+                        ord.reverse()
+                    }
+                }
                 "registered" => {
                     let ord = a.registered.cmp(&b.registered);
-                    if asc { ord } else { ord.reverse() }
-                },
+                    if asc {
+                        ord
+                    } else {
+                        ord.reverse()
+                    }
+                }
                 _ => Ordering::Equal,
             }
         });
@@ -117,7 +141,11 @@ pub fn FilamentList() -> impl IntoView {
     let page_items = move || {
         let items = sorted();
         let start = ts.page.get() * ts.page_size.get();
-        items.into_iter().skip(start).take(ts.page_size.get()).collect::<Vec<_>>()
+        items
+            .into_iter()
+            .skip(start)
+            .take(ts.page_size.get())
+            .collect::<Vec<_>>()
     };
 
     view! {
@@ -171,9 +199,9 @@ pub fn FilamentList() -> impl IntoView {
                                     <td>{f.manufacturer.clone().unwrap_or_default()}</td>
                                     <td>{f.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default()}</td>
                                     <td>{f.material_modifier.clone().unwrap_or_default()}</td>
-                                    {show_diameter().then(|| { let d = f.diameter; view! { <td class="num">{format!("{:.2}mm", d)}</td> } })}
-                                    <td class="num">{format!("{:.3}", f.density)}</td>
-                                    <td>{f.registered.format("%Y-%m-%d").to_string()}</td>
+                                    {show_diameter().then(|| { let d = f.diameter; view! { <td class="num">{format::format_mm(d)}</td> } })}
+                                    <td class="num">{format::format_density(f.density)}</td>
+                                    <td>{format::format_date(f.registered)}</td>
                                     <td class="actions">
                                         <a href=format!("/filaments/{id}")>"View"</a>
                                         " · "
@@ -268,11 +296,11 @@ pub fn FilamentShow() -> impl IntoView {
                                 }).unwrap_or_default()
                             }</dd>
                             <dt>"Modifier"</dt><dd>{f.material_modifier.clone().unwrap_or_default()}</dd>
-                            <dt>"Diameter"</dt><dd>{format!("{:.2}mm", f.diameter)}</dd>
-                            <dt>"Density"</dt><dd>{format!("{:.3} g/cm³", f.density)}</dd>
+                            <dt>"Diameter"</dt><dd>{format::format_mm(f.diameter)}</dd>
+                            <dt>"Density"</dt><dd>{format::format_density(f.density)}</dd>
                             <dt>"Print temp"</dt><dd>{f.print_temp.map(|t| format!("{}°C", t)).unwrap_or_default()}</dd>
                             <dt>"Bed temp"</dt><dd>{f.bed_temp.map(|t| format!("{}°C", t)).unwrap_or_default()}</dd>
-                            <dt>"Spool weight"</dt><dd>{f.spool_weight.map(|w| format!("{:.0}g", w)).unwrap_or_default()}</dd>
+                            <dt>"Spool weight"</dt><dd>{f.spool_weight.map(format::format_weight).unwrap_or_default()}</dd>
                             <dt>"Comment"</dt><dd>{f.comment.clone().unwrap_or_default()}</dd>
                         </dl>
                     }.into_view(),
@@ -312,15 +340,21 @@ pub fn FilamentCreate() -> impl IntoView {
             };
             let body = CreateFilament {
                 manufacturer: Some(manufacturer.get()).filter(|s| !s.is_empty()),
-                material: if mat.is_empty() { None } else { Some(MaterialType::from_abbreviation(&mat)) },
+                material: if mat.is_empty() {
+                    None
+                } else {
+                    Some(MaterialType::from_abbreviation(&mat))
+                },
                 material_modifier: Some(modifier.get()).filter(|s| !s.is_empty()),
                 diameter: resolved_diameter,
                 density: density.get().parse().unwrap_or(1.24),
                 print_temp: print_temp.get().parse().ok(),
                 bed_temp: bed_temp.get().parse().ok(),
                 spool_weight: None,
-                min_print_temp: None, max_print_temp: None,
-                min_bed_temp: None, max_bed_temp: None,
+                min_print_temp: None,
+                max_print_temp: None,
+                min_bed_temp: None,
+                max_bed_temp: None,
                 comment: Some(comment.get()).filter(|s| !s.is_empty()),
             };
             match api::create_filament(&body).await {
@@ -377,7 +411,12 @@ pub fn FilamentEdit() -> impl IntoView {
     create_effect(move |_| {
         if let Some(Ok(f)) = filament.get() {
             manufacturer.set(f.manufacturer.clone().unwrap_or_default());
-            material.set(f.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default());
+            material.set(
+                f.material
+                    .as_ref()
+                    .map(|m| m.abbreviation().to_string())
+                    .unwrap_or_default(),
+            );
             modifier.set(f.material_modifier.clone().unwrap_or_default());
             diameter.set(f.diameter.to_string());
             density.set(f.density.to_string());
@@ -395,7 +434,11 @@ pub fn FilamentEdit() -> impl IntoView {
             let mat = material.get();
             let body = UpdateFilament {
                 manufacturer: Some(manufacturer.get()).filter(|s| !s.is_empty()),
-                material: if mat.is_empty() { None } else { Some(MaterialType::from_abbreviation(&mat)) },
+                material: if mat.is_empty() {
+                    None
+                } else {
+                    Some(MaterialType::from_abbreviation(&mat))
+                },
                 material_modifier: Some(modifier.get()).filter(|s| !s.is_empty()),
                 diameter: diameter.get().parse().ok(),
                 density: density.get().parse().ok(),

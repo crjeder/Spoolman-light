@@ -1,5 +1,5 @@
-use leptos::*;
 use crate::{api, state::diameter_settings};
+use leptos::*;
 
 #[component]
 pub fn SettingsPage() -> impl IntoView {
@@ -15,10 +15,20 @@ pub fn SettingsPage() -> impl IntoView {
 
     create_effect(move |_| {
         if let Some(Ok(s)) = settings.get() {
-            currency.set(s.get("currency_symbol").cloned().unwrap_or_else(|| "€".into()));
-            uniform.set(s.get("uniform_diameter").map(|v| v == "true").unwrap_or(true));
+            currency.set(
+                s.get("currency_symbol")
+                    .cloned()
+                    .unwrap_or_else(|| "€".into()),
+            );
+            uniform.set(
+                s.get("uniform_diameter")
+                    .map(|v| v == "true")
+                    .unwrap_or(true),
+            );
             default_mm.set(
-                s.get("default_diameter").cloned().unwrap_or_else(|| "1.75".into()),
+                s.get("default_diameter")
+                    .cloned()
+                    .unwrap_or_else(|| "1.75".into()),
             );
         }
     });
@@ -31,8 +41,13 @@ pub fn SettingsPage() -> impl IntoView {
             let r1 = api::put_setting("currency_symbol", currency.get()).await;
             let r2 = api::put_setting(
                 "uniform_diameter",
-                if uniform_val { "true".into() } else { "false".into() },
-            ).await;
+                if uniform_val {
+                    "true".into()
+                } else {
+                    "false".into()
+                },
+            )
+            .await;
             let r3 = api::put_setting("default_diameter", default_mm_val.clone()).await;
             match (r1, r2, r3) {
                 (Ok(_), Ok(_), Ok(_)) => {

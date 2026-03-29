@@ -1,5 +1,8 @@
-use spoolman_types::{requests::{CreateLocation, UpdateLocation}, responses::LocationResponse};
-use super::{ApiError, delete, get, patch_json, post_json};
+use super::{delete, get, patch_json, post_json, ApiError};
+use spoolman_types::{
+    requests::{CreateLocation, UpdateLocation},
+    responses::LocationResponse,
+};
 
 pub async fn list_locations() -> Result<Vec<LocationResponse>, ApiError> {
     get("/api/v1/location").await

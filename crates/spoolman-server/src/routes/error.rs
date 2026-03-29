@@ -22,9 +22,10 @@ impl IntoResponse for ApiError {
             StoreError::NotFound => (StatusCode::NOT_FOUND, self.0.to_string()),
             StoreError::Conflict(_) => (StatusCode::CONFLICT, self.0.to_string()),
             StoreError::Validation(_) => (StatusCode::UNPROCESSABLE_ENTITY, self.0.to_string()),
-            StoreError::Io(_) | StoreError::Json(_) => {
-                (StatusCode::INTERNAL_SERVER_ERROR, "internal server error".to_string())
-            }
+            StoreError::Io(_) | StoreError::Json(_) => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "internal server error".to_string(),
+            ),
         };
         (status, Json(json!({ "detail": msg }))).into_response()
     }

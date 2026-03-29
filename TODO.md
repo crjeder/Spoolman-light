@@ -23,9 +23,9 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 ### Enhancements
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
 - [ ] use locale to format date and time. fall back to what is configured in settings. add a setting for date / time format
-- [ ] "clear search" button
+- ~~"clear search" button~~ (done: × button clears the text search input)
 - [ ] rename "filter" to "search"
-- [ ] table headers contain filter button
+- [ ] table headers contain filter button (partial: Color column header activates color picker filter)
 - [ ] move Filament.net_weight to spool.net_weight
 - [ ] add delete buttons wherever edit buttons are
 - ~~remove "remaining %"~~

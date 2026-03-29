@@ -81,7 +81,7 @@ Test files live in `tests/e2e/tests/`. Page-Object Models are in `tests/e2e/page
 
 ## Workflow
 
-- Use git worktrees for feature work to keep changes isolated from the current workspace. Before starting any non-trivial implementation, create a worktree on a new branch rather than working directly on the checked-out branch.
+- Use git worktrees for feature work to keep changes isolated from the current workspace. Before starting any non-trivial implementation, create a worktree on a new branch rather than working directly on the checked-out branch. Place worktrees in .worktrees in the project directory
 - For every non-trivial implementation check crates.io if there is already a crate implementing the functionality.
 - use openspec to plan changes and new features
 

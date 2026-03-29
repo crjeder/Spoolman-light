@@ -1,9 +1,9 @@
 use axum::{
-    Json, Router,
     extract::{Path, State},
     routing::{get, put},
+    Json, Router,
 };
-use serde_json::{Value, json};
+use serde_json::{json, Value};
 
 use crate::{routes::error::Result, store::JsonStore};
 use spoolman_types::requests::PutSetting;

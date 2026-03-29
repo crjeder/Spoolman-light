@@ -1,8 +1,8 @@
 use axum::{
-    Json, Router,
     extract::{Path, Query, State},
     http::{HeaderMap, HeaderValue},
     routing::get,
+    Json, Router,
 };
 use serde::Deserialize;
 use spoolman_types::{
@@ -82,13 +82,9 @@ struct SearchParams {
     q: Option<String>,
 }
 
-async fn search(
-    Query(params): Query<SearchParams>,
-) -> Result<Json<Vec<SpoolmanDbEntry>>> {
+async fn search(Query(params): Query<SearchParams>) -> Result<Json<Vec<SpoolmanDbEntry>>> {
     let q = params.q.unwrap_or_default();
-    let url = format!(
-        "https://donkie.github.io/SpoolmanDB/filaments.json"
-    );
+    let url = format!("https://donkie.github.io/SpoolmanDB/filaments.json");
     let entries = fetch_spoolmandb(&url, &q).await.unwrap_or_default();
     Ok(Json(entries))
 }
@@ -105,7 +101,10 @@ async fn fetch_spoolmandb(url: &str, query: &str) -> Option<Vec<SpoolmanDbEntry>
             }
             let text = format!(
                 "{} {} {}",
-                entry.get("manufacturer").and_then(|v| v.as_str()).unwrap_or(""),
+                entry
+                    .get("manufacturer")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or(""),
                 entry.get("material").and_then(|v| v.as_str()).unwrap_or(""),
                 entry.get("name").and_then(|v| v.as_str()).unwrap_or(""),
             )

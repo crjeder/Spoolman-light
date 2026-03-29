@@ -43,7 +43,9 @@ echo "→ Installing Playwright dependencies…"
 npm ci --prefix "$E2E_DIR"
 
 echo "→ Running Playwright tests…"
+# cd into the E2E dir so Playwright finds playwright.config.ts.
 # Pass PLAYWRIGHT_BASE_URL so playwright.config.ts can pick it up if needed.
-PLAYWRIGHT_BASE_URL="$BASE_URL" npx --prefix "$E2E_DIR" playwright test
+cd "$E2E_DIR"
+PLAYWRIGHT_BASE_URL="$BASE_URL" npx playwright test
 
 echo "✓ All tests passed."

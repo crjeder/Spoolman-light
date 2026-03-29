@@ -4,7 +4,13 @@ use axum::http::{Method, StatusCode};
 use serde_json::json;
 
 async fn create_filament(app: &axum::Router) -> u64 {
-    let (_, body) = common::request(app, Method::POST, "/api/v1/filament", Some(json!({ "density": 1.24 }))).await;
+    let (_, body) = common::request(
+        app,
+        Method::POST,
+        "/api/v1/filament",
+        Some(json!({ "density": 1.24 })),
+    )
+    .await;
     body["id"].as_u64().unwrap()
 }
 
@@ -17,7 +23,8 @@ async fn create_spool_returns_201_with_nested_filament() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;
 
-    let (status, body) = common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+    let (status, body) =
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
     assert_eq!(status, StatusCode::CREATED);
     assert!(body["id"].as_u64().unwrap() > 0);
     assert_eq!(body["filament_id"].as_u64().unwrap(), fid);
@@ -27,7 +34,13 @@ async fn create_spool_returns_201_with_nested_filament() {
 #[tokio::test]
 async fn create_spool_with_unknown_filament_returns_404() {
     let (app, _dir) = common::make_app();
-    let (status, _) = common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(999999))).await;
+    let (status, _) = common::request(
+        &app,
+        Method::POST,
+        "/api/v1/spool",
+        Some(spool_body(999999)),
+    )
+    .await;
     assert_eq!(status, StatusCode::NOT_FOUND);
 }
 
@@ -35,10 +48,12 @@ async fn create_spool_with_unknown_filament_returns_404() {
 async fn get_spool_returns_200() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;
-    let (_, created) = common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+    let (_, created) =
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
     let sid = created["id"].as_u64().unwrap();
 
-    let (status, body) = common::request(&app, Method::GET, &format!("/api/v1/spool/{sid}"), None).await;
+    let (status, body) =
+        common::request(&app, Method::GET, &format!("/api/v1/spool/{sid}"), None).await;
     assert_eq!(status, StatusCode::OK);
     assert_eq!(body["id"].as_u64().unwrap(), sid);
 }
@@ -66,7 +81,8 @@ async fn list_spools_returns_all() {
 async fn update_spool_weight_sets_last_used() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;
-    let (_, created) = common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+    let (_, created) =
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
     let sid = created["id"].as_u64().unwrap();
 
     let (status, body) = common::request(
@@ -74,7 +90,8 @@ async fn update_spool_weight_sets_last_used() {
         Method::PATCH,
         &format!("/api/v1/spool/{sid}"),
         Some(json!({ "current_weight": 800.0 })),
-    ).await;
+    )
+    .await;
     assert_eq!(status, StatusCode::OK);
     assert!((body["current_weight"].as_f64().unwrap() - 800.0).abs() < 0.01);
     assert!(!body["last_used"].is_null());
@@ -84,10 +101,17 @@ async fn update_spool_weight_sets_last_used() {
 async fn clone_spool_returns_201_with_different_id() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;
-    let (_, created) = common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+    let (_, created) =
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
     let sid = created["id"].as_u64().unwrap();
 
-    let (status, body) = common::request(&app, Method::POST, &format!("/api/v1/spool/{sid}/clone"), None).await;
+    let (status, body) = common::request(
+        &app,
+        Method::POST,
+        &format!("/api/v1/spool/{sid}/clone"),
+        None,
+    )
+    .await;
     assert_eq!(status, StatusCode::CREATED);
     assert_ne!(body["id"].as_u64().unwrap(), sid);
     assert_eq!(body["filament_id"].as_u64().unwrap(), fid);
@@ -104,24 +128,32 @@ async fn create_spool_with_zero_net_weight_filament_returns_201() {
         Method::POST,
         "/api/v1/filament",
         Some(json!({ "density": 1.24, "net_weight": 0.0 })),
-    ).await;
+    )
+    .await;
     let fid = fil["id"].as_u64().unwrap();
 
-    let (status, body) = common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+    let (status, body) =
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
     assert_eq!(status, StatusCode::CREATED, "body: {body}");
-    assert!(body["remaining_pct"].is_null(), "remaining_pct should be None when net_weight=0");
+    assert!(
+        body["remaining_pct"].is_null(),
+        "remaining_pct should be None when net_weight=0"
+    );
 }
 
 #[tokio::test]
 async fn delete_spool_returns_204_and_subsequent_get_404() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;
-    let (_, created) = common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
+    let (_, created) =
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid))).await;
     let sid = created["id"].as_u64().unwrap();
 
-    let (status, _) = common::request(&app, Method::DELETE, &format!("/api/v1/spool/{sid}"), None).await;
+    let (status, _) =
+        common::request(&app, Method::DELETE, &format!("/api/v1/spool/{sid}"), None).await;
     assert_eq!(status, StatusCode::NO_CONTENT);
 
-    let (status, _) = common::request(&app, Method::GET, &format!("/api/v1/spool/{sid}"), None).await;
+    let (status, _) =
+        common::request(&app, Method::GET, &format!("/api/v1/spool/{sid}"), None).await;
     assert_eq!(status, StatusCode::NOT_FOUND);
 }

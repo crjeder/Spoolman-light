@@ -13,7 +13,11 @@ pub fn ColHeader(
     let is_active = move || sort_field.get() == field;
     let indicator = move || {
         if is_active() {
-            if sort_asc.get() { " ↑" } else { " ↓" }
+            if sort_asc.get() {
+                " ↑"
+            } else {
+                " ↓"
+            }
         } else {
             ""
         }

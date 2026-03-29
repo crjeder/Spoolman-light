@@ -45,7 +45,9 @@ pub fn build_router(store: JsonStore, cfg: &Config) -> Router {
         api = api.route("/", get(serve_index));
     }
 
-    let mut app = api.layer(CompressionLayer::new()).layer(TraceLayer::new_for_http());
+    let mut app = api
+        .layer(CompressionLayer::new())
+        .layer(TraceLayer::new_for_http());
 
     if let Some(origin) = &cfg.cors_origin {
         let allowed: AllowOrigin = if origin == "*" {

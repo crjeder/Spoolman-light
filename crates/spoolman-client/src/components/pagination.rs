@@ -8,7 +8,11 @@ pub fn Pagination(
 ) -> impl IntoView {
     let total_pages = move || {
         let ps = page_size.get();
-        if ps == 0 { 1 } else { (total.get() + ps - 1) / ps }
+        if ps == 0 {
+            1
+        } else {
+            (total.get() + ps - 1) / ps
+        }
     };
 
     let next_disabled = move || page.get() + 1 >= total_pages();

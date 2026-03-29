@@ -426,6 +426,17 @@ body.dark .success {
     text-align: right;
 }
 
+/* ── Color column header (activates color filter) ─────────────────────────── */
+
+.data-table th.color-head {
+    cursor: pointer;
+}
+
+.data-table th.color-head:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
 /* ── Color swatch ──────────────────────────────────────────────────────────── */
 
 .color-swatch {

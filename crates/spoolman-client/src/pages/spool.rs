@@ -18,6 +18,7 @@ pub fn SpoolList() -> impl IntoView {
     let show_archived = create_rw_signal(false);
     let color_pick: RwSignal<Option<String>> = create_rw_signal(None);
     let threshold: RwSignal<u8> = create_rw_signal(10u8);
+    let color_input_ref = create_node_ref::<html::Input>();
     let _visible_cols = create_rw_signal(vec![
         "filament", "color", "remaining_weight", "location", "registered",
     ]);
@@ -139,6 +140,7 @@ pub fn SpoolList() -> impl IntoView {
                     <span class="color-filter">
                         <input type="color"
                             title="Filter by color"
+                            node_ref=color_input_ref
                             on:input=move |ev| color_pick.set(Some(event_target_value(&ev)))
                         />
                         {move || color_pick.get().map(|_| view! {
@@ -163,7 +165,15 @@ pub fn SpoolList() -> impl IntoView {
                         <tr>
                             <ColHeader label="ID"       field="id"         sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Filament" field="filament"   sort_field=ts.sort_field sort_asc=ts.sort_asc />
-                            <th>"Color"</th>
+                            <th class="color-head" role="button" tabindex="0"
+                                on:click=move |_| { let _ = color_input_ref.get().map(|el| el.focus()); }
+                                on:keydown=move |ev| {
+                                    let key = ev.key();
+                                    if key == "Enter" || key == " " {
+                                        let _ = color_input_ref.get().map(|el| el.focus());
+                                    }
+                                }
+                            >"Color"</th>
                             <ColHeader label="Remaining (g)" field="remaining_weight" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Location"      field="location"          sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />

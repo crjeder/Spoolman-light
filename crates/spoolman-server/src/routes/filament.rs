@@ -84,7 +84,7 @@ struct SearchParams {
 
 async fn search(Query(params): Query<SearchParams>) -> Result<Json<Vec<SpoolmanDbEntry>>> {
     let q = params.q.unwrap_or_default();
-    let url = format!("https://donkie.github.io/SpoolmanDB/filaments.json");
+    let url = "https://donkie.github.io/SpoolmanDB/filaments.json".to_string();
     let entries = fetch_spoolmandb(&url, &q).await.unwrap_or_default();
     Ok(Json(entries))
 }

@@ -5,9 +5,9 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 ## Pending
 
 ### Clippy Warnings
-- [ ] `crates/spoolman-server/src/routes/filament.rs:87` — useless `format!()`, replace with `.to_string()`
-- [ ] `crates/spoolman-server/src/store.rs:287` — `list_spools` has 8 args (>7); consider a filter struct
-- [ ] `crates/spoolman-server/src/store.rs:632` — `sort_items` takes `&mut Vec<T>`, should be `&mut [T]`
+- [x] `crates/spoolman-server/src/routes/filament.rs:87` — useless `format!()`, replace with `.to_string()`
+- [x] `crates/spoolman-server/src/store.rs:287` — `list_spools` has 8 args (>7); consider a filter struct
+- [x] `crates/spoolman-server/src/store.rs:632` — `sort_items` takes `&mut Vec<T>`, should be `&mut [T]`
 
 ### Enhancements
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`

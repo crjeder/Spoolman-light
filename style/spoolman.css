@@ -429,12 +429,44 @@ body.dark .success {
 /* ── Color column header (activates color filter) ─────────────────────────── */
 
 .data-table th.color-head {
+    position: relative;
+    white-space: nowrap;
+}
+
+.data-table th.color-head .color-head-label {
     cursor: pointer;
 }
 
-.data-table th.color-head:hover {
+.data-table th.color-head .color-head-label:hover {
     color: var(--accent);
     text-decoration: underline;
+}
+
+.color-threshold-select {
+    font-size: 0.75rem;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.color-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+}
+
+.color-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 /* ── Color swatch ──────────────────────────────────────────────────────────── */
@@ -472,14 +504,6 @@ body.dark .success {
     font-size: 0.8rem;
     color: var(--muted);
     min-width: 3ch;
-}
-
-/* ── Color filter widget ───────────────────────────────────────────────────── */
-
-.color-filter {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
 }
 
 /* ── Pagination ────────────────────────────────────────────────────────────── */

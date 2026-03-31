@@ -29,6 +29,16 @@ pub enum StoreError {
 
 pub type Result<T> = std::result::Result<T, StoreError>;
 
+pub struct SpoolFilter<'a> {
+    pub filament_id: Option<u32>,
+    pub location_id: Option<u32>,
+    pub allow_archived: bool,
+    pub sort: Option<&'a str>,
+    pub order: Option<&'a str>,
+    pub offset: usize,
+    pub limit: Option<usize>,
+}
+
 /// Thread-safe JSON-backed data store.
 #[derive(Clone)]
 pub struct JsonStore {
@@ -284,16 +294,7 @@ impl JsonStore {
 
     // ── Spool ──────────────────────────────────────────────────────────────────
 
-    pub fn list_spools(
-        &self,
-        filament_id: Option<u32>,
-        location_id: Option<u32>,
-        allow_archived: bool,
-        sort: Option<&str>,
-        order: Option<&str>,
-        offset: usize,
-        limit: Option<usize>,
-    ) -> Result<(Vec<SpoolResponse>, usize)> {
+    pub fn list_spools(&self, filter: SpoolFilter<'_>) -> Result<(Vec<SpoolResponse>, usize)> {
         let store = self.inner.read().unwrap();
         let filament_map: HashMap<u32, Filament> =
             store.filaments.iter().map(|f| (f.id, f.clone())).collect();
@@ -302,15 +303,15 @@ impl JsonStore {
             .spools
             .iter()
             .filter(|s| {
-                if !allow_archived && s.archived {
+                if !filter.allow_archived && s.archived {
                     return false;
                 }
-                if let Some(fid) = filament_id {
+                if let Some(fid) = filter.filament_id {
                     if s.filament_id != fid {
                         return false;
                     }
                 }
-                if let Some(lid) = location_id {
+                if let Some(lid) = filter.location_id {
                     if s.location_id != Some(lid) {
                         return false;
                     }
@@ -324,7 +325,7 @@ impl JsonStore {
             })
             .collect();
 
-        sort_items(&mut items, sort, order, |s, field| match field {
+        sort_items(&mut items, filter.sort, filter.order, |s, field| match field {
             "registered" => s.spool.registered.to_rfc3339(),
             "last_used" => s
                 .spool
@@ -335,7 +336,7 @@ impl JsonStore {
         });
 
         let total = items.len();
-        let items = paginate(items, offset, limit);
+        let items = paginate(items, filter.offset, filter.limit);
         Ok((items, total))
     }
 
@@ -629,7 +630,7 @@ impl JsonStore {
 
 // ── Sort / paginate helpers ────────────────────────────────────────────────────
 
-fn sort_items<T, F>(items: &mut Vec<T>, sort: Option<&str>, order: Option<&str>, key_fn: F)
+fn sort_items<T, F>(items: &mut [T], sort: Option<&str>, order: Option<&str>, key_fn: F)
 where
     F: Fn(&T, &str) -> String,
 {

@@ -10,7 +10,7 @@ use spoolman_types::{
     responses::SpoolResponse,
 };
 
-use crate::{routes::error::Result, store::JsonStore};
+use crate::{routes::error::Result, store::{JsonStore, SpoolFilter}};
 
 pub fn router() -> Router<JsonStore> {
     Router::new()
@@ -34,15 +34,15 @@ async fn list(
     State(store): State<JsonStore>,
     Query(params): Query<ListParams>,
 ) -> Result<(HeaderMap, Json<Vec<SpoolResponse>>)> {
-    let (items, total) = store.list_spools(
-        params.filament_id,
-        params.location_id,
-        params.allow_archived.unwrap_or(false),
-        params.sort.as_deref(),
-        params.order.as_deref(),
-        params.offset.unwrap_or(0),
-        params.limit,
-    )?;
+    let (items, total) = store.list_spools(SpoolFilter {
+        filament_id: params.filament_id,
+        location_id: params.location_id,
+        allow_archived: params.allow_archived.unwrap_or(false),
+        sort: params.sort.as_deref(),
+        order: params.order.as_deref(),
+        offset: params.offset.unwrap_or(0),
+        limit: params.limit,
+    })?;
     let mut headers = HeaderMap::new();
     headers.insert("X-Total-Count", HeaderValue::from(total as u64));
     Ok((headers, Json(items)))

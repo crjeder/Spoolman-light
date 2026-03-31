@@ -1,10 +1,4 @@
-# Spec: color-column-head-activates-filter
-
-## Purpose
-
-The "Color" column header in the spool list table is interactive: clicking it focuses the color picker input in the page header, activating the color filter.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Color column header activates color filter
 The spool list table's "Color" column header SHALL be interactive. Clicking it SHALL focus the color picker input in the page header, activating the color filter. When a color level other than "Off" is selected, the header SHALL display a filled square indicator (■, U+25A0) to signal that a color filter is active.
@@ -24,3 +18,9 @@ The spool list table's "Color" column header SHALL be interactive. Clicking it S
 #### Scenario: Active filter indicator hidden when Off
 - **WHEN** the color level selector is set to "Off"
 - **THEN** the "Color" column header SHALL display only the label "Color" with no ■ indicator
+
+## REMOVED Requirements
+
+### Requirement: Standalone toolbar color-picker button
+**Reason**: The Color column header already activates the picker; a separate toolbar button is redundant and clutters the UI.
+**Migration**: Use the Color column header click to open the colour picker.

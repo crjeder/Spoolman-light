@@ -20,9 +20,13 @@ use crate::{
 pub fn SpoolList() -> impl IntoView {
     let ts = use_table_state("spools");
     let show_archived = create_rw_signal(false);
-    let color_pick: RwSignal<Option<String>> = create_rw_signal(None);
-    let threshold: RwSignal<u8> = create_rw_signal(10u8);
-    let color_input_ref = create_node_ref::<html::Input>();
+    let color_pick = create_rw_signal("#000000".to_string());
+    let color_level = create_rw_signal("off".to_string());
+    let popup_open = create_rw_signal(false);
+
+    const FINE_THRESHOLD: f32 = 10.0;
+    const MEDIUM_THRESHOLD: f32 = 20.0;
+    const COARSE_THRESHOLD: f32 = 35.0;
     let _visible_cols = create_rw_signal(vec![
         "filament",
         "color",
@@ -51,7 +55,7 @@ pub fn SpoolList() -> impl IntoView {
     let filtered = move || {
         let f = ts.filter.get().to_lowercase();
         let pick = color_pick.get();
-        let thresh = threshold.get() as f32;
+        let level = color_level.get();
         spools
             .get()
             .and_then(|r| r.ok())
@@ -73,13 +77,23 @@ pub fn SpoolList() -> impl IntoView {
                         .unwrap_or("")
                         .to_lowercase()
                         .contains(&f);
-                let color_ok = match pick.as_deref().and_then(hex_to_rgba) {
-                    None => true,
-                    Some(target) => s
-                        .spool
-                        .colors
-                        .iter()
-                        .any(|c| color_distance(c, &target) <= thresh),
+                let color_ok = if level == "off" {
+                    true
+                } else {
+                    match hex_to_rgba(&pick) {
+                        None => true, // invalid hex — don't filter
+                        Some(target) => {
+                            let thresh = match level.as_str() {
+                                "fine" => FINE_THRESHOLD,
+                                "medium" => MEDIUM_THRESHOLD,
+                                _ => COARSE_THRESHOLD,
+                            };
+                            s.spool
+                                .colors
+                                .iter()
+                                .any(|c| color_distance(c, &target) <= thresh)
+                        }
+                    }
                 };
                 text_ok && color_ok
             })
@@ -187,25 +201,6 @@ pub fn SpoolList() -> impl IntoView {
                         />
                         " Show archived"
                     </label>
-                    <span class="color-filter">
-                        <input type="color"
-                            title="Filter by color"
-                            node_ref=color_input_ref
-                            on:input=move |ev| color_pick.set(Some(event_target_value(&ev)))
-                        />
-                        {move || color_pick.get().map(|_| view! {
-                            <button type="button" class="btn"
-                                on:click=move |_| color_pick.set(None)
-                            >"×"</button>
-                            <input type="range" min="0" max="255" step="1"
-                                title="Color match threshold"
-                                prop:value=threshold
-                                on:input=move |ev| threshold.set(
-                                    event_target_value(&ev).parse().unwrap_or(60)
-                                )
-                            />
-                        })}
-                    </span>
                     <a href="/spools/new" class="btn btn-primary ">"+ New Spool"</a>
                 </div>
             </div>
@@ -215,15 +210,60 @@ pub fn SpoolList() -> impl IntoView {
                         <tr>
                             <ColHeader label="ID"       field="id"         sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Filament" field="filament"   sort_field=ts.sort_field sort_asc=ts.sort_asc />
-                            <th class="color-head" role="button" tabindex="0"
-                                on:click=move |_| { let _ = color_input_ref.get().map(|el| el.focus()); }
-                                on:keydown=move |ev| {
-                                    let key = ev.key();
-                                    if key == "Enter" || key == " " {
-                                        let _ = color_input_ref.get().map(|el| el.focus());
+                            <th class="color-head">
+                                <span class="color-head-label" role="button" tabindex="0"
+                                    on:click=move |_| popup_open.update(|v| *v = !*v)
+                                    on:keydown=move |ev| {
+                                        let key = ev.key();
+                                        if key == "Enter" || key == " " {
+                                            popup_open.update(|v| *v = !*v);
+                                        }
                                     }
-                                }
-                            >"Color"</th>
+                                >
+                                    {move || if color_level.get() != "off" {
+                                        let color = color_pick.get();
+                                        view! {
+                                            "Color "
+                                            <span style=format!("color:{color}")>"\u{25A0}"</span>
+                                        }.into_view()
+                                    } else {
+                                        view! { "Color" }.into_view()
+                                    }}
+                                </span>
+                                <select class="color-threshold-select"
+                                    prop:value=move || color_level.get()
+                                    on:click=move |ev| ev.stop_propagation()
+                                    on:change=move |ev| {
+                                        ev.stop_propagation();
+                                        color_level.set(event_target_value(&ev));
+                                    }
+                                >
+                                    <option value="off">"Off"</option>
+                                    <option value="fine">"Fine"</option>
+                                    <option value="medium">"Medium"</option>
+                                    <option value="coarse">"Coarse"</option>
+                                </select>
+                                {move || popup_open.get().then(|| view! {
+                                    <div class="color-backdrop"
+                                        on:click=move |_| popup_open.set(false)
+                                    ></div>
+                                    <div class="color-popup">
+                                        <input type="color"
+                                            title="Filter by color"
+                                            prop:value=move || color_pick.get()
+                                            on:input=move |ev| color_pick.set(event_target_value(&ev))
+                                            on:change=move |ev| color_pick.set(event_target_value(&ev))
+                                        />
+                                        <button type="button" class="btn"
+                                            on:click=move |ev| {
+                                                ev.stop_propagation();
+                                                color_level.set("off".to_string());
+                                                popup_open.set(false);
+                                            }
+                                        >"×"</button>
+                                    </div>
+                                })}
+                            </th>
                             <ColHeader label="Remaining (g)" field="remaining_weight" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Location"      field="location"          sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />

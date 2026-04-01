@@ -406,11 +406,13 @@ pub fn SpoolShow() -> impl IntoView {
                                 }
                             }</dd>
                             <dt>"Colors"</dt><dd>{sr.spool.colors.iter().map(|c| {
+                                let hex = format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b);
                                 view! {
                                     <span class="color-swatch"
                                         style=format!("background:rgba({},{},{},{})",
                                             c.r, c.g, c.b, c.a as f32/255.0)>
                                     </span>
+                                    <span class="color-hex">{hex}</span>
                                 }
                             }).collect_view()}</dd>
                             <dt>"Color name"</dt><dd>{sr.spool.color_name.clone().unwrap_or_default()}</dd>

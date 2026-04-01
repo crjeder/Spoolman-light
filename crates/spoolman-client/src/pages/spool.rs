@@ -96,6 +96,30 @@ pub fn SpoolList() -> impl IntoView {
     let sort_asc = ts.sort_asc;
     let sorted = move || {
         let mut items = filtered();
+        let level = color_level.get();
+        let pick = color_pick.get();
+
+        // When a color level is active and the hex is valid, sort by ascending
+        // minimum ΔE*00 distance (closest match first).
+        if level != "off" {
+            if let Some(target) = hex_to_rgba(&pick) {
+                let min_delta = |s: &spoolman_types::responses::SpoolResponse| {
+                    s.spool
+                        .colors
+                        .iter()
+                        .map(|c| color_distance(c, &target))
+                        .fold(f32::MAX, f32::min)
+                };
+                items.sort_by(|a, b| {
+                    min_delta(a)
+                        .partial_cmp(&min_delta(b))
+                        .unwrap_or(std::cmp::Ordering::Equal)
+                });
+                return items;
+            }
+        }
+
+        // Default: column-based sort.
         let field = sort_field.get();
         let asc = sort_asc.get();
         items.sort_by(|a, b| {

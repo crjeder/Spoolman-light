@@ -4,6 +4,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 
 ## Pending
 - [x] B20: color square (U+25A0) does not show the currently selected color. 
+- [ ] B21 /api/v1/info is empty
 
 ### Enhancements
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
@@ -23,8 +24,9 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] color search for multi color is not intuitive
 - [x] pop-up color selector would be better than the selector on top of the page. color should not change when changing the threshold
 - [ ] add the hex value to the color display in spool details
-- [ ] sort spools according to delta when a color is selected
+- [x] sort spools according to delta when a color is selected
 - [ ] implement alternative color distance calculation oklab (or din99d). make them configurable in settings (oklab crate)#
 - [ ] handling of alpha value in color search needs to be better
 - [ ] take surface finish into account for color search
+- [ ] add material column in spools. table head links to a filter (drop down) to select materials to display
 

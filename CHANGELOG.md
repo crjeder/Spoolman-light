@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Spool list sorts by closest color match (ascending ΔE*00) when a color search level is active. Switching back to "Off" restores the default column sort order.
 - "Color" column header in the spool list is now clickable — clicking it (or pressing Enter/Space when focused) activates the color picker filter in the page header. The header shows a pointer cursor and accent hover style to signal interactivity.
 
 ### Fixed

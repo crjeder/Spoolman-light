@@ -481,6 +481,13 @@ body.dark .success {
     border: 1px solid var(--border);
 }
 
+.color-hex {
+    font-family: monospace;
+    font-size: 0.85em;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
 /* ── Inline delete confirmation ────────────────────────────────────────────── */
 
 .confirm-prompt {

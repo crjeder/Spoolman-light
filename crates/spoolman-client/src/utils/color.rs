@@ -1,6 +1,15 @@
 use deltae::{DEMethod::DE2000, DeltaE, LabValue};
 use spoolman_types::models::Rgba;
 
+// ── Algorithm selector ──────────────────────────────────────────────────────
+
+#[derive(Clone, Copy, PartialEq, Debug)]
+pub enum ColorAlgorithm {
+    Ciede2000,
+    OkLab,
+    Din99d,
+}
+
 // ── sRGB → CIE L*a*b* conversion ───────────────────────────────────────────
 
 /// Linearise a single sRGB channel value (0–255) via the exact IEC 61966-2-1
@@ -58,17 +67,102 @@ fn rgba_to_lab(c: &Rgba) -> LabValue {
     LabValue { l, a, b: b_val }
 }
 
-// ── Public API ──────────────────────────────────────────────────────────────
+// ── CIEDE2000 ───────────────────────────────────────────────────────────────
 
-/// Perceptual color difference between two sRGB colours using CIEDE2000 (ΔE*00).
-/// Alpha is ignored. Returns a value in [0, ~100]:
-///   < 1   → imperceptible difference
-///   < 10  → similar colours
-///   > 25  → clearly distinct colours
-pub fn color_distance(a: &Rgba, b: &Rgba) -> f32 {
+fn ciede2000_distance(a: &Rgba, b: &Rgba) -> f32 {
     let lab_a = rgba_to_lab(a);
     let lab_b = rgba_to_lab(b);
     *DeltaE::new(&lab_a, &lab_b, DE2000).value()
+}
+
+// ── OKLab ───────────────────────────────────────────────────────────────────
+
+fn oklab_distance(a: &Rgba, b: &Rgba) -> f32 {
+    let ok_a = oklab::srgb_to_oklab(oklab::Rgb { r: a.r, g: a.g, b: a.b });
+    let ok_b = oklab::srgb_to_oklab(oklab::Rgb { r: b.r, g: b.g, b: b.b });
+    let dl = ok_a.l - ok_b.l;
+    let da = ok_a.a - ok_b.a;
+    let db = ok_a.b - ok_b.b;
+    (dl * dl + da * da + db * db).sqrt()
+}
+
+// ── DIN99d ──────────────────────────────────────────────────────────────────
+
+/// Convert CIE L*a*b* to DIN99d coordinates (DIN 6176:2001, D65 variant).
+fn lab_to_din99d(l: f32, a: f32, b: f32) -> (f32, f32, f32) {
+    let angle: f32 = 50.0_f32.to_radians();
+    let cos_a = angle.cos();
+    let sin_a = angle.sin();
+
+    let eo = a * cos_a + b * sin_a;
+    let fo = 1.14 * (-a * sin_a + b * cos_a);
+
+    let g = (eo * eo + fo * fo).sqrt();
+    let h_ef = fo.atan2(eo);
+
+    let l99 = 325.22 * (1.0 + 0.0036 * l).ln();
+    let c99 = (1.0 + 0.045 * g).ln() / 0.045;
+
+    let a99 = c99 * h_ef.cos();
+    let b99 = c99 * h_ef.sin();
+
+    (l99, a99, b99)
+}
+
+fn din99d_distance(a: &Rgba, b: &Rgba) -> f32 {
+    let lab_a = rgba_to_lab(a);
+    let lab_b = rgba_to_lab(b);
+
+    let (l1, a1, b1) = lab_to_din99d(lab_a.l, lab_a.a, lab_a.b);
+    let (l2, a2, b2) = lab_to_din99d(lab_b.l, lab_b.a, lab_b.b);
+
+    let dl = l1 - l2;
+    let da = a1 - a2;
+    let db = b1 - b2;
+    (dl * dl + da * da + db * db).sqrt()
+}
+
+// ── Public API ──────────────────────────────────────────────────────────────
+
+/// Perceptual color difference between two sRGB colours using the specified
+/// algorithm. Alpha is ignored.
+///
+/// Return value scales:
+///   - `Ciede2000`: ΔE\*00 in [0, ~100]
+///   - `OkLab`: ΔE_ok in [0, ~1]
+///   - `Din99d`: ΔE_99d in [0, ~100]
+///
+/// Use `threshold_for` to obtain level-appropriate thresholds per algorithm.
+pub fn color_distance(a: &Rgba, b: &Rgba, algo: ColorAlgorithm) -> f32 {
+    match algo {
+        ColorAlgorithm::Ciede2000 => ciede2000_distance(a, b),
+        ColorAlgorithm::OkLab => oklab_distance(a, b),
+        ColorAlgorithm::Din99d => din99d_distance(a, b),
+    }
+}
+
+/// Return the numeric threshold for the given search level and algorithm.
+/// Returns `None` for `"off"` or unknown levels.
+/// Levels: `"same"`, `"close"`, `"ballpark"`.
+pub fn threshold_for(level: &str, algo: ColorAlgorithm) -> Option<f32> {
+    match level {
+        "same" => Some(match algo {
+            ColorAlgorithm::Ciede2000 => 10.0,
+            ColorAlgorithm::OkLab => 0.10,
+            ColorAlgorithm::Din99d => 10.0,
+        }),
+        "close" => Some(match algo {
+            ColorAlgorithm::Ciede2000 => 20.0,
+            ColorAlgorithm::OkLab => 0.20,
+            ColorAlgorithm::Din99d => 20.0,
+        }),
+        "ballpark" => Some(match algo {
+            ColorAlgorithm::Ciede2000 => 35.0,
+            ColorAlgorithm::OkLab => 0.35,
+            ColorAlgorithm::Din99d => 35.0,
+        }),
+        _ => None,
+    }
 }
 
 /// Parse a `#rrggbb` hex string (as produced by `<input type="color">`)
@@ -82,4 +176,72 @@ pub fn hex_to_rgba(hex: &str) -> Option<Rgba> {
     let g = u8::from_str_radix(&hex[2..4], 16).ok()?;
     let b = u8::from_str_radix(&hex[4..6], 16).ok()?;
     Some(Rgba { r, g, b, a: 255 })
+}
+
+// ── Tests ───────────────────────────────────────────────────────────────────
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn rgba(r: u8, g: u8, b: u8) -> Rgba {
+        Rgba { r, g, b, a: 255 }
+    }
+
+    // ── Identical colours → 0.0 ─────────────────────────────────────────────
+
+    #[test]
+    fn ciede2000_identical_is_zero() {
+        let red = rgba(255, 0, 0);
+        assert_eq!(color_distance(&red, &red, ColorAlgorithm::Ciede2000), 0.0);
+    }
+
+    #[test]
+    fn oklab_identical_is_zero() {
+        let red = rgba(255, 0, 0);
+        assert_eq!(color_distance(&red, &red, ColorAlgorithm::OkLab), 0.0);
+    }
+
+    #[test]
+    fn din99d_identical_is_zero() {
+        let red = rgba(255, 0, 0);
+        assert!(color_distance(&red, &red, ColorAlgorithm::Din99d) < 1e-4);
+    }
+
+    // ── Red vs blue → clearly different ────────────────────────────────────
+
+    #[test]
+    fn ciede2000_red_vs_blue_high() {
+        assert!(color_distance(&rgba(255, 0, 0), &rgba(0, 0, 255), ColorAlgorithm::Ciede2000) > 25.0);
+    }
+
+    #[test]
+    fn oklab_red_vs_blue_high() {
+        assert!(color_distance(&rgba(255, 0, 0), &rgba(0, 0, 255), ColorAlgorithm::OkLab) > 0.1);
+    }
+
+    #[test]
+    fn din99d_red_vs_blue_high() {
+        assert!(color_distance(&rgba(255, 0, 0), &rgba(0, 0, 255), ColorAlgorithm::Din99d) > 25.0);
+    }
+
+    // ── DIN99d reference pair: white vs black ≈ 100 ─────────────────────────
+
+    #[test]
+    fn din99d_white_vs_black_approx_100() {
+        let d = color_distance(&rgba(255, 255, 255), &rgba(0, 0, 0), ColorAlgorithm::Din99d);
+        assert!(d > 95.0 && d < 105.0, "expected ~100, got {d}");
+    }
+
+    // ── threshold_for sanity checks ─────────────────────────────────────────
+
+    #[test]
+    fn threshold_off_returns_none() {
+        assert_eq!(threshold_for("off", ColorAlgorithm::Ciede2000), None);
+    }
+
+    #[test]
+    fn threshold_same_oklab_is_0_10() {
+        assert_eq!(threshold_for("same", ColorAlgorithm::OkLab), Some(0.10));
+    }
 }

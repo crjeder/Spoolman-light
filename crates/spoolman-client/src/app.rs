@@ -9,7 +9,7 @@ use crate::{
         settings::SettingsPage,
         spool::{SpoolCreate, SpoolEdit, SpoolList, SpoolShow},
     },
-    state::{CurrencySymbol, DiameterSettings},
+    state::{ColorAlgorithm, ColorDistanceAlgorithm, CurrencySymbol, DiameterSettings},
 };
 
 #[component]
@@ -30,6 +30,10 @@ pub fn App() -> impl IntoView {
     let currency_sym = create_rw_signal("€".to_string());
     provide_context(CurrencySymbol(currency_sym));
 
+    // Provide color distance algorithm globally (default: CIEDE2000).
+    let color_algo = create_rw_signal(ColorAlgorithm::Ciede2000);
+    provide_context(ColorDistanceAlgorithm(color_algo));
+
     // Fetch persisted settings and update the diameter + currency signals.
     let settings_res = create_resource(|| (), |_| async { crate::api::fetch_settings().await });
     create_effect(move |_| {
@@ -47,6 +51,11 @@ pub fn App() -> impl IntoView {
             if let Some(sym) = s.get("currency_symbol") {
                 currency_sym.set(sym.clone());
             }
+            color_algo.set(match s.get("color_distance_algorithm").map(String::as_str) {
+                Some("oklab") => ColorAlgorithm::OkLab,
+                Some("din99d") => ColorAlgorithm::Din99d,
+                _ => ColorAlgorithm::Ciede2000,
+            });
         }
     });
 

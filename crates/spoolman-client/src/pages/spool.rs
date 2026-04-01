@@ -10,8 +10,8 @@ use crate::{
     api,
     components::{pagination::Pagination, table::ColHeader},
     format,
-    state::use_table_state,
-    utils::color::{color_distance, hex_to_rgba},
+    state::{color_distance_algorithm, use_table_state},
+    utils::color::{color_distance, hex_to_rgba, threshold_for},
 };
 
 // ── List ───────────────────────────────────────────────────────────────────────
@@ -23,10 +23,8 @@ pub fn SpoolList() -> impl IntoView {
     let color_pick = create_rw_signal("#000000".to_string());
     let color_level = create_rw_signal("off".to_string());
     let popup_open = create_rw_signal(false);
+    let cda = color_distance_algorithm();
 
-    const FINE_THRESHOLD: f32 = 10.0;
-    const MEDIUM_THRESHOLD: f32 = 20.0;
-    const COARSE_THRESHOLD: f32 = 35.0;
     let _visible_cols = create_rw_signal(vec![
         "filament",
         "color",
@@ -80,19 +78,13 @@ pub fn SpoolList() -> impl IntoView {
                 let color_ok = if level == "off" {
                     true
                 } else {
-                    match hex_to_rgba(&pick) {
-                        None => true, // invalid hex — don't filter
-                        Some(target) => {
-                            let thresh = match level.as_str() {
-                                "fine" => FINE_THRESHOLD,
-                                "medium" => MEDIUM_THRESHOLD,
-                                _ => COARSE_THRESHOLD,
-                            };
-                            s.spool
-                                .colors
-                                .iter()
-                                .any(|c| color_distance(c, &target) <= thresh)
-                        }
+                    match (hex_to_rgba(&pick), threshold_for(&level, cda.0.get())) {
+                        (Some(target), Some(thresh)) => s
+                            .spool
+                            .colors
+                            .iter()
+                            .any(|c| color_distance(c, &target, cda.0.get()) <= thresh),
+                        _ => true, // invalid hex or unknown level — don't filter
                     }
                 };
                 text_ok && color_ok
@@ -263,9 +255,9 @@ pub fn SpoolList() -> impl IntoView {
                                     }
                                 >
                                     <option value="off">"Off"</option>
-                                    <option value="fine">"Fine"</option>
-                                    <option value="medium">"Medium"</option>
-                                    <option value="coarse">"Coarse"</option>
+                                    <option value="same">"Same"</option>
+                                    <option value="close">"Close"</option>
+                                    <option value="ballpark">"Ballpark"</option>
                                 </select>
                                 {move || popup_open.get().then(|| view! {
                                     <div class="color-backdrop"

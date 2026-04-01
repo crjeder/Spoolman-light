@@ -20,6 +20,20 @@ pub fn diameter_settings() -> DiameterSettings {
     expect_context::<DiameterSettings>()
 }
 
+// ── Color distance algorithm ───────────────────────────────────────────────────
+
+pub use crate::utils::color::ColorAlgorithm;
+
+/// Reactive color distance algorithm provided via Leptos context from `App`.
+/// Mirrors the `color_distance_algorithm` setting (default `Ciede2000`).
+#[derive(Clone, Copy)]
+pub struct ColorDistanceAlgorithm(pub RwSignal<ColorAlgorithm>);
+
+/// Read the `ColorDistanceAlgorithm` from context.
+pub fn color_distance_algorithm() -> ColorDistanceAlgorithm {
+    expect_context::<ColorDistanceAlgorithm>()
+}
+
 // ── Currency symbol ────────────────────────────────────────────────────────────
 
 /// Reactive currency symbol provided via Leptos context from `App`.

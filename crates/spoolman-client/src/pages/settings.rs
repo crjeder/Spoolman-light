@@ -1,4 +1,7 @@
-use crate::{api, state::diameter_settings};
+use crate::{
+    api,
+    state::{color_distance_algorithm, diameter_settings, ColorAlgorithm},
+};
 use leptos::*;
 
 #[component]
@@ -12,6 +15,10 @@ pub fn SettingsPage() -> impl IntoView {
     let ds = diameter_settings();
     let uniform = create_rw_signal(true);
     let default_mm = create_rw_signal("1.75".to_string());
+
+    // Color distance algorithm — read from shared context; local copy for the form.
+    let cda = color_distance_algorithm();
+    let algo = create_rw_signal("ciede2000".to_string());
 
     create_effect(move |_| {
         if let Some(Ok(s)) = settings.get() {
@@ -30,6 +37,11 @@ pub fn SettingsPage() -> impl IntoView {
                     .cloned()
                     .unwrap_or_else(|| "1.75".into()),
             );
+            algo.set(
+                s.get("color_distance_algorithm")
+                    .cloned()
+                    .unwrap_or_else(|| "ciede2000".into()),
+            );
         }
     });
 
@@ -37,6 +49,7 @@ pub fn SettingsPage() -> impl IntoView {
         ev.prevent_default();
         let uniform_val = uniform.get();
         let default_mm_val = default_mm.get();
+        let algo_val = algo.get();
         spawn_local(async move {
             let r1 = api::put_setting("currency_symbol", currency.get()).await;
             let r2 = api::put_setting(
@@ -49,17 +62,26 @@ pub fn SettingsPage() -> impl IntoView {
             )
             .await;
             let r3 = api::put_setting("default_diameter", default_mm_val.clone()).await;
-            match (r1, r2, r3) {
-                (Ok(_), Ok(_), Ok(_)) => {
+            let r4 = api::put_setting("color_distance_algorithm", algo_val.clone()).await;
+            match (r1, r2, r3, r4) {
+                (Ok(_), Ok(_), Ok(_), Ok(_)) => {
                     // Update the app-wide context signals so other components
                     // see the change without a reload.
                     ds.uniform.set(uniform_val);
                     if let Ok(v) = default_mm_val.parse::<f64>() {
                         ds.default_mm.set(v);
                     }
+                    cda.0.set(match algo_val.as_str() {
+                        "oklab" => ColorAlgorithm::OkLab,
+                        "din99d" => ColorAlgorithm::Din99d,
+                        _ => ColorAlgorithm::Ciede2000,
+                    });
                     saved.set(true);
                 }
-                (Err(e), _, _) | (_, Err(e), _) | (_, _, Err(e)) => {
+                (Err(e), _, _, _)
+                | (_, Err(e), _, _)
+                | (_, _, Err(e), _)
+                | (_, _, _, Err(e)) => {
                     error.set(Some(e.to_string()));
                 }
             }
@@ -101,6 +123,20 @@ pub fn SettingsPage() -> impl IntoView {
                             default_mm.set(event_target_value(&ev));
                         }
                     />
+                </label>
+                <label>
+                    "Color search algorithm"
+                    <select
+                        prop:value=move || algo.get()
+                        on:change=move |ev| {
+                            saved.set(false);
+                            algo.set(event_target_value(&ev));
+                        }
+                    >
+                        <option value="ciede2000">"CIEDE2000 (default)"</option>
+                        <option value="oklab">"OKLab"</option>
+                        <option value="din99d">"DIN99d"</option>
+                    </select>
                 </label>
                 <button type="submit" class="btn btn-primary ">"Save"</button>
             </form>

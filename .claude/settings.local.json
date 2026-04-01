@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(openspec status:*)",
-      "Bash(cargo check:*)"
+      "Bash(cargo check:*)",
+      "WebSearch"
     ]
   }
 }

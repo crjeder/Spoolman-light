@@ -290,18 +290,23 @@ pub fn SpoolList() -> impl IntoView {
                         {move || page_items().into_iter().map(|sr| {
                             let id = sr.spool.id;
                             let name = sr.filament.display_name();
-                            let color = sr.spool.colors.first().cloned()
-                                .unwrap_or(Rgba { r: 200, g: 200, b: 200, a: 255 });
+                            let colors = if sr.spool.colors.is_empty() {
+                                vec![Rgba { r: 200, g: 200, b: 200, a: 255 }]
+                            } else {
+                                sr.spool.colors.clone()
+                            };
                             let rem = sr.remaining_filament.map(format::format_weight).unwrap_or_default();
                             view! {
                                 <tr class=if sr.spool.archived { "archived" } else { "" }>
                                     <td class="num"><a href=format!("/spools/{id}")>{id}</a></td>
                                     <td>{name}</td>
                                     <td>
-                                        <span class="color-swatch"
-                                            style=format!("background:rgba({},{},{},{})",
-                                                color.r, color.g, color.b, color.a as f32/255.0)>
-                                        </span>
+                                        {colors.into_iter().map(|c| view! {
+                                            <span class="color-swatch"
+                                                style=format!("background:rgba({},{},{},{})",
+                                                    c.r, c.g, c.b, c.a as f32/255.0)>
+                                            </span>
+                                        }).collect_view()}
                                         {sr.spool.color_name.clone().unwrap_or_default()}
                                     </td>
                                     <td class="num">{rem}</td>

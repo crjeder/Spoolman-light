@@ -1,0 +1,275 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]: Spoolman
+    - list [ref=e5]:
+      - listitem [ref=e6]:
+        - link "Spools" [ref=e7] [cursor=pointer]:
+          - /url: /spools
+      - listitem [ref=e8]:
+        - link "Filaments" [ref=e9] [cursor=pointer]:
+          - /url: /filaments
+      - listitem [ref=e10]:
+        - link "Locations" [ref=e11] [cursor=pointer]:
+          - /url: /locations
+      - listitem [ref=e12]:
+        - link "Settings" [ref=e13] [cursor=pointer]:
+          - /url: /settings
+      - listitem [ref=e14]:
+        - link "Help" [ref=e15] [cursor=pointer]:
+          - /url: /help
+    - generic [ref=e16]:
+      - button "☾ Dark" [ref=e17] [cursor=pointer]
+      - generic [ref=e18]: v0.1.0
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - heading "Spools" [level=1] [ref=e22]
+        - generic [ref=e23]:
+          - textbox "Search…" [ref=e25]
+          - generic [ref=e26]:
+            - checkbox "Show archived" [ref=e27]
+            - text: Show archived
+          - link "+ New Spool" [ref=e28] [cursor=pointer]:
+            - /url: /spools/new
+      - table [ref=e29]:
+        - rowgroup [ref=e30]:
+          - 'row "ID Filament Color ■ Close #000000 × Remaining (g) Location Registered ↓ Actions" [ref=e547]':
+            - columnheader "ID" [ref=e32]:
+              - button "ID" [ref=e33] [cursor=pointer]
+            - columnheader "Filament" [ref=e34]:
+              - button "Filament" [ref=e35] [cursor=pointer]
+            - 'columnheader "Color ■ Close #000000 ×" [ref=e548]':
+              - button "Color ■" [ref=e354] [cursor=pointer]
+              - combobox [ref=e38]:
+                - option "Off"
+                - option "Same"
+                - option "Close" [selected]
+                - option "Ballpark"
+              - generic [ref=e550]:
+                - textbox "Filter by color" [ref=e551]: "#000000"
+                - button "×" [ref=e552] [cursor=pointer]
+            - columnheader "Remaining (g)" [ref=e39]:
+              - button "Remaining (g)" [ref=e40] [cursor=pointer]
+            - columnheader "Location" [ref=e41]:
+              - button "Location" [ref=e42] [cursor=pointer]
+            - columnheader "Registered ↓" [ref=e43]:
+              - button "Registered ↓" [ref=e44] [cursor=pointer]
+            - columnheader "Actions" [ref=e45]
+        - rowgroup [ref=e46]:
+          - row "2147 Bambu TPU 95A Tomato/Black 395 g 3012 01.08.2025 Edit Delete" [ref=e355]:
+            - cell "2147" [ref=e356]:
+              - link "2147" [ref=e357] [cursor=pointer]:
+                - /url: /spools/2147
+            - cell "Bambu TPU 95A" [ref=e358]
+            - cell "Tomato/Black" [ref=e359]: Tomato/Black
+            - cell "395 g" [ref=e361]
+            - cell "3012" [ref=e362]
+            - cell "01.08.2025" [ref=e363]
+            - cell "Edit Delete" [ref=e364]:
+              - link "Edit" [ref=e365] [cursor=pointer]:
+                - /url: /spools/2147/edit
+              - button "Delete" [ref=e366] [cursor=pointer]
+          - row "2076 ColorFabb PLA Economy Black ColorFabb PLA 750 g 3005 25.03.2025 Edit Delete" [ref=e367]:
+            - cell "2076" [ref=e368]:
+              - link "2076" [ref=e369] [cursor=pointer]:
+                - /url: /spools/2076
+            - cell "ColorFabb PLA Economy" [ref=e370]
+            - cell "Black ColorFabb PLA" [ref=e371]: Black ColorFabb PLA
+            - cell "750 g" [ref=e373]
+            - cell "3005" [ref=e374]
+            - cell "25.03.2025" [ref=e375]
+            - cell "Edit Delete" [ref=e376]:
+              - link "Edit" [ref=e377] [cursor=pointer]:
+                - /url: /spools/2076/edit
+              - button "Delete" [ref=e378] [cursor=pointer]
+          - row "2069 Prusament PETG Black PETG Prusament 1.000 g 3001 20.03.2025 Edit Delete" [ref=e379]:
+            - cell "2069" [ref=e380]:
+              - link "2069" [ref=e381] [cursor=pointer]:
+                - /url: /spools/2069
+            - cell "Prusament PETG" [ref=e382]
+            - cell "Black PETG Prusament" [ref=e383]: Black PETG Prusament
+            - cell "1.000 g" [ref=e385]
+            - cell "3001" [ref=e386]
+            - cell "20.03.2025" [ref=e387]
+            - cell "Edit Delete" [ref=e388]:
+              - link "Edit" [ref=e389] [cursor=pointer]:
+                - /url: /spools/2069/edit
+              - button "Delete" [ref=e390] [cursor=pointer]
+          - row "2109 Sunlu PETG Black Sunlu PETG 1.000 g 3002 18.03.2025 Edit Delete" [ref=e391]:
+            - cell "2109" [ref=e392]:
+              - link "2109" [ref=e393] [cursor=pointer]:
+                - /url: /spools/2109
+            - cell "Sunlu PETG" [ref=e394]
+            - cell "Black Sunlu PETG" [ref=e395]: Black Sunlu PETG
+            - cell "1.000 g" [ref=e397]
+            - cell "3002" [ref=e398]
+            - cell "18.03.2025" [ref=e399]
+            - cell "Edit Delete" [ref=e400]:
+              - link "Edit" [ref=e401] [cursor=pointer]:
+                - /url: /spools/2109/edit
+              - button "Delete" [ref=e402] [cursor=pointer]
+          - row "2049 Polymaker TPU 95A Black TPU 750 g 3002 15.03.2025 Edit Delete" [ref=e403]:
+            - cell "2049" [ref=e404]:
+              - link "2049" [ref=e405] [cursor=pointer]:
+                - /url: /spools/2049
+            - cell "Polymaker TPU 95A" [ref=e406]
+            - cell "Black TPU" [ref=e407]: Black TPU
+            - cell "750 g" [ref=e409]
+            - cell "3002" [ref=e410]
+            - cell "15.03.2025" [ref=e411]
+            - cell "Edit Delete" [ref=e412]:
+              - link "Edit" [ref=e413] [cursor=pointer]:
+                - /url: /spools/2049/edit
+              - button "Delete" [ref=e414] [cursor=pointer]
+          - row "2059 FormFutura HIPS Black HIPS 750 g 3006 15.03.2025 Edit Delete" [ref=e415]:
+            - cell "2059" [ref=e416]:
+              - link "2059" [ref=e417] [cursor=pointer]:
+                - /url: /spools/2059
+            - cell "FormFutura HIPS" [ref=e418]
+            - cell "Black HIPS" [ref=e419]: Black HIPS
+            - cell "750 g" [ref=e421]
+            - cell "3006" [ref=e422]
+            - cell "15.03.2025" [ref=e423]
+            - cell "Edit Delete" [ref=e424]:
+              - link "Edit" [ref=e425] [cursor=pointer]:
+                - /url: /spools/2059/edit
+              - button "Delete" [ref=e426] [cursor=pointer]
+          - row "2074 Polymaker PLA Matte Black Matte 1.000 g 3007 12.03.2025 Edit Delete" [ref=e427]:
+            - cell "2074" [ref=e428]:
+              - link "2074" [ref=e429] [cursor=pointer]:
+                - /url: /spools/2074
+            - cell "Polymaker PLA Matte" [ref=e430]
+            - cell "Black Matte" [ref=e431]: Black Matte
+            - cell "1.000 g" [ref=e433]
+            - cell "3007" [ref=e434]
+            - cell "12.03.2025" [ref=e435]
+            - cell "Edit Delete" [ref=e436]:
+              - link "Edit" [ref=e437] [cursor=pointer]:
+                - /url: /spools/2074/edit
+              - button "Delete" [ref=e438] [cursor=pointer]
+          - row "2039 Fiberlogy ASA Jet Black ASA 350 g 3004 20.01.2025 Edit Delete" [ref=e439]:
+            - cell "2039" [ref=e440]:
+              - link "2039" [ref=e441] [cursor=pointer]:
+                - /url: /spools/2039
+            - cell "Fiberlogy ASA" [ref=e442]
+            - cell "Jet Black ASA" [ref=e443]: Jet Black ASA
+            - cell "350 g" [ref=e445]
+            - cell "3004" [ref=e446]
+            - cell "20.01.2025" [ref=e447]
+            - cell "Edit Delete" [ref=e448]:
+              - link "Edit" [ref=e449] [cursor=pointer]:
+                - /url: /spools/2039/edit
+              - button "Delete" [ref=e450] [cursor=pointer]
+          - row "2006 Bambu PLA Basic Bambu Black 500 g 3003 20.01.2025 Edit Delete" [ref=e451]:
+            - cell "2006" [ref=e452]:
+              - link "2006" [ref=e453] [cursor=pointer]:
+                - /url: /spools/2006
+            - cell "Bambu PLA Basic" [ref=e454]
+            - cell "Bambu Black" [ref=e455]: Bambu Black
+            - cell "500 g" [ref=e457]
+            - cell "3003" [ref=e458]
+            - cell "20.01.2025" [ref=e459]
+            - cell "Edit Delete" [ref=e460]:
+              - link "Edit" [ref=e461] [cursor=pointer]:
+                - /url: /spools/2006/edit
+              - button "Delete" [ref=e462] [cursor=pointer]
+          - row "2060 eSUN PETG Black PETG 520 g 3001 05.12.2024 Edit Delete" [ref=e463]:
+            - cell "2060" [ref=e464]:
+              - link "2060" [ref=e465] [cursor=pointer]:
+                - /url: /spools/2060
+            - cell "eSUN PETG" [ref=e466]
+            - cell "Black PETG" [ref=e467]: Black PETG
+            - cell "520 g" [ref=e469]
+            - cell "3001" [ref=e470]
+            - cell "05.12.2024" [ref=e471]
+            - cell "Edit Delete" [ref=e472]:
+              - link "Edit" [ref=e473] [cursor=pointer]:
+                - /url: /spools/2060/edit
+              - button "Delete" [ref=e474] [cursor=pointer]
+          - row "2122 eSUN PETG Black 295 g 3002 15.10.2024 Edit Delete" [ref=e475]:
+            - cell "2122" [ref=e476]:
+              - link "2122" [ref=e477] [cursor=pointer]:
+                - /url: /spools/2122
+            - cell "eSUN PETG" [ref=e478]
+            - cell "Black" [ref=e479]: Black
+            - cell "295 g" [ref=e481]
+            - cell "3002" [ref=e482]
+            - cell "15.10.2024" [ref=e483]
+            - cell "Edit Delete" [ref=e484]:
+              - link "Edit" [ref=e485] [cursor=pointer]:
+                - /url: /spools/2122/edit
+              - button "Delete" [ref=e486] [cursor=pointer]
+          - row "2152 Fillamentum PETG Black 895 g 3002 15.10.2024 Edit Delete" [ref=e487]:
+            - cell "2152" [ref=e488]:
+              - link "2152" [ref=e489] [cursor=pointer]:
+                - /url: /spools/2152
+            - cell "Fillamentum PETG" [ref=e490]
+            - cell "Black" [ref=e491]: Black
+            - cell "895 g" [ref=e493]
+            - cell "3002" [ref=e494]
+            - cell "15.10.2024" [ref=e495]
+            - cell "Edit Delete" [ref=e496]:
+              - link "Edit" [ref=e497] [cursor=pointer]:
+                - /url: /spools/2152/edit
+              - button "Delete" [ref=e498] [cursor=pointer]
+          - row "2182 Prusament PLA Galaxy Black 695 g 3002 15.10.2024 Edit Delete" [ref=e499]:
+            - cell "2182" [ref=e500]:
+              - link "2182" [ref=e501] [cursor=pointer]:
+                - /url: /spools/2182
+            - cell "Prusament PLA Galaxy" [ref=e502]
+            - cell "Black" [ref=e503]: Black
+            - cell "695 g" [ref=e505]
+            - cell "3002" [ref=e506]
+            - cell "15.10.2024" [ref=e507]
+            - cell "Edit Delete" [ref=e508]:
+              - link "Edit" [ref=e509] [cursor=pointer]:
+                - /url: /spools/2182/edit
+              - button "Delete" [ref=e510] [cursor=pointer]
+          - row "2078 FormFutura HIPS Black HIPS 2 20 g 3006 01.08.2024 Edit Delete" [ref=e511]:
+            - cell "2078" [ref=e512]:
+              - link "2078" [ref=e513] [cursor=pointer]:
+                - /url: /spools/2078
+            - cell "FormFutura HIPS" [ref=e514]
+            - cell "Black HIPS 2" [ref=e515]: Black HIPS 2
+            - cell "20 g" [ref=e517]
+            - cell "3006" [ref=e518]
+            - cell "01.08.2024" [ref=e519]
+            - cell "Edit Delete" [ref=e520]:
+              - link "Edit" [ref=e521] [cursor=pointer]:
+                - /url: /spools/2078/edit
+              - button "Delete" [ref=e522] [cursor=pointer]
+          - row "2017 Bambu ABS Matte Black 650 g 3004 10.02.2025 Edit Delete" [ref=e523]:
+            - cell "2017" [ref=e524]:
+              - link "2017" [ref=e525] [cursor=pointer]:
+                - /url: /spools/2017
+            - cell "Bambu ABS" [ref=e526]
+            - cell "Matte Black" [ref=e527]: Matte Black
+            - cell "650 g" [ref=e529]
+            - cell "3004" [ref=e530]
+            - cell "10.02.2025" [ref=e531]
+            - cell "Edit Delete" [ref=e532]:
+              - link "Edit" [ref=e533] [cursor=pointer]:
+                - /url: /spools/2017/edit
+              - button "Delete" [ref=e534] [cursor=pointer]
+          - row "2023 3DJake PETG CF Carbon Black 260 g 3006 12.03.2025 Edit Delete" [ref=e535]:
+            - cell "2023" [ref=e536]:
+              - link "2023" [ref=e537] [cursor=pointer]:
+                - /url: /spools/2023
+            - cell "3DJake PETG CF" [ref=e538]
+            - cell "Carbon Black" [ref=e539]: Carbon Black
+            - cell "260 g" [ref=e541]
+            - cell "3006" [ref=e542]
+            - cell "12.03.2025" [ref=e543]
+            - cell "Edit Delete" [ref=e544]:
+              - link "Edit" [ref=e545] [cursor=pointer]:
+                - /url: /spools/2023/edit
+              - button "Delete" [ref=e546] [cursor=pointer]
+      - generic [ref=e347]:
+        - button "← Prev" [disabled] [ref=e348]
+        - generic [ref=e349]: Page 1 / 1
+        - button "Next →" [disabled] [ref=e350]
+        - combobox [ref=e351]:
+          - option "10 / page"
+          - option "25 / page" [selected]
+          - option "50 / page"
+          - option "100 / page"

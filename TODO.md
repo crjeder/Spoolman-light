@@ -11,29 +11,28 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 Items where the actual code does NOT match the OpenSpec specification:
 
 **Summary: 4 active OpenSpec changes checked**
-- ✓ 2 fully implemented (`color-hex-display`, `sort-spools-by-color-delta`)
-- ✗ 1 incompletely implemented (`alternative-color-distance` — spec requires enum/dispatcher, code lacks it)
+- ✓ 3 fully implemented (`color-hex-display`, `sort-spools-by-color-delta`, `alternative-color-distance`)
 - ⚠️ 1 design mismatch (`add-filament-type` — spec says datalist/free-text, code uses enum/select)
 - ✓ 1 bonus implemented (`validate-location-required-spool` — not yet in spec, already in code)
 
 **Details:**
 
-1. **[color-hex-display]** ✓ IMPLEMENTED — hex formatted as `#{:02x}{:02x}{:02x}` in `spool.rs` line 426, CSS styling in `spoolman.css` line 484. **Tracking issue:** TODO.md line 23 "add the hex value..." not marked complete. **ACTION: Mark as [x].**
+1. **[color-hex-display]** ✓ IMPLEMENTED — hex formatted as `#{:02x}{:02x}{:02x}` in `spool.rs`, CSS styling in `spoolman.css`.
 
-2. **[alternative-color-distance]** ✗ INCOMPLETE — Spec requires `ColorAlgorithm` enum, `color_distance(a, b, algo)` dispatcher, per-algorithm thresholds, and Settings page UI. Tasks in `tasks.md` marked complete, but actual code shows old signature `color_distance(a: &Rgba, b: &Rgba) -> f32` (line 68 in `utils/color.rs`). No enum exists. This blocks full algorithm selection in Settings and forces `sort-spools-by-color-delta` to use CIEDE2000-only. **ACTION: Either revert tasks.md to mark incomplete, or implement per spec.**
+2. **[alternative-color-distance]** ✓ IMPLEMENTED — `ColorAlgorithm` enum (Ciede2000/OkLab/Din99d), `color_distance(a, b, algo)` dispatcher, per-algorithm thresholds via `threshold_for()`, OKLab via `oklab` crate, DIN99d via rotation-matrix formula. Settings page exposes algorithm selector; choice persisted via `put_setting` and provided globally via `ColorDistanceAlgorithm` Leptos context. Filter and sort both use the reactive context signal. Change archived to `openspec/changes/archive/2026-04-02-alternative-color-distance/`.
 
 3. **[add-filament-type]** ⚠️ DESIGN MISMATCH — Spec requires free-text Material input with `<datalist>` autocomplete fed by `GET /api/v1/material`. Actual code uses `MaterialType` enum (closed set) with `<select>` dropdown and `MaterialType::from_abbreviation()` in `filament.rs` lines 316–395. Backend supports `list_materials()` but frontend never uses it. This is a valid alternative design (cleaner enum validation) but contradicts the spec. **ACTION: Clarify if enum-based approach is intentional (in design doc) or if datalist implementation is still pending.**
 
-4. **[sort-spools-by-color-delta]** ✓ IMPLEMENTED — `sorted()` closure in `spool.rs` lines 105–130 correctly computes `min_delta()` for each spool and sorts ascending by delta when `color_level != "off"`. Includes `hex_to_rgba()` and `color_distance()` calls. **NOTE: Works with CIEDE2000-only until alternative-color-distance is completed.**
+4. **[sort-spools-by-color-delta]** ✓ IMPLEMENTED — `sorted()` closure in `spool.rs` computes `min_delta()` for each spool and sorts ascending by delta when `color_level != "off"`. Uses the selected algorithm from context.
 
-5. **[validate-location-required-spool]** ✓ BONUS IMPLEMENTATION — Not yet a formal spec, but frontend validation already exists in `SpoolCreate` (line 489) and `SpoolEdit` (line 646): checks `if location_id.get().is_none()` and sets error "Location is required." Forms prevent submission without location. **ACTION: Consider archiving or formalizing as spec if feature is stable.**
+5. **[validate-location-required-spool]** ✓ BONUS IMPLEMENTATION — Not yet a formal spec, but frontend validation already exists in `SpoolCreate` and `SpoolEdit`. **ACTION: Consider archiving or formalizing as spec if feature is stable.**
 
 ### Enhancements
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
 - [ ] use locale to format date and time. fall back to what is configured in settings. add a setting for date / time format
 - [x] rename "filter" to "search"
 - [ ] table headers contain filter button (partial: Color column header activates color picker filter)
-- [ ] Manual verify `remove-time-display`: detail panel shows date-only and form retains `YYYY-MM-DD` semantics
+- [x] Manual verify `remove-time-display`: detail panel shows date-only and form retains `YYYY-MM-DD` semantics
 - [ ] Manual verify `format-currency-date-numbers-intl`: locale formatting is active for dates/weights/density in browser rendering
 - [ ] move Filament.net_weight to spool.net_weight
 - [ ] add delete buttons wherever edit buttons are
@@ -54,3 +53,5 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [ ] take surface finish into account for color search
 - [ ] add material column in spools. table head links to a filter (drop down) to select materials to display
 - [ ] make the threshold values configurable per calculation algorithm (in settings)
+- [ ] upgrade crate versions
+- [ ] spool price is not shown / can't be set. calculate the price per lokales weight unit and display it in the spools table

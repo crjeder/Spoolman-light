@@ -34,7 +34,7 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [ ] table headers contain filter button (partial: Color column header activates color picker filter)
 - [x] Manual verify `remove-time-display`: detail panel shows date-only and form retains `YYYY-MM-DD` semantics
 - [ ] Manual verify `format-currency-date-numbers-intl`: locale formatting is active for dates/weights/density in browser rendering
-- [ ] move Filament.net_weight to spool.net_weight
+- [x] move Filament.net_weight to spool.net_weight
 - [ ] add delete buttons wherever edit buttons are
 - ~~remove "remaining %"~~
 - [x] location must not be empty or "none"
@@ -50,12 +50,12 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] sort spools according to delta when a color is selected
 - [x] implement alternative color distance calculation oklab (or din99d). make them configurable in settings (oklab crate)#
 - [ ] add material column in spools. table head links to a filter (drop down) to select materials to display
-- [ ] make the threshold values configurable per calculation algorithm (in settings)
+- [x] make the threshold values configurable per calculation algorithm (in settings)
 - [ ] upgrade crate versions
 - [ ] spool price is not shown / can't be set. calculate the price per lokales weight unit and display it in the spools table
-- [ ] account for transparent and mate / glossy finishes in color search: multiply color hsv by: 
-{
-  "matte_modifier": {"s": 0.85, "v": 1.10},
-  "gloss_modifier": {"s": 1.15, "v": 0.95},
-  "translucent_modifier": {"s": 0.90, "v": 1.20}
-}
+- [ ] account for transparent and mate / glossy finishes in color search
+- [ ] https://filamentcolors.xyz/ and / or spoolmandb lookup
+- [ ] remove the spool id from table. make link to details to the name
+- [ ] replace the edit and delete buttons text with icons. add a view button
+- [ ] in spool details: link the filament name to the corresponding filament
+- [ ] filament edit: add spoolmamdb search

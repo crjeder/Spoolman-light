@@ -1,0 +1,389 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]: Spoolman
+    - list [ref=e5]:
+      - listitem [ref=e6]:
+        - link "Spools" [ref=e7] [cursor=pointer]:
+          - /url: /spools
+      - listitem [ref=e8]:
+        - link "Filaments" [ref=e9] [cursor=pointer]:
+          - /url: /filaments
+      - listitem [ref=e10]:
+        - link "Locations" [ref=e11] [cursor=pointer]:
+          - /url: /locations
+      - listitem [ref=e12]:
+        - link "Settings" [ref=e13] [cursor=pointer]:
+          - /url: /settings
+      - listitem [ref=e14]:
+        - link "Help" [ref=e15] [cursor=pointer]:
+          - /url: /help
+    - generic [ref=e16]:
+      - button "☾ Dark" [ref=e17] [cursor=pointer]
+      - generic [ref=e18]: v0.1.0
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - heading "Spools" [level=1] [ref=e22]
+        - generic [ref=e23]:
+          - textbox "Search…" [ref=e25]
+          - generic [ref=e26]:
+            - checkbox "Show archived" [ref=e27]
+            - text: Show archived
+          - link "+ New Spool" [ref=e28] [cursor=pointer]:
+            - /url: /spools/new
+      - table [ref=e29]:
+        - rowgroup [ref=e30]:
+          - row "ID Filament Color Off Remaining (g) Location Registered ↓ Actions" [ref=e31]:
+            - columnheader "ID" [ref=e32]:
+              - button "ID" [ref=e33] [cursor=pointer]
+            - columnheader "Filament" [ref=e34]:
+              - button "Filament" [ref=e35] [cursor=pointer]
+            - columnheader "Color Off" [ref=e36]:
+              - button "Color" [ref=e37] [cursor=pointer]
+              - combobox [ref=e38]:
+                - option "Off" [selected]
+                - option "Fine"
+                - option "Medium"
+                - option "Coarse"
+            - columnheader "Remaining (g)" [ref=e39]:
+              - button "Remaining (g)" [ref=e40] [cursor=pointer]
+            - columnheader "Location" [ref=e41]:
+              - button "Location" [ref=e42] [cursor=pointer]
+            - columnheader "Registered ↓" [ref=e43]:
+              - button "Registered ↓" [ref=e44] [cursor=pointer]
+            - columnheader "Actions" [ref=e45]
+        - rowgroup [ref=e46]:
+          - row "2150 Overture ABS Navy 680 g 3015 15.09.2025 Edit Delete" [ref=e47]:
+            - cell "2150" [ref=e48]:
+              - link "2150" [ref=e49] [cursor=pointer]:
+                - /url: /spools/2150
+            - cell "Overture ABS" [ref=e50]
+            - cell "Navy" [ref=e51]: Navy
+            - cell "680 g" [ref=e53]
+            - cell "3015" [ref=e54]
+            - cell "15.09.2025" [ref=e55]
+            - cell "Edit Delete" [ref=e56]:
+              - link "Edit" [ref=e57] [cursor=pointer]:
+                - /url: /spools/2150/edit
+              - button "Delete" [ref=e58] [cursor=pointer]
+          - row "2180 FormFutura HIPS Navy 480 g 3015 15.09.2025 Edit Delete" [ref=e59]:
+            - cell "2180" [ref=e60]:
+              - link "2180" [ref=e61] [cursor=pointer]:
+                - /url: /spools/2180
+            - cell "FormFutura HIPS" [ref=e62]
+            - cell "Navy" [ref=e63]: Navy
+            - cell "480 g" [ref=e65]
+            - cell "3015" [ref=e66]
+            - cell "15.09.2025" [ref=e67]
+            - cell "Edit Delete" [ref=e68]:
+              - link "Edit" [ref=e69] [cursor=pointer]:
+                - /url: /spools/2180/edit
+              - button "Delete" [ref=e70] [cursor=pointer]
+          - row "2149 3DJake PLA Silk Magenta 585 g 01.09.2025 Edit Delete" [ref=e71]:
+            - cell "2149" [ref=e72]:
+              - link "2149" [ref=e73] [cursor=pointer]:
+                - /url: /spools/2149
+            - cell "3DJake PLA Silk" [ref=e74]
+            - cell "Magenta" [ref=e75]: Magenta
+            - cell "585 g" [ref=e77]
+            - cell [ref=e78]
+            - cell "01.09.2025" [ref=e79]
+            - cell "Edit Delete" [ref=e80]:
+              - link "Edit" [ref=e81] [cursor=pointer]:
+                - /url: /spools/2149/edit
+              - button "Delete" [ref=e82] [cursor=pointer]
+          - row "2179 Sunlu PLA Silk Magenta 385 g 3014 01.09.2025 Edit Delete" [ref=e83]:
+            - cell "2179" [ref=e84]:
+              - link "2179" [ref=e85] [cursor=pointer]:
+                - /url: /spools/2179
+            - cell "Sunlu PLA Silk" [ref=e86]
+            - cell "Magenta" [ref=e87]: Magenta
+            - cell "385 g" [ref=e89]
+            - cell "3014" [ref=e90]
+            - cell "01.09.2025" [ref=e91]
+            - cell "Edit Delete" [ref=e92]:
+              - link "Edit" [ref=e93] [cursor=pointer]:
+                - /url: /spools/2179/edit
+              - button "Delete" [ref=e94] [cursor=pointer]
+          - row "2148 Sunlu ABS Forest Green 1.000 g 3013 15.08.2025 Edit Delete" [ref=e95]:
+            - cell "2148" [ref=e96]:
+              - link "2148" [ref=e97] [cursor=pointer]:
+                - /url: /spools/2148
+            - cell "Sunlu ABS" [ref=e98]
+            - cell "Forest Green" [ref=e99]: Forest Green
+            - cell "1.000 g" [ref=e101]
+            - cell "3013" [ref=e102]
+            - cell "15.08.2025" [ref=e103]
+            - cell "Edit Delete" [ref=e104]:
+              - link "Edit" [ref=e105] [cursor=pointer]:
+                - /url: /spools/2148/edit
+              - button "Delete" [ref=e106] [cursor=pointer]
+          - row "2178 Prusament ASA Forest Green 290 g 3013 15.08.2025 Edit Delete" [ref=e107]:
+            - cell "2178" [ref=e108]:
+              - link "2178" [ref=e109] [cursor=pointer]:
+                - /url: /spools/2178
+            - cell "Prusament ASA" [ref=e110]
+            - cell "Forest Green" [ref=e111]: Forest Green
+            - cell "290 g" [ref=e113]
+            - cell "3013" [ref=e114]
+            - cell "15.08.2025" [ref=e115]
+            - cell "Edit Delete" [ref=e116]:
+              - link "Edit" [ref=e117] [cursor=pointer]:
+                - /url: /spools/2178/edit
+              - button "Delete" [ref=e118] [cursor=pointer]
+          - row "2147 Bambu TPU 95A Tomato/Black 395 g 3012 01.08.2025 Edit Delete" [ref=e119]:
+            - cell "2147" [ref=e120]:
+              - link "2147" [ref=e121] [cursor=pointer]:
+                - /url: /spools/2147
+            - cell "Bambu TPU 95A" [ref=e122]
+            - cell "Tomato/Black" [ref=e123]: Tomato/Black
+            - cell "395 g" [ref=e125]
+            - cell "3012" [ref=e126]
+            - cell "01.08.2025" [ref=e127]
+            - cell "Edit Delete" [ref=e128]:
+              - link "Edit" [ref=e129] [cursor=pointer]:
+                - /url: /spools/2147/edit
+              - button "Delete" [ref=e130] [cursor=pointer]
+          - row "2177 Overture PETG Tomato 195 g 01.08.2025 Edit Delete" [ref=e131]:
+            - cell "2177" [ref=e132]:
+              - link "2177" [ref=e133] [cursor=pointer]:
+                - /url: /spools/2177
+            - cell "Overture PETG" [ref=e134]
+            - cell "Tomato" [ref=e135]: Tomato
+            - cell "195 g" [ref=e137]
+            - cell [ref=e138]
+            - cell "01.08.2025" [ref=e139]
+            - cell "Edit Delete" [ref=e140]:
+              - link "Edit" [ref=e141] [cursor=pointer]:
+                - /url: /spools/2177/edit
+              - button "Delete" [ref=e142] [cursor=pointer]
+          - row "2146 Fiberlogy PLA HD Turquoise 225 g 3011 15.07.2025 Edit Delete" [ref=e143]:
+            - cell "2146" [ref=e144]:
+              - link "2146" [ref=e145] [cursor=pointer]:
+                - /url: /spools/2146
+            - cell "Fiberlogy PLA HD" [ref=e146]
+            - cell "Turquoise" [ref=e147]: Turquoise
+            - cell "225 g" [ref=e149]
+            - cell "3011" [ref=e150]
+            - cell "15.07.2025" [ref=e151]
+            - cell "Edit Delete" [ref=e152]:
+              - link "Edit" [ref=e153] [cursor=pointer]:
+                - /url: /spools/2146/edit
+              - button "Delete" [ref=e154] [cursor=pointer]
+          - row "2145 ColorFabb PETG HT Tan 180 g 3010 01.07.2025 Edit Delete" [ref=e155]:
+            - cell "2145" [ref=e156]:
+              - link "2145" [ref=e157] [cursor=pointer]:
+                - /url: /spools/2145
+            - cell "ColorFabb PETG HT" [ref=e158]
+            - cell "Tan" [ref=e159]: Tan
+            - cell "180 g" [ref=e161]
+            - cell "3010" [ref=e162]
+            - cell "01.07.2025" [ref=e163]
+            - cell "Edit Delete" [ref=e164]:
+              - link "Edit" [ref=e165] [cursor=pointer]:
+                - /url: /spools/2145/edit
+              - button "Delete" [ref=e166] [cursor=pointer]
+          - row "2175 3DJake PETG CF Tan 1.000 g 3010 01.07.2025 Edit Delete" [ref=e167]:
+            - cell "2175" [ref=e168]:
+              - link "2175" [ref=e169] [cursor=pointer]:
+                - /url: /spools/2175
+            - cell "3DJake PETG CF" [ref=e170]
+            - cell "Tan" [ref=e171]: Tan
+            - cell "1.000 g" [ref=e173]
+            - cell "3010" [ref=e174]
+            - cell "01.07.2025" [ref=e175]
+            - cell "Edit Delete" [ref=e176]:
+              - link "Edit" [ref=e177] [cursor=pointer]:
+                - /url: /spools/2175/edit
+              - button "Delete" [ref=e178] [cursor=pointer]
+          - row "2144 Polymaker ASA Indigo 885 g 3009 15.06.2025 Edit Delete" [ref=e179]:
+            - cell "2144" [ref=e180]:
+              - link "2144" [ref=e181] [cursor=pointer]:
+                - /url: /spools/2144
+            - cell "Polymaker ASA" [ref=e182]
+            - cell "Indigo" [ref=e183]: Indigo
+            - cell "885 g" [ref=e185]
+            - cell "3009" [ref=e186]
+            - cell "15.06.2025" [ref=e187]
+            - cell "Edit Delete" [ref=e188]:
+              - link "Edit" [ref=e189] [cursor=pointer]:
+                - /url: /spools/2144/edit
+              - button "Delete" [ref=e190] [cursor=pointer]
+          - row "2174 Fillamentum CPE Indigo 685 g 3009 15.06.2025 Edit Delete" [ref=e191]:
+            - cell "2174" [ref=e192]:
+              - link "2174" [ref=e193] [cursor=pointer]:
+                - /url: /spools/2174
+            - cell "Fillamentum CPE" [ref=e194]
+            - cell "Indigo" [ref=e195]: Indigo
+            - cell "685 g" [ref=e197]
+            - cell "3009" [ref=e198]
+            - cell "15.06.2025" [ref=e199]
+            - cell "Edit Delete" [ref=e200]:
+              - link "Edit" [ref=e201] [cursor=pointer]:
+                - /url: /spools/2174/edit
+              - button "Delete" [ref=e202] [cursor=pointer]
+          - row "2173 Polymaker PLA Matte Dark Red/Forest Green 590 g 3008 01.06.2025 Edit Delete" [ref=e203]:
+            - cell "2173" [ref=e204]:
+              - link "2173" [ref=e205] [cursor=pointer]:
+                - /url: /spools/2173
+            - cell "Polymaker PLA Matte" [ref=e206]
+            - cell "Dark Red/Forest Green" [ref=e207]: Dark Red/Forest Green
+            - cell "590 g" [ref=e209]
+            - cell "3008" [ref=e210]
+            - cell "01.06.2025" [ref=e211]
+            - cell "Edit Delete" [ref=e212]:
+              - link "Edit" [ref=e213] [cursor=pointer]:
+                - /url: /spools/2173/edit
+              - button "Delete" [ref=e214] [cursor=pointer]
+          - row "2142 Prusament PLA Galaxy Dark Teal 695 g 20.05.2025 Edit Delete" [ref=e215]:
+            - cell "2142" [ref=e216]:
+              - link "2142" [ref=e217] [cursor=pointer]:
+                - /url: /spools/2142
+            - cell "Prusament PLA Galaxy" [ref=e218]
+            - cell "Dark Teal" [ref=e219]: Dark Teal
+            - cell "695 g" [ref=e221]
+            - cell [ref=e222]
+            - cell "20.05.2025" [ref=e223]
+            - cell "Edit Delete" [ref=e224]:
+              - link "Edit" [ref=e225] [cursor=pointer]:
+                - /url: /spools/2142/edit
+              - button "Delete" [ref=e226] [cursor=pointer]
+          - row "2172 eSUN PLA Silk Dark Teal 495 g 3007 20.05.2025 Edit Delete" [ref=e227]:
+            - cell "2172" [ref=e228]:
+              - link "2172" [ref=e229] [cursor=pointer]:
+                - /url: /spools/2172
+            - cell "eSUN PLA Silk" [ref=e230]
+            - cell "Dark Teal" [ref=e231]: Dark Teal
+            - cell "495 g" [ref=e233]
+            - cell "3007" [ref=e234]
+            - cell "20.05.2025" [ref=e235]
+            - cell "Edit Delete" [ref=e236]:
+              - link "Edit" [ref=e237] [cursor=pointer]:
+                - /url: /spools/2172/edit
+              - button "Delete" [ref=e238] [cursor=pointer]
+          - row "2141 Bambu PETG HF Deep Pink 450 g 3006 10.05.2025 Edit Delete" [ref=e239]:
+            - cell "2141" [ref=e240]:
+              - link "2141" [ref=e241] [cursor=pointer]:
+                - /url: /spools/2141
+            - cell "Bambu PETG HF" [ref=e242]
+            - cell "Deep Pink" [ref=e243]: Deep Pink
+            - cell "450 g" [ref=e245]
+            - cell "3006" [ref=e246]
+            - cell "10.05.2025" [ref=e247]
+            - cell "Edit Delete" [ref=e248]:
+              - link "Edit" [ref=e249] [cursor=pointer]:
+                - /url: /spools/2141/edit
+              - button "Delete" [ref=e250] [cursor=pointer]
+          - row "2171 Bambu ABS Deep Pink 300 g 3006 10.05.2025 Edit Delete" [ref=e251]:
+            - cell "2171" [ref=e252]:
+              - link "2171" [ref=e253] [cursor=pointer]:
+                - /url: /spools/2171
+            - cell "Bambu ABS" [ref=e254]
+            - cell "Deep Pink" [ref=e255]: Deep Pink
+            - cell "300 g" [ref=e257]
+            - cell "3006" [ref=e258]
+            - cell "10.05.2025" [ref=e259]
+            - cell "Edit Delete" [ref=e260]:
+              - link "Edit" [ref=e261] [cursor=pointer]:
+                - /url: /spools/2171/edit
+              - button "Delete" [ref=e262] [cursor=pointer]
+          - row "2140 FormFutura HIPS Sky Blue 480 g 3005 01.05.2025 Edit Delete" [ref=e263]:
+            - cell "2140" [ref=e264]:
+              - link "2140" [ref=e265] [cursor=pointer]:
+                - /url: /spools/2140
+            - cell "FormFutura HIPS" [ref=e266]
+            - cell "Sky Blue" [ref=e267]: Sky Blue
+            - cell "480 g" [ref=e269]
+            - cell "3005" [ref=e270]
+            - cell "01.05.2025" [ref=e271]
+            - cell "Edit Delete" [ref=e272]:
+              - link "Edit" [ref=e273] [cursor=pointer]:
+                - /url: /spools/2140/edit
+              - button "Delete" [ref=e274] [cursor=pointer]
+          - row "2170 Fiberlogy ASA Sky Blue 280 g 01.05.2025 Edit Delete" [ref=e275]:
+            - cell "2170" [ref=e276]:
+              - link "2170" [ref=e277] [cursor=pointer]:
+                - /url: /spools/2170
+            - cell "Fiberlogy ASA" [ref=e278]
+            - cell "Sky Blue" [ref=e279]: Sky Blue
+            - cell "280 g" [ref=e281]
+            - cell [ref=e282]
+            - cell "01.05.2025" [ref=e283]
+            - cell "Edit Delete" [ref=e284]:
+              - link "Edit" [ref=e285] [cursor=pointer]:
+                - /url: /spools/2170/edit
+              - button "Delete" [ref=e286] [cursor=pointer]
+          - row "2200 3DJake PLA CF Sky Blue 880 g 3005 01.05.2025 Edit Delete" [ref=e287]:
+            - cell "2200" [ref=e288]:
+              - link "2200" [ref=e289] [cursor=pointer]:
+                - /url: /spools/2200
+            - cell "3DJake PLA CF" [ref=e290]
+            - cell "Sky Blue" [ref=e291]: Sky Blue
+            - cell "880 g" [ref=e293]
+            - cell "3005" [ref=e294]
+            - cell "01.05.2025" [ref=e295]
+            - cell "Edit Delete" [ref=e296]:
+              - link "Edit" [ref=e297] [cursor=pointer]:
+                - /url: /spools/2200/edit
+              - button "Delete" [ref=e298] [cursor=pointer]
+          - row "2139 Sunlu PLA Silk Yellow 1.000 g 3004 20.04.2025 Edit Delete" [ref=e299]:
+            - cell "2139" [ref=e300]:
+              - link "2139" [ref=e301] [cursor=pointer]:
+                - /url: /spools/2139
+            - cell "Sunlu PLA Silk" [ref=e302]
+            - cell "Yellow" [ref=e303]: Yellow
+            - cell "1.000 g" [ref=e305]
+            - cell "3004" [ref=e306]
+            - cell "20.04.2025" [ref=e307]
+            - cell "Edit Delete" [ref=e308]:
+              - link "Edit" [ref=e309] [cursor=pointer]:
+                - /url: /spools/2139/edit
+              - button "Delete" [ref=e310] [cursor=pointer]
+          - row "2169 ColorFabb PLA Economy Yellow 185 g 3004 20.04.2025 Edit Delete" [ref=e311]:
+            - cell "2169" [ref=e312]:
+              - link "2169" [ref=e313] [cursor=pointer]:
+                - /url: /spools/2169
+            - cell "ColorFabb PLA Economy" [ref=e314]
+            - cell "Yellow" [ref=e315]: Yellow
+            - cell "185 g" [ref=e317]
+            - cell "3004" [ref=e318]
+            - cell "20.04.2025" [ref=e319]
+            - cell "Edit Delete" [ref=e320]:
+              - link "Edit" [ref=e321] [cursor=pointer]:
+                - /url: /spools/2169/edit
+              - button "Delete" [ref=e322] [cursor=pointer]
+          - row "2199 Fiberlogy PETG CF Yellow/Indigo 785 g 3004 20.04.2025 Edit Delete" [ref=e323]:
+            - cell "2199" [ref=e324]:
+              - link "2199" [ref=e325] [cursor=pointer]:
+                - /url: /spools/2199
+            - cell "Fiberlogy PETG CF" [ref=e326]
+            - cell "Yellow/Indigo" [ref=e327]: Yellow/Indigo
+            - cell "785 g" [ref=e329]
+            - cell "3004" [ref=e330]
+            - cell "20.04.2025" [ref=e331]
+            - cell "Edit Delete" [ref=e332]:
+              - link "Edit" [ref=e333] [cursor=pointer]:
+                - /url: /spools/2199/edit
+              - button "Delete" [ref=e334] [cursor=pointer]
+          - row "2138 Prusament ASA Dark Gray 290 g 3003 10.04.2025 Edit Delete" [ref=e335]:
+            - cell "2138" [ref=e336]:
+              - link "2138" [ref=e337] [cursor=pointer]:
+                - /url: /spools/2138
+            - cell "Prusament ASA" [ref=e338]
+            - cell "Dark Gray" [ref=e339]: Dark Gray
+            - cell "290 g" [ref=e341]
+            - cell "3003" [ref=e342]
+            - cell "10.04.2025" [ref=e343]
+            - cell "Edit Delete" [ref=e344]:
+              - link "Edit" [ref=e345] [cursor=pointer]:
+                - /url: /spools/2138/edit
+              - button "Delete" [ref=e346] [cursor=pointer]
+      - generic [ref=e347]:
+        - button "← Prev" [disabled] [ref=e348]
+        - generic [ref=e349]: Page 1 / 8
+        - button "Next →" [ref=e350] [cursor=pointer]
+        - combobox [ref=e351]:
+          - option "10 / page"
+          - option "25 / page" [selected]
+          - option "50 / page"
+          - option "100 / page"

@@ -1,0 +1,43 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]: Spoolman
+    - list [ref=e5]:
+      - listitem [ref=e6]:
+        - link "Spools" [ref=e7] [cursor=pointer]:
+          - /url: /spools
+      - listitem [ref=e8]:
+        - link "Filaments" [ref=e9] [cursor=pointer]:
+          - /url: /filaments
+      - listitem [ref=e10]:
+        - link "Locations" [ref=e11] [cursor=pointer]:
+          - /url: /locations
+      - listitem [ref=e12]:
+        - link "Settings" [ref=e13] [cursor=pointer]:
+          - /url: /settings
+      - listitem [ref=e14]:
+        - link "Help" [ref=e15] [cursor=pointer]:
+          - /url: /help
+    - generic [ref=e16]:
+      - button "☾ Dark" [ref=e17] [cursor=pointer]
+      - generic [ref=e18]: v0.1.0
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - heading "Settings" [level=1] [ref=e21]
+      - paragraph [ref=e32]: Saved.
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - text: Currency symbol
+          - textbox "Currency symbol" [ref=e24]: €
+        - generic [ref=e25]:
+          - checkbox "Same diameter for all filaments" [checked] [ref=e26]
+          - text: Same diameter for all filaments
+        - generic [ref=e27]:
+          - text: Default diameter (mm)
+          - spinbutton "Default diameter (mm)" [ref=e28]: "1.75"
+        - generic [ref=e29]:
+          - text: Color distance algorithm
+          - combobox "Color distance algorithm" [ref=e30]:
+            - option "CIEDE2000 (default)" [selected]
+            - option "OKLab"
+            - option "DIN99d"
+        - button "Save" [active] [ref=e31] [cursor=pointer]

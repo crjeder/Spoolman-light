@@ -9,7 +9,8 @@ use crate::{
         settings::SettingsPage,
         spool::{SpoolCreate, SpoolEdit, SpoolList, SpoolShow},
     },
-    state::{ColorAlgorithm, ColorDistanceAlgorithm, CurrencySymbol, DiameterSettings},
+    state::{ColorAlgorithm, ColorDistanceAlgorithm, ColorThresholds, CurrencySymbol, DiameterSettings},
+    utils::color::default_threshold_for,
 };
 
 #[component]
@@ -34,6 +35,20 @@ pub fn App() -> impl IntoView {
     let color_algo = create_rw_signal(ColorAlgorithm::Ciede2000);
     provide_context(ColorDistanceAlgorithm(color_algo));
 
+    // Provide color search thresholds globally (defaults from hardcoded table).
+    let thresholds = ColorThresholds {
+        ciede2000_same:     create_rw_signal(default_threshold_for("same",     ColorAlgorithm::Ciede2000)),
+        ciede2000_close:    create_rw_signal(default_threshold_for("close",    ColorAlgorithm::Ciede2000)),
+        ciede2000_ballpark: create_rw_signal(default_threshold_for("ballpark", ColorAlgorithm::Ciede2000)),
+        oklab_same:         create_rw_signal(default_threshold_for("same",     ColorAlgorithm::OkLab)),
+        oklab_close:        create_rw_signal(default_threshold_for("close",    ColorAlgorithm::OkLab)),
+        oklab_ballpark:     create_rw_signal(default_threshold_for("ballpark", ColorAlgorithm::OkLab)),
+        din99d_same:        create_rw_signal(default_threshold_for("same",     ColorAlgorithm::Din99d)),
+        din99d_close:       create_rw_signal(default_threshold_for("close",    ColorAlgorithm::Din99d)),
+        din99d_ballpark:    create_rw_signal(default_threshold_for("ballpark", ColorAlgorithm::Din99d)),
+    };
+    provide_context(thresholds);
+
     // Fetch persisted settings and update the diameter + currency signals.
     let settings_res = create_resource(|| (), |_| async { crate::api::fetch_settings().await });
     create_effect(move |_| {
@@ -56,6 +71,22 @@ pub fn App() -> impl IntoView {
                 Some("din99d") => ColorAlgorithm::Din99d,
                 _ => ColorAlgorithm::Ciede2000,
             });
+            // Load persisted threshold overrides (fall back to hardcoded default
+            // when a key is absent).
+            let load_thresh = |key: &str, level: &str, algo: ColorAlgorithm| -> f32 {
+                s.get(key)
+                    .and_then(|v| v.parse().ok())
+                    .unwrap_or_else(|| default_threshold_for(level, algo))
+            };
+            thresholds.ciede2000_same.set(load_thresh("color_threshold_ciede2000_same",     "same",     ColorAlgorithm::Ciede2000));
+            thresholds.ciede2000_close.set(load_thresh("color_threshold_ciede2000_close",   "close",    ColorAlgorithm::Ciede2000));
+            thresholds.ciede2000_ballpark.set(load_thresh("color_threshold_ciede2000_ballpark", "ballpark", ColorAlgorithm::Ciede2000));
+            thresholds.oklab_same.set(load_thresh("color_threshold_oklab_same",             "same",     ColorAlgorithm::OkLab));
+            thresholds.oklab_close.set(load_thresh("color_threshold_oklab_close",           "close",    ColorAlgorithm::OkLab));
+            thresholds.oklab_ballpark.set(load_thresh("color_threshold_oklab_ballpark",     "ballpark", ColorAlgorithm::OkLab));
+            thresholds.din99d_same.set(load_thresh("color_threshold_din99d_same",           "same",     ColorAlgorithm::Din99d));
+            thresholds.din99d_close.set(load_thresh("color_threshold_din99d_close",         "close",    ColorAlgorithm::Din99d));
+            thresholds.din99d_ballpark.set(load_thresh("color_threshold_din99d_ballpark",   "ballpark", ColorAlgorithm::Din99d));
         }
     });
 

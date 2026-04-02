@@ -141,7 +141,8 @@ fn din99d_distance(a: &Rgba, b: &Rgba) -> f32 {
 ///   - `OkLab`: ΔE_ok in [0, ~1]
 ///   - `Din99d`: ΔE_99d in [0, ~100]
 ///
-/// Use `threshold_for` to obtain level-appropriate thresholds per algorithm.
+/// Use `default_threshold_for` to obtain hardcoded defaults, or read the reactive
+/// `ColorThresholds` context for user-configured values.
 pub fn color_distance(a: &Rgba, b: &Rgba, algo: ColorAlgorithm) -> f32 {
     match algo {
         ColorAlgorithm::Ciede2000 => ciede2000_distance(a, b),
@@ -150,10 +151,15 @@ pub fn color_distance(a: &Rgba, b: &Rgba, algo: ColorAlgorithm) -> f32 {
     }
 }
 
-/// Return the numeric threshold for the given search level and algorithm.
+/// Return the hardcoded default threshold for the given search level and
+/// algorithm. Used to seed the `ColorThresholds` context on startup.
 /// Returns `None` for `"off"` or unknown levels.
 /// Levels: `"same"`, `"close"`, `"ballpark"`.
-pub fn threshold_for(level: &str, algo: ColorAlgorithm) -> Option<f32> {
+pub fn default_threshold_for(level: &str, algo: ColorAlgorithm) -> f32 {
+    threshold_for_opt(level, algo).unwrap_or(0.0)
+}
+
+fn threshold_for_opt(level: &str, algo: ColorAlgorithm) -> Option<f32> {
     match level {
         "same" => Some(match algo {
             ColorAlgorithm::Ciede2000 => 10.0,
@@ -242,15 +248,15 @@ mod tests {
         assert!(d > 95.0 && d < 105.0, "expected ~100, got {d}");
     }
 
-    // ── threshold_for sanity checks ─────────────────────────────────────────
+    // ── default_threshold_for sanity checks ────────────────────────────────
 
     #[test]
-    fn threshold_off_returns_none() {
-        assert_eq!(threshold_for("off", ColorAlgorithm::Ciede2000), None);
+    fn threshold_off_returns_zero() {
+        assert_eq!(default_threshold_for("off", ColorAlgorithm::Ciede2000), 0.0);
     }
 
     #[test]
     fn threshold_same_oklab_is_0_10() {
-        assert_eq!(threshold_for("same", ColorAlgorithm::OkLab), Some(0.10));
+        assert_eq!(default_threshold_for("same", ColorAlgorithm::OkLab), 0.10);
     }
 }

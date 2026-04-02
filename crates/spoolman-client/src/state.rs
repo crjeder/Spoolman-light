@@ -34,6 +34,50 @@ pub fn color_distance_algorithm() -> ColorDistanceAlgorithm {
     expect_context::<ColorDistanceAlgorithm>()
 }
 
+// ── Color search thresholds ────────────────────────────────────────────────────
+
+/// Reactive color search level thresholds provided via Leptos context from `App`.
+/// Each of the nine (algorithm × level) combinations has its own signal so that
+/// updating one threshold is surgical and only the affected reactive computations
+/// re-run.
+#[derive(Clone, Copy)]
+pub struct ColorThresholds {
+    pub ciede2000_same: RwSignal<f32>,
+    pub ciede2000_close: RwSignal<f32>,
+    pub ciede2000_ballpark: RwSignal<f32>,
+    pub oklab_same: RwSignal<f32>,
+    pub oklab_close: RwSignal<f32>,
+    pub oklab_ballpark: RwSignal<f32>,
+    pub din99d_same: RwSignal<f32>,
+    pub din99d_close: RwSignal<f32>,
+    pub din99d_ballpark: RwSignal<f32>,
+}
+
+impl ColorThresholds {
+    /// Return the threshold for `level` ("same" | "close" | "ballpark") and
+    /// `algo`.  Falls back to 0.0 for unrecognised inputs (filter would pass
+    /// nothing, which is safe).
+    pub fn get(&self, level: &str, algo: ColorAlgorithm) -> f32 {
+        match (algo, level) {
+            (ColorAlgorithm::Ciede2000, "same")     => self.ciede2000_same.get(),
+            (ColorAlgorithm::Ciede2000, "close")    => self.ciede2000_close.get(),
+            (ColorAlgorithm::Ciede2000, "ballpark") => self.ciede2000_ballpark.get(),
+            (ColorAlgorithm::OkLab,     "same")     => self.oklab_same.get(),
+            (ColorAlgorithm::OkLab,     "close")    => self.oklab_close.get(),
+            (ColorAlgorithm::OkLab,     "ballpark") => self.oklab_ballpark.get(),
+            (ColorAlgorithm::Din99d,    "same")     => self.din99d_same.get(),
+            (ColorAlgorithm::Din99d,    "close")    => self.din99d_close.get(),
+            (ColorAlgorithm::Din99d,    "ballpark") => self.din99d_ballpark.get(),
+            _ => 0.0,
+        }
+    }
+}
+
+/// Read the `ColorThresholds` from context.
+pub fn color_thresholds() -> ColorThresholds {
+    expect_context::<ColorThresholds>()
+}
+
 // ── Currency symbol ────────────────────────────────────────────────────────────
 
 /// Reactive currency symbol provided via Leptos context from `App`.

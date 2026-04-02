@@ -44,14 +44,18 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] place a little square unicode U+25A0 in the current color if color search is not "off"
 - [ ] extend search to location
 - [ ] place a filter icon in location table head. user can select a location from drop down. filter table to show only entries which match the selected location
-- [ ] color search for multi color is not intuitive
+- [x] color search for multi color is not intuitive
 - [x] pop-up color selector would be better than the selector on top of the page. color should not change when changing the threshold
 - [x] add the hex value to the color display in spool details
 - [x] sort spools according to delta when a color is selected
-- [ ] implement alternative color distance calculation oklab (or din99d). make them configurable in settings (oklab crate)#
-- [ ] handling of alpha value in color search needs to be better
-- [ ] take surface finish into account for color search
+- [x] implement alternative color distance calculation oklab (or din99d). make them configurable in settings (oklab crate)#
 - [ ] add material column in spools. table head links to a filter (drop down) to select materials to display
 - [ ] make the threshold values configurable per calculation algorithm (in settings)
 - [ ] upgrade crate versions
 - [ ] spool price is not shown / can't be set. calculate the price per lokales weight unit and display it in the spools table
+- [ ] account for transparent and mate / glossy finishes in color search: multiply color hsv by: 
+{
+  "matte_modifier": {"s": 0.85, "v": 1.10},
+  "gloss_modifier": {"s": 1.15, "v": 0.95},
+  "translucent_modifier": {"s": 0.90, "v": 1.20}
+}

@@ -10,8 +10,8 @@ use crate::{
     api,
     components::{pagination::Pagination, table::ColHeader},
     format,
-    state::{color_distance_algorithm, use_table_state},
-    utils::color::{color_distance, hex_to_rgba, threshold_for},
+    state::{color_distance_algorithm, color_thresholds, use_table_state},
+    utils::color::{color_distance, hex_to_rgba},
 };
 
 // ── List ───────────────────────────────────────────────────────────────────────
@@ -24,6 +24,7 @@ pub fn SpoolList() -> impl IntoView {
     let color_level = create_rw_signal("off".to_string());
     let popup_open = create_rw_signal(false);
     let cda = color_distance_algorithm();
+    let ct = color_thresholds();
 
     let _visible_cols = create_rw_signal(vec![
         "filament",
@@ -78,13 +79,15 @@ pub fn SpoolList() -> impl IntoView {
                 let color_ok = if level == "off" {
                     true
                 } else {
-                    match (hex_to_rgba(&pick), threshold_for(&level, cda.0.get())) {
-                        (Some(target), Some(thresh)) => s
-                            .spool
-                            .colors
-                            .iter()
-                            .any(|c| color_distance(c, &target, cda.0.get()) <= thresh),
-                        _ => true, // invalid hex or unknown level — don't filter
+                    match hex_to_rgba(&pick) {
+                        Some(target) => {
+                            let thresh = ct.get(&level, cda.0.get());
+                            s.spool
+                                .colors
+                                .iter()
+                                .any(|c| color_distance(c, &target, cda.0.get()) <= thresh)
+                        }
+                        None => true, // invalid hex — don't filter
                     }
                 };
                 text_ok && color_ok

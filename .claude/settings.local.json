@@ -3,7 +3,8 @@
     "allow": [
       "Bash(openspec status:*)",
       "Bash(cargo check:*)",
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:donkie.github.io)"
     ]
   }
 }

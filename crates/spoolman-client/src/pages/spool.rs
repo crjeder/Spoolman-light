@@ -34,6 +34,8 @@ pub fn SpoolList() -> impl IntoView {
         "registered",
     ]);
 
+    let material_filter = create_rw_signal(String::new());
+
     let version = create_rw_signal(0u32);
     let confirm_delete: RwSignal<Option<u32>> = create_rw_signal(None);
 
@@ -41,6 +43,19 @@ pub fn SpoolList() -> impl IntoView {
         move || (show_archived.get(), version.get()),
         |(archived, _)| async move { api::list_spools(archived).await },
     );
+
+    let available_materials = Signal::derive(move || {
+        let mut mats: Vec<String> = spools
+            .get()
+            .and_then(|r| r.ok())
+            .unwrap_or_default()
+            .into_iter()
+            .filter_map(|s| s.filament.material.map(|m| m.abbreviation().to_string()))
+            .collect();
+        mats.sort_unstable();
+        mats.dedup();
+        mats
+    });
 
     let on_delete = move |id: u32| {
         spawn_local(async move {
@@ -55,6 +70,7 @@ pub fn SpoolList() -> impl IntoView {
         let f = ts.filter.get().to_lowercase();
         let pick = color_pick.get();
         let level = color_level.get();
+        let mat = material_filter.get();
         spools
             .get()
             .and_then(|r| r.ok())
@@ -76,6 +92,12 @@ pub fn SpoolList() -> impl IntoView {
                         .unwrap_or("")
                         .to_lowercase()
                         .contains(&f);
+                let material_ok = mat.is_empty()
+                    || s.filament
+                        .material
+                        .as_ref()
+                        .map(|m| m.abbreviation() == mat.as_str())
+                        .unwrap_or(false);
                 let color_ok = if level == "off" {
                     true
                 } else {
@@ -90,7 +112,7 @@ pub fn SpoolList() -> impl IntoView {
                         None => true, // invalid hex — don't filter
                     }
                 };
-                text_ok && color_ok
+                text_ok && material_ok && color_ok
             })
             .collect::<Vec<_>>()
     };
@@ -229,6 +251,23 @@ pub fn SpoolList() -> impl IntoView {
                         <tr>
                             <ColHeader label="ID"       field="id"         sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Filament" field="filament"   sort_field=ts.sort_field sort_asc=ts.sort_asc />
+                            <th class="material-head">
+                                {move || if !material_filter.get().is_empty() {
+                                    view! { "Material \u{25A0}" }.into_view()
+                                } else {
+                                    view! { "Material" }.into_view()
+                                }}
+                                <select class="material-filter-select"
+                                    prop:value=move || material_filter.get()
+                                    on:change=move |ev| material_filter.set(event_target_value(&ev))
+                                >
+                                    <option value="">"All"</option>
+                                    {move || available_materials.get().into_iter().map(|m| {
+                                        let m2 = m.clone();
+                                        view! { <option value=m>{m2}</option> }
+                                    }).collect_view()}
+                                </select>
+                            </th>
                             <th class="color-head">
                                 <span class="color-head-label" role="button" tabindex="0"
                                     on:click=move |_| popup_open.update(|v| *v = !*v)
@@ -292,6 +331,7 @@ pub fn SpoolList() -> impl IntoView {
                     <tbody>
                         {move || page_items().into_iter().map(|sr| {
                             let id = sr.spool.id;
+                            let filament_id = sr.filament.id;
                             let name = sr.filament.display_name();
                             let colors = if sr.spool.colors.is_empty() {
                                 vec![Rgba { r: 200, g: 200, b: 200, a: 255 }]
@@ -299,10 +339,12 @@ pub fn SpoolList() -> impl IntoView {
                                 sr.spool.colors.clone()
                             };
                             let rem = sr.remaining_filament.map(format::format_weight).unwrap_or_default();
+                            let material = sr.filament.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default();
                             view! {
                                 <tr class=if sr.spool.archived { "archived" } else { "" }>
                                     <td class="num"><a href=format!("/spools/{id}")>{id}</a></td>
-                                    <td>{name}</td>
+                                    <td><a href=format!("/filaments/{filament_id}")>{name}</a></td>
+                                    <td>{material}</td>
                                     <td>
                                         {colors.into_iter().map(|c| view! {
                                             <span class="color-swatch"
@@ -418,7 +460,7 @@ pub fn SpoolShow() -> impl IntoView {
                     }
                     Ok(sr) => view! {
                         <dl class="detail-grid">
-                            <dt>"Filament"</dt><dd>{sr.filament.display_name()}</dd>
+                            <dt>"Filament"</dt><dd><a href=format!("/filaments/{}", sr.filament.id)>{sr.filament.display_name()}</a></dd>
                             <dt>"Location"</dt><dd>{
                                 move || match sr.spool.location_id {
                                     None => "—".to_string(),

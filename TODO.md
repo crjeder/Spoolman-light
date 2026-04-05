@@ -54,8 +54,7 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [ ] upgrade crate versions
 - [ ] spool price is not shown / can't be set. calculate the price per lokales weight unit and display it in the spools table
 - [ ] account for transparent and mate / glossy finishes in color search
-- [ ] https://filamentcolors.xyz/ and / or spoolmandb lookup
 - [ ] remove the spool id from table. make link to details to the name
 - [ ] replace the edit and delete buttons text with icons. add a view button
 - [ ] in spool details: link the filament name to the corresponding filament
-- [ ] filament edit: add spoolmamdb search
+- [ ] filament edit: add https://filamentcolors.xyz/ and / or spoolmandb  search

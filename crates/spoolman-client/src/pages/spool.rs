@@ -249,7 +249,6 @@ pub fn SpoolList() -> impl IntoView {
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <ColHeader label="ID"       field="id"         sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Filament" field="filament"   sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th class="material-head">
                                 {move || if !material_filter.get().is_empty() {
@@ -342,7 +341,6 @@ pub fn SpoolList() -> impl IntoView {
                             let material = sr.filament.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default();
                             view! {
                                 <tr class=if sr.spool.archived { "archived" } else { "" }>
-                                    <td class="num"><a href=format!("/spools/{id}")>{id}</a></td>
                                     <td><a href=format!("/filaments/{filament_id}")>{name}</a></td>
                                     <td>{material}</td>
                                     <td>

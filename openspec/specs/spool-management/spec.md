@@ -97,7 +97,7 @@ Each spool SHALL be addressable at a stable URL suitable for use as the OpenTag3
 - **THEN** the Online Data URL field contains "<host>/api/v1/spool/12345"
 
 ### Requirement: Spool list UI
-The frontend SHALL provide a spool list page with sortable columns, server-side filtering, pagination, and column visibility toggle. Archived spools SHALL be togglable via a button. The spool list page SHALL be the default landing page of the application, rendered at both `"/"` and `"/spools"`. The `"/"` route SHALL render the spool list component directly without a redirect. The Spools navigation link SHALL appear active when the current path is either `"/"` or `"/spools"`. The page SHALL include a text search input labeled "Search" (placeholder "Search…") that filters rows client-side. A clear ("×") button SHALL appear inside the search input when it has a value; clicking it SHALL empty the input and reset the list.
+The frontend SHALL provide a spool list page with sortable columns, server-side filtering, pagination, and column visibility toggle. Archived spools SHALL be togglable via a button. The spool list page SHALL be the default landing page of the application, rendered at both `"/"` and `"/spools"`. The `"/"` route SHALL render the spool list component directly without a redirect. The Spools navigation link SHALL appear active when the current path is either `"/"` or `"/spools"`. The page SHALL include a text search input labeled "Search" (placeholder "Search…") that filters rows client-side. A clear ("×") button SHALL appear inside the search input when it has a value; clicking it SHALL empty the input and reset the list. The table SHALL NOT include a column displaying the internal spool ID.
 
 #### Scenario: Default list shows active spools
 - **WHEN** the spool list page loads
@@ -130,6 +130,10 @@ The frontend SHALL provide a spool list page with sortable columns, server-side 
 #### Scenario: Clear button resets list
 - **WHEN** the user clicks the "×" clear button
 - **THEN** the search input is emptied and all spools are shown
+
+#### Scenario: ID column not shown in spool list
+- **WHEN** the spool list table is rendered
+- **THEN** no column with the internal spool ID is present in the table
 
 ### Requirement: Date-only timestamp display
 The frontend SHALL display all spool timestamps (`registered`, `first_used`, `last_used`) as date-only values in `YYYY-MM-DD` format. Time-of-day SHALL NOT be shown anywhere in the spool UI.

@@ -49,12 +49,12 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] add the hex value to the color display in spool details
 - [x] sort spools according to delta when a color is selected
 - [x] implement alternative color distance calculation oklab (or din99d). make them configurable in settings (oklab crate)#
-- [ ] add material column in spools. table head links to a filter (drop down) to select materials to display
+- [x] add material column in spools. table head links to a filter (drop down) to select materials to display
 - [x] make the threshold values configurable per calculation algorithm (in settings)
-- [ ] upgrade crate versions
+- [x] upgrade crate versions
 - [ ] spool price is not shown / can't be set. calculate the price per lokales weight unit and display it in the spools table
 - [ ] account for transparent and mate / glossy finishes in color search
-- [ ] remove the spool id from table. make link to details to the name
+- [ ] remove the spool id from table.
 - [ ] replace the edit and delete buttons text with icons. add a view button
-- [ ] in spool details: link the filament name to the corresponding filament
+- [x] in spool details: link the filament name to the corresponding filament
 - [ ] filament edit: add https://filamentcolors.xyz/ and / or spoolmandb  search

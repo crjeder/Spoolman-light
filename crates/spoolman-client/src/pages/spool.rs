@@ -356,20 +356,28 @@ pub fn SpoolList() -> impl IntoView {
                                     <td>{sr.spool.location_id.map(|l| l.to_string()).unwrap_or_default()}</td>
                                     <td>{format::format_date(sr.spool.registered)}</td>
                                     <td class="actions">
-                                        <a href=format!("/spools/{id}/edit")>"Edit"</a>
+                                        <a href=format!("/spools/{id}") class="btn btn-icon" title="View">"\u{1F441}"</a>
+                                        " "
+                                        <a href=format!("/spools/{id}/edit") class="btn btn-icon" title="Edit">"\u{270F}"</a>
                                         " "
                                         {move || if confirm_delete.get() == Some(id) {
                                             view! {
-                                                <button class="btn btn-danger "
-                                                    on:click=move |_| on_delete(id)>"Sure?"</button>
+                                                <button class="btn btn-icon btn-danger"
+                                                    on:click=move |_| on_delete(id)
+                                                    title="Confirm delete"
+                                                >"\u{1F5D1}"</button>
                                                 " "
-                                                <button class="btn "
-                                                    on:click=move |_| confirm_delete.set(None)>"Cancel"</button>
+                                                <button class="btn btn-icon"
+                                                    on:click=move |_| confirm_delete.set(None)
+                                                    title="Cancel"
+                                                >"\u{2715}"</button>
                                             }.into_view()
                                         } else {
                                             view! {
-                                                <button class="btn btn-danger "
-                                                    on:click=move |_| confirm_delete.set(Some(id))>"Delete"</button>
+                                                <button class="btn btn-icon btn-danger"
+                                                    on:click=move |_| confirm_delete.set(Some(id))
+                                                    title="Delete"
+                                                >"\u{1F5D1}"</button>
                                             }.into_view()
                                         }}
                                     </td>

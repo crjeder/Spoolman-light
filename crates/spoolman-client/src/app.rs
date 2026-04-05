@@ -93,7 +93,7 @@ pub fn App() -> impl IntoView {
     view! {
         <Router>
             <crate::components::layout::Layout>
-                <Routes>
+                <Routes fallback=|| view! { <p>"404 Not Found"</p> }>
                     <Route path="/"              view=SpoolList />
                     <Route path="/spools"        view=SpoolList />
                     <Route path="/spools/new"    view=SpoolCreate />

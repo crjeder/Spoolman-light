@@ -411,7 +411,7 @@ pub fn SpoolShow() -> impl IntoView {
                     Err(e) => {
                         if e.status == 404 {
                             nav_err.with_value(|f| f("/spools", Default::default()));
-                            view! { <></> }.into_view()
+                            ().into_view()
                         } else {
                             view! { <p class="error">{e.to_string()}</p> }.into_view()
                         }

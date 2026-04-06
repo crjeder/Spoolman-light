@@ -32,6 +32,6 @@
 ## 6. Verification
 
 - [x] 6.1 Run `cargo check -p spoolman-types -p spoolman-server` and confirm zero errors
-- [ ] 6.2 Manually verify: create a spool with a price, confirm `price_per_gram` appears in the API response
+- [x] 6.2 Manually verify: create a spool with a price, confirm `price_per_gram` appears in the API response
 - [ ] 6.3 Manually verify: the `Price/g` column renders correctly in the spool list and is sortable
 - [ ] 6.4 Manually verify: existing spools without a price show `—` in the `Price/g` column

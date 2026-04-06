@@ -10,6 +10,8 @@ pub struct SpoolResponse {
     pub used_weight: f32,
     /// remaining_filament = spool.net_weight - used_weight (None if net_weight unknown)
     pub remaining_filament: Option<f32>,
+    /// price_per_gram = spool.price / net_weight (fallback: initial_weight); None when price absent
+    pub price_per_gram: Option<f32>,
     /// The associated filament (embedded for convenience).
     pub filament: Filament,
 }
@@ -18,11 +20,16 @@ impl SpoolResponse {
     pub fn new(spool: Spool, filament: Filament) -> Self {
         let used_weight = spool.initial_weight - spool.current_weight;
         let remaining_filament = spool.net_weight.map(|nw| nw - used_weight);
+        let price_per_gram = spool.price.map(|p| {
+            let denominator = spool.net_weight.unwrap_or(spool.initial_weight);
+            p / denominator
+        });
         Self {
             spool,
             filament,
             used_weight,
             remaining_filament,
+            price_per_gram,
         }
     }
 }

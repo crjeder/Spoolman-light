@@ -21,7 +21,7 @@ Items where the actual code does NOT match the OpenSpec specification:
 
 2. **[alternative-color-distance]** ✓ IMPLEMENTED — `ColorAlgorithm` enum (Ciede2000/OkLab/Din99d), `color_distance(a, b, algo)` dispatcher, per-algorithm thresholds via `threshold_for()`, OKLab via `oklab` crate, DIN99d via rotation-matrix formula. Settings page exposes algorithm selector; choice persisted via `put_setting` and provided globally via `ColorDistanceAlgorithm` Leptos context. Filter and sort both use the reactive context signal. Change archived to `openspec/changes/archive/2026-04-02-alternative-color-distance/`.
 
-3. **[add-filament-type]** ⚠️ DESIGN MISMATCH — Spec requires free-text Material input with `<datalist>` autocomplete fed by `GET /api/v1/material`. Actual code uses `MaterialType` enum (closed set) with `<select>` dropdown and `MaterialType::from_abbreviation()` in `filament.rs` lines 316–395. Backend supports `list_materials()` but frontend never uses it. This is a valid alternative design (cleaner enum validation) but contradicts the spec. **ACTION: Clarify if enum-based approach is intentional (in design doc) or if datalist implementation is still pending.**
+3. **[add-filament-type]** ✓ IMPLEMENTED — `MaterialType` enum in `spoolman-types`; `<select>` on filament create/edit driven by `MaterialType::all_known()`; material filter on filament list; spool text filter matches `abbreviation()`. Design doc explicitly chose `<select>` over `<datalist>` to enforce a closed vocabulary.
 
 4. **[sort-spools-by-color-delta]** ✓ IMPLEMENTED — `sorted()` closure in `spool.rs` computes `min_delta()` for each spool and sorts ascending by delta when `color_level != "off"`. Uses the selected algorithm from context.
 
@@ -52,9 +52,9 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] add material column in spools. table head links to a filter (drop down) to select materials to display
 - [x] make the threshold values configurable per calculation algorithm (in settings)
 - [x] upgrade crate versions
-- [ ] spool price is not shown / can't be set. calculate the price per lokales weight unit and display it in the spools table
+- [ ] spool price is not shown / can't be set. calculate the price per locale weight unit and display it in the spools table
 - [ ] account for transparent and mate / glossy finishes in color search
-- [ ] remove the spool id from table.
-- [ ] replace the edit and delete buttons text with icons. add a view button
+- [x] remove the spool id from table.
+- [x] replace the edit and delete buttons text with icons. add a view button
 - [x] in spool details: link the filament name to the corresponding filament
 - [ ] filament edit: add https://filamentcolors.xyz/ and / or spoolmandb  search

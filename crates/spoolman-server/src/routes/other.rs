@@ -14,7 +14,7 @@ pub fn router() -> Router<JsonStore> {
         .route("/material", get(list_materials))
         .route("/export", get(export))
         .route("/setting", get(list_settings))
-        .route("/setting/:key", put(put_setting))
+        .route("/setting/{key}", put(put_setting))
 }
 
 async fn info(State(store): State<JsonStore>) -> Json<Value> {

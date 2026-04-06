@@ -159,6 +159,25 @@ The frontend SHALL provide a spool list page with sortable columns, server-side 
 - **WHEN** the spool list table is rendered
 - **THEN** the actions column buttons display only icons (no "Edit", "Delete", or "View" text)
 
+### Requirement: Location required in spool forms
+The spool create and edit forms SHALL require a location to be selected before submission. The submit button SHALL be disabled when no location is selected.
+
+#### Scenario: Submit disabled without location on create
+- **WHEN** the spool create form is open and no location is selected
+- **THEN** the submit button is disabled
+
+#### Scenario: Submit enabled after location selected on create
+- **WHEN** the user selects a location in the spool create form
+- **THEN** the submit button becomes enabled
+
+#### Scenario: Submit disabled without location on edit
+- **WHEN** the spool edit form is open and no location is selected
+- **THEN** the submit button is disabled
+
+#### Scenario: Submit enabled after location selected on edit
+- **WHEN** the user selects a location in the spool edit form
+- **THEN** the submit button becomes enabled
+
 ### Requirement: Date-only timestamp display
 The frontend SHALL display all spool timestamps (`registered`, `first_used`, `last_used`) as date-only values in `YYYY-MM-DD` format. Time-of-day SHALL NOT be shown anywhere in the spool UI.
 

@@ -151,9 +151,9 @@ impl JsonStore {
 
     /// Generate a random u32 ID not already in `existing`.
     fn new_id(existing: &HashSet<u32>) -> u32 {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         loop {
-            let id: u32 = rng.gen_range(1..=u32::MAX);
+            let id: u32 = rng.random_range(1..=u32::MAX);
             if !existing.contains(&id) {
                 return id;
             }

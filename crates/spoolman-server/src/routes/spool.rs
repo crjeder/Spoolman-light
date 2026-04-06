@@ -15,8 +15,8 @@ use crate::{routes::error::Result, store::{JsonStore, SpoolFilter}};
 pub fn router() -> Router<JsonStore> {
     Router::new()
         .route("/", get(list).post(create))
-        .route("/:id", get(show).patch(update).delete(destroy))
-        .route("/:id/clone", post(clone))
+        .route("/{id}", get(show).patch(update).delete(destroy))
+        .route("/{id}/clone", post(clone))
 }
 
 #[derive(Deserialize)]

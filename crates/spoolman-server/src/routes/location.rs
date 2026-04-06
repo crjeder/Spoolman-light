@@ -14,7 +14,7 @@ use crate::{routes::error::Result, store::JsonStore};
 pub fn router() -> Router<JsonStore> {
     Router::new()
         .route("/", get(list).post(create))
-        .route("/:id", get(show).patch(update).delete(destroy))
+        .route("/{id}", get(show).patch(update).delete(destroy))
 }
 
 async fn list(State(store): State<JsonStore>) -> Result<Json<Vec<LocationResponse>>> {

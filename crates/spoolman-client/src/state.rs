@@ -1,6 +1,6 @@
 //! Shared reactive state — table state with localStorage persistence.
 
-use leptos::*;
+use leptos::prelude::*;
 use web_sys::window;
 
 // ── Diameter settings ──────────────────────────────────────────────────────────

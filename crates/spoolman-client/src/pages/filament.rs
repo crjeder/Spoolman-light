@@ -4,8 +4,9 @@ use crate::{
     format,
     state::{diameter_settings, use_table_state},
 };
-use leptos::*;
-use leptos_router::use_params_map;
+use leptos::prelude::*;
+use leptos::task::spawn_local;
+use leptos_router::hooks::use_params_map;
 use spoolman_types::{
     models::MaterialType,
     requests::{CreateFilament, UpdateFilament},
@@ -30,7 +31,8 @@ fn MaterialSelect(value: RwSignal<String>) -> impl IntoView {
                 } else {
                     abbr.clone()
                 };
-                view! { <option value=abbr.clone()>{label}</option> }
+                let abbr2 = abbr.clone();
+                view! { <option value=abbr2>{label}</option> }
             }).collect_view()}
         </select>
     }
@@ -48,13 +50,14 @@ pub fn FilamentList() -> impl IntoView {
     let version = create_rw_signal(0u32);
     let confirm_delete: RwSignal<Option<u32>> = create_rw_signal(None);
 
-    let filaments = create_resource(
-        move || (material_filter.get(), version.get()),
-        |(mat, _)| async move {
+    let filaments = LocalResource::new(move || {
+        let mat = material_filter.get();
+        let _ = version.get();
+        async move {
             let mat_opt = if mat.is_empty() { None } else { Some(mat) };
             api::list_filaments(mat_opt.as_deref()).await
-        },
-    );
+        }
+    });
 
     let on_delete = move |id: u32| {
         spawn_local(async move {
@@ -162,7 +165,8 @@ pub fn FilamentList() -> impl IntoView {
                         <option value="">"All materials"</option>
                         {MaterialType::all_known().iter().map(|m| {
                             let abbr = m.abbreviation().to_string();
-                            view! { <option value=abbr.clone()>{abbr}</option> }
+                            let abbr2 = abbr.clone();
+                            view! { <option value=abbr2>{abbr}</option> }
                         }).collect_view()}
                     </select>
                     <div class="search-input-wrapper">
@@ -214,12 +218,12 @@ pub fn FilamentList() -> impl IntoView {
                                                 " "
                                                 <button class="btn "
                                                     on:click=move |_| confirm_delete.set(None)>"Cancel"</button>
-                                            }.into_view()
+                                            }.into_any()
                                         } else {
                                             view! {
                                                 <button class="btn btn-danger "
                                                     on:click=move |_| confirm_delete.set(Some(id))>"Delete"</button>
-                                            }.into_view()
+                                            }.into_any()
                                         }}
                                     </td>
                                 </tr>
@@ -239,8 +243,8 @@ pub fn FilamentList() -> impl IntoView {
 pub fn FilamentShow() -> impl IntoView {
     let params = use_params_map();
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
-    let filament = create_resource(id, |id| async move { api::get_filament(id).await });
-    let navigate = leptos_router::use_navigate();
+    let filament = LocalResource::new(move || { let id = id(); async move { api::get_filament(id).await } });
+    let navigate = leptos_router::hooks::use_navigate();
     let confirm_delete = create_rw_signal(false);
 
     let nav_err = store_value(navigate.clone());
@@ -263,9 +267,9 @@ pub fn FilamentShow() -> impl IntoView {
                     Err(e) => {
                         if e.status == 404 {
                             nav_err.with_value(|f| f("/filaments", Default::default()));
-                            ().into_view()
+                            ().into_any()
                         } else {
-                            view! { <p class="error">{e.to_string()}</p> }.into_view()
+                            view! { <p class="error">{e.to_string()}</p> }.into_any()
                         }
                     }
                     Ok(f) => view! {
@@ -278,11 +282,11 @@ pub fn FilamentShow() -> impl IntoView {
                                         <button on:click=move |e| on_delete.with_value(|f| f(e)) class="btn btn-danger ">"Sure?"</button>
                                         " "
                                         <button on:click=move |_| confirm_delete.set(false) class="btn ">"Cancel"</button>
-                                    }.into_view()
+                                    }.into_any()
                                 } else {
                                     view! {
                                         <button on:click=move |_| confirm_delete.set(true) class="btn btn-danger ">"Delete"</button>
-                                    }.into_view()
+                                    }.into_any()
                                 }}
                             </div>
                         </div>
@@ -303,7 +307,7 @@ pub fn FilamentShow() -> impl IntoView {
                             <dt>"Spool weight"</dt><dd>{f.spool_weight.map(format::format_weight).unwrap_or_default()}</dd>
                             <dt>"Comment"</dt><dd>{f.comment.clone().unwrap_or_default()}</dd>
                         </dl>
-                    }.into_view(),
+                    }.into_any(),
                 })}
             </Suspense>
         </div>
@@ -314,7 +318,7 @@ pub fn FilamentShow() -> impl IntoView {
 
 #[component]
 pub fn FilamentCreate() -> impl IntoView {
-    let navigate = leptos_router::use_navigate();
+    let navigate = leptos_router::hooks::use_navigate();
     let ds = diameter_settings();
     let manufacturer = create_rw_signal(String::new());
     let material = create_rw_signal(String::new());
@@ -394,8 +398,8 @@ pub fn FilamentCreate() -> impl IntoView {
 pub fn FilamentEdit() -> impl IntoView {
     let params = use_params_map();
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
-    let filament = create_resource(id, |id| async move { api::get_filament(id).await });
-    let navigate = leptos_router::use_navigate();
+    let filament = LocalResource::new(move || { let id = id(); async move { api::get_filament(id).await } });
+    let navigate = leptos_router::hooks::use_navigate();
     let ds = diameter_settings();
 
     let manufacturer = create_rw_signal(String::new());

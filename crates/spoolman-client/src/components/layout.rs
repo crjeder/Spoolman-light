@@ -1,5 +1,6 @@
-use leptos::*;
-use leptos_router::{use_location, A};
+use leptos::prelude::*;
+use leptos_router::components::A;
+use leptos_router::hooks::use_location;
 
 #[component]
 pub fn Layout(children: Children) -> impl IntoView {

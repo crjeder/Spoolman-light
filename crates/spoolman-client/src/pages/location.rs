@@ -1,4 +1,5 @@
-use leptos::*;
+use leptos::prelude::*;
+use leptos::task::spawn_local;
 use spoolman_types::requests::{CreateLocation, UpdateLocation};
 
 use crate::api;
@@ -6,10 +7,10 @@ use crate::api;
 #[component]
 pub fn LocationList() -> impl IntoView {
     let version = create_rw_signal(0u32);
-    let locations = create_resource(
-        move || version.get(),
-        |_| async { api::list_locations().await },
-    );
+    let locations = LocalResource::new(move || {
+        let _ = version.get();
+        async { api::list_locations().await }
+    });
 
     // Inline create form state.
     let new_name = create_rw_signal(String::new());
@@ -91,7 +92,7 @@ pub fn LocationList() -> impl IntoView {
                     </thead>
                     <tbody>
                         {move || locations.get().map(|r| match r {
-                            Err(e) => view! { <tr><td colspan="3" class="error">{e.to_string()}</td></tr> }.into_view(),
+                            Err(e) => view! { <tr><td colspan="3" class="error">{e.to_string()}</td></tr> }.into_any(),
                             Ok(ls) => ls.into_iter().map(|loc| {
                                 let id = loc.location.id;
                                 let name = loc.location.name.clone();
@@ -114,9 +115,9 @@ pub fn LocationList() -> impl IntoView {
                                                             });
                                                         }
                                                     />
-                                                }.into_view()
+                                                }.into_any()
                                             } else {
-                                                view! { <span>{name.clone()}</span> }.into_view()
+                                                view! { <span>{name.clone()}</span> }.into_any()
                                             }}
                                         </td>
                                         <td>{count}</td>
@@ -126,7 +127,7 @@ pub fn LocationList() -> impl IntoView {
                                                     <button class="btn " on:click=on_save_edit>"Save"</button>
                                                     " "
                                                     <button class="btn " on:click=move |_| { editing.set(None); confirm_delete.set(None); }>"Cancel"</button>
-                                                }.into_view()
+                                                }.into_any()
                                             } else if confirm_delete.get() == Some(id) {
                                                 view! {
                                                     <button class="btn btn-danger "
@@ -134,7 +135,7 @@ pub fn LocationList() -> impl IntoView {
                                                     " "
                                                     <button class="btn "
                                                         on:click=move |_| confirm_delete.set(None)>"Cancel"</button>
-                                                }.into_view()
+                                                }.into_any()
                                             } else {
                                                 let n = name_for_actions.clone();
                                                 let delete_disabled = count > 0;
@@ -148,12 +149,12 @@ pub fn LocationList() -> impl IntoView {
                                                     <button class="btn btn-danger "
                                                         disabled=delete_disabled
                                                         on:click=move |_| confirm_delete.set(Some(id))>"Delete"</button>
-                                                }.into_view()
+                                                }.into_any()
                                             }}
                                         </td>
                                     </tr>
                                 }
-                            }).collect_view().into_view(),
+                            }).collect_view().into_any(),
                         })}
                     </tbody>
                 </table>

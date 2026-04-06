@@ -16,7 +16,7 @@ pub fn router() -> Router<JsonStore> {
     Router::new()
         .route("/", get(list).post(create))
         .route("/search", get(search))
-        .route("/:id", get(show).patch(update).delete(destroy))
+        .route("/{id}", get(show).patch(update).delete(destroy))
 }
 
 #[derive(Deserialize)]

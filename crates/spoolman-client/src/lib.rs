@@ -6,7 +6,7 @@ pub mod pages;
 pub mod state;
 pub mod utils;
 
-use leptos::*;
+use leptos::prelude::*;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen(start)]

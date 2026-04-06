@@ -1,4 +1,4 @@
-use leptos::*;
+use leptos::prelude::*;
 
 /// Column header with sort indicator and optional text filter.
 #[component]

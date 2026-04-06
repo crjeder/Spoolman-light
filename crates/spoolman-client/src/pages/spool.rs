@@ -1,6 +1,7 @@
 use chrono::{DateTime, NaiveDate, Utc};
-use leptos::*;
-use leptos_router::{use_navigate, use_params_map};
+use leptos::prelude::*;
+use leptos::task::spawn_local;
+use leptos_router::hooks::{use_navigate, use_params_map};
 use spoolman_types::{
     models::Rgba,
     requests::{CreateSpool, UpdateSpool},
@@ -39,10 +40,11 @@ pub fn SpoolList() -> impl IntoView {
     let version = create_rw_signal(0u32);
     let confirm_delete: RwSignal<Option<u32>> = create_rw_signal(None);
 
-    let spools = create_resource(
-        move || (show_archived.get(), version.get()),
-        |(archived, _)| async move { api::list_spools(archived).await },
-    );
+    let spools = LocalResource::new(move || {
+        let archived = show_archived.get();
+        let _ = version.get();
+        async move { api::list_spools(archived).await }
+    });
 
     let available_materials = Signal::derive(move || {
         let mut mats: Vec<String> = spools
@@ -252,9 +254,9 @@ pub fn SpoolList() -> impl IntoView {
                             <ColHeader label="Filament" field="filament"   sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th class="material-head">
                                 {move || if !material_filter.get().is_empty() {
-                                    view! { "Material \u{25A0}" }.into_view()
+                                    view! { "Material \u{25A0}" }.into_any()
                                 } else {
-                                    view! { "Material" }.into_view()
+                                    view! { "Material" }.into_any()
                                 }}
                                 <select class="material-filter-select"
                                     prop:value=move || material_filter.get()
@@ -282,9 +284,9 @@ pub fn SpoolList() -> impl IntoView {
                                         view! {
                                             "Color "
                                             <span style=format!("color:{color}")>"\u{25A0}"</span>
-                                        }.into_view()
+                                        }.into_any()
                                     } else {
-                                        view! { "Color" }.into_view()
+                                        view! { "Color" }.into_any()
                                     }}
                                 </span>
                                 <select class="color-threshold-select"
@@ -371,14 +373,14 @@ pub fn SpoolList() -> impl IntoView {
                                                     on:click=move |_| confirm_delete.set(None)
                                                     title="Cancel"
                                                 >"\u{2715}"</button>
-                                            }.into_view()
+                                            }.into_any()
                                         } else {
                                             view! {
                                                 <button class="btn btn-icon btn-danger"
                                                     on:click=move |_| confirm_delete.set(Some(id))
                                                     title="Delete"
                                                 >"\u{1F5D1}"</button>
-                                            }.into_view()
+                                            }.into_any()
                                         }}
                                     </td>
                                 </tr>
@@ -398,8 +400,8 @@ pub fn SpoolList() -> impl IntoView {
 pub fn SpoolShow() -> impl IntoView {
     let params = use_params_map();
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
-    let spool = create_resource(id, |id| async move { api::get_spool(id).await });
-    let locations = create_resource(|| (), |_| async { api::list_locations().await });
+    let spool = LocalResource::new(move || { let id = id(); async move { api::get_spool(id).await } });
+    let locations = LocalResource::new(|| async { api::list_locations().await });
     let navigate = use_navigate();
     let confirm_delete = create_rw_signal(false);
 
@@ -446,11 +448,11 @@ pub fn SpoolShow() -> impl IntoView {
                             <button on:click=move |e| on_delete.with_value(|f| f(e)) class="btn btn-danger ">"Yes, delete"</button>
                             " "
                             <button on:click=move |_| confirm_delete.set(false) class="btn ">"Cancel"</button>
-                        }.into_view()
+                        }.into_any()
                     } else {
                         view! {
                             <button on:click=move |_| confirm_delete.set(true) class="btn btn-danger ">"Delete"</button>
-                        }.into_view()
+                        }.into_any()
                     }}
                 </div>
             </div>
@@ -459,9 +461,9 @@ pub fn SpoolShow() -> impl IntoView {
                     Err(e) => {
                         if e.status == 404 {
                             nav_err.with_value(|f| f("/spools", Default::default()));
-                            ().into_view()
+                            ().into_any()
                         } else {
-                            view! { <p class="error">{e.to_string()}</p> }.into_view()
+                            view! { <p class="error">{e.to_string()}</p> }.into_any()
                         }
                     }
                     Ok(sr) => view! {
@@ -498,7 +500,7 @@ pub fn SpoolShow() -> impl IntoView {
                             <dt>"Comment"</dt><dd>{sr.spool.comment.clone().unwrap_or_default()}</dd>
                             <dt>"Archived"</dt><dd>{if sr.spool.archived { "Yes" } else { "No" }}</dd>
                         </dl>
-                    }.into_view(),
+                    }.into_any(),
                 })}
             </Suspense>
         </div>
@@ -510,8 +512,8 @@ pub fn SpoolShow() -> impl IntoView {
 #[component]
 pub fn SpoolCreate() -> impl IntoView {
     let navigate = use_navigate();
-    let filaments = create_resource(|| (), |_| async { api::list_filaments(None).await });
-    let locations = create_resource(|| (), |_| async { api::list_locations().await });
+    let filaments = LocalResource::new(|| async { api::list_filaments(None).await });
+    let locations = LocalResource::new(|| async { api::list_locations().await });
 
     let filament_id = create_rw_signal(0u32);
     let color_hex = create_rw_signal(String::from("#000000"));
@@ -641,8 +643,8 @@ pub fn SpoolCreate() -> impl IntoView {
 pub fn SpoolEdit() -> impl IntoView {
     let params = use_params_map();
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
-    let spool = create_resource(id, |id| async move { api::get_spool(id).await });
-    let locations = create_resource(|| (), |_| async { api::list_locations().await });
+    let spool = LocalResource::new(move || { let id = id(); async move { api::get_spool(id).await } });
+    let locations = LocalResource::new(|| async { api::list_locations().await });
     let navigate = use_navigate();
 
     let current_weight = create_rw_signal(String::new());

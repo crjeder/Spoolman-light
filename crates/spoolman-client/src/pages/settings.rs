@@ -2,11 +2,12 @@ use crate::{
     api,
     state::{color_distance_algorithm, color_thresholds, diameter_settings, ColorAlgorithm},
 };
-use leptos::*;
+use leptos::prelude::*;
+use leptos::task::spawn_local;
 
 #[component]
 pub fn SettingsPage() -> impl IntoView {
-    let settings = create_resource(|| (), |_| async { api::fetch_settings().await });
+    let settings = LocalResource::new(|| async { api::fetch_settings().await });
     let currency = create_rw_signal(String::new());
     let saved = create_rw_signal(false);
     let error = create_rw_signal(Option::<String>::None);

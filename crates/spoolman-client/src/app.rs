@@ -1,5 +1,6 @@
-use leptos::*;
-use leptos_router::*;
+use leptos::prelude::*;
+use leptos_router::components::{Route, Router, Routes};
+use leptos_router::path;
 
 use crate::{
     pages::{
@@ -50,7 +51,7 @@ pub fn App() -> impl IntoView {
     provide_context(thresholds);
 
     // Fetch persisted settings and update the diameter + currency signals.
-    let settings_res = create_resource(|| (), |_| async { crate::api::fetch_settings().await });
+    let settings_res = LocalResource::new(|| async { crate::api::fetch_settings().await });
     create_effect(move |_| {
         if let Some(Ok(s)) = settings_res.get() {
             diam_uniform.set(
@@ -94,18 +95,18 @@ pub fn App() -> impl IntoView {
         <Router>
             <crate::components::layout::Layout>
                 <Routes fallback=|| view! { <p>"404 Not Found"</p> }>
-                    <Route path="/"              view=SpoolList />
-                    <Route path="/spools"        view=SpoolList />
-                    <Route path="/spools/new"    view=SpoolCreate />
-                    <Route path="/spools/:id"    view=SpoolShow />
-                    <Route path="/spools/:id/edit" view=SpoolEdit />
-                    <Route path="/filaments"     view=FilamentList />
-                    <Route path="/filaments/new" view=FilamentCreate />
-                    <Route path="/filaments/:id" view=FilamentShow />
-                    <Route path="/filaments/:id/edit" view=FilamentEdit />
-                    <Route path="/locations"     view=LocationList />
-                    <Route path="/settings"      view=SettingsPage />
-                    <Route path="/help"          view=HelpPage />
+                    <Route path=path!("/")                   view=SpoolList />
+                    <Route path=path!("/spools")             view=SpoolList />
+                    <Route path=path!("/spools/new")         view=SpoolCreate />
+                    <Route path=path!("/spools/:id")         view=SpoolShow />
+                    <Route path=path!("/spools/:id/edit")    view=SpoolEdit />
+                    <Route path=path!("/filaments")          view=FilamentList />
+                    <Route path=path!("/filaments/new")      view=FilamentCreate />
+                    <Route path=path!("/filaments/:id")      view=FilamentShow />
+                    <Route path=path!("/filaments/:id/edit") view=FilamentEdit />
+                    <Route path=path!("/locations")          view=LocationList />
+                    <Route path=path!("/settings")           view=SettingsPage />
+                    <Route path=path!("/help")               view=HelpPage />
                 </Routes>
             </crate::components::layout::Layout>
         </Router>

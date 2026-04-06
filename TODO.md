@@ -58,3 +58,4 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] replace the edit and delete buttons text with icons. add a view button
 - [x] in spool details: link the filament name to the corresponding filament
 - [ ] filament edit: add https://filamentcolors.xyz/ and / or spoolmandb  search
+- [ ] use of deprecated function `leptos::prelude::create_effect`: This function is being removed to conform to Rust idioms. Please use `Effect::new()` instead.

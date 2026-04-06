@@ -101,3 +101,8 @@ when archiving the change, update [CHANGELOG.md](CHANGELOG.md):
 - **JSON file storage** — data stored in `spoolman.json` in platform user-data dir; no DB env vars needed.
 - **NFC tag URL format** — Spool Online Data URL is `<host>/api/v1/spool/<id>` without `https://` (OpenTag3D / OpenPrintTag spec).
 - **Random u32 IDs** — Rust data model uses random u32 IDs with collision check on insert (not sequential).
+- **Branch cleanup requires prune** — run `git fetch --prune` before checking for `[gone]` branches; without it, deleted remote branches don't show `[gone]` in `git branch -v`.
+
+## TODO.md Conventions
+
+- `[ ]` not started, `[~]` partially done (e.g. implementation complete, verification pending), `[x]` fully done.

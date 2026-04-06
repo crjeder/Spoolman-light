@@ -52,7 +52,7 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] add material column in spools. table head links to a filter (drop down) to select materials to display
 - [x] make the threshold values configurable per calculation algorithm (in settings)
 - [x] upgrade crate versions
-- [ ] spool price is not shown / can't be set. calculate the price per locale weight unit and display it in the spools table
+- [~] spool price: implementation complete on `feat/spool-price-field` (data model, API, forms, Price/g table column); pending manual UI verification (6.3, 6.4)
 - [ ] account for transparent and mate / glossy finishes in color search
 - [x] remove the spool id from table.
 - [x] replace the edit and delete buttons text with icons. add a view button

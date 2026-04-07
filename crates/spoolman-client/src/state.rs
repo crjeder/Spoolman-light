@@ -91,6 +91,31 @@ pub fn currency_symbol() -> CurrencySymbol {
     expect_context::<CurrencySymbol>()
 }
 
+// ── Date / time format settings ────────────────────────────────────────────────
+
+/// Reactive date format provided via Leptos context from `App`.
+/// Mirrors the `date_format` setting (default `"medium"`).
+/// Valid values match `Intl.DateTimeFormat` `dateStyle`: `"short"`, `"medium"`,
+/// `"long"`, `"full"`.
+#[derive(Clone, Copy)]
+pub struct DateFormat(pub RwSignal<String>);
+
+/// Read the `DateFormat` from context.
+pub fn date_format_setting() -> DateFormat {
+    expect_context::<DateFormat>()
+}
+
+/// Reactive time format provided via Leptos context from `App`.
+/// Mirrors the `time_format` setting (default `"none"` — date only).
+/// Valid values: `"none"`, `"short"`, `"medium"`.
+#[derive(Clone, Copy)]
+pub struct TimeFormat(pub RwSignal<String>);
+
+/// Read the `TimeFormat` from context.
+pub fn time_format_setting() -> TimeFormat {
+    expect_context::<TimeFormat>()
+}
+
 #[derive(Clone, Debug)]
 pub struct TableState {
     pub sort_field: RwSignal<String>,

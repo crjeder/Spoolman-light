@@ -11,7 +11,7 @@ use crate::{
     api,
     components::{pagination::Pagination, table::ColHeader},
     format,
-    state::{color_distance_algorithm, color_thresholds, currency_symbol, use_table_state},
+    state::{color_distance_algorithm, color_thresholds, currency_symbol, date_format_setting, time_format_setting, use_table_state},
     utils::color::{color_distance, hex_to_rgba},
 };
 
@@ -27,6 +27,8 @@ pub fn SpoolList() -> impl IntoView {
     let cda = color_distance_algorithm();
     let ct = color_thresholds();
     let cur_sym = currency_symbol();
+    let df = date_format_setting();
+    let tf = time_format_setting();
 
     let _visible_cols = RwSignal::new(vec![
         "filament",
@@ -409,7 +411,7 @@ pub fn SpoolList() -> impl IntoView {
                                                 .unwrap_or_else(|| lid.to_string()),
                                         }
                                     }</td>
-                                    <td>{format::format_date(sr.spool.registered)}</td>
+                                    <td>{format::format_date(sr.spool.registered, &df.0.get(), &tf.0.get())}</td>
                                     <td class="actions">
                                         <a href=format!("/spools/{id}") class="btn btn-icon" title="View">"\u{1F441}"</a>
                                         " "
@@ -458,6 +460,8 @@ pub fn SpoolShow() -> impl IntoView {
     let cur_sym = currency_symbol();
     let navigate = use_navigate();
     let confirm_delete = RwSignal::new(false);
+    let df = date_format_setting();
+    let tf = time_format_setting();
 
     // store_value gives Copy semantics so these handlers can be captured
     // by the reactive `move ||` closure inside view! without making it FnOnce.
@@ -548,9 +552,9 @@ pub fn SpoolShow() -> impl IntoView {
                             <dt>"Remaining filament"</dt><dd>{sr.remaining_filament.map(format::format_weight).unwrap_or_else(|| "unknown".into())}</dd>
                             <dt>"Price"</dt><dd>{sr.spool.price.map(|p| format::format_currency(p as f64, &cur_sym.0.get())).unwrap_or_else(|| "—".into())}</dd>
                             <dt>"Price/kg"</dt><dd>{sr.price_per_kg.map(|p| format::format_currency(p as f64, &cur_sym.0.get())).unwrap_or_else(|| "—".into())}</dd>
-                            <dt>"Registered"</dt><dd>{format::format_date(sr.spool.registered)}</dd>
-                            <dt>"First used"</dt><dd>{sr.spool.first_used.map(format::format_date).unwrap_or_default()}</dd>
-                            <dt>"Last used"</dt><dd>{sr.spool.last_used.map(format::format_date).unwrap_or_default()}</dd>
+                            <dt>"Registered"</dt><dd>{format::format_date(sr.spool.registered, &df.0.get(), &tf.0.get())}</dd>
+                            <dt>"First used"</dt><dd>{sr.spool.first_used.map(|dt| format::format_date(dt, &df.0.get(), &tf.0.get())).unwrap_or_default()}</dd>
+                            <dt>"Last used"</dt><dd>{sr.spool.last_used.map(|dt| format::format_date(dt, &df.0.get(), &tf.0.get())).unwrap_or_default()}</dd>
                             <dt>"Comment"</dt><dd>{sr.spool.comment.clone().unwrap_or_default()}</dd>
                             <dt>"Archived"</dt><dd>{if sr.spool.archived { "Yes" } else { "No" }}</dd>
                         </dl>

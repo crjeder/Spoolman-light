@@ -10,7 +10,7 @@ use crate::{
         settings::SettingsPage,
         spool::{SpoolCreate, SpoolEdit, SpoolList, SpoolShow},
     },
-    state::{ColorAlgorithm, ColorDistanceAlgorithm, ColorThresholds, CurrencySymbol, DiameterSettings},
+    state::{ColorAlgorithm, ColorDistanceAlgorithm, ColorThresholds, CurrencySymbol, DateFormat, DiameterSettings, TimeFormat},
     utils::color::default_threshold_for,
 };
 
@@ -32,8 +32,14 @@ pub fn App() -> impl IntoView {
     let currency_sym = RwSignal::new("€".to_string());
     provide_context(CurrencySymbol(currency_sym));
 
+    // Provide date/time format settings globally (defaults: medium / none).
+    let date_fmt = RwSignal::new("medium".to_string());
+    let time_fmt = RwSignal::new("none".to_string());
+    provide_context(DateFormat(date_fmt));
+    provide_context(TimeFormat(time_fmt));
+
     // Provide color distance algorithm globally (default: DIN99d).
-    let color_algo = create_rw_signal(ColorAlgorithm::Din99d);
+    let color_algo = RwSignal::new(ColorAlgorithm::Din99d);
     provide_context(ColorDistanceAlgorithm(color_algo));
 
     // Provide color search thresholds globally (defaults from hardcoded table).
@@ -67,6 +73,18 @@ pub fn App() -> impl IntoView {
             if let Some(sym) = s.get("currency_symbol") {
                 currency_sym.set(sym.clone());
             }
+            date_fmt.set(
+                s.get("date_format")
+                    .filter(|v| !v.is_empty())
+                    .cloned()
+                    .unwrap_or_else(|| "medium".to_string()),
+            );
+            time_fmt.set(
+                s.get("time_format")
+                    .filter(|v| !v.is_empty())
+                    .cloned()
+                    .unwrap_or_else(|| "none".to_string()),
+            );
             color_algo.set(match s.get("color_distance_algorithm").map(String::as_str) {
                 Some("oklab") => ColorAlgorithm::OkLab,
                 Some("ciede2000") => ColorAlgorithm::Ciede2000,

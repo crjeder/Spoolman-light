@@ -11,7 +11,7 @@ FROM rust:1-bookworm AS builder
 # $PATH so cargo-leptos uses it directly without a network download.
 RUN rustup target add wasm32-unknown-unknown \
  && cargo install cargo-leptos --locked \
- && cargo install wasm-bindgen-cli --version 0.2.114 --locked
+ && cargo install wasm-bindgen-cli --version 0.2.117 --locked
 
 WORKDIR /build
 COPY . .

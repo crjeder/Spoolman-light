@@ -665,7 +665,8 @@
       "last_used": "2025-03-20T18:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2002,
@@ -687,7 +688,8 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 21.33
     },
     {
       "id": 2003,
@@ -709,7 +711,8 @@
       "last_used": "2025-01-08T16:00:00Z",
       "comment": "Nearly empty",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 29.39
     },
     {
       "id": 2004,
@@ -737,7 +740,8 @@
       "last_used": "2025-03-22T09:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2005,
@@ -759,7 +763,8 @@
       "last_used": "2025-02-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 24.99
     },
     {
       "id": 2006,
@@ -781,7 +786,8 @@
       "last_used": "2025-03-18T17:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 25.24
     },
     {
       "id": 2007,
@@ -803,7 +809,8 @@
       "last_used": "2024-12-15T16:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2008,
@@ -825,7 +832,8 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 17.5
     },
     {
       "id": 2009,
@@ -847,7 +855,8 @@
       "last_used": "2025-03-15T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 16.48
     },
     {
       "id": 2010,
@@ -869,7 +878,8 @@
       "last_used": "2025-03-01T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2011,
@@ -891,7 +901,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 17.81
     },
     {
       "id": 2012,
@@ -913,7 +924,8 @@
       "last_used": "2025-02-28T16:00:00Z",
       "comment": "Running low",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 17.99
     },
     {
       "id": 2013,
@@ -935,7 +947,8 @@
       "last_used": "2025-03-10T11:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2014,
@@ -957,7 +970,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 32.63
     },
     {
       "id": 2015,
@@ -979,7 +993,8 @@
       "last_used": "2025-03-20T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 33.98
     },
     {
       "id": 2016,
@@ -1001,7 +1016,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 850.0
+      "net_weight": 850.0,
+      "price": null
     },
     {
       "id": 2017,
@@ -1023,7 +1039,8 @@
       "last_used": "2025-03-22T16:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 22.53
     },
     {
       "id": 2018,
@@ -1045,7 +1062,8 @@
       "last_used": "2025-03-05T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 19.79
     },
     {
       "id": 2019,
@@ -1067,7 +1085,8 @@
       "last_used": "2025-03-18T11:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2020,
@@ -1089,7 +1108,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 23.22
     },
     {
       "id": 2021,
@@ -1111,7 +1131,8 @@
       "last_used": "2025-03-12T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 23.45
     },
     {
       "id": 2022,
@@ -1133,7 +1154,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2023,
@@ -1155,7 +1177,8 @@
       "last_used": "2025-03-24T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 500.0
+      "net_weight": 500.0,
+      "price": 16.48
     },
     {
       "id": 2024,
@@ -1177,7 +1200,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 17.63
     },
     {
       "id": 2025,
@@ -1199,7 +1223,8 @@
       "last_used": "2025-02-20T13:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2026,
@@ -1221,7 +1246,8 @@
       "last_used": "2025-03-08T16:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 18.99
     },
     {
       "id": 2027,
@@ -1243,7 +1269,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 19.18
     },
     {
       "id": 2028,
@@ -1265,7 +1292,8 @@
       "last_used": "2025-03-20T17:00:00Z",
       "comment": "Outdoor parts",
       "archived": false,
-      "net_weight": 850.0
+      "net_weight": 850.0,
+      "price": null
     },
     {
       "id": 2029,
@@ -1287,7 +1315,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 850.0
+      "net_weight": 850.0,
+      "price": 36.04
     },
     {
       "id": 2030,
@@ -1321,7 +1350,8 @@
       "last_used": "2025-03-22T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 15.51
     },
     {
       "id": 2031,
@@ -1343,7 +1373,8 @@
       "last_used": "2025-03-24T16:00:00Z",
       "comment": "Support material for ABS",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2032,
@@ -1365,7 +1396,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 29.69
     },
     {
       "id": 2033,
@@ -1387,7 +1419,8 @@
       "last_used": "2025-01-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 29.99
     },
     {
       "id": 2034,
@@ -1409,7 +1442,8 @@
       "last_used": "2025-03-15T12:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2035,
@@ -1431,7 +1465,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 25.49
     },
     {
       "id": 2036,
@@ -1453,7 +1488,8 @@
       "last_used": "2025-03-05T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 17.5
     },
     {
       "id": 2037,
@@ -1475,7 +1511,8 @@
       "last_used": "2024-10-30T15:00:00Z",
       "comment": "Essentially empty",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2038,
@@ -1497,7 +1534,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 32.33
     },
     {
       "id": 2039,
@@ -1519,7 +1557,8 @@
       "last_used": "2025-03-20T16:00:00Z",
       "comment": "Outdoor enclosure parts",
       "archived": false,
-      "net_weight": 850.0
+      "net_weight": 850.0,
+      "price": 32.66
     },
     {
       "id": 2040,
@@ -1541,7 +1580,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2041,
@@ -1563,7 +1603,8 @@
       "last_used": "2025-03-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 20.19
     },
     {
       "id": 2042,
@@ -1585,7 +1626,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 23.45
     },
     {
       "id": 2043,
@@ -1607,7 +1649,8 @@
       "last_used": "2025-02-15T13:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2044,
@@ -1629,7 +1672,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 17.45
     },
     {
       "id": 2045,
@@ -1651,7 +1695,8 @@
       "last_used": "2025-02-10T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 17.63
     },
     {
       "id": 2046,
@@ -1679,7 +1724,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2047,
@@ -1701,7 +1747,8 @@
       "last_used": "2025-03-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 17.99
     },
     {
       "id": 2048,
@@ -1723,7 +1770,8 @@
       "last_used": "2025-03-01T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 32.31
     },
     {
       "id": 2049,
@@ -1745,7 +1793,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2050,
@@ -1767,7 +1816,8 @@
       "last_used": "2025-01-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 27.8
     },
     {
       "id": 2051,
@@ -1789,7 +1839,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 29.09
     },
     {
       "id": 2052,
@@ -1811,7 +1862,8 @@
       "last_used": "2025-03-18T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2053,
@@ -1833,7 +1885,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 16.82
     },
     {
       "id": 2054,
@@ -1855,7 +1908,8 @@
       "last_used": "2024-09-15T14:00:00Z",
       "comment": "Nearly empty",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 16.99
     },
     {
       "id": 2055,
@@ -1877,7 +1931,8 @@
       "last_used": "2025-03-10T13:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2056,
@@ -1899,7 +1954,8 @@
       "last_used": "2025-03-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 45.89
     },
     {
       "id": 2057,
@@ -1921,7 +1977,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 500.0
+      "net_weight": 500.0,
+      "price": 17.5
     },
     {
       "id": 2058,
@@ -1943,7 +2000,8 @@
       "last_used": "2025-03-05T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2059,
@@ -1965,7 +2023,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 29.39
     },
     {
       "id": 2060,
@@ -1987,7 +2046,8 @@
       "last_used": "2025-02-28T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 21.77
     },
     {
       "id": 2061,
@@ -2009,7 +2069,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2062,
@@ -2031,7 +2092,8 @@
       "last_used": "2025-03-15T16:00:00Z",
       "comment": "Traffic cone parts",
       "archived": false,
-      "net_weight": 850.0
+      "net_weight": 850.0,
+      "price": 35.34
     },
     {
       "id": 2063,
@@ -2053,7 +2115,8 @@
       "last_used": "2025-02-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 23.45
     },
     {
       "id": 2064,
@@ -2075,7 +2138,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2065,
@@ -2097,7 +2161,8 @@
       "last_used": "2025-03-22T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 24.24
     },
     {
       "id": 2066,
@@ -2119,7 +2184,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 24.49
     },
     {
       "id": 2067,
@@ -2141,7 +2207,8 @@
       "last_used": "2025-03-12T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2068,
@@ -2163,7 +2230,8 @@
       "last_used": "2024-08-20T14:00:00Z",
       "comment": "Last bits",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 16.99
     },
     {
       "id": 2069,
@@ -2185,7 +2253,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 32.31
     },
     {
       "id": 2070,
@@ -2207,7 +2276,8 @@
       "last_used": "2025-03-20T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 850.0
+      "net_weight": 850.0,
+      "price": null
     },
     {
       "id": 2071,
@@ -2235,7 +2305,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 20.59
     },
     {
       "id": 2072,
@@ -2257,7 +2328,8 @@
       "last_used": "2025-02-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 17.45
     },
     {
       "id": 2073,
@@ -2279,7 +2351,8 @@
       "last_used": "2025-03-08T13:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2074,
@@ -2301,7 +2374,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 22.76
     },
     {
       "id": 2075,
@@ -2335,7 +2409,8 @@
       "last_used": "2025-03-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 15.99
     },
     {
       "id": 2076,
@@ -2357,7 +2432,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2077,
@@ -2379,7 +2455,8 @@
       "last_used": "2025-03-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 27.53
     },
     {
       "id": 2078,
@@ -2401,7 +2478,8 @@
       "last_used": "2024-12-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 30.89
     },
     {
       "id": 2079,
@@ -2423,7 +2501,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 850.0
+      "net_weight": 850.0,
+      "price": null
     },
     {
       "id": 2080,
@@ -2445,7 +2524,8 @@
       "last_used": "2025-03-20T16:00:00Z",
       "comment": "Structural parts",
       "archived": false,
-      "net_weight": 500.0
+      "net_weight": 500.0,
+      "price": 16.65
     },
     {
       "id": 2081,
@@ -2467,7 +2547,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 29.69
     },
     {
       "id": 2082,
@@ -2489,7 +2570,8 @@
       "last_used": "2025-03-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2083,
@@ -2511,7 +2593,8 @@
       "last_used": "2025-03-18T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 25.24
     },
     {
       "id": 2084,
@@ -2533,7 +2616,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 17.33
     },
     {
       "id": 2085,
@@ -2555,7 +2639,8 @@
       "last_used": "2025-03-22T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2086,
@@ -2577,7 +2662,8 @@
       "last_used": "2025-03-24T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 31.03
     },
     {
       "id": 2087,
@@ -2599,7 +2685,8 @@
       "last_used": "2025-01-30T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 22.53
     },
     {
       "id": 2088,
@@ -2621,7 +2708,8 @@
       "last_used": "2025-03-10T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2089,
@@ -2643,7 +2731,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 22.99
     },
     {
       "id": 2090,
@@ -2671,7 +2760,8 @@
       "last_used": "2025-03-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 20.19
     },
     {
       "id": 2091,
@@ -2693,7 +2783,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2092,
@@ -2715,7 +2806,8 @@
       "last_used": "2025-01-25T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 850.0
+      "net_weight": 850.0,
+      "price": 33.98
     },
     {
       "id": 2093,
@@ -2737,7 +2829,8 @@
       "last_used": "2025-02-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 32.0
     },
     {
       "id": 2094,
@@ -2765,7 +2858,8 @@
       "last_used": "2025-03-18T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2095,
@@ -2787,7 +2881,8 @@
       "last_used": "2025-03-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 26.72
     },
     {
       "id": 2096,
@@ -2809,7 +2904,8 @@
       "last_used": "2025-02-28T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 16.99
     },
     {
       "id": 2097,
@@ -2831,7 +2927,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2098,
@@ -2853,7 +2950,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 30.59
     },
     {
       "id": 2099,
@@ -2875,7 +2973,8 @@
       "last_used": "2025-03-10T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 22.65
     },
     {
       "id": 2100,
@@ -2897,7 +2996,8 @@
       "last_used": "2025-03-22T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2101,
@@ -2919,7 +3019,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 31.35
     },
     {
       "id": 2102,
@@ -2941,7 +3042,8 @@
       "last_used": "2025-03-18T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 24.74
     },
     {
       "id": 2103,
@@ -2963,7 +3065,8 @@
       "last_used": "2024-07-20T14:00:00Z",
       "comment": "Used up",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2104,
@@ -2985,7 +3088,8 @@
       "last_used": "2025-03-18T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 23.22
     },
     {
       "id": 2105,
@@ -3007,7 +3111,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 18.35
     },
     {
       "id": 2106,
@@ -3029,7 +3134,8 @@
       "last_used": "2025-03-20T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 850.0
+      "net_weight": 850.0,
+      "price": null
     },
     {
       "id": 2107,
@@ -3051,7 +3157,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 19.39
     },
     {
       "id": 2108,
@@ -3073,7 +3180,8 @@
       "last_used": "2025-02-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 18.61
     },
     {
       "id": 2109,
@@ -3095,7 +3203,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2110,
@@ -3117,7 +3226,8 @@
       "last_used": "2025-03-12T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 32.99
     },
     {
       "id": 2111,
@@ -3139,7 +3249,8 @@
       "last_used": "2025-03-22T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 30.29
     },
     {
       "id": 2112,
@@ -3161,7 +3272,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2113,
@@ -3183,7 +3295,8 @@
       "last_used": "2025-02-25T14:00:00Z",
       "comment": "Functional brackets",
       "archived": false,
-      "net_weight": 500.0
+      "net_weight": 500.0,
+      "price": 17.5
     },
     {
       "id": 2114,
@@ -3205,7 +3318,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 24.24
     },
     {
       "id": 2115,
@@ -3227,7 +3341,8 @@
       "last_used": "2024-06-20T14:00:00Z",
       "comment": "Empty",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2116,
@@ -3249,7 +3364,8 @@
       "last_used": "2025-03-05T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 850.0
+      "net_weight": 850.0,
+      "price": 32.66
     },
     {
       "id": 2117,
@@ -3277,7 +3393,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 15.99
     },
     {
       "id": 2118,
@@ -3299,7 +3416,8 @@
       "last_used": "2025-03-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2119,
@@ -3321,7 +3439,8 @@
       "last_used": "2025-03-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 45.89
     },
     {
       "id": 2120,
@@ -3343,7 +3462,8 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 23.68
     },
     {
       "id": 2121,
@@ -3365,7 +3485,8 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2122,
@@ -3387,7 +3508,8 @@
       "last_used": "2025-01-05T08:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 21.55
     },
     {
       "id": 2123,
@@ -3409,7 +3531,8 @@
       "last_used": "2025-01-10T10:05:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 26.72
     },
     {
       "id": 2124,
@@ -3431,7 +3554,8 @@
       "last_used": "2025-01-20T09:00:00Z",
       "comment": "Great quality",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2125,
@@ -3453,7 +3577,8 @@
       "last_used": "2025-02-01T11:00:00Z",
       "comment": "Good adhesion",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 17.16
     },
     {
       "id": 2126,
@@ -3475,7 +3600,8 @@
       "last_used": "2025-02-15T08:35:00Z",
       "comment": "Slightly damp - redry before use",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 17.33
     },
     {
       "id": 2127,
@@ -3497,7 +3623,8 @@
       "last_used": "2025-02-28T09:00:00Z",
       "comment": "Perfect for functional parts",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2128,
@@ -3519,7 +3646,8 @@
       "last_used": "2025-03-01T14:10:00Z",
       "comment": "Vibrant color",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 31.03
     },
     {
       "id": 2129,
@@ -3541,7 +3669,8 @@
       "last_used": "2025-03-10T13:00:00Z",
       "comment": "Reserved for client project",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 32.33
     },
     {
       "id": 2130,
@@ -3563,7 +3692,8 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2131,
@@ -3585,7 +3715,8 @@
       "last_used": "2025-03-25T11:00:00Z",
       "comment": "Backup spool",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 22.99
     },
     {
       "id": 2132,
@@ -3607,7 +3738,8 @@
       "last_used": "2025-05-01T09:00:00Z",
       "comment": "Nearly empty",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 20.19
     },
     {
       "id": 2133,
@@ -3629,7 +3761,8 @@
       "last_used": "2025-04-10T10:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2134,
@@ -3657,7 +3790,8 @@
       "last_used": "2025-04-20T11:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 46.34
     },
     {
       "id": 2135,
@@ -3679,7 +3813,8 @@
       "last_used": "2025-05-01T09:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 16.48
     },
     {
       "id": 2136,
@@ -3701,7 +3836,8 @@
       "last_used": "2025-05-10T10:00:00Z",
       "comment": "Great quality",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2137,
@@ -3723,7 +3859,8 @@
       "last_used": "2025-05-20T11:00:00Z",
       "comment": "Good adhesion",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 18.8
     },
     {
       "id": 2138,
@@ -3745,7 +3882,8 @@
       "last_used": "2025-06-01T09:00:00Z",
       "comment": "Slightly damp - redry before use",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 34.99
     },
     {
       "id": 2139,
@@ -3767,7 +3905,8 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2140,
@@ -3789,7 +3928,8 @@
       "last_used": "2025-07-01T09:00:00Z",
       "comment": "Vibrant color",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 30.59
     },
     {
       "id": 2141,
@@ -3811,7 +3951,8 @@
       "last_used": "2025-07-15T10:00:00Z",
       "comment": "Reserved for client project",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 27.8
     },
     {
       "id": 2142,
@@ -3833,7 +3974,8 @@
       "last_used": "2025-08-01T09:00:00Z",
       "comment": "Test roll",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2143,
@@ -3855,7 +3997,8 @@
       "last_used": "2024-10-01T08:00:00Z",
       "comment": "Nearly empty",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 18.61
     },
     {
       "id": 2144,
@@ -3877,7 +4020,8 @@
       "last_used": "2025-09-01T09:00:00Z",
       "comment": "Gift from friend",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 27.71
     },
     {
       "id": 2145,
@@ -3899,7 +4043,8 @@
       "last_used": "2025-09-15T10:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2146,
@@ -3921,7 +4066,8 @@
       "last_used": "2024-10-01T08:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 28.27
     },
     {
       "id": 2147,
@@ -3949,7 +4095,8 @@
       "last_used": "2024-10-15T09:30:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 30.59
     },
     {
       "id": 2148,
@@ -3971,7 +4118,8 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2149,
@@ -3993,7 +4141,8 @@
       "last_used": "2024-11-20T10:00:00Z",
       "comment": "Good adhesion",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 14.54
     },
     {
       "id": 2150,
@@ -4015,7 +4164,8 @@
       "last_used": "2024-12-01T08:00:00Z",
       "comment": "Slightly damp - redry before use",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 15.67
     },
     {
       "id": 2151,
@@ -4037,7 +4187,8 @@
       "last_used": "2024-12-15T14:00:00Z",
       "comment": "Perfect for functional parts",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2152,
@@ -4059,7 +4210,8 @@
       "last_used": "2025-01-05T08:00:00Z",
       "comment": "Vibrant color",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 36.99
     },
     {
       "id": 2153,
@@ -4081,7 +4233,8 @@
       "last_used": "2025-01-10T10:05:00Z",
       "comment": "Reserved for client project",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 39.38
     },
     {
       "id": 2154,
@@ -4103,7 +4256,8 @@
       "last_used": "2025-02-28T09:00:00Z",
       "comment": "Nearly empty",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2155,
@@ -4125,7 +4279,8 @@
       "last_used": "2025-02-01T11:00:00Z",
       "comment": "Backup spool",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 51.49
     },
     {
       "id": 2156,
@@ -4147,7 +4302,8 @@
       "last_used": "2025-02-15T08:35:00Z",
       "comment": "Gift from friend",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 24.24
     },
     {
       "id": 2157,
@@ -4169,7 +4325,8 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2158,
@@ -4191,7 +4348,8 @@
       "last_used": "2025-03-01T14:10:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 39.59
     },
     {
       "id": 2159,
@@ -4213,7 +4371,8 @@
       "last_used": "2025-03-10T13:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 29.99
     },
     {
       "id": 2160,
@@ -4241,7 +4400,8 @@
       "last_used": "2025-03-20T10:00:00Z",
       "comment": "Great quality",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2161,
@@ -4263,7 +4423,8 @@
       "last_used": "2025-03-25T11:00:00Z",
       "comment": "Good adhesion",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 30.59
     },
     {
       "id": 2162,
@@ -4285,7 +4446,8 @@
       "last_used": "2025-04-01T09:00:00Z",
       "comment": "Slightly damp - redry before use",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 22.65
     },
     {
       "id": 2163,
@@ -4307,7 +4469,8 @@
       "last_used": "2025-04-10T10:00:00Z",
       "comment": "Perfect for functional parts",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2164,
@@ -4329,7 +4492,8 @@
       "last_used": "2025-04-20T11:00:00Z",
       "comment": "Vibrant color",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 24.49
     },
     {
       "id": 2165,
@@ -4351,7 +4515,8 @@
       "last_used": "2025-06-01T09:00:00Z",
       "comment": "Nearly empty",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 16.82
     },
     {
       "id": 2166,
@@ -4373,7 +4538,8 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2167,
@@ -4395,7 +4561,8 @@
       "last_used": "2025-05-20T11:00:00Z",
       "comment": "Backup spool",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 18.17
     },
     {
       "id": 2168,
@@ -4417,7 +4584,8 @@
       "last_used": "2025-06-01T09:00:00Z",
       "comment": "Gift from friend",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 32.63
     },
     {
       "id": 2169,
@@ -4439,7 +4607,8 @@
       "last_used": "2025-06-15T10:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2170,
@@ -4461,7 +4630,8 @@
       "last_used": "2025-07-01T09:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 32.0
     },
     {
       "id": 2171,
@@ -4483,7 +4653,8 @@
       "last_used": "2025-07-15T10:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 22.53
     },
     {
       "id": 2172,
@@ -4505,7 +4676,8 @@
       "last_used": "2025-08-01T09:00:00Z",
       "comment": "Great quality",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2173,
@@ -4533,7 +4705,8 @@
       "last_used": "2025-08-15T10:00:00Z",
       "comment": "Good adhesion",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 22.99
     },
     {
       "id": 2174,
@@ -4555,7 +4728,8 @@
       "last_used": "2025-09-01T09:00:00Z",
       "comment": "Slightly damp - redry before use",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 45.44
     },
     {
       "id": 2175,
@@ -4577,7 +4751,8 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2176,
@@ -4599,7 +4774,8 @@
       "last_used": "2024-11-20T10:00:00Z",
       "comment": "Nearly empty",
       "archived": true,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 18.53
     },
     {
       "id": 2177,
@@ -4621,7 +4797,8 @@
       "last_used": "2024-10-15T09:30:00Z",
       "comment": "Reserved for client project",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 18.42
     },
     {
       "id": 2178,
@@ -4643,7 +4820,8 @@
       "last_used": "2024-11-01T12:00:00Z",
       "comment": "Test roll",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2179,
@@ -4665,7 +4843,8 @@
       "last_used": "2024-11-20T10:00:00Z",
       "comment": "Backup spool",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 15.83
     },
     {
       "id": 2180,
@@ -4687,7 +4866,8 @@
       "last_used": "2024-12-01T08:00:00Z",
       "comment": "Gift from friend",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 29.99
     },
     {
       "id": 2181,
@@ -4709,7 +4889,8 @@
       "last_used": "2024-12-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2182,
@@ -4731,7 +4912,8 @@
       "last_used": "2025-01-05T08:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 30.59
     },
     {
       "id": 2183,
@@ -4753,7 +4935,8 @@
       "last_used": "2025-01-10T10:05:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 19.56
     },
     {
       "id": 2184,
@@ -4775,7 +4958,8 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2185,
@@ -4797,7 +4981,8 @@
       "last_used": "2025-02-01T11:00:00Z",
       "comment": "Good adhesion",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 34.29
     },
     {
       "id": 2186,
@@ -4825,7 +5010,8 @@
       "last_used": "2025-02-15T08:35:00Z",
       "comment": "Slightly damp - redry before use",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 27.71
     },
     {
       "id": 2187,
@@ -4847,7 +5033,8 @@
       "last_used": "2025-03-20T10:00:00Z",
       "comment": "Nearly empty",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2188,
@@ -4869,7 +5056,8 @@
       "last_used": "2025-03-01T14:10:00Z",
       "comment": "Vibrant color",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 15.14
     },
     {
       "id": 2189,
@@ -4891,7 +5079,8 @@
       "last_used": "2025-03-10T13:00:00Z",
       "comment": "Reserved for client project",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 15.29
     },
     {
       "id": 2190,
@@ -4913,7 +5102,8 @@
       "last_used": "2025-03-20T10:00:00Z",
       "comment": "Test roll",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2191,
@@ -4935,7 +5125,8 @@
       "last_used": "2025-03-25T11:00:00Z",
       "comment": "Backup spool",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": 53.34
     },
     {
       "id": 2192,
@@ -4957,7 +5148,8 @@
       "last_used": "2025-04-01T09:00:00Z",
       "comment": "Gift from friend",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 36.25
     },
     {
       "id": 2193,
@@ -4979,7 +5171,8 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2194,
@@ -5001,7 +5194,8 @@
       "last_used": "2025-04-20T11:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 19.99
     },
     {
       "id": 2195,
@@ -5023,7 +5217,8 @@
       "last_used": "2025-05-01T09:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 50.49
     },
     {
       "id": 2196,
@@ -5045,7 +5240,8 @@
       "last_used": "2025-05-10T10:00:00Z",
       "comment": "Great quality",
       "archived": false,
-      "net_weight": 750.0
+      "net_weight": 750.0,
+      "price": null
     },
     {
       "id": 2197,
@@ -5067,7 +5263,8 @@
       "last_used": "2025-05-20T11:00:00Z",
       "comment": "Good adhesion",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 25.74
     },
     {
       "id": 2198,
@@ -5089,7 +5286,8 @@
       "last_used": "2025-07-15T10:00:00Z",
       "comment": "Nearly empty",
       "archived": true,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 38.79
     },
     {
       "id": 2199,
@@ -5117,7 +5315,8 @@
       "last_used": "2025-06-15T10:00:00Z",
       "comment": "Perfect for functional parts",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": null
     },
     {
       "id": 2200,
@@ -5139,7 +5338,8 @@
       "last_used": "2025-07-01T09:00:00Z",
       "comment": "Vibrant color",
       "archived": false,
-      "net_weight": 1000.0
+      "net_weight": 1000.0,
+      "price": 14.84
     }
   ],
   "locations": [
@@ -5205,6 +5405,6 @@
     }
   ],
   "settings": {
-    "currency_symbol": "€"
+    "currency_symbol": "\u00e2\u201a\u00ac"
   }
 }

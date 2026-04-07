@@ -416,6 +416,9 @@ pub struct Spool {
     pub current_weight: f32,
     /// Net weight of filament only (no spool tare), in grams. Specific to this spool purchase.
     pub net_weight: Option<f32>,
+    /// Purchase price of this spool. Currency semantics are defined by the `currency_symbol` setting.
+    #[serde(default)]
+    pub price: Option<f32>,
     pub registered: DateTime<Utc>,
     pub first_used: Option<DateTime<Utc>>,
     pub last_used: Option<DateTime<Utc>>,

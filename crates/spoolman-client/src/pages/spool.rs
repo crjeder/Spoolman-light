@@ -11,7 +11,7 @@ use crate::{
     api,
     components::{pagination::Pagination, table::ColHeader},
     format,
-    state::{color_distance_algorithm, color_thresholds, use_table_state},
+    state::{color_distance_algorithm, color_thresholds, currency_symbol, use_table_state},
     utils::color::{color_distance, hex_to_rgba},
 };
 
@@ -26,11 +26,13 @@ pub fn SpoolList() -> impl IntoView {
     let popup_open = create_rw_signal(false);
     let cda = color_distance_algorithm();
     let ct = color_thresholds();
+    let cur_sym = currency_symbol();
 
     let _visible_cols = create_rw_signal(vec![
         "filament",
         "color",
         "remaining_weight",
+        "price_per_gram",
         "location",
         "registered",
     ]);
@@ -185,6 +187,19 @@ pub fn SpoolList() -> impl IntoView {
                         }
                     }
                 },
+                "price_per_gram" => match (a.price_per_gram, b.price_per_gram) {
+                    (None, None) => Ordering::Equal,
+                    (None, _) => Ordering::Greater,
+                    (_, None) => Ordering::Less,
+                    (Some(av), Some(bv)) => {
+                        let ord = av.partial_cmp(&bv).unwrap_or(Ordering::Equal);
+                        if asc {
+                            ord
+                        } else {
+                            ord.reverse()
+                        }
+                    }
+                },
                 "location" => match (a.spool.location_id, b.spool.location_id) {
                     (None, None) => Ordering::Equal,
                     (None, _) => Ordering::Greater,
@@ -324,6 +339,7 @@ pub fn SpoolList() -> impl IntoView {
                                 })}
                             </th>
                             <ColHeader label="Remaining (g)" field="remaining_weight" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
+                            <ColHeader label="Price/g"       field="price_per_gram"    sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Location"      field="location"          sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Actions"</th>
@@ -340,6 +356,9 @@ pub fn SpoolList() -> impl IntoView {
                                 sr.spool.colors.clone()
                             };
                             let rem = sr.remaining_filament.map(format::format_weight).unwrap_or_default();
+                            let ppg = sr.price_per_gram
+                                .map(|p| format::format_currency(p as f64, &cur_sym.0.get()))
+                                .unwrap_or_else(|| "—".into());
                             let material = sr.filament.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default();
                             view! {
                                 <tr class=if sr.spool.archived { "archived" } else { "" }>
@@ -355,6 +374,7 @@ pub fn SpoolList() -> impl IntoView {
                                         {sr.spool.color_name.clone().unwrap_or_default()}
                                     </td>
                                     <td class="num">{rem}</td>
+                                    <td class="num">{ppg}</td>
                                     <td>{sr.spool.location_id.map(|l| l.to_string()).unwrap_or_default()}</td>
                                     <td>{format::format_date(sr.spool.registered)}</td>
                                     <td class="actions">
@@ -521,6 +541,7 @@ pub fn SpoolCreate() -> impl IntoView {
     let color_name = create_rw_signal(String::new());
     let initial_weight = create_rw_signal(String::new());
     let net_weight = create_rw_signal(String::new());
+    let price = create_rw_signal(String::new());
     let location_id = create_rw_signal(Option::<u32>::None);
     let comment = create_rw_signal(String::new());
     let error = create_rw_signal(Option::<String>::None);
@@ -554,6 +575,7 @@ pub fn SpoolCreate() -> impl IntoView {
                 location_id: location_id.get(),
                 initial_weight: weight,
                 net_weight: net_weight.get().parse().ok(),
+                price: price.get().parse::<f32>().ok(),
                 first_used: None,
                 last_used: None,
                 comment: Some(comment.get()).filter(|s| !s.is_empty()),
@@ -611,6 +633,11 @@ pub fn SpoolCreate() -> impl IntoView {
                         on:input=move |ev| net_weight.set(event_target_value(&ev)) />
                 </label>
                 <label>
+                    "Price"
+                    <input type="number" step="0.01" min="0"
+                        on:input=move |ev| price.set(event_target_value(&ev)) />
+                </label>
+                <label>
                     "Location"
                     <Suspense fallback=|| view! { <select><option>"Loading…"</option></select> }>
                         <select on:change=move |ev| {
@@ -649,6 +676,7 @@ pub fn SpoolEdit() -> impl IntoView {
 
     let current_weight = create_rw_signal(String::new());
     let net_weight = create_rw_signal(String::new());
+    let price = create_rw_signal(String::new());
     let color_hex = create_rw_signal(String::from("#000000"));
     let color_alpha = create_rw_signal(255u8);
     let color_name = create_rw_signal(String::new());
@@ -668,6 +696,7 @@ pub fn SpoolEdit() -> impl IntoView {
                     .map(|w| w.to_string())
                     .unwrap_or_default(),
             );
+            price.set(sr.spool.price.map(|v| v.to_string()).unwrap_or_default());
             if let Some(c) = sr.spool.colors.first() {
                 color_hex.set(format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b));
                 color_alpha.set(c.a);
@@ -711,6 +740,7 @@ pub fn SpoolEdit() -> impl IntoView {
             let body = UpdateSpool {
                 current_weight: current_weight.get().parse::<f32>().ok(),
                 net_weight: net_weight.get().parse::<f32>().ok(),
+                price: price.get().parse::<f32>().ok(),
                 colors: Some(
                     hex_to_rgba(&color_hex.get())
                         .map(|mut c| {
@@ -749,6 +779,12 @@ pub fn SpoolEdit() -> impl IntoView {
                     <input type="number" step="1"
                         prop:value=move || net_weight.get()
                         on:input=move |ev| net_weight.set(event_target_value(&ev)) />
+                </label>
+                <label>
+                    "Price"
+                    <input type="number" step="0.01" min="0"
+                        prop:value=move || price.get()
+                        on:input=move |ev| price.set(event_target_value(&ev)) />
                 </label>
                 <label>
                     "Color"

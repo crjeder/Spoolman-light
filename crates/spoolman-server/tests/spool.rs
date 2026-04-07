@@ -141,6 +141,45 @@ async fn create_spool_with_zero_net_weight_filament_returns_201() {
     );
 }
 
+/// Task 6.2: creating a spool with a price returns `price_per_gram` in the response.
+/// Also verifies that a spool without price returns `null` for `price_per_gram`.
+#[tokio::test]
+async fn spool_price_returns_price_per_gram() {
+    let (app, _dir) = common::make_app();
+    // Create filament with a known net_weight so price_per_gram is deterministic
+    let (_, fil) = common::request(
+        &app,
+        Method::POST,
+        "/api/v1/filament",
+        Some(json!({ "density": 1.24 })),
+    )
+    .await;
+    let fid = fil["id"].as_u64().unwrap();
+
+    // Spool with price=20.0 and net_weight=1000.0 → price_per_gram = 0.02
+    let (status, body) = common::request(
+        &app,
+        Method::POST,
+        "/api/v1/spool",
+        Some(json!({ "filament_id": fid, "colors": [], "initial_weight": 1200.0, "net_weight": 1000.0, "price": 20.0 })),
+    )
+    .await;
+    assert_eq!(status, StatusCode::CREATED, "body: {body}");
+    let ppg = body["price_per_gram"].as_f64().expect("price_per_gram should be present");
+    assert!((ppg - 0.02).abs() < 0.0001, "expected ~0.02, got {ppg}");
+
+    // Spool without price → price_per_gram must be null
+    let (status2, body2) = common::request(
+        &app,
+        Method::POST,
+        "/api/v1/spool",
+        Some(json!({ "filament_id": fid, "colors": [], "initial_weight": 1200.0, "net_weight": 1000.0 })),
+    )
+    .await;
+    assert_eq!(status2, StatusCode::CREATED, "body: {body2}");
+    assert!(body2["price_per_gram"].is_null(), "price_per_gram should be null when no price set");
+}
+
 #[tokio::test]
 async fn delete_spool_returns_204_and_subsequent_get_404() {
     let (app, _dir) = common::make_app();

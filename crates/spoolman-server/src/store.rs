@@ -375,6 +375,7 @@ impl JsonStore {
             initial_weight: req.initial_weight,
             current_weight: req.initial_weight,
             net_weight: req.net_weight,
+            price: req.price,
             registered: Utc::now(),
             first_used: req.first_used,
             last_used: req.last_used,
@@ -406,6 +407,7 @@ impl JsonStore {
         if let Some(nw) = req.net_weight {
             spool.net_weight = Some(nw);
         }
+        apply_option(&mut spool.price, req.price);
         apply_option_nullable_dt(&mut spool.first_used, req.first_used);
         apply_option_nullable_dt(&mut spool.last_used, req.last_used);
         apply_option_nullable(&mut spool.comment, req.comment);
@@ -467,6 +469,7 @@ impl JsonStore {
             initial_weight: spool.initial_weight,
             current_weight: spool.initial_weight,
             net_weight: spool.net_weight,
+            price: spool.price,
             registered: Utc::now(),
             first_used: None,
             last_used: None,

@@ -57,5 +57,10 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] remove the spool id from table.
 - [x] replace the edit and delete buttons text with icons. add a view button
 - [x] in spool details: link the filament name to the corresponding filament
-- [ ] filament edit: add https://filamentcolors.xyz/ and / or spoolmandb  search
+- [ ] filament and or spool edit: add https://filamentcolors.xyz/ and / or spoolmandb  search
 - [ ] use of deprecated function `leptos::prelude::create_effect`: This function is being removed to conform to Rust idioms. Please use `Effect::new()` instead.
+- [ ] replace buttons with icons everywhere
+- [ ] display spool price and price per kg in spool details 
+- [ ] change the unit to price per kg in spool table
+- [ ] filter on location
+- [ ] default values for din99 13; 19; 25

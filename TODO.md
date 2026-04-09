@@ -29,7 +29,7 @@ Items where the actual code does NOT match the OpenSpec specification:
 
 ### Enhancements
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
-- [ ] use locale to format date and time. fall back to what is configured in settings. add a setting for date / time format
+- [~] use locale to format date and time. fall back to what is configured in settings. add a setting for date / time format — implementation complete on `feat/locale-datetime-format` (PR #49); pending manual UI verification (Docker build + browser smoke tests)
 - [x] rename "filter" to "search"
 - [ ] table headers contain filter button (partial: Color column header activates color picker filter)
 - [x] Manual verify `remove-time-display`: detail panel shows date-only and form retains `YYYY-MM-DD` semantics
@@ -52,7 +52,7 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] add material column in spools. table head links to a filter (drop down) to select materials to display
 - [x] make the threshold values configurable per calculation algorithm (in settings)
 - [x] upgrade crate versions
-- [~] spool price: implementation complete on `feat/spool-price-field` (data model, API, forms, Price/g table column); pending manual UI verification (6.3, 6.4)
+- [x] spool price: implementation complete on `feat/spool-price-field` (data model, API, forms, Price/g table column); pending manual UI verification (6.3, 6.4)
 - [ ] account for transparent and mate / glossy finishes in color search
 - [x] remove the spool id from table.
 - [x] replace the edit and delete buttons text with icons. add a view button
@@ -64,3 +64,5 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [ ] change the unit to price per kg in spool table
 - [ ] filter on location
 - [ ] default values for din99 13; 19; 25
+- [ ] € defect
+- [ ] € after number in price

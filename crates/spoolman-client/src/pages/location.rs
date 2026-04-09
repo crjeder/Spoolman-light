@@ -124,31 +124,28 @@ pub fn LocationList() -> impl IntoView {
                                         <td class="actions">
                                             {move || if is_editing() {
                                                 view! {
-                                                    <button class="btn " on:click=on_save_edit>"Save"</button>
-                                                    " "
-                                                    <button class="btn " on:click=move |_| { editing.set(None); confirm_delete.set(None); }>"Cancel"</button>
+                                                    <button class="btn btn-icon" title="Save changes" on:click=on_save_edit>"\u{1F4BE}"</button>
+                                                    <button class="btn btn-icon" title="Cancel" on:click=move |_| { editing.set(None); confirm_delete.set(None); }>"\u{2715}"</button>
                                                 }.into_any()
                                             } else if confirm_delete.get() == Some(id) {
                                                 view! {
-                                                    <button class="btn btn-danger "
-                                                        on:click=move |_| on_delete(id)>"Sure?"</button>
-                                                    " "
-                                                    <button class="btn "
-                                                        on:click=move |_| confirm_delete.set(None)>"Cancel"</button>
+                                                    <button class="btn btn-icon btn-danger" title="Confirm delete"
+                                                        on:click=move |_| on_delete(id)>"\u{1F5D1}"</button>
+                                                    <button class="btn btn-icon" title="Cancel"
+                                                        on:click=move |_| confirm_delete.set(None)>"\u{2715}"</button>
                                                 }.into_any()
                                             } else {
                                                 let n = name_for_actions.clone();
                                                 let delete_disabled = count > 0;
                                                 view! {
-                                                    <button class="btn "
+                                                    <button class="btn btn-icon" title="Edit"
                                                         on:click=move |_| {
                                                             confirm_delete.set(None);
                                                             editing.set(Some((id, n.clone())));
-                                                        }>"Edit"</button>
-                                                    " "
-                                                    <button class="btn btn-danger "
+                                                        }>"\u{270F}"</button>
+                                                    <button class="btn btn-icon btn-danger" title="Delete"
                                                         disabled=delete_disabled
-                                                        on:click=move |_| confirm_delete.set(Some(id))>"Delete"</button>
+                                                        on:click=move |_| confirm_delete.set(Some(id))>"\u{1F5D1}"</button>
                                                 }.into_any()
                                             }}
                                         </td>

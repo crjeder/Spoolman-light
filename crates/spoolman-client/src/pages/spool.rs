@@ -459,19 +459,16 @@ pub fn SpoolShow() -> impl IntoView {
             <div class="page-header">
                 <h1>"Spool #"{move || id()}</h1>
                 <div class="page-actions">
-                    <a href=move || format!("/spools/{}/edit", id()) class="btn ">"Edit"</a>
-                    <button on:click=move |e| on_clone.with_value(|f| f(e)) class="btn ">"Clone"</button>
+                    <a href=move || format!("/spools/{}/edit", id()) class="btn btn-icon" title="Edit">"\u{270F}"</a>
+                    <button on:click=move |e| on_clone.with_value(|f| f(e)) class="btn btn-icon" title="Clone">"\u{29C9}"</button>
                     {move || if confirm_delete.get() {
                         view! {
-                            <span class="confirm-prompt">"Sure?"</span>
-                            " "
-                            <button on:click=move |e| on_delete.with_value(|f| f(e)) class="btn btn-danger ">"Yes, delete"</button>
-                            " "
-                            <button on:click=move |_| confirm_delete.set(false) class="btn ">"Cancel"</button>
+                            <button on:click=move |e| on_delete.with_value(|f| f(e)) class="btn btn-icon btn-danger" title="Confirm delete">"\u{1F5D1}"</button>
+                            <button on:click=move |_| confirm_delete.set(false) class="btn btn-icon" title="Cancel">"\u{2715}"</button>
                         }.into_any()
                     } else {
                         view! {
-                            <button on:click=move |_| confirm_delete.set(true) class="btn btn-danger ">"Delete"</button>
+                            <button on:click=move |_| confirm_delete.set(true) class="btn btn-icon btn-danger" title="Delete">"\u{1F5D1}"</button>
                         }.into_any()
                     }}
                 </div>

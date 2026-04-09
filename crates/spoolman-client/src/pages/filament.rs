@@ -207,22 +207,19 @@ pub fn FilamentList() -> impl IntoView {
                                     <td class="num">{format::format_density(f.density)}</td>
                                     <td>{format::format_date(f.registered)}</td>
                                     <td class="actions">
-                                        <a href=format!("/filaments/{id}")>"View"</a>
-                                        " · "
-                                        <a href=format!("/filaments/{id}/edit")>"Edit"</a>
-                                        " · "
+                                        <a href=format!("/filaments/{id}") class="btn btn-icon" title="View">"\u{1F441}"</a>
+                                        <a href=format!("/filaments/{id}/edit") class="btn btn-icon" title="Edit">"\u{270F}"</a>
                                         {move || if confirm_delete.get() == Some(id) {
                                             view! {
-                                                <button class="btn btn-danger "
-                                                    on:click=move |_| on_delete(id)>"Sure?"</button>
-                                                " "
-                                                <button class="btn "
-                                                    on:click=move |_| confirm_delete.set(None)>"Cancel"</button>
+                                                <button class="btn btn-icon btn-danger" title="Confirm delete"
+                                                    on:click=move |_| on_delete(id)>"\u{1F5D1}"</button>
+                                                <button class="btn btn-icon" title="Cancel"
+                                                    on:click=move |_| confirm_delete.set(None)>"\u{2715}"</button>
                                             }.into_any()
                                         } else {
                                             view! {
-                                                <button class="btn btn-danger "
-                                                    on:click=move |_| confirm_delete.set(Some(id))>"Delete"</button>
+                                                <button class="btn btn-icon btn-danger" title="Delete"
+                                                    on:click=move |_| confirm_delete.set(Some(id))>"\u{1F5D1}"</button>
                                             }.into_any()
                                         }}
                                     </td>

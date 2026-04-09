@@ -19,15 +19,15 @@ pub fn Pagination(
 
     view! {
         <div class="pagination">
-            <button
+            <button class="btn btn-icon" title="Previous page"
                 disabled=move || page.get() == 0
                 on:click=move |_| page.update(|p| *p = p.saturating_sub(1))
-            >"← Prev"</button>
+            >"\u{2039}"</button>
             <span>{move || format!("Page {} / {}", page.get() + 1, total_pages())}</span>
-            <button
+            <button class="btn btn-icon" title="Next page"
                 disabled=next_disabled
                 on:click=move |_| page.update(|p| *p += 1)
-            >"Next →"</button>
+            >"\u{203A}"</button>
             <select
                 on:change=move |ev| {
                     let v = event_target_value(&ev).parse::<usize>().unwrap_or(25);

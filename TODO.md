@@ -29,9 +29,9 @@ Items where the actual code does NOT match the OpenSpec specification:
 
 ### Enhancements
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
-- [~] use locale to format date and time. fall back to what is configured in settings. add a setting for date / time format — implementation complete on `feat/locale-datetime-format` (PR #49); pending manual UI verification (Docker build + browser smoke tests)
+- [x] use locale to format date and time. fall back to what is configured in settings. add a setting for date / time format — implementation complete on `feat/locale-datetime-format` (PR #49); pending manual UI verification (Docker build + browser smoke tests)
 - [x] rename "filter" to "search"
-- [ ] table headers contain filter button (partial: Color column header activates color picker filter)
+- [x] table headers contain filter button (partial: Color column header activates color picker filter)
 - [x] Manual verify `remove-time-display`: detail panel shows date-only and form retains `YYYY-MM-DD` semantics
 - [x] Manual verify `format-currency-date-numbers-intl`: locale formatting is active for dates/weights/density in browser rendering
 - [x] move Filament.net_weight to spool.net_weight

@@ -33,7 +33,7 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] rename "filter" to "search"
 - [ ] table headers contain filter button (partial: Color column header activates color picker filter)
 - [x] Manual verify `remove-time-display`: detail panel shows date-only and form retains `YYYY-MM-DD` semantics
-- [ ] Manual verify `format-currency-date-numbers-intl`: locale formatting is active for dates/weights/density in browser rendering
+- [x] Manual verify `format-currency-date-numbers-intl`: locale formatting is active for dates/weights/density in browser rendering
 - [x] move Filament.net_weight to spool.net_weight
 - [ ] add delete buttons wherever edit buttons are
 - ~~remove "remaining %"~~
@@ -43,7 +43,7 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] remove the color button from above the table
 - [x] place a little square unicode U+25A0 in the current color if color search is not "off"
 - [ ] extend search to location
-- [ ] place a filter icon in location table head. user can select a location from drop down. filter table to show only entries which match the selected location
+- [x] place a filter icon in location table head. user can select a location from drop down. filter table to show only entries which match the selected location
 - [x] color search for multi color is not intuitive
 - [x] pop-up color selector would be better than the selector on top of the page. color should not change when changing the threshold
 - [x] add the hex value to the color display in spool details
@@ -58,11 +58,11 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] replace the edit and delete buttons text with icons. add a view button
 - [x] in spool details: link the filament name to the corresponding filament
 - [ ] filament and or spool edit: add https://filamentcolors.xyz/ and / or spoolmandb  search
-- [ ] use of deprecated function `leptos::prelude::create_effect`: This function is being removed to conform to Rust idioms. Please use `Effect::new()` instead.
+- [x] use of deprecated function `leptos::prelude::create_effect`: This function is being removed to conform to Rust idioms. Please use `Effect::new()` instead.
 - [x] replace buttons with icons everywhere
 - [x] display spool price and price per kg in spool details 
 - [x] change the unit to price per kg in spool table
-- [ ] filter on location
+- [x] filter on location
 - [ ] default values for din99 13; 19; 25
 - [x] € defect
 - [x] € after number in price

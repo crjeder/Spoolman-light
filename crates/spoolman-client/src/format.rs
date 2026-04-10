@@ -26,10 +26,20 @@ export function sm_format_date_medium(timestamp_ms) {
         timeZone: 'UTC',
     }).format(new Date(timestamp_ms));
 }
+export function sm_format_currency(value, symbol) {
+    const parts = new Intl.NumberFormat(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).formatToParts(value);
+    return parts.map(p => p.type === 'currency' ? symbol : p.value).join('');
+}
 ")]
 extern "C" {
     fn sm_format_decimal(value: f64, min_fd: u32, max_fd: u32) -> String;
     fn sm_format_date_medium(timestamp_ms: f64) -> String;
+    fn sm_format_currency(value: f64, symbol: &str) -> String;
 }
 
 /// Format a weight value with the browser locale, appending " g".
@@ -56,20 +66,18 @@ pub fn format_date(dt: DateTime<Utc>) -> String {
     sm_format_date_medium(dt.timestamp_millis() as f64)
 }
 
-/// Format a currency amount.
+/// Format a currency amount with locale-aware symbol positioning.
 ///
-/// If `symbol_override` is non-empty it is prepended as a literal prefix and
-/// the numeric part is locale-formatted with exactly 2 fractional digits.
+/// If `symbol_override` is non-empty, it is placed before or after the number
+/// according to the browser locale (e.g. `"$10.00"` for `en-US`, `"10,00 €"`
+/// for `de-DE`). Position is derived via `Intl.NumberFormat.formatToParts()`
+/// using USD as a locale probe.
 /// If empty, the amount is formatted as a plain locale decimal with 2 fraction
 /// digits (no symbol).
-///
-/// **No call sites yet** — price fields are not in the data model.  When a
-/// price field is added, use this helper rather than rolling a new formatter.
 pub fn format_currency(amount: f64, symbol_override: &str) -> String {
-    let number = sm_format_decimal(amount, 2, 2);
     if symbol_override.is_empty() {
-        number
+        sm_format_decimal(amount, 2, 2)
     } else {
-        format!("{}{}", symbol_override, number)
+        sm_format_currency(amount, symbol_override)
     }
 }

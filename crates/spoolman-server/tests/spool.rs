@@ -141,12 +141,12 @@ async fn create_spool_with_zero_net_weight_filament_returns_201() {
     );
 }
 
-/// Task 6.2: creating a spool with a price returns `price_per_gram` in the response.
-/// Also verifies that a spool without price returns `null` for `price_per_gram`.
+/// Task 6.2: creating a spool with a price returns `price_per_kg` in the response.
+/// Also verifies that a spool without price returns `null` for `price_per_kg`.
 #[tokio::test]
-async fn spool_price_returns_price_per_gram() {
+async fn spool_price_returns_price_per_kg() {
     let (app, _dir) = common::make_app();
-    // Create filament with a known net_weight so price_per_gram is deterministic
+    // Create filament with a known net_weight so price_per_kg is deterministic
     let (_, fil) = common::request(
         &app,
         Method::POST,
@@ -156,7 +156,7 @@ async fn spool_price_returns_price_per_gram() {
     .await;
     let fid = fil["id"].as_u64().unwrap();
 
-    // Spool with price=20.0 and net_weight=1000.0 → price_per_gram = 0.02
+    // Spool with price=20.0 and net_weight=1000.0 g → price_per_kg = 20.0
     let (status, body) = common::request(
         &app,
         Method::POST,
@@ -165,10 +165,10 @@ async fn spool_price_returns_price_per_gram() {
     )
     .await;
     assert_eq!(status, StatusCode::CREATED, "body: {body}");
-    let ppg = body["price_per_gram"].as_f64().expect("price_per_gram should be present");
-    assert!((ppg - 0.02).abs() < 0.0001, "expected ~0.02, got {ppg}");
+    let ppkg = body["price_per_kg"].as_f64().expect("price_per_kg should be present");
+    assert!((ppkg - 20.0).abs() < 0.001, "expected ~20.0, got {ppkg}");
 
-    // Spool without price → price_per_gram must be null
+    // Spool without price → price_per_kg must be null
     let (status2, body2) = common::request(
         &app,
         Method::POST,
@@ -177,7 +177,7 @@ async fn spool_price_returns_price_per_gram() {
     )
     .await;
     assert_eq!(status2, StatusCode::CREATED, "body: {body2}");
-    assert!(body2["price_per_gram"].is_null(), "price_per_gram should be null when no price set");
+    assert!(body2["price_per_kg"].is_null(), "price_per_kg should be null when no price set");
 }
 
 #[tokio::test]

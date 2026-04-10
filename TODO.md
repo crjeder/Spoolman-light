@@ -60,9 +60,9 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [ ] filament and or spool edit: add https://filamentcolors.xyz/ and / or spoolmandb  search
 - [ ] use of deprecated function `leptos::prelude::create_effect`: This function is being removed to conform to Rust idioms. Please use `Effect::new()` instead.
 - [x] replace buttons with icons everywhere
-- [ ] display spool price and price per kg in spool details 
-- [ ] change the unit to price per kg in spool table
+- [x] display spool price and price per kg in spool details 
+- [x] change the unit to price per kg in spool table
 - [ ] filter on location
 - [ ] default values for din99 13; 19; 25
-- [ ] € defect
-- [ ] € after number in price
+- [x] € defect
+- [x] € after number in price

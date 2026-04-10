@@ -59,7 +59,7 @@ Items where the actual code does NOT match the OpenSpec specification:
 - [x] in spool details: link the filament name to the corresponding filament
 - [ ] filament and or spool edit: add https://filamentcolors.xyz/ and / or spoolmandb  search
 - [ ] use of deprecated function `leptos::prelude::create_effect`: This function is being removed to conform to Rust idioms. Please use `Effect::new()` instead.
-- [ ] replace buttons with icons everywhere
+- [x] replace buttons with icons everywhere
 - [ ] display spool price and price per kg in spool details 
 - [ ] change the unit to price per kg in spool table
 - [ ] filter on location

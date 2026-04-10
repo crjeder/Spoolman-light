@@ -32,7 +32,7 @@ pub fn SpoolList() -> impl IntoView {
         "filament",
         "color",
         "remaining_weight",
-        "price_per_gram",
+        "price_per_kg",
         "location",
         "registered",
     ]);
@@ -187,7 +187,7 @@ pub fn SpoolList() -> impl IntoView {
                         }
                     }
                 },
-                "price_per_gram" => match (a.price_per_gram, b.price_per_gram) {
+                "price_per_kg" => match (a.price_per_kg, b.price_per_kg) {
                     (None, None) => Ordering::Equal,
                     (None, _) => Ordering::Greater,
                     (_, None) => Ordering::Less,
@@ -339,7 +339,7 @@ pub fn SpoolList() -> impl IntoView {
                                 })}
                             </th>
                             <ColHeader label="Remaining (g)" field="remaining_weight" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
-                            <ColHeader label="Price/g"       field="price_per_gram"    sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
+                            <ColHeader label="Price/kg"      field="price_per_kg"      sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Location"      field="location"          sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Actions"</th>
@@ -356,7 +356,7 @@ pub fn SpoolList() -> impl IntoView {
                                 sr.spool.colors.clone()
                             };
                             let rem = sr.remaining_filament.map(format::format_weight).unwrap_or_default();
-                            let ppg = sr.price_per_gram
+                            let ppg = sr.price_per_kg
                                 .map(|p| format::format_currency(p as f64, &cur_sym.0.get()))
                                 .unwrap_or_else(|| "—".into());
                             let material = sr.filament.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default();
@@ -422,6 +422,7 @@ pub fn SpoolShow() -> impl IntoView {
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
     let spool = LocalResource::new(move || { let id = id(); async move { api::get_spool(id).await } });
     let locations = LocalResource::new(|| async { api::list_locations().await });
+    let cur_sym = currency_symbol();
     let navigate = use_navigate();
     let confirm_delete = create_rw_signal(false);
 
@@ -508,9 +509,12 @@ pub fn SpoolShow() -> impl IntoView {
                             }).collect_view()}</dd>
                             <dt>"Color name"</dt><dd>{sr.spool.color_name.clone().unwrap_or_default()}</dd>
                             <dt>"Initial weight"</dt><dd>{format::format_weight(sr.spool.initial_weight)}</dd>
+                            <dt>"Net weight"</dt><dd>{sr.spool.net_weight.map(format::format_weight).unwrap_or_else(|| "—".into())}</dd>
                             <dt>"Current weight"</dt><dd>{format::format_weight(sr.spool.current_weight)}</dd>
                             <dt>"Used"</dt><dd>{format::format_weight(sr.used_weight)}</dd>
                             <dt>"Remaining filament"</dt><dd>{sr.remaining_filament.map(format::format_weight).unwrap_or_else(|| "unknown".into())}</dd>
+                            <dt>"Price"</dt><dd>{sr.spool.price.map(|p| format::format_currency(p as f64, &cur_sym.0.get())).unwrap_or_else(|| "—".into())}</dd>
+                            <dt>"Price/kg"</dt><dd>{sr.price_per_kg.map(|p| format::format_currency(p as f64, &cur_sym.0.get())).unwrap_or_else(|| "—".into())}</dd>
                             <dt>"Registered"</dt><dd>{format::format_date(sr.spool.registered)}</dd>
                             <dt>"First used"</dt><dd>{sr.spool.first_used.map(format::format_date).unwrap_or_default()}</dd>
                             <dt>"Last used"</dt><dd>{sr.spool.last_used.map(format::format_date).unwrap_or_default()}</dd>

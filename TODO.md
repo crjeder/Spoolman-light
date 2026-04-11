@@ -4,7 +4,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 
 ## Pending
 - [x] B20: color square (U+25A0) does not show the currently selected color. 
-- [ ] B21 /api/v1/info is empty
+- [x] B21 /api/v1/info is empty
 
 ### OpenSpec Implementation Discrepancies
 

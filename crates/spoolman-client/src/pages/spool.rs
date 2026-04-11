@@ -547,7 +547,7 @@ pub fn SpoolCreate() -> impl IntoView {
     let comment = create_rw_signal(String::new());
     let error = create_rw_signal(Option::<String>::None);
 
-    create_effect(move |_| {
+    Effect::new(move |_| {
         if let Some(Ok(fs)) = filaments.get() {
             if let Some(first) = fs.first() {
                 filament_id.set(first.id);
@@ -688,7 +688,7 @@ pub fn SpoolEdit() -> impl IntoView {
     let error = create_rw_signal(Option::<String>::None);
 
     // Pre-fill once loaded.
-    create_effect(move |_| {
+    Effect::new(move |_| {
         if let Some(Ok(sr)) = spool.get() {
             current_weight.set(sr.spool.current_weight.to_string());
             net_weight.set(

@@ -409,7 +409,7 @@ pub fn FilamentEdit() -> impl IntoView {
     let comment = create_rw_signal(String::new());
     let error = create_rw_signal(Option::<String>::None);
 
-    create_effect(move |_| {
+    Effect::new(move |_| {
         if let Some(Ok(f)) = filament.get() {
             manufacturer.set(f.manufacturer.clone().unwrap_or_default());
             material.set(

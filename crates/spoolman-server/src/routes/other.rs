@@ -18,9 +18,16 @@ pub fn router() -> Router<JsonStore> {
 }
 
 async fn info(State(store): State<JsonStore>) -> Json<Value> {
+    let data_directory = store
+        .data_file_path()
+        .parent()
+        .map(|p| p.to_string_lossy().into_owned())
+        .unwrap_or_default();
     Json(json!({
         "version": env!("CARGO_PKG_VERSION"),
-        "data_file": store.get_data_file_path().to_string_lossy(),
+        "debug": store.debug_mode(),
+        "data_directory": data_directory,
+        "automatic_backup": store.automatic_backup(),
     }))
 }
 

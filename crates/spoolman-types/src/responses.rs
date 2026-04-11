@@ -68,9 +68,11 @@ pub struct SpoolmanDbEntry {
     pub colors: Option<Vec<Rgba>>,
 }
 
-/// Server info response for GET /info.
+/// Server info response for GET /info and GET /api/v1/info.
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct InfoResponse {
     pub version: String,
-    pub data_file: String,
+    pub debug: bool,
+    pub data_directory: String,
+    pub automatic_backup: bool,
 }

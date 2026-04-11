@@ -44,6 +44,8 @@ pub struct SpoolFilter<'a> {
 pub struct JsonStore {
     inner: Arc<RwLock<DataStore>>,
     path: PathBuf,
+    automatic_backup: bool,
+    debug_mode: bool,
 }
 
 impl JsonStore {
@@ -68,11 +70,20 @@ impl JsonStore {
         let store = Self {
             inner: Arc::new(RwLock::new(DataStore::default())),
             path: resolved,
+            automatic_backup: true,
+            debug_mode: false,
         };
         // Run any pending schema migrations before exposing the store.
         store.migrate(&mut data)?;
         *store.inner.write().unwrap() = data;
         Ok(store)
+    }
+
+    /// Configure runtime flags from the server config.
+    pub fn with_config(mut self, automatic_backup: bool, debug_mode: bool) -> Self {
+        self.automatic_backup = automatic_backup;
+        self.debug_mode = debug_mode;
+        self
     }
 
     /// Migrate the store to the current schema version if needed.
@@ -628,6 +639,14 @@ impl JsonStore {
 
     pub fn data_file_path(&self) -> &Path {
         &self.path
+    }
+
+    pub fn automatic_backup(&self) -> bool {
+        self.automatic_backup
+    }
+
+    pub fn debug_mode(&self) -> bool {
+        self.debug_mode
     }
 }
 

@@ -1,4 +1,4 @@
-# Specification: Color Threshold Settings
+## MODIFIED Requirements
 
 ### Requirement: Color search level thresholds are user-configurable
 The Settings page SHALL display three numeric input fields for the active color distance algorithm's thresholds — one for each search level (Same, Close, Ballpark). Each field SHALL be pre-populated with the persisted value for that level/algorithm combination, or the hardcoded default when no value has been saved. Saving the Settings form SHALL persist each threshold under its key `color_threshold_{algo}_{level}` (e.g. `color_threshold_ciede2000_same`) via `PUT /api/v1/settings/{key}`.

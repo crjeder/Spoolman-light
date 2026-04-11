@@ -1,4 +1,4 @@
-# Specification: Color Distance Algorithm
+## MODIFIED Requirements
 
 ### Requirement: Color distance algorithm setting
 The system SHALL store a user-selected color distance algorithm under the settings key `color_distance_algorithm`. Valid values are `ciede2000`, `oklab`, and `din99d`. When the key is absent the system SHALL default to `din99d`. The value SHALL be persisted via the existing `PUT /api/v1/settings/{key}` endpoint.
@@ -21,28 +21,6 @@ The Settings page SHALL display a labeled `<select>` element for the color dista
 #### Scenario: Saving a new algorithm updates the selector and filter
 - **WHEN** the user changes the selector to "DIN99d (default)" and saves
 - **THEN** the selector shows "DIN99d (default)" and the spool list immediately applies DIN99d distance without a page reload
-
-### Requirement: OKLab color distance
-The system SHALL support computing perceptual color difference in the OKLab color space (ΔE_ok) as the Euclidean distance between two OKLab values derived from sRGB inputs. Alpha SHALL be ignored.
-
-#### Scenario: Identical colors return zero distance
-- **WHEN** both input colors are the same sRGB value and OKLab is the active algorithm
-- **THEN** the returned ΔE_ok is 0.0
-
-#### Scenario: Clearly different colors return non-zero distance
-- **WHEN** comparing pure red (#ff0000) and pure blue (#0000ff) using OKLab
-- **THEN** the returned ΔE_ok is greater than 0.1
-
-### Requirement: DIN99d color distance
-The system SHALL support computing perceptual color difference using the DIN99d metric (DIN 6176:2001) as a closed-form transform applied to CIE L\*a\*b\* values derived from sRGB inputs. Alpha SHALL be ignored.
-
-#### Scenario: Identical colors return zero distance
-- **WHEN** both input colors are the same sRGB value and DIN99d is the active algorithm
-- **THEN** the returned DIN99d ΔE is 0.0
-
-#### Scenario: Clearly different colors return high distance
-- **WHEN** comparing pure red (#ff0000) and pure blue (#0000ff) using DIN99d
-- **THEN** the returned DIN99d ΔE is greater than 25.0
 
 ### Requirement: Per-algorithm thresholds for color search levels
 The system SHALL map the color search level labels (Same, Close, Ballpark) to numeric thresholds that are user-configurable and persisted in the settings store. When no user value has been saved for a given level/algorithm combination, the system SHALL fall back to the following defaults:

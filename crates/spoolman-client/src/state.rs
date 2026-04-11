@@ -116,19 +116,19 @@ pub fn use_table_state(namespace: &'static str) -> TableState {
     // Persist changes back to localStorage.
     {
         let ns = namespace;
-        create_effect(move |_| {
+        Effect::new(move |_| {
             storage_set(&format!("table.{ns}.sort_field"), &sort_field.get());
         });
-        create_effect(move |_| {
+        Effect::new(move |_| {
             storage_set(
                 &format!("table.{ns}.sort_asc"),
                 if sort_asc.get() { "true" } else { "false" },
             );
         });
-        create_effect(move |_| {
+        Effect::new(move |_| {
             storage_set(&format!("table.{ns}.page"), &page.get().to_string());
         });
-        create_effect(move |_| {
+        Effect::new(move |_| {
             storage_set(
                 &format!("table.{ns}.page_size"),
                 &page_size.get().to_string(),

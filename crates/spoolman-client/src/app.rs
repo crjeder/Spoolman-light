@@ -52,7 +52,7 @@ pub fn App() -> impl IntoView {
 
     // Fetch persisted settings and update the diameter + currency signals.
     let settings_res = LocalResource::new(|| async { crate::api::fetch_settings().await });
-    create_effect(move |_| {
+    Effect::new(move |_| {
         if let Some(Ok(s)) = settings_res.get() {
             diam_uniform.set(
                 s.get("uniform_diameter")

@@ -27,7 +27,7 @@ pub fn SettingsPage() -> impl IntoView {
     let thresh_close    = create_rw_signal(format!("{:.1}", ct.ciede2000_close.get_untracked()));
     let thresh_ballpark = create_rw_signal(format!("{:.1}", ct.ciede2000_ballpark.get_untracked()));
 
-    create_effect(move |_| {
+    Effect::new(move |_| {
         if let Some(Ok(s)) = settings.get() {
             currency.set(
                 s.get("currency_symbol")
@@ -56,7 +56,7 @@ pub fn SettingsPage() -> impl IntoView {
 
     // When the algorithm selector changes, swap the threshold fields to show
     // that algorithm's current values.
-    create_effect(move |_| {
+    Effect::new(move |_| {
         update_thresh_fields(algo.get().as_str(), ct, &thresh_same, &thresh_close, &thresh_ballpark);
     });
 

@@ -5,20 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.5.0] - 2026-04-12
 
 ### Added
 
 - Spool list sorts by closest color match (ascending ΔE*00) when a color search level is active. Switching back to "Off" restores the default column sort order.
 - "Color" column header in the spool list is now clickable — clicking it (or pressing Enter/Space when focused) activates the color picker filter in the page header. The header shows a pointer cursor and accent hover style to signal interactivity.
-
-### Fixed
-
-- Docker build no longer fails when GitHub Releases is unreachable: `wasm-bindgen-cli` is now pre-installed via `cargo install` in the builder stage so `cargo-leptos` finds it on `$PATH` instead of downloading a pre-built binary at build time.
-- `scripts/run-e2e.sh` now `cd`s into `tests/e2e/` before running Playwright so `playwright.config.ts` (and its `baseURL`) is picked up correctly. Previously all 15 E2E tests failed with "Cannot navigate to invalid URL" because Playwright ran from the repo root without a config.
-
-### Added (previously unreleased)
-
 - Light theme colour palette derived from the Spoolman Light logo: cyan accent (`#4DC8E8`), charcoal text (`#3D4555`), and off-white sidebar background (`#F0F2F5`) replace the previous generic greys and blue. Dark mode tokens are unchanged.
 - CSS styling via `stylers 0.3.2` — every Leptos component now has a scoped `style!` block. Global styles (CSS custom properties, dark-mode overrides, reset, buttons, shared page classes) live in `style/spoolman.css` bundled via `Leptos.toml` `style-file`. The app is no longer completely unstyled (fixes B4).
 - Rust integration test suite — 24 tests covering health, filament, spool, location, and settings endpoints via in-process Axum dispatch; runs with `cargo test -p spoolman-server`, no Docker required.
@@ -29,28 +21,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Docker build no longer fails when GitHub Releases is unreachable: `wasm-bindgen-cli` is now pre-installed via `cargo install` in the builder stage so `cargo-leptos` finds it on `$PATH` instead of downloading a pre-built binary at build time.
+- `scripts/run-e2e.sh` now `cd`s into `tests/e2e/` before running Playwright so `playwright.config.ts` (and its `baseURL`) is picked up correctly. Previously all 15 E2E tests failed with "Cannot navigate to invalid URL" because Playwright ran from the repo root without a config.
 - Spool detail view now shows `first_used` alongside `registered` and `last_used`, with dates formatted as human-readable `YYYY-MM-DD HH:MM UTC` instead of raw RFC 3339. The edit form gains `First used` and `Last used` datetime-local inputs that round-trip dates through the `UpdateSpool` API (fixes B14).
 - **B15** Delete buttons now show inline "Sure?" / "Cancel" confirmation before removing any entity.
 - **B15** Location list rows disappear immediately after delete (replaced `refetch()` with a version-counter reactive source).
 - **B15** Spool and Filament list pages now have Delete buttons per row.
 - **B15** FilamentShow now has a Delete button.
 - **B15** Navigating to a deleted spool or filament (HTTP 404) redirects to the list view instead of showing an error.
-
 - Spool create and edit dialogs now reject the form with an error message when no location is selected — previously the form submitted with `location_id: None` silently (fixes B16).
-
 - Help page had three issues: the "Data file" section linked to `/api/v1/setting` (returns an empty map) with misleading text; the NFC section displayed the literal text `&lt;id&gt;` instead of `<id>` due to double-escaping in the Leptos text node; and no `/info` endpoint existed. Added `GET /api/v1/info` (returns `{ version, data_file }`), updated the link and label to point to `/api/v1/info`, and corrected the NFC URL string (fixes B17).
 - `/api/v1/info` returned empty — the client was fetching `/info` but the route is mounted at `/api/v1/info`; corrected the client path.
-
 - Opacity (alpha) of spool colours was hardcoded to 255 — the native `<input type="color">` element has no alpha channel. Added an `<input type="range">` opacity slider (0–255) next to the colour picker in both the create and edit spool forms. The current percentage is shown as a label; the edit form pre-fills the slider from the saved colour's alpha value (fixes B7).
-
 - Spool create and edit both returned HTTP 500 when the selected filament had `net_weight = Some(0.0)` — division by zero in `SpoolResponse::new` produced `NaN`/`±inf` for `remaining_pct`, which `serde_json` cannot serialize, causing Axum to return 500 instead of the expected 201/200. Added `.filter(|&nw| nw > 0.0)` before the `.map()` so `remaining_pct` is `None` when `net_weight` is zero or absent. Regression test `create_spool_with_zero_net_weight_filament_returns_201` added (fixes B8, B12). Also fixed spool edit navigation: after a successful save the client now navigates to `/spools` (list) instead of `/spools/{id}` (detail) (fixes B9).
-
 - Filament list sorting was completely non-functional — same root cause as spool list (sort signals tracked for display only, never applied to data). Added `sorted` closure with numeric comparison for density and date comparison for registered. Added `ColHeader` for the Density column (was a plain `<th>`). Manufacturer and Material sort by case-insensitive string; `None` values sort last regardless of direction (fixes B11).
-
 - Spool list sorting was completely non-functional — `sort_field`/`sort_asc` state was tracked for display but never applied to the data. Added a `sorted` closure that sorts the filtered items before pagination using numeric comparison for IDs, weights, and percentages (not lexicographic), and string comparison for filament names. `Remaining (g)` and `Location` columns previously had no sort button (`<th>` with no `ColHeader`); replaced with `ColHeader` wired to `remaining_weight` and `location` fields respectively. `None` values always sort last regardless of direction (fixes B6, B10).
-
 - Locations Delete button rendered raw Leptos macro source as its label (`0 on : click = move | _ | on_delete(id) >Delete`) — `>` in `disabled=move || count > 0` was parsed as the closing `>` of the `<button` tag; extracted to `let delete_disabled = count > 0` before the `view!` block (same fix pattern as Pagination "Next →"). Also added `.btn:disabled` CSS rule so disabled buttons keep their color identity rather than looking like unstyled pagination buttons (fixes B5).
-
 - Pagination Next/Prev buttons were always disabled — the previous fix for the `>=` parsing issue extracted `next_disabled` as a `Signal::derive(…)`, but Leptos 0.6 does not create reactive attribute bindings for a bare `Signal<bool>` passed by name: it reads the initial value (always `true` before data loads) and never updates. Changed `next_disabled` to a plain `move || …` closure so the attribute binding is reactive (fixes B13).
 - Spool create form sent `filament_id: 0` causing a 404 — added a `create_effect` that initializes the signal to the first loaded filament's ID when the resource resolves.
 - Spool create and edit forms always sent an empty `colors` array — added `<input type="color">` picker wired through `hex_to_rgba`; edit form pre-fills the picker from the spool's existing first color.

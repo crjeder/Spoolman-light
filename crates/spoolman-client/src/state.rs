@@ -107,11 +107,11 @@ pub fn use_table_state(namespace: &'static str) -> TableState {
         storage_get(&format!("table.{namespace}.{key}")).unwrap_or_else(|| default.to_string())
     };
 
-    let sort_field = create_rw_signal(load("sort_field", "registered"));
-    let sort_asc = create_rw_signal(load("sort_asc", "false") == "true");
-    let page = create_rw_signal(load("page", "0").parse::<usize>().unwrap_or(0));
-    let page_size = create_rw_signal(load("page_size", "25").parse::<usize>().unwrap_or(25));
-    let filter = create_rw_signal(String::new()); // filters are session-only
+    let sort_field = RwSignal::new(load("sort_field", "registered"));
+    let sort_asc = RwSignal::new(load("sort_asc", "false") == "true");
+    let page = RwSignal::new(load("page", "0").parse::<usize>().unwrap_or(0));
+    let page_size = RwSignal::new(load("page_size", "25").parse::<usize>().unwrap_or(25));
+    let filter = RwSignal::new(String::new()); // filters are session-only
 
     // Persist changes back to localStorage.
     {

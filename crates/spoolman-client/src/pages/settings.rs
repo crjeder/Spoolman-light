@@ -8,24 +8,24 @@ use leptos::task::spawn_local;
 #[component]
 pub fn SettingsPage() -> impl IntoView {
     let settings = LocalResource::new(|| async { api::fetch_settings().await });
-    let currency = create_rw_signal(String::new());
-    let saved = create_rw_signal(false);
-    let error = create_rw_signal(Option::<String>::None);
+    let currency = RwSignal::new(String::new());
+    let saved = RwSignal::new(false);
+    let error = RwSignal::new(Option::<String>::None);
 
     // Diameter settings — read from shared context; local copies for the form.
     let ds = diameter_settings();
-    let uniform = create_rw_signal(true);
-    let default_mm = create_rw_signal("1.75".to_string());
+    let uniform = RwSignal::new(true);
+    let default_mm = RwSignal::new("1.75".to_string());
 
     // Color distance algorithm — read from shared context; local copy for the form.
     let cda = color_distance_algorithm();
-    let algo = create_rw_signal("ciede2000".to_string());
+    let algo = RwSignal::new("ciede2000".to_string());
 
     // Color search thresholds — read from shared context; local copies for the form.
     let ct = color_thresholds();
-    let thresh_same     = create_rw_signal(format!("{:.1}", ct.ciede2000_same.get_untracked()));
-    let thresh_close    = create_rw_signal(format!("{:.1}", ct.ciede2000_close.get_untracked()));
-    let thresh_ballpark = create_rw_signal(format!("{:.1}", ct.ciede2000_ballpark.get_untracked()));
+    let thresh_same     = RwSignal::new(format!("{:.1}", ct.ciede2000_same.get_untracked()));
+    let thresh_close    = RwSignal::new(format!("{:.1}", ct.ciede2000_close.get_untracked()));
+    let thresh_ballpark = RwSignal::new(format!("{:.1}", ct.ciede2000_ballpark.get_untracked()));
 
     Effect::new(move |_| {
         if let Some(Ok(s)) = settings.get() {

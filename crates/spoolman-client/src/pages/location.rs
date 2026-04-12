@@ -6,23 +6,23 @@ use crate::api;
 
 #[component]
 pub fn LocationList() -> impl IntoView {
-    let version = create_rw_signal(0u32);
+    let version = RwSignal::new(0u32);
     let locations = LocalResource::new(move || {
         let _ = version.get();
         async { api::list_locations().await }
     });
 
     // Inline create form state.
-    let new_name = create_rw_signal(String::new());
-    let create_error = create_rw_signal(Option::<String>::None);
+    let new_name = RwSignal::new(String::new());
+    let create_error = RwSignal::new(Option::<String>::None);
 
     // Edit state: (id, name).
-    let editing = create_rw_signal(Option::<(u32, String)>::None);
-    let edit_error = create_rw_signal(Option::<String>::None);
+    let editing = RwSignal::new(Option::<(u32, String)>::None);
+    let edit_error = RwSignal::new(Option::<String>::None);
 
     // Pending-delete confirmation: holds the id of the row awaiting confirmation.
-    let confirm_delete: RwSignal<Option<u32>> = create_rw_signal(None);
-    let delete_error = create_rw_signal(Option::<String>::None);
+    let confirm_delete: RwSignal<Option<u32>> = RwSignal::new(None);
+    let delete_error = RwSignal::new(Option::<String>::None);
 
     let on_create = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();

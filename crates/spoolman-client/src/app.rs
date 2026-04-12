@@ -32,8 +32,8 @@ pub fn App() -> impl IntoView {
     let currency_sym = create_rw_signal("€".to_string());
     provide_context(CurrencySymbol(currency_sym));
 
-    // Provide color distance algorithm globally (default: CIEDE2000).
-    let color_algo = create_rw_signal(ColorAlgorithm::Ciede2000);
+    // Provide color distance algorithm globally (default: DIN99d).
+    let color_algo = create_rw_signal(ColorAlgorithm::Din99d);
     provide_context(ColorDistanceAlgorithm(color_algo));
 
     // Provide color search thresholds globally (defaults from hardcoded table).
@@ -69,8 +69,8 @@ pub fn App() -> impl IntoView {
             }
             color_algo.set(match s.get("color_distance_algorithm").map(String::as_str) {
                 Some("oklab") => ColorAlgorithm::OkLab,
-                Some("din99d") => ColorAlgorithm::Din99d,
-                _ => ColorAlgorithm::Ciede2000,
+                Some("ciede2000") => ColorAlgorithm::Ciede2000,
+                _ => ColorAlgorithm::Din99d,
             });
             // Load persisted threshold overrides (fall back to hardcoded default
             // when a key is absent).

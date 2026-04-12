@@ -164,17 +164,17 @@ fn threshold_for_opt(level: &str, algo: ColorAlgorithm) -> Option<f32> {
         "same" => Some(match algo {
             ColorAlgorithm::Ciede2000 => 10.0,
             ColorAlgorithm::OkLab => 0.10,
-            ColorAlgorithm::Din99d => 10.0,
+            ColorAlgorithm::Din99d => 13.0,
         }),
         "close" => Some(match algo {
             ColorAlgorithm::Ciede2000 => 20.0,
             ColorAlgorithm::OkLab => 0.20,
-            ColorAlgorithm::Din99d => 20.0,
+            ColorAlgorithm::Din99d => 19.0,
         }),
         "ballpark" => Some(match algo {
             ColorAlgorithm::Ciede2000 => 35.0,
             ColorAlgorithm::OkLab => 0.35,
-            ColorAlgorithm::Din99d => 35.0,
+            ColorAlgorithm::Din99d => 25.0,
         }),
         _ => None,
     }

@@ -164,9 +164,9 @@ pub fn SettingsPage() -> impl IntoView {
                             algo.set(event_target_value(&ev));
                         }
                     >
-                        <option value="ciede2000">"CIEDE2000 (default)"</option>
+                        <option value="ciede2000">"CIEDE2000"</option>
                         <option value="oklab">"OKLab"</option>
-                        <option value="din99d">"DIN99d"</option>
+                        <option value="din99d">"DIN99d (default)"</option>
                     </select>
                 </label>
                 <fieldset class="threshold-fieldset">

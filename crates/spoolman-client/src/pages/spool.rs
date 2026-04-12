@@ -20,15 +20,15 @@ use crate::{
 #[component]
 pub fn SpoolList() -> impl IntoView {
     let ts = use_table_state("spools");
-    let show_archived = create_rw_signal(false);
-    let color_pick = create_rw_signal("#000000".to_string());
-    let color_level = create_rw_signal("off".to_string());
-    let popup_open = create_rw_signal(false);
+    let show_archived = RwSignal::new(false);
+    let color_pick = RwSignal::new("#000000".to_string());
+    let color_level = RwSignal::new("off".to_string());
+    let popup_open = RwSignal::new(false);
     let cda = color_distance_algorithm();
     let ct = color_thresholds();
     let cur_sym = currency_symbol();
 
-    let _visible_cols = create_rw_signal(vec![
+    let _visible_cols = RwSignal::new(vec![
         "filament",
         "color",
         "remaining_weight",
@@ -37,10 +37,10 @@ pub fn SpoolList() -> impl IntoView {
         "registered",
     ]);
 
-    let material_filter = create_rw_signal(String::new());
+    let material_filter = RwSignal::new(String::new());
 
-    let version = create_rw_signal(0u32);
-    let confirm_delete: RwSignal<Option<u32>> = create_rw_signal(None);
+    let version = RwSignal::new(0u32);
+    let confirm_delete: RwSignal<Option<u32>> = RwSignal::new(None);
 
     let spools = LocalResource::new(move || {
         let archived = show_archived.get();
@@ -424,7 +424,7 @@ pub fn SpoolShow() -> impl IntoView {
     let locations = LocalResource::new(|| async { api::list_locations().await });
     let cur_sym = currency_symbol();
     let navigate = use_navigate();
-    let confirm_delete = create_rw_signal(false);
+    let confirm_delete = RwSignal::new(false);
 
     // store_value gives Copy semantics so these handlers can be captured
     // by the reactive `move ||` closure inside view! without making it FnOnce.
@@ -536,16 +536,16 @@ pub fn SpoolCreate() -> impl IntoView {
     let filaments = LocalResource::new(|| async { api::list_filaments(None).await });
     let locations = LocalResource::new(|| async { api::list_locations().await });
 
-    let filament_id = create_rw_signal(0u32);
-    let color_hex = create_rw_signal(String::from("#000000"));
-    let color_alpha = create_rw_signal(255u8);
-    let color_name = create_rw_signal(String::new());
-    let initial_weight = create_rw_signal(String::new());
-    let net_weight = create_rw_signal(String::new());
-    let price = create_rw_signal(String::new());
-    let location_id = create_rw_signal(Option::<u32>::None);
-    let comment = create_rw_signal(String::new());
-    let error = create_rw_signal(Option::<String>::None);
+    let filament_id = RwSignal::new(0u32);
+    let color_hex = RwSignal::new(String::from("#000000"));
+    let color_alpha = RwSignal::new(255u8);
+    let color_name = RwSignal::new(String::new());
+    let initial_weight = RwSignal::new(String::new());
+    let net_weight = RwSignal::new(String::new());
+    let price = RwSignal::new(String::new());
+    let location_id = RwSignal::new(Option::<u32>::None);
+    let comment = RwSignal::new(String::new());
+    let error = RwSignal::new(Option::<String>::None);
 
     Effect::new(move |_| {
         if let Some(Ok(fs)) = filaments.get() {
@@ -675,17 +675,17 @@ pub fn SpoolEdit() -> impl IntoView {
     let locations = LocalResource::new(|| async { api::list_locations().await });
     let navigate = use_navigate();
 
-    let current_weight = create_rw_signal(String::new());
-    let net_weight = create_rw_signal(String::new());
-    let price = create_rw_signal(String::new());
-    let color_hex = create_rw_signal(String::from("#000000"));
-    let color_alpha = create_rw_signal(255u8);
-    let color_name = create_rw_signal(String::new());
-    let location_id = create_rw_signal(Option::<u32>::None);
-    let first_used = create_rw_signal(String::new());
-    let last_used = create_rw_signal(String::new());
-    let comment = create_rw_signal(String::new());
-    let error = create_rw_signal(Option::<String>::None);
+    let current_weight = RwSignal::new(String::new());
+    let net_weight = RwSignal::new(String::new());
+    let price = RwSignal::new(String::new());
+    let color_hex = RwSignal::new(String::from("#000000"));
+    let color_alpha = RwSignal::new(255u8);
+    let color_name = RwSignal::new(String::new());
+    let location_id = RwSignal::new(Option::<u32>::None);
+    let first_used = RwSignal::new(String::new());
+    let last_used = RwSignal::new(String::new());
+    let comment = RwSignal::new(String::new());
+    let error = RwSignal::new(Option::<String>::None);
 
     // Pre-fill once loaded.
     Effect::new(move |_| {

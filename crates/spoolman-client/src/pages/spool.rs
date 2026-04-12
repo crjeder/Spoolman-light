@@ -40,6 +40,7 @@ pub fn SpoolList() -> impl IntoView {
     ]);
 
     let material_filter = RwSignal::new(String::new());
+    let location_filter: RwSignal<Option<u32>> = RwSignal::new(None);
 
     let version = RwSignal::new(0u32);
     let confirm_delete: RwSignal<Option<u32>> = RwSignal::new(None);

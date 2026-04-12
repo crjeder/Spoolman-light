@@ -9,11 +9,13 @@ use spoolman_types::{
 
 use crate::{
     api,
-    components::{pagination::Pagination, table::ColHeader},
+    components::{pagination::Pagination, spoolmandb_search::SpoolmanDbSearch, table::ColHeader},
     format,
+    spoolmandb::parse_material,
     state::{color_distance_algorithm, color_thresholds, currency_symbol, date_format_setting, time_format_setting, use_table_state},
     utils::color::{color_distance, hex_to_rgba},
 };
+use spoolman_types::requests::CreateFilament;
 
 // ── List ───────────────────────────────────────────────────────────────────────
 
@@ -584,12 +586,81 @@ pub fn SpoolCreate() -> impl IntoView {
     let location_id = RwSignal::new(Option::<u32>::None);
     let comment = RwSignal::new(String::new());
     let error = RwSignal::new(Option::<String>::None);
+    // Cache of known filaments — updated when LocalResource resolves and when auto-create adds one.
+    let filaments_list: RwSignal<Vec<spoolman_types::models::Filament>> = RwSignal::new(vec![]);
+    // Notification shown when a filament is auto-created by the DB lookup.
+    let auto_create_msg: RwSignal<Option<String>> = RwSignal::new(None);
 
     Effect::new(move |_| {
         if let Some(Ok(fs)) = filaments.get() {
             if let Some(first) = fs.first() {
                 filament_id.set(first.id);
             }
+            filaments_list.set(fs);
+        }
+    });
+
+    // SpoolmanDB selection: auto-fill color/weight, find or create matching filament.
+    let on_db_select = Callback::new(move |entry: crate::spoolmandb::SpoolmanEntry| {
+        // Fill color fields.
+        if let Some(ref hex) = entry.color_hex {
+            color_hex.set(format!("#{hex}"));
+        }
+        color_name.set(entry.name.clone());
+        if let Some(w) = entry.weight {
+            net_weight.set(w.to_string());
+        }
+
+        // Find a matching filament in our known list.
+        let (mat_type, modifier_opt) = parse_material(&entry.material);
+        let entry_manufacturer_lc = entry.manufacturer.to_lowercase();
+        let entry_diameter = entry.diameter;
+        let known = filaments_list.get_untracked();
+        let matched = known.into_iter().find(|f| {
+            f.manufacturer
+                .as_deref()
+                .map(|m| m.to_lowercase())
+                .as_deref()
+                == Some(entry_manufacturer_lc.as_str())
+                && f.material.as_ref() == Some(&mat_type)
+                && (f.diameter - entry_diameter).abs() < 0.01
+        });
+
+        if let Some(f) = matched {
+            filament_id.set(f.id);
+        } else {
+            // Auto-create the filament and notify the user.
+            let mfr = entry.manufacturer.clone();
+            let mat_abbr = mat_type.abbreviation().to_string();
+            spawn_local(async move {
+                let body = CreateFilament {
+                    manufacturer: Some(mfr.clone()).filter(|s| !s.is_empty()),
+                    material: Some(mat_type),
+                    material_modifier: modifier_opt.filter(|s| !s.is_empty()),
+                    diameter: entry_diameter,
+                    density: if entry.density > 0.0 { entry.density } else { 1.24 },
+                    print_temp: entry.extruder_temp.map(|t| t as i32),
+                    bed_temp: entry.bed_temp.map(|t| t as i32),
+                    spool_weight: entry.spool_weight,
+                    min_print_temp: None,
+                    max_print_temp: None,
+                    min_bed_temp: None,
+                    max_bed_temp: None,
+                    comment: None,
+                };
+                match api::create_filament(&body).await {
+                    Ok(new_f) => {
+                        let new_id = new_f.id;
+                        filaments_list.update(|list| list.push(new_f));
+                        filament_id.set(new_id);
+                        auto_create_msg.set(Some(format!(
+                            "Filament '{} {}' was created automatically.",
+                            mfr, mat_abbr
+                        )));
+                    }
+                    Err(e) => error.set(Some(e.to_string())),
+                }
+            });
         }
     });
 
@@ -630,18 +701,36 @@ pub fn SpoolCreate() -> impl IntoView {
         <div class="page spool-create">
             <h1>"New Spool"</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
+            {move || auto_create_msg.get().map(|msg| view! {
+                <div class="info-banner">
+                    {msg}
+                    <button type="button" class="btn-dismiss"
+                        on:click=move |_| auto_create_msg.set(None)
+                    >"×"</button>
+                </div>
+            })}
+            <SpoolmanDbSearch on_select=on_db_select />
             <form on:submit=on_submit>
                 <label>
                     "Filament"
                     <Suspense fallback=|| view! { <select><option>"Loading…"</option></select> }>
-                        <select on:change=move |ev| {
-                            filament_id.set(event_target_value(&ev).parse().unwrap_or(0));
-                        }>
-                            {move || filaments.get().and_then(|r| r.ok()).map(|fs| {
-                                fs.into_iter().map(|f| view! {
-                                    <option value=f.id.to_string()>{f.display_name()}</option>
+                        <select
+                            prop:value=move || filament_id.get().to_string()
+                            on:change=move |ev| {
+                                filament_id.set(event_target_value(&ev).parse().unwrap_or(0));
+                            }
+                        >
+                            {move || {
+                                let fs = filaments_list.get();
+                                let selected = filament_id.get();
+                                fs.into_iter().map(|f| {
+                                    let id_str = f.id.to_string();
+                                    let is_selected = f.id == selected;
+                                    view! {
+                                        <option value=id_str prop:selected=is_selected>{f.display_name()}</option>
+                                    }
                                 }).collect_view()
-                            })}
+                            }}
                         </select>
                     </Suspense>
                 </label>
@@ -659,7 +748,7 @@ pub fn SpoolCreate() -> impl IntoView {
                 </label>
                 <label>
                     "Color name"
-                    <input type="text" on:input=move |ev| color_name.set(event_target_value(&ev)) />
+                    <input type="text" prop:value=move || color_name.get() on:input=move |ev| color_name.set(event_target_value(&ev)) />
                 </label>
                 <label>
                     "Initial weight (g)"
@@ -669,6 +758,7 @@ pub fn SpoolCreate() -> impl IntoView {
                 <label>
                     "Net weight (g)"
                     <input type="number" step="1"
+                        prop:value=move || net_weight.get()
                         on:input=move |ev| net_weight.set(event_target_value(&ev)) />
                 </label>
                 <label>

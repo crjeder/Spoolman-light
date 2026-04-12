@@ -43,12 +43,12 @@ fn MaterialSelect(value: RwSignal<String>) -> impl IntoView {
 #[component]
 pub fn FilamentList() -> impl IntoView {
     let ts = use_table_state("filaments");
-    let material_filter = create_rw_signal(String::new());
+    let material_filter = RwSignal::new(String::new());
     let ds = diameter_settings();
     let show_diameter = move || !ds.uniform.get();
 
-    let version = create_rw_signal(0u32);
-    let confirm_delete: RwSignal<Option<u32>> = create_rw_signal(None);
+    let version = RwSignal::new(0u32);
+    let confirm_delete: RwSignal<Option<u32>> = RwSignal::new(None);
 
     let filaments = LocalResource::new(move || {
         let mat = material_filter.get();
@@ -242,12 +242,12 @@ pub fn FilamentShow() -> impl IntoView {
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
     let filament = LocalResource::new(move || { let id = id(); async move { api::get_filament(id).await } });
     let navigate = leptos_router::hooks::use_navigate();
-    let confirm_delete = create_rw_signal(false);
+    let confirm_delete = RwSignal::new(false);
 
-    let nav_err = store_value(navigate.clone());
+    let nav_err = StoredValue::new(navigate.clone());
     let nav_delete = navigate;
 
-    let on_delete = store_value(move |_: web_sys::MouseEvent| {
+    let on_delete = StoredValue::new(move |_: web_sys::MouseEvent| {
         let id = id();
         let nav = nav_delete.clone();
         spawn_local(async move {
@@ -317,16 +317,16 @@ pub fn FilamentShow() -> impl IntoView {
 pub fn FilamentCreate() -> impl IntoView {
     let navigate = leptos_router::hooks::use_navigate();
     let ds = diameter_settings();
-    let manufacturer = create_rw_signal(String::new());
-    let material = create_rw_signal(String::new());
-    let modifier = create_rw_signal(String::new());
+    let manufacturer = RwSignal::new(String::new());
+    let material = RwSignal::new(String::new());
+    let modifier = RwSignal::new(String::new());
     // Initialise diameter from the configured default.
-    let diameter = create_rw_signal(ds.default_mm.get_untracked().to_string());
-    let density = create_rw_signal("1.24".to_string());
-    let print_temp = create_rw_signal(String::new());
-    let bed_temp = create_rw_signal(String::new());
-    let comment = create_rw_signal(String::new());
-    let error = create_rw_signal(Option::<String>::None);
+    let diameter = RwSignal::new(ds.default_mm.get_untracked().to_string());
+    let density = RwSignal::new("1.24".to_string());
+    let print_temp = RwSignal::new(String::new());
+    let bed_temp = RwSignal::new(String::new());
+    let comment = RwSignal::new(String::new());
+    let error = RwSignal::new(Option::<String>::None);
 
     let on_submit = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();
@@ -399,15 +399,15 @@ pub fn FilamentEdit() -> impl IntoView {
     let navigate = leptos_router::hooks::use_navigate();
     let ds = diameter_settings();
 
-    let manufacturer = create_rw_signal(String::new());
-    let material = create_rw_signal(String::new());
-    let modifier = create_rw_signal(String::new());
-    let diameter = create_rw_signal("1.75".to_string());
-    let density = create_rw_signal("1.24".to_string());
-    let print_temp = create_rw_signal(String::new());
-    let bed_temp = create_rw_signal(String::new());
-    let comment = create_rw_signal(String::new());
-    let error = create_rw_signal(Option::<String>::None);
+    let manufacturer = RwSignal::new(String::new());
+    let material = RwSignal::new(String::new());
+    let modifier = RwSignal::new(String::new());
+    let diameter = RwSignal::new("1.75".to_string());
+    let density = RwSignal::new("1.24".to_string());
+    let print_temp = RwSignal::new(String::new());
+    let bed_temp = RwSignal::new(String::new());
+    let comment = RwSignal::new(String::new());
+    let error = RwSignal::new(Option::<String>::None);
 
     Effect::new(move |_| {
         if let Some(Ok(f)) = filament.get() {

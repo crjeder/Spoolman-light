@@ -17,19 +17,19 @@ use crate::{
 #[component]
 pub fn App() -> impl IntoView {
     // Provide dark-mode signal globally.
-    let dark = create_rw_signal(load_dark_mode());
+    let dark = RwSignal::new(load_dark_mode());
     provide_context(dark);
 
     // Provide diameter settings globally (defaults: uniform=true, 1.75 mm).
-    let diam_uniform = create_rw_signal(true);
-    let diam_default = create_rw_signal(1.75f64);
+    let diam_uniform = RwSignal::new(true);
+    let diam_default = RwSignal::new(1.75f64);
     provide_context(DiameterSettings {
         uniform: diam_uniform,
         default_mm: diam_default,
     });
 
     // Provide currency symbol globally (default: "€").
-    let currency_sym = create_rw_signal("€".to_string());
+    let currency_sym = RwSignal::new("€".to_string());
     provide_context(CurrencySymbol(currency_sym));
 
     // Provide color distance algorithm globally (default: DIN99d).
@@ -38,15 +38,15 @@ pub fn App() -> impl IntoView {
 
     // Provide color search thresholds globally (defaults from hardcoded table).
     let thresholds = ColorThresholds {
-        ciede2000_same:     create_rw_signal(default_threshold_for("same",     ColorAlgorithm::Ciede2000)),
-        ciede2000_close:    create_rw_signal(default_threshold_for("close",    ColorAlgorithm::Ciede2000)),
-        ciede2000_ballpark: create_rw_signal(default_threshold_for("ballpark", ColorAlgorithm::Ciede2000)),
-        oklab_same:         create_rw_signal(default_threshold_for("same",     ColorAlgorithm::OkLab)),
-        oklab_close:        create_rw_signal(default_threshold_for("close",    ColorAlgorithm::OkLab)),
-        oklab_ballpark:     create_rw_signal(default_threshold_for("ballpark", ColorAlgorithm::OkLab)),
-        din99d_same:        create_rw_signal(default_threshold_for("same",     ColorAlgorithm::Din99d)),
-        din99d_close:       create_rw_signal(default_threshold_for("close",    ColorAlgorithm::Din99d)),
-        din99d_ballpark:    create_rw_signal(default_threshold_for("ballpark", ColorAlgorithm::Din99d)),
+        ciede2000_same:     RwSignal::new(default_threshold_for("same",     ColorAlgorithm::Ciede2000)),
+        ciede2000_close:    RwSignal::new(default_threshold_for("close",    ColorAlgorithm::Ciede2000)),
+        ciede2000_ballpark: RwSignal::new(default_threshold_for("ballpark", ColorAlgorithm::Ciede2000)),
+        oklab_same:         RwSignal::new(default_threshold_for("same",     ColorAlgorithm::OkLab)),
+        oklab_close:        RwSignal::new(default_threshold_for("close",    ColorAlgorithm::OkLab)),
+        oklab_ballpark:     RwSignal::new(default_threshold_for("ballpark", ColorAlgorithm::OkLab)),
+        din99d_same:        RwSignal::new(default_threshold_for("same",     ColorAlgorithm::Din99d)),
+        din99d_close:       RwSignal::new(default_threshold_for("close",    ColorAlgorithm::Din99d)),
+        din99d_ballpark:    RwSignal::new(default_threshold_for("ballpark", ColorAlgorithm::Din99d)),
     };
     provide_context(thresholds);
 

@@ -42,10 +42,13 @@ pub fn SpoolList() -> impl IntoView {
     let version = RwSignal::new(0u32);
     let confirm_delete: RwSignal<Option<u32>> = RwSignal::new(None);
 
+    let locations = LocalResource::new(|| async { api::list_locations().await });
+
     let spools = LocalResource::new(move || {
         let archived = show_archived.get();
+        let loc_id = location_filter.get();
         let _ = version.get();
-        async move { api::list_spools(archived).await }
+        async move { api::list_spools(archived, loc_id).await }
     });
 
     let available_materials = Signal::derive(move || {
@@ -259,6 +262,27 @@ pub fn SpoolList() -> impl IntoView {
                         />
                         " Show archived"
                     </label>
+                    <Suspense>
+                        <select
+                            prop:value=move || location_filter.get().map(|id| id.to_string()).unwrap_or_default()
+                            on:change=move |ev| {
+                                let v = event_target_value(&ev);
+                                location_filter.set(v.parse::<u32>().ok());
+                            }
+                        >
+                            <option value="">"All locations"</option>
+                            {move || locations.get().and_then(|r| r.ok()).map(|ls| {
+                                let cur = location_filter.get();
+                                ls.into_iter().map(|lr| {
+                                    let id = lr.location.id;
+                                    let name = lr.location.name.clone();
+                                    view! {
+                                        <option value=id.to_string() selected=cur == Some(id)>{name}</option>
+                                    }
+                                }).collect_view()
+                            })}
+                        </select>
+                    </Suspense>
                     <a href="/spools/new" class="btn btn-primary ">"+ New Spool"</a>
                 </div>
             </div>
@@ -375,7 +399,16 @@ pub fn SpoolList() -> impl IntoView {
                                     </td>
                                     <td class="num">{rem}</td>
                                     <td class="num">{ppg}</td>
-                                    <td>{sr.spool.location_id.map(|l| l.to_string()).unwrap_or_default()}</td>
+                                    <td>{
+                                        move || match sr.spool.location_id {
+                                            None => "—".to_string(),
+                                            Some(lid) => locations.get()
+                                                .and_then(|r| r.ok())
+                                                .and_then(|ls| ls.into_iter().find(|lr| lr.location.id == lid))
+                                                .map(|lr| lr.location.name.clone())
+                                                .unwrap_or_else(|| lid.to_string()),
+                                        }
+                                    }</td>
                                     <td>{format::format_date(sr.spool.registered)}</td>
                                     <td class="actions">
                                         <a href=format!("/spools/{id}") class="btn btn-icon" title="View">"\u{1F441}"</a>

@@ -244,10 +244,10 @@ pub fn FilamentShow() -> impl IntoView {
     let navigate = leptos_router::hooks::use_navigate();
     let confirm_delete = RwSignal::new(false);
 
-    let nav_err = store_value(navigate.clone());
+    let nav_err = StoredValue::new(navigate.clone());
     let nav_delete = navigate;
 
-    let on_delete = store_value(move |_: web_sys::MouseEvent| {
+    let on_delete = StoredValue::new(move |_: web_sys::MouseEvent| {
         let id = id();
         let nav = nav_delete.clone();
         spawn_local(async move {

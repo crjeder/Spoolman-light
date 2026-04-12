@@ -428,10 +428,10 @@ pub fn SpoolShow() -> impl IntoView {
 
     // store_value gives Copy semantics so these handlers can be captured
     // by the reactive `move ||` closure inside view! without making it FnOnce.
-    let nav_err = store_value(navigate.clone());
+    let nav_err = StoredValue::new(navigate.clone());
     let nav1 = navigate.clone();
     let navigate_clone = navigate;
-    let on_delete = store_value(move |_: web_sys::MouseEvent| {
+    let on_delete = StoredValue::new(move |_: web_sys::MouseEvent| {
         let id = id();
         let nav = nav1.clone();
         confirm_delete.set(false);
@@ -442,7 +442,7 @@ pub fn SpoolShow() -> impl IntoView {
         });
     });
 
-    let on_clone = store_value(move |_: web_sys::MouseEvent| {
+    let on_clone = StoredValue::new(move |_: web_sys::MouseEvent| {
         let id = id();
         let nav = navigate_clone.clone();
         spawn_local(async move {

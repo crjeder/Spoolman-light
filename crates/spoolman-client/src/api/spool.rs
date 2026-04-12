@@ -4,11 +4,15 @@ use spoolman_types::{
     responses::SpoolResponse,
 };
 
-pub async fn list_spools(allow_archived: bool) -> Result<Vec<SpoolResponse>, ApiError> {
-    get(&format!(
-        "/api/v1/spool?allow_archived={allow_archived}&order=desc"
-    ))
-    .await
+pub async fn list_spools(
+    allow_archived: bool,
+    location_id: Option<u32>,
+) -> Result<Vec<SpoolResponse>, ApiError> {
+    let mut url = format!("/api/v1/spool?allow_archived={allow_archived}&order=desc");
+    if let Some(lid) = location_id {
+        url.push_str(&format!("&location_id={lid}"));
+    }
+    get(&url).await
 }
 
 pub async fn get_spool(id: u32) -> Result<SpoolResponse, ApiError> {

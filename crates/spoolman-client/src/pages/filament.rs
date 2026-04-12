@@ -1,7 +1,8 @@
 use crate::{
     api,
-    components::{pagination::Pagination, table::ColHeader},
+    components::{pagination::Pagination, spoolmandb_search::SpoolmanDbSearch, table::ColHeader},
     format,
+    spoolmandb::parse_material,
     state::{date_format_setting, diameter_settings, time_format_setting, use_table_state},
 };
 use leptos::prelude::*;
@@ -367,22 +368,42 @@ pub fn FilamentCreate() -> impl IntoView {
         });
     };
 
+    let on_db_select = Callback::new(move |entry: crate::spoolmandb::SpoolmanEntry| {
+        let (mat_type, modifier_opt) = parse_material(&entry.material);
+        manufacturer.set(entry.manufacturer.clone());
+        material.set(mat_type.abbreviation().to_string());
+        modifier.set(modifier_opt.unwrap_or_default());
+        if !ds.uniform.get() {
+            diameter.set(entry.diameter.to_string());
+        }
+        if entry.density > 0.0 {
+            density.set(entry.density.to_string());
+        }
+        if let Some(t) = entry.extruder_temp {
+            print_temp.set(t.to_string());
+        }
+        if let Some(t) = entry.bed_temp {
+            bed_temp.set(t.to_string());
+        }
+    });
+
     view! {
         <div class="page filament-create">
             <h1>"New Filament"</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
+            <SpoolmanDbSearch on_select=on_db_select />
             <form on:submit=on_submit>
-                <label>"Manufacturer"<input type="text" on:input=move |ev| manufacturer.set(event_target_value(&ev)) /></label>
+                <label>"Manufacturer"<input type="text" prop:value=move || manufacturer.get() on:input=move |ev| manufacturer.set(event_target_value(&ev)) /></label>
                 <label>"Material"
                     <MaterialSelect value=material />
                 </label>
-                <label>"Modifier"<input type="text" on:input=move |ev| modifier.set(event_target_value(&ev)) /></label>
+                <label>"Modifier"<input type="text" prop:value=move || modifier.get() on:input=move |ev| modifier.set(event_target_value(&ev)) /></label>
                 {move || (!ds.uniform.get()).then(|| view! {
                     <label>"Diameter (mm)"<input type="number" step="0.01" prop:value=move || diameter.get() on:input=move |ev| diameter.set(event_target_value(&ev)) /></label>
                 })}
                 <label>"Density (g/cm³)"<input type="number" step="0.001" prop:value=move || density.get() on:input=move |ev| density.set(event_target_value(&ev)) /></label>
-                <label>"Print temp (°C)"<input type="number" on:input=move |ev| print_temp.set(event_target_value(&ev)) /></label>
-                <label>"Bed temp (°C)"<input type="number" on:input=move |ev| bed_temp.set(event_target_value(&ev)) /></label>
+                <label>"Print temp (°C)"<input type="number" prop:value=move || print_temp.get() on:input=move |ev| print_temp.set(event_target_value(&ev)) /></label>
+                <label>"Bed temp (°C)"<input type="number" prop:value=move || bed_temp.get() on:input=move |ev| bed_temp.set(event_target_value(&ev)) /></label>
                 <label>"Comment"<textarea on:input=move |ev| comment.set(event_target_value(&ev))></textarea></label>
                 <button type="submit" class="btn btn-primary ">"Create"</button>
                 <a href="/filaments" class="btn ">"Cancel"</a>
@@ -457,10 +478,30 @@ pub fn FilamentEdit() -> impl IntoView {
         });
     };
 
+    let on_db_select = Callback::new(move |entry: crate::spoolmandb::SpoolmanEntry| {
+        let (mat_type, modifier_opt) = parse_material(&entry.material);
+        manufacturer.set(entry.manufacturer.clone());
+        material.set(mat_type.abbreviation().to_string());
+        modifier.set(modifier_opt.unwrap_or_default());
+        if !ds.uniform.get() {
+            diameter.set(entry.diameter.to_string());
+        }
+        if entry.density > 0.0 {
+            density.set(entry.density.to_string());
+        }
+        if let Some(t) = entry.extruder_temp {
+            print_temp.set(t.to_string());
+        }
+        if let Some(t) = entry.bed_temp {
+            bed_temp.set(t.to_string());
+        }
+    });
+
     view! {
         <div class="page filament-edit">
             <h1>"Edit Filament"</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
+            <SpoolmanDbSearch on_select=on_db_select />
             <form on:submit=on_submit>
                 <label>"Manufacturer"<input type="text" prop:value=move || manufacturer.get() on:input=move |ev| manufacturer.set(event_target_value(&ev)) /></label>
                 <label>"Material"

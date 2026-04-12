@@ -3,6 +3,7 @@ pub mod app;
 pub mod components;
 pub mod format;
 pub mod pages;
+pub mod spoolmandb;
 pub mod state;
 pub mod utils;
 

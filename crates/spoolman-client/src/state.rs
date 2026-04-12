@@ -25,7 +25,7 @@ pub fn diameter_settings() -> DiameterSettings {
 pub use crate::utils::color::ColorAlgorithm;
 
 /// Reactive color distance algorithm provided via Leptos context from `App`.
-/// Mirrors the `color_distance_algorithm` setting (default `Ciede2000`).
+/// Mirrors the `color_distance_algorithm` setting (default `Din99d`).
 #[derive(Clone, Copy)]
 pub struct ColorDistanceAlgorithm(pub RwSignal<ColorAlgorithm>);
 

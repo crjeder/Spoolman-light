@@ -7,7 +7,7 @@ pub fn Layout(children: Children) -> impl IntoView {
     let dark = use_context::<RwSignal<bool>>().expect("dark mode signal");
 
     // Apply or remove the `dark` class on <body> whenever the signal changes.
-    create_effect(move |_| {
+    Effect::new(move |_| {
         let body = web_sys::window()
             .and_then(|w| w.document())
             .and_then(|d| d.body());

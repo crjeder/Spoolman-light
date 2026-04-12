@@ -20,7 +20,9 @@ pub async fn run() {
 
     tracing::info!(version = %cfg.version, "starting spoolman-server");
 
-    let store = store::JsonStore::load(&cfg.data_file).expect("failed to load data store");
+    let store = store::JsonStore::load(&cfg.data_file)
+        .expect("failed to load data store")
+        .with_config(cfg.automatic_backup, cfg.debug_mode);
     tracing::info!(path = %cfg.data_file.display(), "data store loaded");
 
     if cfg.automatic_backup {

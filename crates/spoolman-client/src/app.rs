@@ -17,42 +17,42 @@ use crate::{
 #[component]
 pub fn App() -> impl IntoView {
     // Provide dark-mode signal globally.
-    let dark = create_rw_signal(load_dark_mode());
+    let dark = RwSignal::new(load_dark_mode());
     provide_context(dark);
 
     // Provide diameter settings globally (defaults: uniform=true, 1.75 mm).
-    let diam_uniform = create_rw_signal(true);
-    let diam_default = create_rw_signal(1.75f64);
+    let diam_uniform = RwSignal::new(true);
+    let diam_default = RwSignal::new(1.75f64);
     provide_context(DiameterSettings {
         uniform: diam_uniform,
         default_mm: diam_default,
     });
 
     // Provide currency symbol globally (default: "€").
-    let currency_sym = create_rw_signal("€".to_string());
+    let currency_sym = RwSignal::new("€".to_string());
     provide_context(CurrencySymbol(currency_sym));
 
-    // Provide color distance algorithm globally (default: CIEDE2000).
-    let color_algo = create_rw_signal(ColorAlgorithm::Ciede2000);
+    // Provide color distance algorithm globally (default: DIN99d).
+    let color_algo = create_rw_signal(ColorAlgorithm::Din99d);
     provide_context(ColorDistanceAlgorithm(color_algo));
 
     // Provide color search thresholds globally (defaults from hardcoded table).
     let thresholds = ColorThresholds {
-        ciede2000_same:     create_rw_signal(default_threshold_for("same",     ColorAlgorithm::Ciede2000)),
-        ciede2000_close:    create_rw_signal(default_threshold_for("close",    ColorAlgorithm::Ciede2000)),
-        ciede2000_ballpark: create_rw_signal(default_threshold_for("ballpark", ColorAlgorithm::Ciede2000)),
-        oklab_same:         create_rw_signal(default_threshold_for("same",     ColorAlgorithm::OkLab)),
-        oklab_close:        create_rw_signal(default_threshold_for("close",    ColorAlgorithm::OkLab)),
-        oklab_ballpark:     create_rw_signal(default_threshold_for("ballpark", ColorAlgorithm::OkLab)),
-        din99d_same:        create_rw_signal(default_threshold_for("same",     ColorAlgorithm::Din99d)),
-        din99d_close:       create_rw_signal(default_threshold_for("close",    ColorAlgorithm::Din99d)),
-        din99d_ballpark:    create_rw_signal(default_threshold_for("ballpark", ColorAlgorithm::Din99d)),
+        ciede2000_same:     RwSignal::new(default_threshold_for("same",     ColorAlgorithm::Ciede2000)),
+        ciede2000_close:    RwSignal::new(default_threshold_for("close",    ColorAlgorithm::Ciede2000)),
+        ciede2000_ballpark: RwSignal::new(default_threshold_for("ballpark", ColorAlgorithm::Ciede2000)),
+        oklab_same:         RwSignal::new(default_threshold_for("same",     ColorAlgorithm::OkLab)),
+        oklab_close:        RwSignal::new(default_threshold_for("close",    ColorAlgorithm::OkLab)),
+        oklab_ballpark:     RwSignal::new(default_threshold_for("ballpark", ColorAlgorithm::OkLab)),
+        din99d_same:        RwSignal::new(default_threshold_for("same",     ColorAlgorithm::Din99d)),
+        din99d_close:       RwSignal::new(default_threshold_for("close",    ColorAlgorithm::Din99d)),
+        din99d_ballpark:    RwSignal::new(default_threshold_for("ballpark", ColorAlgorithm::Din99d)),
     };
     provide_context(thresholds);
 
     // Fetch persisted settings and update the diameter + currency signals.
     let settings_res = LocalResource::new(|| async { crate::api::fetch_settings().await });
-    create_effect(move |_| {
+    Effect::new(move |_| {
         if let Some(Ok(s)) = settings_res.get() {
             diam_uniform.set(
                 s.get("uniform_diameter")
@@ -69,8 +69,8 @@ pub fn App() -> impl IntoView {
             }
             color_algo.set(match s.get("color_distance_algorithm").map(String::as_str) {
                 Some("oklab") => ColorAlgorithm::OkLab,
-                Some("din99d") => ColorAlgorithm::Din99d,
-                _ => ColorAlgorithm::Ciede2000,
+                Some("ciede2000") => ColorAlgorithm::Ciede2000,
+                _ => ColorAlgorithm::Din99d,
             });
             // Load persisted threshold overrides (fall back to hardcoded default
             // when a key is absent).

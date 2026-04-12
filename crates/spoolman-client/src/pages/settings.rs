@@ -22,7 +22,7 @@ pub fn SettingsPage() -> impl IntoView {
 
     // Color distance algorithm — read from shared context; local copy for the form.
     let cda = color_distance_algorithm();
-    let algo = RwSignal::new("ciede2000".to_string());
+    let algo = RwSignal::new("din99d".to_string());
 
     // Color search thresholds — read from shared context; local copies for the form.
     let ct = color_thresholds();
@@ -56,7 +56,7 @@ pub fn SettingsPage() -> impl IntoView {
             let algo_str = s
                 .get("color_distance_algorithm")
                 .cloned()
-                .unwrap_or_else(|| "ciede2000".into());
+                .unwrap_or_else(|| "din99d".into());
             algo.set(algo_str.clone());
             // Seed threshold fields from context (already hydrated by App).
             update_thresh_fields(algo_str.as_str(), ct, &thresh_same, &thresh_close, &thresh_ballpark);

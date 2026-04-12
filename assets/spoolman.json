@@ -322,326 +322,6 @@
       "max_bed_temp": 110,
       "registered": "2025-03-08T10:00:00Z",
       "comment": "Support material"
-    },
-    {
-      "id": 1021,
-      "manufacturer": "Bambu",
-      "material": "PETG",
-      "material_modifier": "HF",
-      "diameter": 1.75,
-      "density": 1.27,
-      "print_temp": 230,
-      "bed_temp": 70,
-      "min_print_temp": 220,
-      "max_print_temp": 245,
-      "min_bed_temp": 65,
-      "max_bed_temp": 80,
-      "registered": "2025-04-01T10:00:00Z",
-      "comment": "High flow"
-    },
-    {
-      "id": 1022,
-      "manufacturer": "Prusament",
-      "material": "PLA",
-      "material_modifier": "Galaxy",
-      "diameter": 1.75,
-      "density": 1.24,
-      "print_temp": 215,
-      "bed_temp": 60,
-      "min_print_temp": 205,
-      "max_print_temp": 230,
-      "min_bed_temp": 50,
-      "max_bed_temp": 70,
-      "registered": "2025-04-05T09:00:00Z",
-      "comment": "Galaxy effect"
-    },
-    {
-      "id": 1023,
-      "manufacturer": "eSUN",
-      "material": "ABS",
-      "material_modifier": null,
-      "diameter": 1.75,
-      "density": 1.04,
-      "print_temp": 240,
-      "bed_temp": 100,
-      "min_print_temp": 225,
-      "max_print_temp": 260,
-      "min_bed_temp": 90,
-      "max_bed_temp": 110,
-      "registered": "2025-03-15T11:00:00Z",
-      "comment": null
-    },
-    {
-      "id": 1024,
-      "manufacturer": "Polymaker",
-      "material": "ASA",
-      "material_modifier": null,
-      "diameter": 1.75,
-      "density": 1.07,
-      "print_temp": 250,
-      "bed_temp": 100,
-      "min_print_temp": 240,
-      "max_print_temp": 265,
-      "min_bed_temp": 90,
-      "max_bed_temp": 110,
-      "registered": "2025-03-20T12:00:00Z",
-      "comment": null
-    },
-    {
-      "id": 1025,
-      "manufacturer": "ColorFabb",
-      "material": "PETG",
-      "material_modifier": "HT",
-      "diameter": 1.75,
-      "density": 1.27,
-      "print_temp": 250,
-      "bed_temp": 85,
-      "min_print_temp": 240,
-      "max_print_temp": 265,
-      "min_bed_temp": 75,
-      "max_bed_temp": 95,
-      "registered": "2025-04-10T10:00:00Z",
-      "comment": "High temperature"
-    },
-    {
-      "id": 1026,
-      "manufacturer": "Fiberlogy",
-      "material": "PLA",
-      "material_modifier": "HD",
-      "diameter": 1.75,
-      "density": 1.25,
-      "print_temp": 210,
-      "bed_temp": 60,
-      "min_print_temp": 195,
-      "max_print_temp": 225,
-      "min_bed_temp": 50,
-      "max_bed_temp": 70,
-      "registered": "2025-04-12T09:00:00Z",
-      "comment": "High detail"
-    },
-    {
-      "id": 1027,
-      "manufacturer": "Bambu",
-      "material": "TPU",
-      "material_modifier": "95A",
-      "diameter": 1.75,
-      "density": 1.22,
-      "print_temp": 220,
-      "bed_temp": 35,
-      "min_print_temp": 210,
-      "max_print_temp": 235,
-      "min_bed_temp": null,
-      "max_bed_temp": null,
-      "registered": "2025-04-15T10:00:00Z",
-      "comment": null
-    },
-    {
-      "id": 1028,
-      "manufacturer": "Sunlu",
-      "material": "ABS",
-      "material_modifier": null,
-      "diameter": 1.75,
-      "density": 1.04,
-      "print_temp": 235,
-      "bed_temp": 100,
-      "min_print_temp": 220,
-      "max_print_temp": 255,
-      "min_bed_temp": 90,
-      "max_bed_temp": 110,
-      "registered": "2025-03-25T13:00:00Z",
-      "comment": null
-    },
-    {
-      "id": 1029,
-      "manufacturer": "3DJake",
-      "material": "PLA",
-      "material_modifier": "Silk",
-      "diameter": 1.75,
-      "density": 1.24,
-      "print_temp": 215,
-      "bed_temp": 60,
-      "min_print_temp": 200,
-      "max_print_temp": 230,
-      "min_bed_temp": 50,
-      "max_bed_temp": 70,
-      "registered": "2025-04-02T10:00:00Z",
-      "comment": "Dual silk"
-    },
-    {
-      "id": 1030,
-      "manufacturer": "Overture",
-      "material": "ABS",
-      "material_modifier": null,
-      "diameter": 1.75,
-      "density": 1.04,
-      "print_temp": 230,
-      "bed_temp": 100,
-      "min_print_temp": 220,
-      "max_print_temp": 250,
-      "min_bed_temp": 90,
-      "max_bed_temp": 110,
-      "registered": "2025-03-18T11:00:00Z",
-      "comment": null
-    },
-    {
-      "id": 1031,
-      "manufacturer": "Prusament",
-      "material": "PC",
-      "material_modifier": null,
-      "diameter": 1.75,
-      "density": 1.2,
-      "print_temp": 275,
-      "bed_temp": 110,
-      "min_print_temp": 260,
-      "max_print_temp": 290,
-      "min_bed_temp": 100,
-      "max_bed_temp": 120,
-      "registered": "2025-04-20T10:00:00Z",
-      "comment": "Polycarbonate"
-    },
-    {
-      "id": 1032,
-      "manufacturer": "Fillamentum",
-      "material": "PETG",
-      "material_modifier": null,
-      "diameter": 1.75,
-      "density": 1.27,
-      "print_temp": 240,
-      "bed_temp": 80,
-      "min_print_temp": 225,
-      "max_print_temp": 255,
-      "min_bed_temp": 70,
-      "max_bed_temp": 90,
-      "registered": "2025-04-18T09:00:00Z",
-      "comment": null
-    },
-    {
-      "id": 1033,
-      "manufacturer": "ColorFabb",
-      "material": "nGen",
-      "material_modifier": null,
-      "diameter": 1.75,
-      "density": 1.19,
-      "print_temp": 235,
-      "bed_temp": 75,
-      "min_print_temp": 220,
-      "max_print_temp": 250,
-      "min_bed_temp": 65,
-      "max_bed_temp": 85,
-      "registered": "2025-04-22T10:00:00Z",
-      "comment": "Tough and flexible"
-    },
-    {
-      "id": 1034,
-      "manufacturer": "Hatchbox",
-      "material": "PETG",
-      "material_modifier": null,
-      "diameter": 1.75,
-      "density": 1.27,
-      "print_temp": 235,
-      "bed_temp": 80,
-      "min_print_temp": 220,
-      "max_print_temp": 250,
-      "min_bed_temp": 70,
-      "max_bed_temp": 90,
-      "registered": "2025-04-08T11:00:00Z",
-      "comment": null
-    },
-    {
-      "id": 1035,
-      "manufacturer": "Polymaker",
-      "material": "PC",
-      "material_modifier": "Max",
-      "diameter": 1.75,
-      "density": 1.19,
-      "print_temp": 280,
-      "bed_temp": 120,
-      "min_print_temp": 265,
-      "max_print_temp": 300,
-      "min_bed_temp": 110,
-      "max_bed_temp": 130,
-      "registered": "2025-05-01T10:00:00Z",
-      "comment": "High performance PC"
-    },
-    {
-      "id": 1036,
-      "manufacturer": "Bambu",
-      "material": "PLA",
-      "material_modifier": "Matte",
-      "diameter": 1.75,
-      "density": 1.24,
-      "print_temp": 215,
-      "bed_temp": 35,
-      "min_print_temp": 190,
-      "max_print_temp": 230,
-      "min_bed_temp": 35,
-      "max_bed_temp": 45,
-      "registered": "2025-05-05T09:00:00Z",
-      "comment": null
-    },
-    {
-      "id": 1037,
-      "manufacturer": "eSUN",
-      "material": "TPU",
-      "material_modifier": "87A",
-      "diameter": 1.75,
-      "density": 1.2,
-      "print_temp": 215,
-      "bed_temp": 30,
-      "min_print_temp": 200,
-      "max_print_temp": 230,
-      "min_bed_temp": null,
-      "max_bed_temp": null,
-      "registered": "2025-05-08T10:00:00Z",
-      "comment": "Extra flexible"
-    },
-    {
-      "id": 1038,
-      "manufacturer": "Prusament",
-      "material": "FLEX",
-      "material_modifier": null,
-      "diameter": 1.75,
-      "density": 1.22,
-      "print_temp": 225,
-      "bed_temp": 40,
-      "min_print_temp": 215,
-      "max_print_temp": 240,
-      "min_bed_temp": null,
-      "max_bed_temp": null,
-      "registered": "2025-05-10T10:00:00Z",
-      "comment": null
-    },
-    {
-      "id": 1039,
-      "manufacturer": "Fiberlogy",
-      "material": "PETG",
-      "material_modifier": "CF",
-      "diameter": 1.75,
-      "density": 1.35,
-      "print_temp": 255,
-      "bed_temp": 80,
-      "min_print_temp": 245,
-      "max_print_temp": 265,
-      "min_bed_temp": 70,
-      "max_bed_temp": 90,
-      "registered": "2025-05-12T11:00:00Z",
-      "comment": "Carbon fiber PETG"
-    },
-    {
-      "id": 1040,
-      "manufacturer": "3DJake",
-      "material": "PLA",
-      "material_modifier": "CF",
-      "diameter": 1.75,
-      "density": 1.3,
-      "print_temp": 210,
-      "bed_temp": 60,
-      "min_print_temp": 200,
-      "max_print_temp": 225,
-      "min_bed_temp": 50,
-      "max_bed_temp": 70,
-      "registered": "2025-05-15T10:00:00Z",
-      "comment": "Carbon fiber PLA"
     }
   ],
   "spools": [
@@ -665,8 +345,7 @@
       "last_used": "2025-03-20T18:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2002,
@@ -688,8 +367,7 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 21.33
+      "net_weight": 1000.0
     },
     {
       "id": 2003,
@@ -711,8 +389,7 @@
       "last_used": "2025-01-08T16:00:00Z",
       "comment": "Nearly empty",
       "archived": true,
-      "net_weight": 1000.0,
-      "price": 29.39
+      "net_weight": 1000.0
     },
     {
       "id": 2004,
@@ -740,8 +417,7 @@
       "last_used": "2025-03-22T09:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": null
+      "net_weight": 750.0
     },
     {
       "id": 2005,
@@ -763,8 +439,7 @@
       "last_used": "2025-02-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 24.99
+      "net_weight": 1000.0
     },
     {
       "id": 2006,
@@ -786,8 +461,7 @@
       "last_used": "2025-03-18T17:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 25.24
+      "net_weight": 1000.0
     },
     {
       "id": 2007,
@@ -809,8 +483,7 @@
       "last_used": "2024-12-15T16:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2008,
@@ -832,8 +505,7 @@
       "last_used": null,
       "comment": "Unopened",
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 17.5
+      "net_weight": 1000.0
     },
     {
       "id": 2009,
@@ -855,8 +527,7 @@
       "last_used": "2025-03-15T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 16.48
+      "net_weight": 1000.0
     },
     {
       "id": 2010,
@@ -878,8 +549,7 @@
       "last_used": "2025-03-01T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2011,
@@ -901,8 +571,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 17.81
+      "net_weight": 1000.0
     },
     {
       "id": 2012,
@@ -924,8 +593,7 @@
       "last_used": "2025-02-28T16:00:00Z",
       "comment": "Running low",
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 17.99
+      "net_weight": 1000.0
     },
     {
       "id": 2013,
@@ -947,8 +615,7 @@
       "last_used": "2025-03-10T11:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2014,
@@ -970,8 +637,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 32.63
+      "net_weight": 1000.0
     },
     {
       "id": 2015,
@@ -993,8 +659,7 @@
       "last_used": "2025-03-20T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": 33.98
+      "net_weight": 750.0
     },
     {
       "id": 2016,
@@ -1016,8 +681,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 850.0,
-      "price": null
+      "net_weight": 850.0
     },
     {
       "id": 2017,
@@ -1039,8 +703,7 @@
       "last_used": "2025-03-22T16:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 22.53
+      "net_weight": 1000.0
     },
     {
       "id": 2018,
@@ -1062,8 +725,7 @@
       "last_used": "2025-03-05T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 19.79
+      "net_weight": 1000.0
     },
     {
       "id": 2019,
@@ -1085,8 +747,7 @@
       "last_used": "2025-03-18T11:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2020,
@@ -1108,8 +769,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 23.22
+      "net_weight": 1000.0
     },
     {
       "id": 2021,
@@ -1131,8 +791,7 @@
       "last_used": "2025-03-12T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 23.45
+      "net_weight": 1000.0
     },
     {
       "id": 2022,
@@ -1154,8 +813,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": null
+      "net_weight": 750.0
     },
     {
       "id": 2023,
@@ -1177,8 +835,7 @@
       "last_used": "2025-03-24T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 500.0,
-      "price": 16.48
+      "net_weight": 500.0
     },
     {
       "id": 2024,
@@ -1200,8 +857,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 17.63
+      "net_weight": 1000.0
     },
     {
       "id": 2025,
@@ -1223,8 +879,7 @@
       "last_used": "2025-02-20T13:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2026,
@@ -1246,8 +901,7 @@
       "last_used": "2025-03-08T16:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 18.99
+      "net_weight": 1000.0
     },
     {
       "id": 2027,
@@ -1269,8 +923,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 19.18
+      "net_weight": 1000.0
     },
     {
       "id": 2028,
@@ -1292,8 +945,7 @@
       "last_used": "2025-03-20T17:00:00Z",
       "comment": "Outdoor parts",
       "archived": false,
-      "net_weight": 850.0,
-      "price": null
+      "net_weight": 850.0
     },
     {
       "id": 2029,
@@ -1315,8 +967,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 850.0,
-      "price": 36.04
+      "net_weight": 850.0
     },
     {
       "id": 2030,
@@ -1350,8 +1001,7 @@
       "last_used": "2025-03-22T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 15.51
+      "net_weight": 1000.0
     },
     {
       "id": 2031,
@@ -1373,8 +1023,7 @@
       "last_used": "2025-03-24T16:00:00Z",
       "comment": "Support material for ABS",
       "archived": false,
-      "net_weight": 750.0,
-      "price": null
+      "net_weight": 750.0
     },
     {
       "id": 2032,
@@ -1396,8 +1045,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 29.69
+      "net_weight": 1000.0
     },
     {
       "id": 2033,
@@ -1419,8 +1067,7 @@
       "last_used": "2025-01-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 29.99
+      "net_weight": 1000.0
     },
     {
       "id": 2034,
@@ -1442,8 +1089,7 @@
       "last_used": "2025-03-15T12:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2035,
@@ -1465,8 +1111,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 25.49
+      "net_weight": 1000.0
     },
     {
       "id": 2036,
@@ -1488,8 +1133,7 @@
       "last_used": "2025-03-05T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 17.5
+      "net_weight": 1000.0
     },
     {
       "id": 2037,
@@ -1511,8 +1155,7 @@
       "last_used": "2024-10-30T15:00:00Z",
       "comment": "Essentially empty",
       "archived": true,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2038,
@@ -1534,8 +1177,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": 32.33
+      "net_weight": 750.0
     },
     {
       "id": 2039,
@@ -1557,8 +1199,7 @@
       "last_used": "2025-03-20T16:00:00Z",
       "comment": "Outdoor enclosure parts",
       "archived": false,
-      "net_weight": 850.0,
-      "price": 32.66
+      "net_weight": 850.0
     },
     {
       "id": 2040,
@@ -1580,8 +1221,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2041,
@@ -1603,8 +1243,7 @@
       "last_used": "2025-03-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 20.19
+      "net_weight": 1000.0
     },
     {
       "id": 2042,
@@ -1626,8 +1265,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 23.45
+      "net_weight": 1000.0
     },
     {
       "id": 2043,
@@ -1649,8 +1287,7 @@
       "last_used": "2025-02-15T13:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2044,
@@ -1672,8 +1309,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 17.45
+      "net_weight": 1000.0
     },
     {
       "id": 2045,
@@ -1695,8 +1331,7 @@
       "last_used": "2025-02-10T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 17.63
+      "net_weight": 1000.0
     },
     {
       "id": 2046,
@@ -1724,8 +1359,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2047,
@@ -1747,8 +1381,7 @@
       "last_used": "2025-03-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 17.99
+      "net_weight": 1000.0
     },
     {
       "id": 2048,
@@ -1770,8 +1403,7 @@
       "last_used": "2025-03-01T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 32.31
+      "net_weight": 1000.0
     },
     {
       "id": 2049,
@@ -1793,8 +1425,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": null
+      "net_weight": 750.0
     },
     {
       "id": 2050,
@@ -1816,8 +1447,7 @@
       "last_used": "2025-01-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": 27.8
+      "net_weight": 750.0
     },
     {
       "id": 2051,
@@ -1839,8 +1469,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 29.09
+      "net_weight": 1000.0
     },
     {
       "id": 2052,
@@ -1862,8 +1491,7 @@
       "last_used": "2025-03-18T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2053,
@@ -1885,8 +1513,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 16.82
+      "net_weight": 1000.0
     },
     {
       "id": 2054,
@@ -1908,8 +1535,7 @@
       "last_used": "2024-09-15T14:00:00Z",
       "comment": "Nearly empty",
       "archived": true,
-      "net_weight": 1000.0,
-      "price": 16.99
+      "net_weight": 1000.0
     },
     {
       "id": 2055,
@@ -1931,8 +1557,7 @@
       "last_used": "2025-03-10T13:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2056,
@@ -1954,8 +1579,7 @@
       "last_used": "2025-03-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": 45.89
+      "net_weight": 750.0
     },
     {
       "id": 2057,
@@ -1977,8 +1601,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 500.0,
-      "price": 17.5
+      "net_weight": 500.0
     },
     {
       "id": 2058,
@@ -2000,8 +1623,7 @@
       "last_used": "2025-03-05T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": null
+      "net_weight": 750.0
     },
     {
       "id": 2059,
@@ -2023,8 +1645,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": 29.39
+      "net_weight": 750.0
     },
     {
       "id": 2060,
@@ -2046,8 +1667,7 @@
       "last_used": "2025-02-28T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 21.77
+      "net_weight": 1000.0
     },
     {
       "id": 2061,
@@ -2069,8 +1689,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2062,
@@ -2092,8 +1711,7 @@
       "last_used": "2025-03-15T16:00:00Z",
       "comment": "Traffic cone parts",
       "archived": false,
-      "net_weight": 850.0,
-      "price": 35.34
+      "net_weight": 850.0
     },
     {
       "id": 2063,
@@ -2115,8 +1733,7 @@
       "last_used": "2025-02-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 23.45
+      "net_weight": 1000.0
     },
     {
       "id": 2064,
@@ -2138,8 +1755,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2065,
@@ -2161,8 +1777,7 @@
       "last_used": "2025-03-22T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 24.24
+      "net_weight": 1000.0
     },
     {
       "id": 2066,
@@ -2184,8 +1799,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 24.49
+      "net_weight": 1000.0
     },
     {
       "id": 2067,
@@ -2207,8 +1821,7 @@
       "last_used": "2025-03-12T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2068,
@@ -2230,8 +1843,7 @@
       "last_used": "2024-08-20T14:00:00Z",
       "comment": "Last bits",
       "archived": true,
-      "net_weight": 1000.0,
-      "price": 16.99
+      "net_weight": 1000.0
     },
     {
       "id": 2069,
@@ -2253,8 +1865,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 32.31
+      "net_weight": 1000.0
     },
     {
       "id": 2070,
@@ -2276,8 +1887,7 @@
       "last_used": "2025-03-20T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 850.0,
-      "price": null
+      "net_weight": 850.0
     },
     {
       "id": 2071,
@@ -2305,8 +1915,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 20.59
+      "net_weight": 1000.0
     },
     {
       "id": 2072,
@@ -2328,8 +1937,7 @@
       "last_used": "2025-02-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 17.45
+      "net_weight": 1000.0
     },
     {
       "id": 2073,
@@ -2351,8 +1959,7 @@
       "last_used": "2025-03-08T13:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2074,
@@ -2374,8 +1981,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 22.76
+      "net_weight": 1000.0
     },
     {
       "id": 2075,
@@ -2409,8 +2015,7 @@
       "last_used": "2025-03-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 15.99
+      "net_weight": 1000.0
     },
     {
       "id": 2076,
@@ -2432,8 +2037,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": null
+      "net_weight": 750.0
     },
     {
       "id": 2077,
@@ -2455,8 +2059,7 @@
       "last_used": "2025-03-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": 27.53
+      "net_weight": 750.0
     },
     {
       "id": 2078,
@@ -2478,8 +2081,7 @@
       "last_used": "2024-12-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": 30.89
+      "net_weight": 750.0
     },
     {
       "id": 2079,
@@ -2501,8 +2103,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 850.0,
-      "price": null
+      "net_weight": 850.0
     },
     {
       "id": 2080,
@@ -2524,8 +2125,7 @@
       "last_used": "2025-03-20T16:00:00Z",
       "comment": "Structural parts",
       "archived": false,
-      "net_weight": 500.0,
-      "price": 16.65
+      "net_weight": 500.0
     },
     {
       "id": 2081,
@@ -2547,8 +2147,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 29.69
+      "net_weight": 1000.0
     },
     {
       "id": 2082,
@@ -2570,8 +2169,7 @@
       "last_used": "2025-03-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2083,
@@ -2593,8 +2191,7 @@
       "last_used": "2025-03-18T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 25.24
+      "net_weight": 1000.0
     },
     {
       "id": 2084,
@@ -2616,8 +2213,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 17.33
+      "net_weight": 1000.0
     },
     {
       "id": 2085,
@@ -2639,8 +2235,7 @@
       "last_used": "2025-03-22T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2086,
@@ -2662,8 +2257,7 @@
       "last_used": "2025-03-24T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 31.03
+      "net_weight": 1000.0
     },
     {
       "id": 2087,
@@ -2685,8 +2279,7 @@
       "last_used": "2025-01-30T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 22.53
+      "net_weight": 1000.0
     },
     {
       "id": 2088,
@@ -2708,8 +2301,7 @@
       "last_used": "2025-03-10T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2089,
@@ -2731,8 +2323,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 22.99
+      "net_weight": 1000.0
     },
     {
       "id": 2090,
@@ -2760,8 +2351,7 @@
       "last_used": "2025-03-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 20.19
+      "net_weight": 1000.0
     },
     {
       "id": 2091,
@@ -2783,8 +2373,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2092,
@@ -2806,8 +2395,7 @@
       "last_used": "2025-01-25T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 850.0,
-      "price": 33.98
+      "net_weight": 850.0
     },
     {
       "id": 2093,
@@ -2829,8 +2417,7 @@
       "last_used": "2025-02-20T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": 32.0
+      "net_weight": 750.0
     },
     {
       "id": 2094,
@@ -2858,8 +2445,7 @@
       "last_used": "2025-03-18T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2095,
@@ -2881,8 +2467,7 @@
       "last_used": "2025-03-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": 26.72
+      "net_weight": 750.0
     },
     {
       "id": 2096,
@@ -2904,8 +2489,7 @@
       "last_used": "2025-02-28T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 16.99
+      "net_weight": 1000.0
     },
     {
       "id": 2097,
@@ -2927,8 +2511,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": null
+      "net_weight": 750.0
     },
     {
       "id": 2098,
@@ -2950,8 +2533,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 30.59
+      "net_weight": 1000.0
     },
     {
       "id": 2099,
@@ -2973,8 +2555,7 @@
       "last_used": "2025-03-10T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 22.65
+      "net_weight": 1000.0
     },
     {
       "id": 2100,
@@ -2996,8 +2577,7 @@
       "last_used": "2025-03-22T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2101,
@@ -3019,8 +2599,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 31.35
+      "net_weight": 1000.0
     },
     {
       "id": 2102,
@@ -3042,8 +2621,7 @@
       "last_used": "2025-03-18T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 24.74
+      "net_weight": 1000.0
     },
     {
       "id": 2103,
@@ -3065,8 +2643,7 @@
       "last_used": "2024-07-20T14:00:00Z",
       "comment": "Used up",
       "archived": true,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2104,
@@ -3088,8 +2665,7 @@
       "last_used": "2025-03-18T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 23.22
+      "net_weight": 1000.0
     },
     {
       "id": 2105,
@@ -3111,8 +2687,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 18.35
+      "net_weight": 1000.0
     },
     {
       "id": 2106,
@@ -3134,8 +2709,7 @@
       "last_used": "2025-03-20T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 850.0,
-      "price": null
+      "net_weight": 850.0
     },
     {
       "id": 2107,
@@ -3157,8 +2731,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 19.39
+      "net_weight": 1000.0
     },
     {
       "id": 2108,
@@ -3180,8 +2753,7 @@
       "last_used": "2025-02-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 18.61
+      "net_weight": 1000.0
     },
     {
       "id": 2109,
@@ -3203,8 +2775,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2110,
@@ -3226,8 +2797,7 @@
       "last_used": "2025-03-12T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": 32.99
+      "net_weight": 750.0
     },
     {
       "id": 2111,
@@ -3249,8 +2819,7 @@
       "last_used": "2025-03-22T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 30.29
+      "net_weight": 1000.0
     },
     {
       "id": 2112,
@@ -3272,8 +2841,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2113,
@@ -3295,8 +2863,7 @@
       "last_used": "2025-02-25T14:00:00Z",
       "comment": "Functional brackets",
       "archived": false,
-      "net_weight": 500.0,
-      "price": 17.5
+      "net_weight": 500.0
     },
     {
       "id": 2114,
@@ -3318,8 +2885,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 24.24
+      "net_weight": 1000.0
     },
     {
       "id": 2115,
@@ -3341,8 +2907,7 @@
       "last_used": "2024-06-20T14:00:00Z",
       "comment": "Empty",
       "archived": true,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2116,
@@ -3364,8 +2929,7 @@
       "last_used": "2025-03-05T15:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 850.0,
-      "price": 32.66
+      "net_weight": 850.0
     },
     {
       "id": 2117,
@@ -3393,8 +2957,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 15.99
+      "net_weight": 1000.0
     },
     {
       "id": 2118,
@@ -3416,8 +2979,7 @@
       "last_used": "2025-03-10T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": null
+      "net_weight": 1000.0
     },
     {
       "id": 2119,
@@ -3439,8 +3001,7 @@
       "last_used": "2025-03-15T14:00:00Z",
       "comment": null,
       "archived": false,
-      "net_weight": 750.0,
-      "price": 45.89
+      "net_weight": 750.0
     },
     {
       "id": 2120,
@@ -3462,1884 +3023,7 @@
       "last_used": null,
       "comment": null,
       "archived": false,
-      "net_weight": 1000.0,
-      "price": 23.68
-    },
-    {
-      "id": 2121,
-      "filament_id": 1001,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 255,
-          "g": 80,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Orange",
-      "initial_weight": 950.0,
-      "current_weight": 950.0,
-      "registered": "2024-10-01T08:00:00Z",
-      "first_used": null,
-      "last_used": null,
-      "comment": "Unopened",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": null
-    },
-    {
-      "id": 2122,
-      "filament_id": 1002,
-      "location_id": 3002,
-      "colors": [
-        {
-          "r": 0,
-          "g": 0,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Black",
-      "initial_weight": 1205.0,
-      "current_weight": 500.0,
-      "registered": "2024-10-15T09:30:00Z",
-      "first_used": "2024-11-20T10:00:00Z",
-      "last_used": "2025-01-05T08:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 21.55
-    },
-    {
-      "id": 2123,
-      "filament_id": 1003,
-      "location_id": 3003,
-      "colors": [
-        {
-          "r": 255,
-          "g": 255,
-          "b": 255,
-          "a": 255
-        }
-      ],
-      "color_name": "White",
-      "initial_weight": 1210.0,
-      "current_weight": 600.0,
-      "registered": "2024-11-01T12:00:00Z",
-      "first_used": "2024-12-01T08:00:00Z",
-      "last_used": "2025-01-10T10:05:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 26.72
-    },
-    {
-      "id": 2124,
-      "filament_id": 1004,
-      "location_id": 3004,
-      "colors": [
-        {
-          "r": 220,
-          "g": 220,
-          "b": 220,
-          "a": 200
-        }
-      ],
-      "color_name": "Clear",
-      "initial_weight": 1215.0,
-      "current_weight": 700.0,
-      "registered": "2024-11-20T10:00:00Z",
-      "first_used": "2024-12-15T14:00:00Z",
-      "last_used": "2025-01-20T09:00:00Z",
-      "comment": "Great quality",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2125,
-      "filament_id": 1005,
-      "location_id": 3005,
-      "colors": [
-        {
-          "r": 30,
-          "g": 30,
-          "b": 200,
-          "a": 255
-        }
-      ],
-      "color_name": "Blue",
-      "initial_weight": 1220.0,
-      "current_weight": 800.0,
-      "registered": "2024-12-01T08:00:00Z",
-      "first_used": "2025-01-05T08:00:00Z",
-      "last_used": "2025-02-01T11:00:00Z",
-      "comment": "Good adhesion",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 17.16
-    },
-    {
-      "id": 2126,
-      "filament_id": 1006,
-      "location_id": 3006,
-      "colors": [
-        {
-          "r": 200,
-          "g": 30,
-          "b": 30,
-          "a": 255
-        }
-      ],
-      "color_name": "Red",
-      "initial_weight": 950.0,
-      "current_weight": 725.0,
-      "registered": "2024-12-15T14:00:00Z",
-      "first_used": "2025-01-10T10:05:00Z",
-      "last_used": "2025-02-15T08:35:00Z",
-      "comment": "Slightly damp - redry before use",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": 17.33
-    },
-    {
-      "id": 2127,
-      "filament_id": 1007,
-      "location_id": 3007,
-      "colors": [
-        {
-          "r": 30,
-          "g": 160,
-          "b": 30,
-          "a": 255
-        }
-      ],
-      "color_name": "Green",
-      "initial_weight": 1205.0,
-      "current_weight": 1000.0,
-      "registered": "2025-01-05T08:00:00Z",
-      "first_used": "2025-01-20T09:00:00Z",
-      "last_used": "2025-02-28T09:00:00Z",
-      "comment": "Perfect for functional parts",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2128,
-      "filament_id": 1008,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 255,
-          "g": 215,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Gold",
-      "initial_weight": 1210.0,
-      "current_weight": 1100.0,
-      "registered": "2025-01-10T10:05:00Z",
-      "first_used": "2025-02-01T11:00:00Z",
-      "last_used": "2025-03-01T14:10:00Z",
-      "comment": "Vibrant color",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 31.03
-    },
-    {
-      "id": 2129,
-      "filament_id": 1009,
-      "location_id": 3009,
-      "colors": [
-        {
-          "r": 180,
-          "g": 0,
-          "b": 200,
-          "a": 255
-        }
-      ],
-      "color_name": "Purple",
-      "initial_weight": 1215.0,
-      "current_weight": 400.0,
-      "registered": "2025-01-20T09:00:00Z",
-      "first_used": "2025-02-15T08:35:00Z",
-      "last_used": "2025-03-10T13:00:00Z",
-      "comment": "Reserved for client project",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 32.33
-    },
-    {
-      "id": 2130,
-      "filament_id": 1010,
-      "location_id": 3010,
-      "colors": [
-        {
-          "r": 255,
-          "g": 180,
-          "b": 180,
-          "a": 255
-        }
-      ],
-      "color_name": "Pink",
-      "initial_weight": 1220.0,
-      "current_weight": 1220.0,
-      "registered": "2025-02-01T11:00:00Z",
-      "first_used": null,
-      "last_used": null,
-      "comment": "Unopened",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2131,
-      "filament_id": 1011,
-      "location_id": 3011,
-      "colors": [
-        {
-          "r": 50,
-          "g": 200,
-          "b": 200,
-          "a": 255
-        }
-      ],
-      "color_name": "Teal",
-      "initial_weight": 950.0,
-      "current_weight": 500.0,
-      "registered": "2025-02-15T08:35:00Z",
-      "first_used": "2025-03-01T14:10:00Z",
-      "last_used": "2025-03-25T11:00:00Z",
-      "comment": "Backup spool",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": 22.99
-    },
-    {
-      "id": 2132,
-      "filament_id": 1012,
-      "location_id": 3012,
-      "colors": [
-        {
-          "r": 230,
-          "g": 115,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Copper",
-      "initial_weight": 1205.0,
-      "current_weight": 40.0,
-      "registered": "2025-02-28T09:00:00Z",
-      "first_used": "2025-03-20T10:00:00Z",
-      "last_used": "2025-05-01T09:00:00Z",
-      "comment": "Nearly empty",
-      "archived": true,
-      "net_weight": 1000.0,
-      "price": 20.19
-    },
-    {
-      "id": 2133,
-      "filament_id": 1013,
-      "location_id": 3013,
-      "colors": [
-        {
-          "r": 192,
-          "g": 192,
-          "b": 192,
-          "a": 255
-        }
-      ],
-      "color_name": "Silver",
-      "initial_weight": 1210.0,
-      "current_weight": 800.0,
-      "registered": "2025-03-01T14:10:00Z",
-      "first_used": "2025-03-20T10:00:00Z",
-      "last_used": "2025-04-10T10:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2134,
-      "filament_id": 1014,
-      "location_id": 3014,
-      "colors": [
-        {
-          "r": 100,
-          "g": 60,
-          "b": 20,
-          "a": 255
-        },
-        {
-          "r": 255,
-          "g": 255,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Brown/Yellow",
-      "initial_weight": 1215.0,
-      "current_weight": 900.0,
-      "registered": "2025-03-10T13:00:00Z",
-      "first_used": "2025-03-25T11:00:00Z",
-      "last_used": "2025-04-20T11:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 46.34
-    },
-    {
-      "id": 2135,
-      "filament_id": 1015,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 0,
-          "g": 200,
-          "b": 100,
-          "a": 255
-        }
-      ],
-      "color_name": "Lime",
-      "initial_weight": 1220.0,
-      "current_weight": 1000.0,
-      "registered": "2025-03-20T10:00:00Z",
-      "first_used": "2025-04-01T09:00:00Z",
-      "last_used": "2025-05-01T09:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 16.48
-    },
-    {
-      "id": 2136,
-      "filament_id": 1016,
-      "location_id": 3001,
-      "colors": [
-        {
-          "r": 255,
-          "g": 165,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Amber",
-      "initial_weight": 950.0,
-      "current_weight": 875.0,
-      "registered": "2025-03-25T11:00:00Z",
-      "first_used": "2025-04-10T10:00:00Z",
-      "last_used": "2025-05-10T10:00:00Z",
-      "comment": "Great quality",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": null
-    },
-    {
-      "id": 2137,
-      "filament_id": 1017,
-      "location_id": 3002,
-      "colors": [
-        {
-          "r": 70,
-          "g": 130,
-          "b": 180,
-          "a": 255
-        }
-      ],
-      "color_name": "Steel Blue",
-      "initial_weight": 1205.0,
-      "current_weight": 400.0,
-      "registered": "2025-04-01T09:00:00Z",
-      "first_used": "2025-04-20T11:00:00Z",
-      "last_used": "2025-05-20T11:00:00Z",
-      "comment": "Good adhesion",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 18.8
-    },
-    {
-      "id": 2138,
-      "filament_id": 1018,
-      "location_id": 3003,
-      "colors": [
-        {
-          "r": 50,
-          "g": 50,
-          "b": 50,
-          "a": 255
-        }
-      ],
-      "color_name": "Dark Gray",
-      "initial_weight": 1210.0,
-      "current_weight": 500.0,
-      "registered": "2025-04-10T10:00:00Z",
-      "first_used": "2025-05-01T09:00:00Z",
-      "last_used": "2025-06-01T09:00:00Z",
-      "comment": "Slightly damp - redry before use",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 34.99
-    },
-    {
-      "id": 2139,
-      "filament_id": 1019,
-      "location_id": 3004,
-      "colors": [
-        {
-          "r": 255,
-          "g": 255,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Yellow",
-      "initial_weight": 1215.0,
-      "current_weight": 1215.0,
-      "registered": "2025-04-20T11:00:00Z",
-      "first_used": null,
-      "last_used": null,
-      "comment": "Unopened",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2140,
-      "filament_id": 1020,
-      "location_id": 3005,
-      "colors": [
-        {
-          "r": 135,
-          "g": 206,
-          "b": 235,
-          "a": 255
-        }
-      ],
-      "color_name": "Sky Blue",
-      "initial_weight": 1220.0,
-      "current_weight": 700.0,
-      "registered": "2025-05-01T09:00:00Z",
-      "first_used": "2025-05-20T11:00:00Z",
-      "last_used": "2025-07-01T09:00:00Z",
-      "comment": "Vibrant color",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 30.59
-    },
-    {
-      "id": 2141,
-      "filament_id": 1021,
-      "location_id": 3006,
-      "colors": [
-        {
-          "r": 255,
-          "g": 20,
-          "b": 147,
-          "a": 255
-        }
-      ],
-      "color_name": "Deep Pink",
-      "initial_weight": 950.0,
-      "current_weight": 650.0,
-      "registered": "2025-05-10T10:00:00Z",
-      "first_used": "2025-06-01T09:00:00Z",
-      "last_used": "2025-07-15T10:00:00Z",
-      "comment": "Reserved for client project",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": 27.8
-    },
-    {
-      "id": 2142,
-      "filament_id": 1022,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 0,
-          "g": 128,
-          "b": 128,
-          "a": 255
-        }
-      ],
-      "color_name": "Dark Teal",
-      "initial_weight": 1205.0,
-      "current_weight": 900.0,
-      "registered": "2025-05-20T11:00:00Z",
-      "first_used": "2025-06-15T10:00:00Z",
-      "last_used": "2025-08-01T09:00:00Z",
-      "comment": "Test roll",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2143,
-      "filament_id": 1023,
-      "location_id": 3008,
-      "colors": [
-        {
-          "r": 139,
-          "g": 0,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Dark Red",
-      "initial_weight": 1210.0,
-      "current_weight": 40.0,
-      "registered": "2025-06-01T09:00:00Z",
-      "first_used": "2025-07-15T10:00:00Z",
-      "last_used": "2024-10-01T08:00:00Z",
-      "comment": "Nearly empty",
-      "archived": true,
-      "net_weight": 1000.0,
-      "price": 18.61
-    },
-    {
-      "id": 2144,
-      "filament_id": 1024,
-      "location_id": 3009,
-      "colors": [
-        {
-          "r": 75,
-          "g": 0,
-          "b": 130,
-          "a": 255
-        }
-      ],
-      "color_name": "Indigo",
-      "initial_weight": 1215.0,
-      "current_weight": 1100.0,
-      "registered": "2025-06-15T10:00:00Z",
-      "first_used": "2025-07-15T10:00:00Z",
-      "last_used": "2025-09-01T09:00:00Z",
-      "comment": "Gift from friend",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 27.71
-    },
-    {
-      "id": 2145,
-      "filament_id": 1025,
-      "location_id": 3010,
-      "colors": [
-        {
-          "r": 210,
-          "g": 180,
-          "b": 140,
-          "a": 255
-        }
-      ],
-      "color_name": "Tan",
-      "initial_weight": 1220.0,
-      "current_weight": 400.0,
-      "registered": "2025-07-01T09:00:00Z",
-      "first_used": "2025-08-01T09:00:00Z",
-      "last_used": "2025-09-15T10:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2146,
-      "filament_id": 1026,
-      "location_id": 3011,
-      "colors": [
-        {
-          "r": 64,
-          "g": 224,
-          "b": 208,
-          "a": 255
-        }
-      ],
-      "color_name": "Turquoise",
-      "initial_weight": 950.0,
-      "current_weight": 425.0,
-      "registered": "2025-07-15T10:00:00Z",
-      "first_used": "2025-08-15T10:00:00Z",
-      "last_used": "2024-10-01T08:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 750.0,
-      "price": 28.27
-    },
-    {
-      "id": 2147,
-      "filament_id": 1027,
-      "location_id": 3012,
-      "colors": [
-        {
-          "r": 255,
-          "g": 99,
-          "b": 71,
-          "a": 255
-        },
-        {
-          "r": 0,
-          "g": 0,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Tomato/Black",
-      "initial_weight": 1205.0,
-      "current_weight": 600.0,
-      "registered": "2025-08-01T09:00:00Z",
-      "first_used": "2025-09-01T09:00:00Z",
-      "last_used": "2024-10-15T09:30:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 30.59
-    },
-    {
-      "id": 2148,
-      "filament_id": 1028,
-      "location_id": 3013,
-      "colors": [
-        {
-          "r": 34,
-          "g": 139,
-          "b": 34,
-          "a": 255
-        }
-      ],
-      "color_name": "Forest Green",
-      "initial_weight": 1210.0,
-      "current_weight": 1210.0,
-      "registered": "2025-08-15T10:00:00Z",
-      "first_used": null,
-      "last_used": null,
-      "comment": "Unopened",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2149,
-      "filament_id": 1029,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 128,
-          "g": 0,
-          "b": 128,
-          "a": 255
-        }
-      ],
-      "color_name": "Magenta",
-      "initial_weight": 1215.0,
-      "current_weight": 800.0,
-      "registered": "2025-09-01T09:00:00Z",
-      "first_used": "2024-10-01T08:00:00Z",
-      "last_used": "2024-11-20T10:00:00Z",
-      "comment": "Good adhesion",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 14.54
-    },
-    {
-      "id": 2150,
-      "filament_id": 1030,
-      "location_id": 3015,
-      "colors": [
-        {
-          "r": 0,
-          "g": 0,
-          "b": 128,
-          "a": 255
-        }
-      ],
-      "color_name": "Navy",
-      "initial_weight": 1220.0,
-      "current_weight": 900.0,
-      "registered": "2025-09-15T10:00:00Z",
-      "first_used": "2024-10-15T09:30:00Z",
-      "last_used": "2024-12-01T08:00:00Z",
-      "comment": "Slightly damp - redry before use",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 15.67
-    },
-    {
-      "id": 2151,
-      "filament_id": 1031,
-      "location_id": 3001,
-      "colors": [
-        {
-          "r": 255,
-          "g": 80,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Orange",
-      "initial_weight": 950.0,
-      "current_weight": 800.0,
-      "registered": "2024-10-01T08:00:00Z",
-      "first_used": "2024-11-01T12:00:00Z",
-      "last_used": "2024-12-15T14:00:00Z",
-      "comment": "Perfect for functional parts",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": null
-    },
-    {
-      "id": 2152,
-      "filament_id": 1032,
-      "location_id": 3002,
-      "colors": [
-        {
-          "r": 0,
-          "g": 0,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Black",
-      "initial_weight": 1205.0,
-      "current_weight": 1100.0,
-      "registered": "2024-10-15T09:30:00Z",
-      "first_used": "2024-11-20T10:00:00Z",
-      "last_used": "2025-01-05T08:00:00Z",
-      "comment": "Vibrant color",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 36.99
-    },
-    {
-      "id": 2153,
-      "filament_id": 1033,
-      "location_id": 3003,
-      "colors": [
-        {
-          "r": 255,
-          "g": 255,
-          "b": 255,
-          "a": 255
-        }
-      ],
-      "color_name": "White",
-      "initial_weight": 1210.0,
-      "current_weight": 400.0,
-      "registered": "2024-11-01T12:00:00Z",
-      "first_used": "2024-12-01T08:00:00Z",
-      "last_used": "2025-01-10T10:05:00Z",
-      "comment": "Reserved for client project",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 39.38
-    },
-    {
-      "id": 2154,
-      "filament_id": 1034,
-      "location_id": 3004,
-      "colors": [
-        {
-          "r": 220,
-          "g": 220,
-          "b": 220,
-          "a": 200
-        }
-      ],
-      "color_name": "Clear",
-      "initial_weight": 1215.0,
-      "current_weight": 40.0,
-      "registered": "2024-11-20T10:00:00Z",
-      "first_used": "2025-01-05T08:00:00Z",
-      "last_used": "2025-02-28T09:00:00Z",
-      "comment": "Nearly empty",
-      "archived": true,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2155,
-      "filament_id": 1035,
-      "location_id": 3005,
-      "colors": [
-        {
-          "r": 30,
-          "g": 30,
-          "b": 200,
-          "a": 255
-        }
-      ],
-      "color_name": "Blue",
-      "initial_weight": 1220.0,
-      "current_weight": 600.0,
-      "registered": "2024-12-01T08:00:00Z",
-      "first_used": "2025-01-05T08:00:00Z",
-      "last_used": "2025-02-01T11:00:00Z",
-      "comment": "Backup spool",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 51.49
-    },
-    {
-      "id": 2156,
-      "filament_id": 1036,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 200,
-          "g": 30,
-          "b": 30,
-          "a": 255
-        }
-      ],
-      "color_name": "Red",
-      "initial_weight": 950.0,
-      "current_weight": 575.0,
-      "registered": "2024-12-15T14:00:00Z",
-      "first_used": "2025-01-10T10:05:00Z",
-      "last_used": "2025-02-15T08:35:00Z",
-      "comment": "Gift from friend",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": 24.24
-    },
-    {
-      "id": 2157,
-      "filament_id": 1037,
-      "location_id": 3007,
-      "colors": [
-        {
-          "r": 30,
-          "g": 160,
-          "b": 30,
-          "a": 255
-        }
-      ],
-      "color_name": "Green",
-      "initial_weight": 1205.0,
-      "current_weight": 1205.0,
-      "registered": "2025-01-05T08:00:00Z",
-      "first_used": null,
-      "last_used": null,
-      "comment": "Unopened",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2158,
-      "filament_id": 1038,
-      "location_id": 3008,
-      "colors": [
-        {
-          "r": 255,
-          "g": 215,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Gold",
-      "initial_weight": 1210.0,
-      "current_weight": 900.0,
-      "registered": "2025-01-10T10:05:00Z",
-      "first_used": "2025-02-01T11:00:00Z",
-      "last_used": "2025-03-01T14:10:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 39.59
-    },
-    {
-      "id": 2159,
-      "filament_id": 1039,
-      "location_id": 3009,
-      "colors": [
-        {
-          "r": 180,
-          "g": 0,
-          "b": 200,
-          "a": 255
-        }
-      ],
-      "color_name": "Purple",
-      "initial_weight": 1215.0,
-      "current_weight": 1000.0,
-      "registered": "2025-01-20T09:00:00Z",
-      "first_used": "2025-02-15T08:35:00Z",
-      "last_used": "2025-03-10T13:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 29.99
-    },
-    {
-      "id": 2160,
-      "filament_id": 1040,
-      "location_id": 3010,
-      "colors": [
-        {
-          "r": 255,
-          "g": 180,
-          "b": 180,
-          "a": 255
-        },
-        {
-          "r": 0,
-          "g": 200,
-          "b": 100,
-          "a": 255
-        }
-      ],
-      "color_name": "Pink/Lime",
-      "initial_weight": 1220.0,
-      "current_weight": 1100.0,
-      "registered": "2025-02-01T11:00:00Z",
-      "first_used": "2025-02-28T09:00:00Z",
-      "last_used": "2025-03-20T10:00:00Z",
-      "comment": "Great quality",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2161,
-      "filament_id": 1001,
-      "location_id": 3011,
-      "colors": [
-        {
-          "r": 50,
-          "g": 200,
-          "b": 200,
-          "a": 255
-        }
-      ],
-      "color_name": "Teal",
-      "initial_weight": 950.0,
-      "current_weight": 350.0,
-      "registered": "2025-02-15T08:35:00Z",
-      "first_used": "2025-03-01T14:10:00Z",
-      "last_used": "2025-03-25T11:00:00Z",
-      "comment": "Good adhesion",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": 30.59
-    },
-    {
-      "id": 2162,
-      "filament_id": 1002,
-      "location_id": 3012,
-      "colors": [
-        {
-          "r": 230,
-          "g": 115,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Copper",
-      "initial_weight": 1205.0,
-      "current_weight": 500.0,
-      "registered": "2025-02-28T09:00:00Z",
-      "first_used": "2025-03-10T13:00:00Z",
-      "last_used": "2025-04-01T09:00:00Z",
-      "comment": "Slightly damp - redry before use",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 22.65
-    },
-    {
-      "id": 2163,
-      "filament_id": 1003,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 192,
-          "g": 192,
-          "b": 192,
-          "a": 255
-        }
-      ],
-      "color_name": "Silver",
-      "initial_weight": 1210.0,
-      "current_weight": 600.0,
-      "registered": "2025-03-01T14:10:00Z",
-      "first_used": "2025-03-20T10:00:00Z",
-      "last_used": "2025-04-10T10:00:00Z",
-      "comment": "Perfect for functional parts",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2164,
-      "filament_id": 1004,
-      "location_id": 3014,
-      "colors": [
-        {
-          "r": 100,
-          "g": 60,
-          "b": 20,
-          "a": 255
-        }
-      ],
-      "color_name": "Brown",
-      "initial_weight": 1215.0,
-      "current_weight": 700.0,
-      "registered": "2025-03-10T13:00:00Z",
-      "first_used": "2025-03-25T11:00:00Z",
-      "last_used": "2025-04-20T11:00:00Z",
-      "comment": "Vibrant color",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 24.49
-    },
-    {
-      "id": 2165,
-      "filament_id": 1005,
-      "location_id": 3015,
-      "colors": [
-        {
-          "r": 0,
-          "g": 200,
-          "b": 100,
-          "a": 255
-        }
-      ],
-      "color_name": "Lime",
-      "initial_weight": 1220.0,
-      "current_weight": 40.0,
-      "registered": "2025-03-20T10:00:00Z",
-      "first_used": "2025-04-10T10:00:00Z",
-      "last_used": "2025-06-01T09:00:00Z",
-      "comment": "Nearly empty",
-      "archived": true,
-      "net_weight": 1000.0,
-      "price": 16.82
-    },
-    {
-      "id": 2166,
-      "filament_id": 1006,
-      "location_id": 3001,
-      "colors": [
-        {
-          "r": 255,
-          "g": 165,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Amber",
-      "initial_weight": 950.0,
-      "current_weight": 950.0,
-      "registered": "2025-03-25T11:00:00Z",
-      "first_used": null,
-      "last_used": null,
-      "comment": "Unopened",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": null
-    },
-    {
-      "id": 2167,
-      "filament_id": 1007,
-      "location_id": 3002,
-      "colors": [
-        {
-          "r": 70,
-          "g": 130,
-          "b": 180,
-          "a": 255
-        }
-      ],
-      "color_name": "Steel Blue",
-      "initial_weight": 1205.0,
-      "current_weight": 1000.0,
-      "registered": "2025-04-01T09:00:00Z",
-      "first_used": "2025-04-20T11:00:00Z",
-      "last_used": "2025-05-20T11:00:00Z",
-      "comment": "Backup spool",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 18.17
-    },
-    {
-      "id": 2168,
-      "filament_id": 1008,
-      "location_id": 3003,
-      "colors": [
-        {
-          "r": 50,
-          "g": 50,
-          "b": 50,
-          "a": 255
-        }
-      ],
-      "color_name": "Dark Gray",
-      "initial_weight": 1210.0,
-      "current_weight": 1100.0,
-      "registered": "2025-04-10T10:00:00Z",
-      "first_used": "2025-05-01T09:00:00Z",
-      "last_used": "2025-06-01T09:00:00Z",
-      "comment": "Gift from friend",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 32.63
-    },
-    {
-      "id": 2169,
-      "filament_id": 1009,
-      "location_id": 3004,
-      "colors": [
-        {
-          "r": 255,
-          "g": 255,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Yellow",
-      "initial_weight": 1215.0,
-      "current_weight": 400.0,
-      "registered": "2025-04-20T11:00:00Z",
-      "first_used": "2025-05-10T10:00:00Z",
-      "last_used": "2025-06-15T10:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2170,
-      "filament_id": 1010,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 135,
-          "g": 206,
-          "b": 235,
-          "a": 255
-        }
-      ],
-      "color_name": "Sky Blue",
-      "initial_weight": 1220.0,
-      "current_weight": 500.0,
-      "registered": "2025-05-01T09:00:00Z",
-      "first_used": "2025-05-20T11:00:00Z",
-      "last_used": "2025-07-01T09:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 32.0
-    },
-    {
-      "id": 2171,
-      "filament_id": 1011,
-      "location_id": 3006,
-      "colors": [
-        {
-          "r": 255,
-          "g": 20,
-          "b": 147,
-          "a": 255
-        }
-      ],
-      "color_name": "Deep Pink",
-      "initial_weight": 950.0,
-      "current_weight": 500.0,
-      "registered": "2025-05-10T10:00:00Z",
-      "first_used": "2025-06-01T09:00:00Z",
-      "last_used": "2025-07-15T10:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 750.0,
-      "price": 22.53
-    },
-    {
-      "id": 2172,
-      "filament_id": 1012,
-      "location_id": 3007,
-      "colors": [
-        {
-          "r": 0,
-          "g": 128,
-          "b": 128,
-          "a": 255
-        }
-      ],
-      "color_name": "Dark Teal",
-      "initial_weight": 1205.0,
-      "current_weight": 700.0,
-      "registered": "2025-05-20T11:00:00Z",
-      "first_used": "2025-06-15T10:00:00Z",
-      "last_used": "2025-08-01T09:00:00Z",
-      "comment": "Great quality",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2173,
-      "filament_id": 1013,
-      "location_id": 3008,
-      "colors": [
-        {
-          "r": 139,
-          "g": 0,
-          "b": 0,
-          "a": 255
-        },
-        {
-          "r": 34,
-          "g": 139,
-          "b": 34,
-          "a": 255
-        }
-      ],
-      "color_name": "Dark Red/Forest Green",
-      "initial_weight": 1210.0,
-      "current_weight": 800.0,
-      "registered": "2025-06-01T09:00:00Z",
-      "first_used": "2025-07-01T09:00:00Z",
-      "last_used": "2025-08-15T10:00:00Z",
-      "comment": "Good adhesion",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 22.99
-    },
-    {
-      "id": 2174,
-      "filament_id": 1014,
-      "location_id": 3009,
-      "colors": [
-        {
-          "r": 75,
-          "g": 0,
-          "b": 130,
-          "a": 255
-        }
-      ],
-      "color_name": "Indigo",
-      "initial_weight": 1215.0,
-      "current_weight": 900.0,
-      "registered": "2025-06-15T10:00:00Z",
-      "first_used": "2025-07-15T10:00:00Z",
-      "last_used": "2025-09-01T09:00:00Z",
-      "comment": "Slightly damp - redry before use",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 45.44
-    },
-    {
-      "id": 2175,
-      "filament_id": 1015,
-      "location_id": 3010,
-      "colors": [
-        {
-          "r": 210,
-          "g": 180,
-          "b": 140,
-          "a": 255
-        }
-      ],
-      "color_name": "Tan",
-      "initial_weight": 1220.0,
-      "current_weight": 1220.0,
-      "registered": "2025-07-01T09:00:00Z",
-      "first_used": null,
-      "last_used": null,
-      "comment": "Unopened",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2176,
-      "filament_id": 1016,
-      "location_id": 3011,
-      "colors": [
-        {
-          "r": 64,
-          "g": 224,
-          "b": 208,
-          "a": 255
-        }
-      ],
-      "color_name": "Turquoise",
-      "initial_weight": 950.0,
-      "current_weight": 30.0,
-      "registered": "2025-07-15T10:00:00Z",
-      "first_used": "2025-09-01T09:00:00Z",
-      "last_used": "2024-11-20T10:00:00Z",
-      "comment": "Nearly empty",
-      "archived": true,
-      "net_weight": 750.0,
-      "price": 18.53
-    },
-    {
-      "id": 2177,
-      "filament_id": 1017,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 255,
-          "g": 99,
-          "b": 71,
-          "a": 255
-        }
-      ],
-      "color_name": "Tomato",
-      "initial_weight": 1205.0,
-      "current_weight": 400.0,
-      "registered": "2025-08-01T09:00:00Z",
-      "first_used": "2025-09-01T09:00:00Z",
-      "last_used": "2024-10-15T09:30:00Z",
-      "comment": "Reserved for client project",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 18.42
-    },
-    {
-      "id": 2178,
-      "filament_id": 1018,
-      "location_id": 3013,
-      "colors": [
-        {
-          "r": 34,
-          "g": 139,
-          "b": 34,
-          "a": 255
-        }
-      ],
-      "color_name": "Forest Green",
-      "initial_weight": 1210.0,
-      "current_weight": 500.0,
-      "registered": "2025-08-15T10:00:00Z",
-      "first_used": "2025-09-15T10:00:00Z",
-      "last_used": "2024-11-01T12:00:00Z",
-      "comment": "Test roll",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2179,
-      "filament_id": 1019,
-      "location_id": 3014,
-      "colors": [
-        {
-          "r": 128,
-          "g": 0,
-          "b": 128,
-          "a": 255
-        }
-      ],
-      "color_name": "Magenta",
-      "initial_weight": 1215.0,
-      "current_weight": 600.0,
-      "registered": "2025-09-01T09:00:00Z",
-      "first_used": "2024-10-01T08:00:00Z",
-      "last_used": "2024-11-20T10:00:00Z",
-      "comment": "Backup spool",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 15.83
-    },
-    {
-      "id": 2180,
-      "filament_id": 1020,
-      "location_id": 3015,
-      "colors": [
-        {
-          "r": 0,
-          "g": 0,
-          "b": 128,
-          "a": 255
-        }
-      ],
-      "color_name": "Navy",
-      "initial_weight": 1220.0,
-      "current_weight": 700.0,
-      "registered": "2025-09-15T10:00:00Z",
-      "first_used": "2024-10-15T09:30:00Z",
-      "last_used": "2024-12-01T08:00:00Z",
-      "comment": "Gift from friend",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 29.99
-    },
-    {
-      "id": 2181,
-      "filament_id": 1021,
-      "location_id": 3001,
-      "colors": [
-        {
-          "r": 255,
-          "g": 80,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Orange",
-      "initial_weight": 950.0,
-      "current_weight": 650.0,
-      "registered": "2024-10-01T08:00:00Z",
-      "first_used": "2024-11-01T12:00:00Z",
-      "last_used": "2024-12-15T14:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 750.0,
-      "price": null
-    },
-    {
-      "id": 2182,
-      "filament_id": 1022,
-      "location_id": 3002,
-      "colors": [
-        {
-          "r": 0,
-          "g": 0,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Black",
-      "initial_weight": 1205.0,
-      "current_weight": 900.0,
-      "registered": "2024-10-15T09:30:00Z",
-      "first_used": "2024-11-20T10:00:00Z",
-      "last_used": "2025-01-05T08:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 30.59
-    },
-    {
-      "id": 2183,
-      "filament_id": 1023,
-      "location_id": 3003,
-      "colors": [
-        {
-          "r": 255,
-          "g": 255,
-          "b": 255,
-          "a": 255
-        }
-      ],
-      "color_name": "White",
-      "initial_weight": 1210.0,
-      "current_weight": 1000.0,
-      "registered": "2024-11-01T12:00:00Z",
-      "first_used": "2024-12-01T08:00:00Z",
-      "last_used": "2025-01-10T10:05:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 19.56
-    },
-    {
-      "id": 2184,
-      "filament_id": 1024,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 220,
-          "g": 220,
-          "b": 220,
-          "a": 200
-        }
-      ],
-      "color_name": "Clear",
-      "initial_weight": 1215.0,
-      "current_weight": 1215.0,
-      "registered": "2024-11-20T10:00:00Z",
-      "first_used": null,
-      "last_used": null,
-      "comment": "Unopened",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2185,
-      "filament_id": 1025,
-      "location_id": 3005,
-      "colors": [
-        {
-          "r": 30,
-          "g": 30,
-          "b": 200,
-          "a": 255
-        }
-      ],
-      "color_name": "Blue",
-      "initial_weight": 1220.0,
-      "current_weight": 400.0,
-      "registered": "2024-12-01T08:00:00Z",
-      "first_used": "2025-01-05T08:00:00Z",
-      "last_used": "2025-02-01T11:00:00Z",
-      "comment": "Good adhesion",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 34.29
-    },
-    {
-      "id": 2186,
-      "filament_id": 1026,
-      "location_id": 3006,
-      "colors": [
-        {
-          "r": 200,
-          "g": 30,
-          "b": 30,
-          "a": 255
-        },
-        {
-          "r": 50,
-          "g": 200,
-          "b": 200,
-          "a": 255
-        }
-      ],
-      "color_name": "Red/Teal",
-      "initial_weight": 950.0,
-      "current_weight": 425.0,
-      "registered": "2024-12-15T14:00:00Z",
-      "first_used": "2025-01-10T10:05:00Z",
-      "last_used": "2025-02-15T08:35:00Z",
-      "comment": "Slightly damp - redry before use",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": 27.71
-    },
-    {
-      "id": 2187,
-      "filament_id": 1027,
-      "location_id": 3007,
-      "colors": [
-        {
-          "r": 30,
-          "g": 160,
-          "b": 30,
-          "a": 255
-        }
-      ],
-      "color_name": "Green",
-      "initial_weight": 1205.0,
-      "current_weight": 40.0,
-      "registered": "2025-01-05T08:00:00Z",
-      "first_used": "2025-02-01T11:00:00Z",
-      "last_used": "2025-03-20T10:00:00Z",
-      "comment": "Nearly empty",
-      "archived": true,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2188,
-      "filament_id": 1028,
-      "location_id": 3008,
-      "colors": [
-        {
-          "r": 255,
-          "g": 215,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Gold",
-      "initial_weight": 1210.0,
-      "current_weight": 700.0,
-      "registered": "2025-01-10T10:05:00Z",
-      "first_used": "2025-02-01T11:00:00Z",
-      "last_used": "2025-03-01T14:10:00Z",
-      "comment": "Vibrant color",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 15.14
-    },
-    {
-      "id": 2189,
-      "filament_id": 1029,
-      "location_id": 3009,
-      "colors": [
-        {
-          "r": 180,
-          "g": 0,
-          "b": 200,
-          "a": 255
-        }
-      ],
-      "color_name": "Purple",
-      "initial_weight": 1215.0,
-      "current_weight": 800.0,
-      "registered": "2025-01-20T09:00:00Z",
-      "first_used": "2025-02-15T08:35:00Z",
-      "last_used": "2025-03-10T13:00:00Z",
-      "comment": "Reserved for client project",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 15.29
-    },
-    {
-      "id": 2190,
-      "filament_id": 1030,
-      "location_id": 3010,
-      "colors": [
-        {
-          "r": 255,
-          "g": 180,
-          "b": 180,
-          "a": 255
-        }
-      ],
-      "color_name": "Pink",
-      "initial_weight": 1220.0,
-      "current_weight": 900.0,
-      "registered": "2025-02-01T11:00:00Z",
-      "first_used": "2025-02-28T09:00:00Z",
-      "last_used": "2025-03-20T10:00:00Z",
-      "comment": "Test roll",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2191,
-      "filament_id": 1031,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 50,
-          "g": 200,
-          "b": 200,
-          "a": 255
-        }
-      ],
-      "color_name": "Teal",
-      "initial_weight": 950.0,
-      "current_weight": 800.0,
-      "registered": "2025-02-15T08:35:00Z",
-      "first_used": "2025-03-01T14:10:00Z",
-      "last_used": "2025-03-25T11:00:00Z",
-      "comment": "Backup spool",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": 53.34
-    },
-    {
-      "id": 2192,
-      "filament_id": 1032,
-      "location_id": 3012,
-      "colors": [
-        {
-          "r": 230,
-          "g": 115,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Copper",
-      "initial_weight": 1205.0,
-      "current_weight": 1100.0,
-      "registered": "2025-02-28T09:00:00Z",
-      "first_used": "2025-03-10T13:00:00Z",
-      "last_used": "2025-04-01T09:00:00Z",
-      "comment": "Gift from friend",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 36.25
-    },
-    {
-      "id": 2193,
-      "filament_id": 1033,
-      "location_id": 3013,
-      "colors": [
-        {
-          "r": 192,
-          "g": 192,
-          "b": 192,
-          "a": 255
-        }
-      ],
-      "color_name": "Silver",
-      "initial_weight": 1210.0,
-      "current_weight": 1210.0,
-      "registered": "2025-03-01T14:10:00Z",
-      "first_used": null,
-      "last_used": null,
-      "comment": "Unopened",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2194,
-      "filament_id": 1034,
-      "location_id": 3014,
-      "colors": [
-        {
-          "r": 100,
-          "g": 60,
-          "b": 20,
-          "a": 255
-        }
-      ],
-      "color_name": "Brown",
-      "initial_weight": 1215.0,
-      "current_weight": 500.0,
-      "registered": "2025-03-10T13:00:00Z",
-      "first_used": "2025-03-25T11:00:00Z",
-      "last_used": "2025-04-20T11:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 19.99
-    },
-    {
-      "id": 2195,
-      "filament_id": 1035,
-      "location_id": 3015,
-      "colors": [
-        {
-          "r": 0,
-          "g": 200,
-          "b": 100,
-          "a": 255
-        }
-      ],
-      "color_name": "Lime",
-      "initial_weight": 1220.0,
-      "current_weight": 600.0,
-      "registered": "2025-03-20T10:00:00Z",
-      "first_used": "2025-04-01T09:00:00Z",
-      "last_used": "2025-05-01T09:00:00Z",
-      "comment": null,
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 50.49
-    },
-    {
-      "id": 2196,
-      "filament_id": 1036,
-      "location_id": 3001,
-      "colors": [
-        {
-          "r": 255,
-          "g": 165,
-          "b": 0,
-          "a": 255
-        }
-      ],
-      "color_name": "Amber",
-      "initial_weight": 950.0,
-      "current_weight": 575.0,
-      "registered": "2025-03-25T11:00:00Z",
-      "first_used": "2025-04-10T10:00:00Z",
-      "last_used": "2025-05-10T10:00:00Z",
-      "comment": "Great quality",
-      "archived": false,
-      "net_weight": 750.0,
-      "price": null
-    },
-    {
-      "id": 2197,
-      "filament_id": 1037,
-      "location_id": 3002,
-      "colors": [
-        {
-          "r": 70,
-          "g": 130,
-          "b": 180,
-          "a": 255
-        }
-      ],
-      "color_name": "Steel Blue",
-      "initial_weight": 1205.0,
-      "current_weight": 800.0,
-      "registered": "2025-04-01T09:00:00Z",
-      "first_used": "2025-04-20T11:00:00Z",
-      "last_used": "2025-05-20T11:00:00Z",
-      "comment": "Good adhesion",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 25.74
-    },
-    {
-      "id": 2198,
-      "filament_id": 1038,
-      "location_id": null,
-      "colors": [
-        {
-          "r": 50,
-          "g": 50,
-          "b": 50,
-          "a": 255
-        }
-      ],
-      "color_name": "Dark Gray",
-      "initial_weight": 1210.0,
-      "current_weight": 40.0,
-      "registered": "2025-04-10T10:00:00Z",
-      "first_used": "2025-05-10T10:00:00Z",
-      "last_used": "2025-07-15T10:00:00Z",
-      "comment": "Nearly empty",
-      "archived": true,
-      "net_weight": 1000.0,
-      "price": 38.79
-    },
-    {
-      "id": 2199,
-      "filament_id": 1039,
-      "location_id": 3004,
-      "colors": [
-        {
-          "r": 255,
-          "g": 255,
-          "b": 0,
-          "a": 255
-        },
-        {
-          "r": 75,
-          "g": 0,
-          "b": 130,
-          "a": 255
-        }
-      ],
-      "color_name": "Yellow/Indigo",
-      "initial_weight": 1215.0,
-      "current_weight": 1000.0,
-      "registered": "2025-04-20T11:00:00Z",
-      "first_used": "2025-05-10T10:00:00Z",
-      "last_used": "2025-06-15T10:00:00Z",
-      "comment": "Perfect for functional parts",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": null
-    },
-    {
-      "id": 2200,
-      "filament_id": 1040,
-      "location_id": 3005,
-      "colors": [
-        {
-          "r": 135,
-          "g": 206,
-          "b": 235,
-          "a": 255
-        }
-      ],
-      "color_name": "Sky Blue",
-      "initial_weight": 1220.0,
-      "current_weight": 1100.0,
-      "registered": "2025-05-01T09:00:00Z",
-      "first_used": "2025-05-20T11:00:00Z",
-      "last_used": "2025-07-01T09:00:00Z",
-      "comment": "Vibrant color",
-      "archived": false,
-      "net_weight": 1000.0,
-      "price": 14.84
+      "net_weight": 1000.0
     }
   ],
   "locations": [
@@ -5374,37 +3058,9 @@
     {
       "id": 3008,
       "name": "New Arrivals"
-    },
-    {
-      "id": 3009,
-      "name": "Flexible Materials Box"
-    },
-    {
-      "id": 3010,
-      "name": "High-Temp Rack"
-    },
-    {
-      "id": 3011,
-      "name": "Carbon Fiber Shelf"
-    },
-    {
-      "id": 3012,
-      "name": "Printer 2 AMS"
-    },
-    {
-      "id": 3013,
-      "name": "Printer 3 AMS"
-    },
-    {
-      "id": 3014,
-      "name": "Archive Box"
-    },
-    {
-      "id": 3015,
-      "name": "Working Drawer"
     }
   ],
   "settings": {
-    "currency_symbol": "€"
+    "currency_symbol": "\u00e2\u201a\u00ac"
   }
 }

@@ -20,11 +20,10 @@ export function sm_format_decimal(value, min_fd, max_fd) {
         maximumFractionDigits: max_fd,
     }).format(value);
 }
-export function sm_format_date_medium(timestamp_ms) {
-    return new Intl.DateTimeFormat(undefined, {
-        dateStyle: 'medium',
-        timeZone: 'UTC',
-    }).format(new Date(timestamp_ms));
+export function sm_format_date(timestamp_ms, date_style, time_style) {
+    const opts = { dateStyle: date_style, timeZone: 'UTC' };
+    if (time_style) opts.timeStyle = time_style;
+    return new Intl.DateTimeFormat(undefined, opts).format(new Date(timestamp_ms));
 }
 export function sm_format_currency(value, symbol) {
     const parts = new Intl.NumberFormat(undefined, {
@@ -38,7 +37,7 @@ export function sm_format_currency(value, symbol) {
 ")]
 extern "C" {
     fn sm_format_decimal(value: f64, min_fd: u32, max_fd: u32) -> String;
-    fn sm_format_date_medium(timestamp_ms: f64) -> String;
+    fn sm_format_date(timestamp_ms: f64, date_style: &str, time_style: &str) -> String;
     fn sm_format_currency(value: f64, symbol: &str) -> String;
 }
 
@@ -59,11 +58,20 @@ pub fn format_mm(mm: f32) -> String {
     format!("{} mm", sm_format_decimal(f64::from(mm), 0, 2))
 }
 
-/// Format a `DateTime<Utc>` as a locale-aware date (date portion only).
-/// Uses `Intl.DateTimeFormat` with `dateStyle: "medium"`, e.g. "Mar 29, 2026"
-/// or "29 mars 2026" depending on the browser locale.
-pub fn format_date(dt: DateTime<Utc>) -> String {
-    sm_format_date_medium(dt.timestamp_millis() as f64)
+/// Format a `DateTime<Utc>` as a locale-aware date/time string.
+///
+/// `date_style` must be one of `"short"`, `"medium"`, `"long"`, `"full"` —
+/// passed directly to `Intl.DateTimeFormat` as `dateStyle`.
+///
+/// `time_style` must be `"short"`, `"medium"`, or `""` / `"none"`.  An empty
+/// string or `"none"` omits the time component entirely (date-only display).
+///
+/// Passing `date_style = "medium"` and `time_style = ""` reproduces the
+/// previous hardcoded behaviour exactly.
+pub fn format_date(dt: DateTime<Utc>, date_style: &str, time_style: &str) -> String {
+    // Normalise "none" to an empty string so the JS shim sees a falsy value.
+    let ts = if time_style == "none" { "" } else { time_style };
+    sm_format_date(dt.timestamp_millis() as f64, date_style, ts)
 }
 
 /// Format a currency amount with locale-aware symbol positioning.

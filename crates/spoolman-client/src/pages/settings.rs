@@ -1,6 +1,9 @@
 use crate::{
     api,
-    state::{color_distance_algorithm, color_thresholds, diameter_settings, ColorAlgorithm},
+    state::{
+        color_distance_algorithm, color_thresholds, date_format_setting, diameter_settings,
+        time_format_setting, ColorAlgorithm,
+    },
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
@@ -27,6 +30,12 @@ pub fn SettingsPage() -> impl IntoView {
     let thresh_close    = RwSignal::new(format!("{:.1}", ct.ciede2000_close.get_untracked()));
     let thresh_ballpark = RwSignal::new(format!("{:.1}", ct.ciede2000_ballpark.get_untracked()));
 
+    // Date / time format — read from shared context; local copies for the form.
+    let date_fmt_ctx = date_format_setting();
+    let time_fmt_ctx = time_format_setting();
+    let date_fmt = RwSignal::new("medium".to_string());
+    let time_fmt = RwSignal::new("none".to_string());
+
     Effect::new(move |_| {
         if let Some(Ok(s)) = settings.get() {
             currency.set(
@@ -51,6 +60,19 @@ pub fn SettingsPage() -> impl IntoView {
             algo.set(algo_str.clone());
             // Seed threshold fields from context (already hydrated by App).
             update_thresh_fields(algo_str.as_str(), ct, &thresh_same, &thresh_close, &thresh_ballpark);
+
+            date_fmt.set(
+                s.get("date_format")
+                    .filter(|v| !v.is_empty())
+                    .cloned()
+                    .unwrap_or_else(|| "medium".into()),
+            );
+            time_fmt.set(
+                s.get("time_format")
+                    .filter(|v| !v.is_empty())
+                    .cloned()
+                    .unwrap_or_else(|| "none".into()),
+            );
         }
     });
 
@@ -68,6 +90,8 @@ pub fn SettingsPage() -> impl IntoView {
         let same_val     = thresh_same.get();
         let close_val    = thresh_close.get();
         let ballpark_val = thresh_ballpark.get();
+        let date_fmt_val = date_fmt.get();
+        let time_fmt_val = time_fmt.get();
         spawn_local(async move {
             let r1 = api::put_setting("currency_symbol", currency.get()).await;
             let r2 = api::put_setting(
@@ -82,8 +106,12 @@ pub fn SettingsPage() -> impl IntoView {
             let r6 = api::put_setting(&format!("color_threshold_{algo_val}_close"),    close_val.clone()).await;
             let r7 = api::put_setting(&format!("color_threshold_{algo_val}_ballpark"), ballpark_val.clone()).await;
 
-            if matches!((&r1, &r2, &r3, &r4, &r5, &r6, &r7),
-                (Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_)))
+            // Persist date / time format keys.
+            let r8 = api::put_setting("date_format", date_fmt_val.clone()).await;
+            let r9 = api::put_setting("time_format", time_fmt_val.clone()).await;
+
+            if matches!((&r1, &r2, &r3, &r4, &r5, &r6, &r7, &r8, &r9),
+                (Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_)))
             {
                 // Update app-wide context signals so other components see the
                 // change without a reload.
@@ -101,9 +129,13 @@ pub fn SettingsPage() -> impl IntoView {
                 // Update the matching threshold signals for the active algorithm.
                 set_thresh_signals(new_algo, ct, &same_val, &close_val, &ballpark_val);
 
+                // Update date / time format context signals.
+                date_fmt_ctx.0.set(date_fmt_val);
+                time_fmt_ctx.0.set(time_fmt_val);
+
                 saved.set(true);
             } else {
-                let first_err = [r1, r2, r3, r4, r5, r6, r7]
+                let first_err = [r1, r2, r3, r4, r5, r6, r7, r8, r9]
                     .into_iter()
                     .find_map(|r| r.err());
                 error.set(first_err.map(|e| e.to_string()));
@@ -154,6 +186,35 @@ pub fn SettingsPage() -> impl IntoView {
                             default_mm.set(event_target_value(&ev));
                         }
                     />
+                </label>
+                <label>
+                    "Date format"
+                    <select
+                        prop:value=move || date_fmt.get()
+                        on:change=move |ev| {
+                            saved.set(false);
+                            date_fmt.set(event_target_value(&ev));
+                        }
+                    >
+                        <option value="short">"Short (e.g. 3/29/26)"</option>
+                        <option value="medium">"Medium (e.g. Mar 29, 2026) — default"</option>
+                        <option value="long">"Long (e.g. March 29, 2026)"</option>
+                        <option value="full">"Full (e.g. Saturday, March 29, 2026)"</option>
+                    </select>
+                </label>
+                <label>
+                    "Time format"
+                    <select
+                        prop:value=move || time_fmt.get()
+                        on:change=move |ev| {
+                            saved.set(false);
+                            time_fmt.set(event_target_value(&ev));
+                        }
+                    >
+                        <option value="none">"None — date only (default)"</option>
+                        <option value="short">"Short (e.g. 2:30 PM)"</option>
+                        <option value="medium">"Medium (e.g. 2:30:00 PM)"</option>
+                    </select>
                 </label>
                 <label>
                     "Color search algorithm"

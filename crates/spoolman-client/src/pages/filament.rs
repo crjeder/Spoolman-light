@@ -2,7 +2,7 @@ use crate::{
     api,
     components::{pagination::Pagination, table::ColHeader},
     format,
-    state::{diameter_settings, use_table_state},
+    state::{date_format_setting, diameter_settings, time_format_setting, use_table_state},
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
@@ -46,6 +46,8 @@ pub fn FilamentList() -> impl IntoView {
     let material_filter = RwSignal::new(String::new());
     let ds = diameter_settings();
     let show_diameter = move || !ds.uniform.get();
+    let df = date_format_setting();
+    let tf = time_format_setting();
 
     let version = RwSignal::new(0u32);
     let confirm_delete: RwSignal<Option<u32>> = RwSignal::new(None);
@@ -205,7 +207,7 @@ pub fn FilamentList() -> impl IntoView {
                                     <td>{f.material_modifier.clone().unwrap_or_default()}</td>
                                     {show_diameter().then(|| { let d = f.diameter; view! { <td class="num">{format::format_mm(d)}</td> } })}
                                     <td class="num">{format::format_density(f.density)}</td>
-                                    <td>{format::format_date(f.registered)}</td>
+                                    <td>{format::format_date(f.registered, &df.0.get(), &tf.0.get())}</td>
                                     <td class="actions">
                                         <a href=format!("/filaments/{id}") class="btn btn-icon" title="View">"\u{1F441}"</a>
                                         <a href=format!("/filaments/{id}/edit") class="btn btn-icon" title="Edit">"\u{270F}"</a>

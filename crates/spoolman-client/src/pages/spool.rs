@@ -267,27 +267,6 @@ pub fn SpoolList() -> impl IntoView {
                         />
                         " Show archived"
                     </label>
-                    <Suspense>
-                        <select
-                            prop:value=move || location_filter.get().map(|id| id.to_string()).unwrap_or_default()
-                            on:change=move |ev| {
-                                let v = event_target_value(&ev);
-                                location_filter.set(v.parse::<u32>().ok());
-                            }
-                        >
-                            <option value="">"All locations"</option>
-                            {move || locations.get().and_then(|r| r.ok()).map(|ls| {
-                                let cur = location_filter.get();
-                                ls.into_iter().map(|lr| {
-                                    let id = lr.location.id;
-                                    let name = lr.location.name.clone();
-                                    view! {
-                                        <option value=id.to_string() selected=cur == Some(id)>{name}</option>
-                                    }
-                                }).collect_view()
-                            })}
-                        </select>
-                    </Suspense>
                     <a href="/spools/new" class="btn btn-primary ">"+ New Spool"</a>
                 </div>
             </div>
@@ -369,7 +348,46 @@ pub fn SpoolList() -> impl IntoView {
                             </th>
                             <ColHeader label="Remaining (g)" field="remaining_weight" sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
                             <ColHeader label="Price/kg"      field="price_per_kg"      sort_field=ts.sort_field sort_asc=ts.sort_asc num=true />
-                            <ColHeader label="Location"      field="location"          sort_field=ts.sort_field sort_asc=ts.sort_asc />
+                            <th class=move || {
+                                let active = ts.sort_field.get() == "location";
+                                if active { "col-header active location-head" } else { "col-header location-head" }
+                            }>
+                                <button class="sort-btn" on:click=move |_| {
+                                    if ts.sort_field.get() == "location" {
+                                        ts.sort_asc.update(|a| *a = !*a);
+                                    } else {
+                                        ts.sort_field.set("location".to_string());
+                                        ts.sort_asc.set(true);
+                                    }
+                                }>
+                                    "Location"
+                                    {move || if ts.sort_field.get() == "location" {
+                                        if ts.sort_asc.get() { " ↑" } else { " ↓" }
+                                    } else { "" }}
+                                    {move || if location_filter.get().is_some() { " \u{25A0}" } else { "" }}
+                                </button>
+                                <Suspense>
+                                    <select class="location-filter-select"
+                                        prop:value=move || location_filter.get().map(|id| id.to_string()).unwrap_or_default()
+                                        on:change=move |ev| {
+                                            let v = event_target_value(&ev);
+                                            location_filter.set(v.parse::<u32>().ok());
+                                        }
+                                    >
+                                        <option value="">"All"</option>
+                                        {move || locations.get().and_then(|r| r.ok()).map(|ls| {
+                                            let cur = location_filter.get();
+                                            ls.into_iter().map(|lr| {
+                                                let id = lr.location.id;
+                                                let name = lr.location.name.clone();
+                                                view! {
+                                                    <option value=id.to_string() selected=cur == Some(id)>{name}</option>
+                                                }
+                                            }).collect_view()
+                                        })}
+                                    </select>
+                                </Suspense>
+                            </th>
                             <ColHeader label="Registered" field="registered" sort_field=ts.sort_field sort_asc=ts.sort_asc />
                             <th>"Actions"</th>
                         </tr>

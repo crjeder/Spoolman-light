@@ -8,7 +8,9 @@ use serde::{Deserialize, Serialize};
 use spoolman_types::models::MaterialType;
 
 pub const DB_URL: &str = "https://donkie.github.io/SpoolmanDB/filaments.json";
+#[cfg(target_arch = "wasm32")]
 const CACHE_KEY: &str = "spoolmandb_cache";
+#[cfg(target_arch = "wasm32")]
 const CACHE_TTL_MS: f64 = 24.0 * 60.0 * 60.0 * 1000.0;
 
 /// One entry from the SpoolmanDB `filaments.json` file.
@@ -47,6 +49,7 @@ pub struct SpoolmanEntry {
 }
 
 /// localStorage cache envelope.
+#[cfg(target_arch = "wasm32")]
 #[derive(Serialize, Deserialize)]
 struct CacheEntry {
     data: Vec<SpoolmanEntry>,

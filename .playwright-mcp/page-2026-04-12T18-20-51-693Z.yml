@@ -1,0 +1,99 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]: Spoolman
+    - list [ref=e5]:
+      - listitem [ref=e6]:
+        - link "Spools" [ref=e7] [cursor=pointer]:
+          - /url: /spools
+      - listitem [ref=e8]:
+        - link "Filaments" [ref=e9] [cursor=pointer]:
+          - /url: /filaments
+      - listitem [ref=e10]:
+        - link "Locations" [ref=e11] [cursor=pointer]:
+          - /url: /locations
+      - listitem [ref=e12]:
+        - link "Settings" [ref=e13] [cursor=pointer]:
+          - /url: /settings
+      - listitem [ref=e14]:
+        - link "Help" [ref=e15] [cursor=pointer]:
+          - /url: /help
+    - generic [ref=e16]:
+      - button "☾ Dark" [ref=e17] [cursor=pointer]
+      - generic [ref=e18]: v1.5.0
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - heading "New Filament" [level=1] [ref=e21]
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - text: Search filament database
+          - textbox "Search filament database" [ref=e24]:
+            - /placeholder: e.g. Prusament PLA
+        - paragraph [ref=e25]: Loading database…
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - text: Manufacturer
+          - textbox "Manufacturer" [ref=e28]
+        - generic [ref=e29]:
+          - text: Material
+          - combobox "Material" [ref=e30]:
+            - option "— Select material —" [selected]
+            - option "PLA – Polylactic Acid"
+            - option "PETG – Polyethylene Terephthalate Glycol"
+            - option "TPU – Thermoplastic Polyurethane"
+            - option "ABS – Acrylonitrile Butadiene Styrene"
+            - option "ASA – Acrylonitrile Styrene Acrylate"
+            - option "PC – Polycarbonate"
+            - option "PCTG – Polycyclohexylenedimethylene Terephthalate Glycol"
+            - option "PP – Polypropylene"
+            - option "PA6 – Polyamide 6"
+            - option "PA11 – Polyamide 11"
+            - option "PA12 – Polyamide 12"
+            - option "PA66 – Polyamide 66"
+            - option "CPE – Copolyester"
+            - option "TPE – Thermoplastic Elastomer"
+            - option "HIPS – High Impact Polystyrene"
+            - option "PHA – Polyhydroxyalkanoate"
+            - option "PET – Polyethylene Terephthalate"
+            - option "PEI – Polyetherimide"
+            - option "PBT – Polybutylene Terephthalate"
+            - option "PVB – Polyvinyl Butyral"
+            - option "PVA – Polyvinyl Alcohol"
+            - option "PEKK – Polyetherketoneketone"
+            - option "PEEK – Polyether Ether Ketone"
+            - option "BVOH – Butenediol Vinyl Alcohol Copolymer"
+            - option "TPC – Thermoplastic Copolyester"
+            - option "PPS – Polyphenylene Sulfide"
+            - option "PPSU – Polyphenylsulfone"
+            - option "PVC – Polyvinyl Chloride"
+            - option "PEBA – Polyether Block Amide"
+            - option "PVDF – Polyvinylidene Fluoride"
+            - option "PPA – Polyphthalamide"
+            - option "PCL – Polycaprolactone"
+            - option "PES – Polyethersulfone"
+            - option "PMMA – Polymethyl Methacrylate"
+            - option "POM – Polyoxymethylene"
+            - option "PPE – Polyphenylene Ether"
+            - option "PS – Polystyrene"
+            - option "PSU – Polysulfone"
+            - option "TPI – Thermoplastic Polyimide"
+            - option "SBS – Styrene-Butadiene-Styrene"
+            - option "OBC – Olefin Block Copolymer"
+            - option "EVA – Ethylene Vinyl Acetate"
+        - generic [ref=e31]:
+          - text: Modifier
+          - textbox "Modifier" [ref=e32]
+        - generic [ref=e33]:
+          - text: Density (g/cm³)
+          - spinbutton "Density (g/cm³)" [ref=e34]: "1.24"
+        - generic [ref=e35]:
+          - text: Print temp (°C)
+          - spinbutton "Print temp (°C)" [ref=e36]
+        - generic [ref=e37]:
+          - text: Bed temp (°C)
+          - spinbutton "Bed temp (°C)" [ref=e38]
+        - generic [ref=e39]:
+          - text: Comment
+          - textbox "Comment" [ref=e40]
+        - button "Create" [ref=e41] [cursor=pointer]
+        - link "Cancel" [ref=e42] [cursor=pointer]:
+          - /url: /filaments

@@ -1,0 +1,485 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]: Spoolman
+    - list [ref=e5]:
+      - listitem [ref=e6]:
+        - link "Spools" [ref=e7] [cursor=pointer]:
+          - /url: /spools
+      - listitem [ref=e8]:
+        - link "Filaments" [ref=e9] [cursor=pointer]:
+          - /url: /filaments
+      - listitem [ref=e10]:
+        - link "Locations" [ref=e11] [cursor=pointer]:
+          - /url: /locations
+      - listitem [ref=e12]:
+        - link "Settings" [ref=e13] [cursor=pointer]:
+          - /url: /settings
+      - listitem [ref=e14]:
+        - link "Help" [ref=e15] [cursor=pointer]:
+          - /url: /help
+    - generic [ref=e16]:
+      - button "☾ Dark" [ref=e17] [cursor=pointer]
+      - generic [ref=e18]: v1.5.0
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - heading "Spools" [level=1] [ref=e22]
+        - generic [ref=e23]:
+          - textbox "Search…" [ref=e25]
+          - generic [ref=e26]:
+            - checkbox "Show archived" [ref=e27]
+            - text: Show archived
+          - combobox [ref=e28]:
+            - option "All locations" [selected]
+            - option "Bambu AMS"
+            - option "Dry Box 1"
+            - option "Dry Box 2"
+            - option "Engineering Shelf"
+            - option "New Arrivals"
+            - option "Printer AMS"
+            - option "Specialty Rack"
+            - option "Technical Materials"
+          - link "+ New Spool" [ref=e29] [cursor=pointer]:
+            - /url: /spools/new
+      - table [ref=e30]:
+        - rowgroup [ref=e31]:
+          - row "Filament Material All Color Off Remaining (g) Price/kg Location Registered ↓ Actions" [ref=e32]:
+            - columnheader "Filament" [ref=e33]:
+              - button "Filament" [ref=e34] [cursor=pointer]
+            - columnheader "Material All" [ref=e35]:
+              - text: Material
+              - combobox [ref=e36]:
+                - option "All" [selected]
+                - option "ABS"
+                - option "ASA"
+                - option "CPE"
+                - option "HIPS"
+                - option "PETG"
+                - option "PLA"
+                - option "TPU"
+            - columnheader "Color Off" [ref=e37]:
+              - button "Color" [ref=e38] [cursor=pointer]
+              - combobox [ref=e39]:
+                - option "Off" [selected]
+                - option "Same"
+                - option "Close"
+                - option "Ballpark"
+            - columnheader "Remaining (g)" [ref=e40]:
+              - button "Remaining (g)" [ref=e41] [cursor=pointer]
+            - columnheader "Price/kg" [ref=e42]:
+              - button "Price/kg" [ref=e43] [cursor=pointer]
+            - columnheader "Location" [ref=e44]:
+              - button "Location" [ref=e45] [cursor=pointer]
+            - columnheader "Registered ↓" [ref=e46]:
+              - button "Registered ↓" [ref=e47] [cursor=pointer]
+            - columnheader "Actions" [ref=e48]
+        - rowgroup [ref=e49]:
+          - row "ColorFabb PLA Economy PLA Black ColorFabb PLA 750 g — Specialty Rack 25.03.2025 👁 ✏ 🗑" [ref=e50]:
+            - cell "ColorFabb PLA Economy" [ref=e51]:
+              - link "ColorFabb PLA Economy" [ref=e52] [cursor=pointer]:
+                - /url: /filaments/1009
+            - cell "PLA" [ref=e53]
+            - cell "Black ColorFabb PLA" [ref=e54]: Black ColorFabb PLA
+            - cell "750 g" [ref=e56]
+            - cell "—" [ref=e57]
+            - cell "Specialty Rack" [ref=e58]
+            - cell "25.03.2025" [ref=e59]
+            - cell "👁 ✏ 🗑" [ref=e60]:
+              - link "👁" [ref=e61] [cursor=pointer]:
+                - /url: /spools/2076
+              - link "✏" [ref=e62] [cursor=pointer]:
+                - /url: /spools/2076/edit
+              - button "🗑" [ref=e63] [cursor=pointer]
+          - row "Prusament PLA PLA Tomato Red 1.000 g — New Arrivals 25.03.2025 👁 ✏ 🗑" [ref=e64]:
+            - cell "Prusament PLA" [ref=e65]:
+              - link "Prusament PLA" [ref=e66] [cursor=pointer]:
+                - /url: /filaments/1001
+            - cell "PLA" [ref=e67]
+            - cell "Tomato Red" [ref=e68]: Tomato Red
+            - cell "1.000 g" [ref=e70]
+            - cell "—" [ref=e71]
+            - cell "New Arrivals" [ref=e72]
+            - cell "25.03.2025" [ref=e73]
+            - cell "👁 ✏ 🗑" [ref=e74]:
+              - link "👁" [ref=e75] [cursor=pointer]:
+                - /url: /spools/2081
+              - link "✏" [ref=e76] [cursor=pointer]:
+                - /url: /spools/2081/edit
+              - button "🗑" [ref=e77] [cursor=pointer]
+          - row "Prusament PETG PETG Indigo PETG 1.000 g — Dry Box 1 25.03.2025 👁 ✏ 🗑" [ref=e78]:
+            - cell "Prusament PETG" [ref=e79]:
+              - link "Prusament PETG" [ref=e80] [cursor=pointer]:
+                - /url: /filaments/1008
+            - cell "PETG" [ref=e81]
+            - cell "Indigo PETG" [ref=e82]: Indigo PETG
+            - cell "1.000 g" [ref=e84]
+            - cell "—" [ref=e85]
+            - cell "Dry Box 1" [ref=e86]
+            - cell "25.03.2025" [ref=e87]
+            - cell "👁 ✏ 🗑" [ref=e88]:
+              - link "👁" [ref=e89] [cursor=pointer]:
+                - /url: /spools/2101
+              - link "✏" [ref=e90] [cursor=pointer]:
+                - /url: /spools/2101/edit
+              - button "🗑" [ref=e91] [cursor=pointer]
+          - row "Bambu PLA Basic PLA Pure White Bambu 1.000 g — Bambu AMS 25.03.2025 👁 ✏ 🗑" [ref=e92]:
+            - cell "Bambu PLA Basic" [ref=e93]:
+              - link "Bambu PLA Basic" [ref=e94] [cursor=pointer]:
+                - /url: /filaments/1004
+            - cell "PLA" [ref=e95]
+            - cell "Pure White Bambu" [ref=e96]: Pure White Bambu
+            - cell "1.000 g" [ref=e98]
+            - cell "—" [ref=e99]
+            - cell "Bambu AMS" [ref=e100]
+            - cell "25.03.2025" [ref=e101]
+            - cell "👁 ✏ 🗑" [ref=e102]:
+              - link "👁" [ref=e103] [cursor=pointer]:
+                - /url: /spools/2114
+              - link "✏" [ref=e104] [cursor=pointer]:
+                - /url: /spools/2114/edit
+              - button "🗑" [ref=e105] [cursor=pointer]
+          - row "Sunlu PLA Silk PLA Violet Pink Silk 1.000 g — Specialty Rack 25.03.2025 👁 ✏ 🗑" [ref=e106]:
+            - cell "Sunlu PLA Silk" [ref=e107]:
+              - link "Sunlu PLA Silk" [ref=e108] [cursor=pointer]:
+                - /url: /filaments/1019
+            - cell "PLA" [ref=e109]
+            - cell "Violet Pink Silk" [ref=e110]: Violet Pink Silk
+            - cell "1.000 g" [ref=e113]
+            - cell "—" [ref=e114]
+            - cell "Specialty Rack" [ref=e115]
+            - cell "25.03.2025" [ref=e116]
+            - cell "👁 ✏ 🗑" [ref=e117]:
+              - link "👁" [ref=e118] [cursor=pointer]:
+                - /url: /spools/2117
+              - link "✏" [ref=e119] [cursor=pointer]:
+                - /url: /spools/2117/edit
+              - button "🗑" [ref=e120] [cursor=pointer]
+          - row "Polymaker PLA Matte PLA Forest Green Matte 1.000 g — Dry Box 2 25.03.2025 👁 ✏ 🗑" [ref=e121]:
+            - cell "Polymaker PLA Matte" [ref=e122]:
+              - link "Polymaker PLA Matte" [ref=e123] [cursor=pointer]:
+                - /url: /filaments/1013
+            - cell "PLA" [ref=e124]
+            - cell "Forest Green Matte" [ref=e125]: Forest Green Matte
+            - cell "1.000 g" [ref=e127]
+            - cell "—" [ref=e128]
+            - cell "Dry Box 2" [ref=e129]
+            - cell "25.03.2025" [ref=e130]
+            - cell "👁 ✏ 🗑" [ref=e131]:
+              - link "👁" [ref=e132] [cursor=pointer]:
+                - /url: /spools/2120
+              - link "✏" [ref=e133] [cursor=pointer]:
+                - /url: /spools/2120/edit
+              - button "🗑" [ref=e134] [cursor=pointer]
+          - row "Bambu PLA Basic PLA Turquoise 1.000 g — Bambu AMS 25.03.2025 👁 ✏ 🗑" [ref=e135]:
+            - cell "Bambu PLA Basic" [ref=e136]:
+              - link "Bambu PLA Basic" [ref=e137] [cursor=pointer]:
+                - /url: /filaments/1004
+            - cell "PLA" [ref=e138]
+            - cell "Turquoise" [ref=e139]: Turquoise
+            - cell "1.000 g" [ref=e141]
+            - cell "—" [ref=e142]
+            - cell "Bambu AMS" [ref=e143]
+            - cell "25.03.2025" [ref=e144]
+            - cell "👁 ✏ 🗑" [ref=e145]:
+              - link "👁" [ref=e146] [cursor=pointer]:
+                - /url: /spools/2066
+              - link "✏" [ref=e147] [cursor=pointer]:
+                - /url: /spools/2066/edit
+              - button "🗑" [ref=e148] [cursor=pointer]
+          - row "Prusament PLA PLA Ultramarine 1.000 g — New Arrivals 24.03.2025 👁 ✏ 🗑" [ref=e149]:
+            - cell "Prusament PLA" [ref=e150]:
+              - link "Prusament PLA" [ref=e151] [cursor=pointer]:
+                - /url: /filaments/1001
+            - cell "PLA" [ref=e152]
+            - cell "Ultramarine" [ref=e153]: Ultramarine
+            - cell "1.000 g" [ref=e155]
+            - cell "—" [ref=e156]
+            - cell "New Arrivals" [ref=e157]
+            - cell "24.03.2025" [ref=e158]
+            - cell "👁 ✏ 🗑" [ref=e159]:
+              - link "👁" [ref=e160] [cursor=pointer]:
+                - /url: /spools/2098
+              - link "✏" [ref=e161] [cursor=pointer]:
+                - /url: /spools/2098/edit
+              - button "🗑" [ref=e162] [cursor=pointer]
+          - row "Prusament PLA PLA Spring Green 1.000 g — Dry Box 2 22.03.2025 👁 ✏ 🗑" [ref=e163]:
+            - cell "Prusament PLA" [ref=e164]:
+              - link "Prusament PLA" [ref=e165] [cursor=pointer]:
+                - /url: /filaments/1001
+            - cell "PLA" [ref=e166]
+            - cell "Spring Green" [ref=e167]: Spring Green
+            - cell "1.000 g" [ref=e169]
+            - cell "—" [ref=e170]
+            - cell "Dry Box 2" [ref=e171]
+            - cell "22.03.2025" [ref=e172]
+            - cell "👁 ✏ 🗑" [ref=e173]:
+              - link "👁" [ref=e174] [cursor=pointer]:
+                - /url: /spools/2051
+              - link "✏" [ref=e175] [cursor=pointer]:
+                - /url: /spools/2051/edit
+              - button "🗑" [ref=e176] [cursor=pointer]
+          - row "eSUN PLA Silk PLA Flamingo Silk 1.000 g — Specialty Rack 22.03.2025 👁 ✏ 🗑" [ref=e177]:
+            - cell "eSUN PLA Silk" [ref=e178]:
+              - link "eSUN PLA Silk" [ref=e179] [cursor=pointer]:
+                - /url: /filaments/1012
+            - cell "PLA" [ref=e180]
+            - cell "Flamingo Silk" [ref=e181]: Flamingo Silk
+            - cell "1.000 g" [ref=e184]
+            - cell "—" [ref=e185]
+            - cell "Specialty Rack" [ref=e186]
+            - cell "22.03.2025" [ref=e187]
+            - cell "👁 ✏ 🗑" [ref=e188]:
+              - link "👁" [ref=e189] [cursor=pointer]:
+                - /url: /spools/2071
+              - link "✏" [ref=e190] [cursor=pointer]:
+                - /url: /spools/2071/edit
+              - button "🗑" [ref=e191] [cursor=pointer]
+          - row "Polymaker PLA Matte PLA Orange Matte 1.000 g — Dry Box 2 22.03.2025 👁 ✏ 🗑" [ref=e192]:
+            - cell "Polymaker PLA Matte" [ref=e193]:
+              - link "Polymaker PLA Matte" [ref=e194] [cursor=pointer]:
+                - /url: /filaments/1013
+            - cell "PLA" [ref=e195]
+            - cell "Orange Matte" [ref=e196]: Orange Matte
+            - cell "1.000 g" [ref=e198]
+            - cell "—" [ref=e199]
+            - cell "Dry Box 2" [ref=e200]
+            - cell "22.03.2025" [ref=e201]
+            - cell "👁 ✏ 🗑" [ref=e202]:
+              - link "👁" [ref=e203] [cursor=pointer]:
+                - /url: /spools/2089
+              - link "✏" [ref=e204] [cursor=pointer]:
+                - /url: /spools/2089/edit
+              - button "🗑" [ref=e205] [cursor=pointer]
+          - row "Fillamentum CPE CPE Red CPE 750 g — Technical Materials 22.03.2025 👁 ✏ 🗑" [ref=e206]:
+            - cell "Fillamentum CPE" [ref=e207]:
+              - link "Fillamentum CPE" [ref=e208] [cursor=pointer]:
+                - /url: /filaments/1014
+            - cell "CPE" [ref=e209]
+            - cell "Red CPE" [ref=e210]: Red CPE
+            - cell "750 g" [ref=e212]
+            - cell "—" [ref=e213]
+            - cell "Technical Materials" [ref=e214]
+            - cell "22.03.2025" [ref=e215]
+            - cell "👁 ✏ 🗑" [ref=e216]:
+              - link "👁" [ref=e217] [cursor=pointer]:
+                - /url: /spools/2097
+              - link "✏" [ref=e218] [cursor=pointer]:
+                - /url: /spools/2097/edit
+              - button "🗑" [ref=e219] [cursor=pointer]
+          - row "Hatchbox PLA PLA Maroon 1.000 g — Dry Box 2 22.03.2025 👁 ✏ 🗑" [ref=e220]:
+            - cell "Hatchbox PLA" [ref=e221]:
+              - link "Hatchbox PLA" [ref=e222] [cursor=pointer]:
+                - /url: /filaments/1016
+            - cell "PLA" [ref=e223]
+            - cell "Maroon" [ref=e224]: Maroon
+            - cell "1.000 g" [ref=e226]
+            - cell "—" [ref=e227]
+            - cell "Dry Box 2" [ref=e228]
+            - cell "22.03.2025" [ref=e229]
+            - cell "👁 ✏ 🗑" [ref=e230]:
+              - link "👁" [ref=e231] [cursor=pointer]:
+                - /url: /spools/2105
+              - link "✏" [ref=e232] [cursor=pointer]:
+                - /url: /spools/2105/edit
+              - button "🗑" [ref=e233] [cursor=pointer]
+          - row "Overture PLA PLA Medium Spring Green 1.000 g — New Arrivals 22.03.2025 👁 ✏ 🗑" [ref=e234]:
+            - cell "Overture PLA" [ref=e235]:
+              - link "Overture PLA" [ref=e236] [cursor=pointer]:
+                - /url: /filaments/1006
+            - cell "PLA" [ref=e237]
+            - cell "Medium Spring Green" [ref=e238]: Medium Spring Green
+            - cell "1.000 g" [ref=e240]
+            - cell "—" [ref=e241]
+            - cell "New Arrivals" [ref=e242]
+            - cell "22.03.2025" [ref=e243]
+            - cell "👁 ✏ 🗑" [ref=e244]:
+              - link "👁" [ref=e245] [cursor=pointer]:
+                - /url: /spools/2112
+              - link "✏" [ref=e246] [cursor=pointer]:
+                - /url: /spools/2112/edit
+              - button "🗑" [ref=e247] [cursor=pointer]
+          - row "Polymaker PLA Matte PLA Teal Matte 1.000 g — Dry Box 1 22.03.2025 👁 ✏ 🗑" [ref=e248]:
+            - cell "Polymaker PLA Matte" [ref=e249]:
+              - link "Polymaker PLA Matte" [ref=e250] [cursor=pointer]:
+                - /url: /filaments/1013
+            - cell "PLA" [ref=e251]
+            - cell "Teal Matte" [ref=e252]: Teal Matte
+            - cell "1.000 g" [ref=e254]
+            - cell "—" [ref=e255]
+            - cell "Dry Box 1" [ref=e256]
+            - cell "22.03.2025" [ref=e257]
+            - cell "👁 ✏ 🗑" [ref=e258]:
+              - link "👁" [ref=e259] [cursor=pointer]:
+                - /url: /spools/2042
+              - link "✏" [ref=e260] [cursor=pointer]:
+                - /url: /spools/2042/edit
+              - button "🗑" [ref=e261] [cursor=pointer]
+          - row "Prusament PLA PLA Galaxy Purple 1.000 g — Dry Box 1 20.03.2025 👁 ✏ 🗑" [ref=e262]:
+            - cell "Prusament PLA" [ref=e263]:
+              - link "Prusament PLA" [ref=e264] [cursor=pointer]:
+                - /url: /filaments/1001
+            - cell "PLA" [ref=e265]
+            - cell "Galaxy Purple" [ref=e266]: Galaxy Purple
+            - cell "1.000 g" [ref=e268]
+            - cell "—" [ref=e269]
+            - cell "Dry Box 1" [ref=e270]
+            - cell "20.03.2025" [ref=e271]
+            - cell "👁 ✏ 🗑" [ref=e272]:
+              - link "👁" [ref=e273] [cursor=pointer]:
+                - /url: /spools/2032
+              - link "✏" [ref=e274] [cursor=pointer]:
+                - /url: /spools/2032/edit
+              - button "🗑" [ref=e275] [cursor=pointer]
+          - row "3DJake PETG CF PETG Graphite CF-PETG 500 g — Technical Materials 20.03.2025 👁 ✏ 🗑" [ref=e276]:
+            - cell "3DJake PETG CF" [ref=e277]:
+              - link "3DJake PETG CF" [ref=e278] [cursor=pointer]:
+                - /url: /filaments/1015
+            - cell "PETG" [ref=e279]
+            - cell "Graphite CF-PETG" [ref=e280]: Graphite CF-PETG
+            - cell "500 g" [ref=e282]
+            - cell "—" [ref=e283]
+            - cell "Technical Materials" [ref=e284]
+            - cell "20.03.2025" [ref=e285]
+            - cell "👁 ✏ 🗑" [ref=e286]:
+              - link "👁" [ref=e287] [cursor=pointer]:
+                - /url: /spools/2057
+              - link "✏" [ref=e288] [cursor=pointer]:
+                - /url: /spools/2057/edit
+              - button "🗑" [ref=e289] [cursor=pointer]
+          - row "Prusament PETG PETG Black PETG Prusament 1.000 g — Dry Box 1 20.03.2025 👁 ✏ 🗑" [ref=e290]:
+            - cell "Prusament PETG" [ref=e291]:
+              - link "Prusament PETG" [ref=e292] [cursor=pointer]:
+                - /url: /filaments/1008
+            - cell "PETG" [ref=e293]
+            - cell "Black PETG Prusament" [ref=e294]: Black PETG Prusament
+            - cell "1.000 g" [ref=e296]
+            - cell "—" [ref=e297]
+            - cell "Dry Box 1" [ref=e298]
+            - cell "20.03.2025" [ref=e299]
+            - cell "👁 ✏ 🗑" [ref=e300]:
+              - link "👁" [ref=e301] [cursor=pointer]:
+                - /url: /spools/2069
+              - link "✏" [ref=e302] [cursor=pointer]:
+                - /url: /spools/2069/edit
+              - button "🗑" [ref=e303] [cursor=pointer]
+          - row "Prusament ASA ASA Navy ASA 850 g — Engineering Shelf 20.03.2025 👁 ✏ 🗑" [ref=e304]:
+            - cell "Prusament ASA" [ref=e305]:
+              - link "Prusament ASA" [ref=e306] [cursor=pointer]:
+                - /url: /filaments/1018
+            - cell "ASA" [ref=e307]
+            - cell "Navy ASA" [ref=e308]: Navy ASA
+            - cell "850 g" [ref=e310]
+            - cell "—" [ref=e311]
+            - cell "Engineering Shelf" [ref=e312]
+            - cell "20.03.2025" [ref=e313]
+            - cell "👁 ✏ 🗑" [ref=e314]:
+              - link "👁" [ref=e315] [cursor=pointer]:
+                - /url: /spools/2079
+              - link "✏" [ref=e316] [cursor=pointer]:
+                - /url: /spools/2079/edit
+              - button "🗑" [ref=e317] [cursor=pointer]
+          - row "Overture PETG PETG Pink PETG 1.000 g — Printer AMS 20.03.2025 👁 ✏ 🗑" [ref=e318]:
+            - cell "Overture PETG" [ref=e319]:
+              - link "Overture PETG" [ref=e320] [cursor=pointer]:
+                - /url: /filaments/1017
+            - cell "PETG" [ref=e321]
+            - cell "Pink PETG" [ref=e322]: Pink PETG
+            - cell "1.000 g" [ref=e324]
+            - cell "—" [ref=e325]
+            - cell "Printer AMS" [ref=e326]
+            - cell "20.03.2025" [ref=e327]
+            - cell "👁 ✏ 🗑" [ref=e328]:
+              - link "👁" [ref=e329] [cursor=pointer]:
+                - /url: /spools/2091
+              - link "✏" [ref=e330] [cursor=pointer]:
+                - /url: /spools/2091/edit
+              - button "🗑" [ref=e331] [cursor=pointer]
+          - row "eSUN PLA Silk PLA Green Silk 1.000 g — Specialty Rack 20.03.2025 👁 ✏ 🗑" [ref=e332]:
+            - cell "eSUN PLA Silk" [ref=e333]:
+              - link "eSUN PLA Silk" [ref=e334] [cursor=pointer]:
+                - /url: /filaments/1012
+            - cell "PLA" [ref=e335]
+            - cell "Green Silk" [ref=e336]: Green Silk
+            - cell "1.000 g" [ref=e338]
+            - cell "—" [ref=e339]
+            - cell "Specialty Rack" [ref=e340]
+            - cell "20.03.2025" [ref=e341]
+            - cell "👁 ✏ 🗑" [ref=e342]:
+              - link "👁" [ref=e343] [cursor=pointer]:
+                - /url: /spools/2107
+              - link "✏" [ref=e344] [cursor=pointer]:
+                - /url: /spools/2107/edit
+              - button "🗑" [ref=e345] [cursor=pointer]
+          - row "Sunlu PLA Silk PLA Ocean Silk 1.000 g — Specialty Rack 18.03.2025 👁 ✏ 🗑" [ref=e346]:
+            - cell "Sunlu PLA Silk" [ref=e347]:
+              - link "Sunlu PLA Silk" [ref=e348] [cursor=pointer]:
+                - /url: /filaments/1019
+            - cell "PLA" [ref=e349]
+            - cell "Ocean Silk" [ref=e350]: Ocean Silk
+            - cell "1.000 g" [ref=e353]
+            - cell "—" [ref=e354]
+            - cell "Specialty Rack" [ref=e355]
+            - cell "18.03.2025" [ref=e356]
+            - cell "👁 ✏ 🗑" [ref=e357]:
+              - link "👁" [ref=e358] [cursor=pointer]:
+                - /url: /spools/2046
+              - link "✏" [ref=e359] [cursor=pointer]:
+                - /url: /spools/2046/edit
+              - button "🗑" [ref=e360] [cursor=pointer]
+          - row "Prusament PLA PLA Signal Yellow 1.000 g — Dry Box 2 18.03.2025 👁 ✏ 🗑" [ref=e361]:
+            - cell "Prusament PLA" [ref=e362]:
+              - link "Prusament PLA" [ref=e363] [cursor=pointer]:
+                - /url: /filaments/1001
+            - cell "PLA" [ref=e364]
+            - cell "Signal Yellow" [ref=e365]: Signal Yellow
+            - cell "1.000 g" [ref=e367]
+            - cell "—" [ref=e368]
+            - cell "Dry Box 2" [ref=e369]
+            - cell "18.03.2025" [ref=e370]
+            - cell "👁 ✏ 🗑" [ref=e371]:
+              - link "👁" [ref=e372] [cursor=pointer]:
+                - /url: /spools/2064
+              - link "✏" [ref=e373] [cursor=pointer]:
+                - /url: /spools/2064/edit
+              - button "🗑" [ref=e374] [cursor=pointer]
+          - row "Sunlu PETG PETG Black Sunlu PETG 1.000 g — Printer AMS 18.03.2025 👁 ✏ 🗑" [ref=e375]:
+            - cell "Sunlu PETG" [ref=e376]:
+              - link "Sunlu PETG" [ref=e377] [cursor=pointer]:
+                - /url: /filaments/1007
+            - cell "PETG" [ref=e378]
+            - cell "Black Sunlu PETG" [ref=e379]: Black Sunlu PETG
+            - cell "1.000 g" [ref=e381]
+            - cell "—" [ref=e382]
+            - cell "Printer AMS" [ref=e383]
+            - cell "18.03.2025" [ref=e384]
+            - cell "👁 ✏ 🗑" [ref=e385]:
+              - link "👁" [ref=e386] [cursor=pointer]:
+                - /url: /spools/2109
+              - link "✏" [ref=e387] [cursor=pointer]:
+                - /url: /spools/2109/edit
+              - button "🗑" [ref=e388] [cursor=pointer]
+          - row "Polymaker TPU 95A TPU Black TPU 750 g — Printer AMS 15.03.2025 👁 ✏ 🗑" [ref=e389]:
+            - cell "Polymaker TPU 95A" [ref=e390]:
+              - link "Polymaker TPU 95A" [ref=e391] [cursor=pointer]:
+                - /url: /filaments/1003
+            - cell "TPU" [ref=e392]
+            - cell "Black TPU" [ref=e393]: Black TPU
+            - cell "750 g" [ref=e395]
+            - cell "—" [ref=e396]
+            - cell "Printer AMS" [ref=e397]
+            - cell "15.03.2025" [ref=e398]
+            - cell "👁 ✏ 🗑" [ref=e399]:
+              - link "👁" [ref=e400] [cursor=pointer]:
+                - /url: /spools/2049
+              - link "✏" [ref=e401] [cursor=pointer]:
+                - /url: /spools/2049/edit
+              - button "🗑" [ref=e402] [cursor=pointer]
+      - generic [ref=e403]:
+        - button "‹" [disabled]
+        - generic [ref=e404]: Page 1 / 5
+        - button "›" [ref=e405] [cursor=pointer]
+        - combobox [ref=e406]:
+          - option "10 / page"
+          - option "25 / page" [selected]
+          - option "50 / page"
+          - option "100 / page"

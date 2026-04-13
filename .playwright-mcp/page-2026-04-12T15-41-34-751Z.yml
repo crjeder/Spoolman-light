@@ -1,0 +1,67 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]: Spoolman
+    - list [ref=e5]:
+      - listitem [ref=e6]:
+        - link "Spools" [ref=e7] [cursor=pointer]:
+          - /url: /spools
+      - listitem [ref=e8]:
+        - link "Filaments" [ref=e9] [cursor=pointer]:
+          - /url: /filaments
+      - listitem [ref=e10]:
+        - link "Locations" [ref=e11] [cursor=pointer]:
+          - /url: /locations
+      - listitem [ref=e12]:
+        - link "Settings" [ref=e13] [cursor=pointer]:
+          - /url: /settings
+      - listitem [ref=e14]:
+        - link "Help" [ref=e15] [cursor=pointer]:
+          - /url: /help
+    - generic [ref=e16]:
+      - button "☾ Dark" [ref=e17] [cursor=pointer]
+      - generic [ref=e18]: v1.5.0
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - heading "Settings" [level=1] [ref=e21]
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - text: Currency symbol
+          - textbox "Currency symbol" [ref=e24]: €
+        - generic [ref=e25]:
+          - checkbox "Same diameter for all filaments" [checked] [ref=e26]
+          - text: Same diameter for all filaments
+        - generic [ref=e27]:
+          - text: Default diameter (mm)
+          - spinbutton "Default diameter (mm)" [ref=e28]: "1.75"
+        - generic [ref=e29]:
+          - text: Date format
+          - combobox "Date format" [ref=e30]:
+            - option "Short (e.g. 3/29/26)"
+            - option "Medium (e.g. Mar 29, 2026) — default" [selected]
+            - option "Long (e.g. March 29, 2026)"
+            - option "Full (e.g. Saturday, March 29, 2026)"
+        - generic [ref=e31]:
+          - text: Time format
+          - combobox "Time format" [ref=e32]:
+            - option "None — date only (default)" [selected]
+            - option "Short (e.g. 2:30 PM)"
+            - option "Medium (e.g. 2:30:00 PM)"
+        - generic [ref=e33]:
+          - text: Color search algorithm
+          - combobox "Color search algorithm" [ref=e34]:
+            - option "CIEDE2000"
+            - option "OKLab"
+            - option "DIN99d (default)" [selected]
+        - group "Color search thresholds — DIN99D" [ref=e35]:
+          - generic [ref=e36]: Color search thresholds — DIN99D
+          - paragraph [ref=e37]: sensitive — small changes matter; typical range 5.0 – 50.0
+          - generic [ref=e38]:
+            - text: Same
+            - spinbutton "Same" [ref=e39]: "13.0"
+          - generic [ref=e40]:
+            - text: Close
+            - spinbutton "Close" [ref=e41]: "19.0"
+          - generic [ref=e42]:
+            - text: Ballpark
+            - spinbutton "Ballpark" [ref=e43]: "25.0"
+        - button "Save" [ref=e44] [cursor=pointer]

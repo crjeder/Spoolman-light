@@ -29,24 +29,15 @@ RUN cp target/site/pkg/spoolman-server.wasm target/site/pkg/spoolman-server_bg.w
 RUN printf '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1" />\n  <title>Spoolman</title>\n  <link rel="icon" type="image/png" href="/spoolman-light-logo.png" />\n  <link rel="stylesheet" href="/pkg/spoolman-server.css" />\n</head>\n<body>\n  <script type="module">\n    import init from "/pkg/spoolman-server.js";\n    init();\n  </script>\n</body>\n</html>\n' > target/site/index.html
 
 # ── Stage 2: runtime ──────────────────────────────────────────────────────────
-FROM debian:bookworm-slim AS runtime
-
-RUN apt-get update \
- && apt-get install -y --no-install-recommends ca-certificates \
- && rm -rf /var/lib/apt/lists/*
-
-# Non-root user matching the previous image's uid/gid convention.
-RUN groupmod -g 1000 users \
- && useradd -u 1000 -U app \
- && usermod -G users app \
- && mkdir -p /data \
- && chown -R app:app /data
+# distroless/cc includes glibc + libstdc++ but no shell or package manager,
+# minimising attack surface. The built-in nonroot user has uid/gid 65532.
+FROM gcr.io/distroless/cc-debian12 AS runtime
 
 # Copy the compiled server binary.
-COPY --from=builder --chown=app:app /build/target/release/spoolman-server /spoolman
+COPY --from=builder --chown=65532:65532 /build/target/release/spoolman-server /spoolman
 
 # Copy the compiled WASM frontend assets served by the binary at runtime.
-COPY --from=builder --chown=app:app /build/target/site /site
+COPY --from=builder --chown=65532:65532 /build/target/site /site
 
 LABEL org.opencontainers.image.source=https://github.com/Donkie/Spoolman
 LABEL org.opencontainers.image.description="Keep track of your inventory of 3D-printer filament spools."
@@ -60,5 +51,5 @@ ENV SPOOLMAN_HOST=0.0.0.0 \
 EXPOSE 8000
 VOLUME ["/data"]
 
-USER app
+USER 65532
 CMD ["/spoolman"]

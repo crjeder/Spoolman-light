@@ -1,17 +1,15 @@
 services:
   spoolman:
-    image: donkie/spoolman:latest
+    image: spoolman-light:latest
+    build: .
     restart: unless-stopped
     ports:
       - "8000:8000"
     volumes:
       - spoolman_data:/data
     environment:
-      - SPOOLMAN_LOGGING_LEVEL=INFO
-      # Override SPOOLMAN_DATA_FILE if you want a custom path.
-      # - SPOOLMAN_DATA_FILE=/data/spoolman.json  # default
-      # - SPOOLMAN_BASE_PATH=                     # set if behind a reverse proxy sub-path
-      # - SPOOLMAN_CORS_ORIGIN=FALSE              # set to frontend URL if CORS is needed
+      - SPOOLMAN_DATA_FILE=/data/spoolman.json
+      # - SPOOLMAN_PORT=8000
     security_opt:
       - no-new-privileges:true
 

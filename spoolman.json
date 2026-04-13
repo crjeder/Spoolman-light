@@ -1,0 +1,1921 @@
+{
+  "meta": {
+    "schema_version": 2
+  },
+  "filaments": [
+    {
+      "id": 1,
+      "registered": "2025-05-12 13:42:47",
+      "manufacturer": "JAYO",
+      "material": "PLA",
+      "material_modifier": "Sky Blue",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 2,
+      "registered": "2025-05-12 13:44:13",
+      "manufacturer": "JAYO",
+      "material": "PLA",
+      "material_modifier": "Cherry Red",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 3,
+      "registered": "2025-05-12 13:46:34",
+      "manufacturer": "OWL-Filament",
+      "material": "PLA",
+      "material_modifier": "Proto Braun-Grün",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 4,
+      "registered": "2025-05-12 13:48:10",
+      "manufacturer": "OWL-Filament",
+      "material": "PLA",
+      "material_modifier": "Proto Schwarz-Rot",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 5,
+      "registered": "2025-05-12 13:49:04",
+      "manufacturer": "OWL-Filament",
+      "material": "PLA",
+      "material_modifier": "Proto Gelb-Orange",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 19,
+      "registered": "2025-05-12 14:24:42",
+      "manufacturer": "Filatech",
+      "material": "PLA",
+      "material_modifier": "Luminous green",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 20,
+      "registered": "2025-05-12 14:26:10",
+      "manufacturer": "OWL-Filament",
+      "material": "PETG",
+      "material_modifier": "RAL 6029",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 240,
+      "bed_temp": 40,
+      "comment": null
+    },
+    {
+      "id": 10,
+      "registered": "2025-05-12 14:04:14",
+      "manufacturer": "noname",
+      "material": "PLA",
+      "material_modifier": "Green",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 21,
+      "registered": "2025-05-12 14:27:45",
+      "manufacturer": "noname",
+      "material": "PLA",
+      "material_modifier": "Grey",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 50,
+      "comment": "PLA+"
+    },
+    {
+      "id": 29,
+      "registered": "2025-05-12 14:40:17",
+      "manufacturer": "Polaroid",
+      "material": "PLA",
+      "material_modifier": "Grey",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 39,
+      "registered": "2025-05-12 14:52:06",
+      "manufacturer": "Bambu Lab",
+      "material": "PLA",
+      "material_modifier": "Bambu Basic Green",
+      "density": 1.24,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 22,
+      "registered": "2025-05-12 14:29:05",
+      "manufacturer": "noname",
+      "material": "PLA",
+      "material_modifier": "Grey silk",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 50,
+      "comment": "SPLA"
+    },
+    {
+      "id": 11,
+      "registered": "2025-05-12 14:05:29",
+      "manufacturer": "JAYO",
+      "material": "PLA",
+      "material_modifier": "Orange mate",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 27,
+      "registered": "2025-05-12 14:36:12",
+      "manufacturer": "JAYO",
+      "material": "PLA",
+      "material_modifier": "silk dual color red-gold",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 38,
+      "registered": "2025-05-12 14:51:18",
+      "manufacturer": "Extrudr",
+      "material": "PLA",
+      "material_modifier": "Steampunk Copper",
+      "density": 1.25,
+      "diameter": 1.75,
+      "print_temp": 230,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 37,
+      "registered": "2025-05-12 14:50:35",
+      "manufacturer": "Extrudr",
+      "material": "PLA",
+      "material_modifier": "Venom Green",
+      "density": 1.25,
+      "diameter": 1.75,
+      "print_temp": 230,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 44,
+      "registered": "2025-05-12 15:03:45",
+      "manufacturer": "Filatech",
+      "material": "PLA",
+      "material_modifier": "Luminous Yellow",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 50,
+      "comment": null
+    },
+    {
+      "id": 23,
+      "registered": "2025-05-12 14:30:11",
+      "manufacturer": "noname",
+      "material": "PETG",
+      "material_modifier": "Neon Orange",
+      "density": 1.27,
+      "diameter": 1.75,
+      "print_temp": 24,
+      "bed_temp": 40,
+      "comment": null
+    },
+    {
+      "id": 24,
+      "registered": "2025-05-12 14:31:21",
+      "manufacturer": "noname",
+      "material": "PETG",
+      "material_modifier": "Blue",
+      "density": 1.27,
+      "diameter": 1.75,
+      "print_temp": 240,
+      "bed_temp": 40,
+      "comment": null
+    },
+    {
+      "id": 43,
+      "registered": "2025-05-12 15:02:03",
+      "manufacturer": "Eryone",
+      "material": "PETG",
+      "material_modifier": "Grey Carbon Fiber",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 250,
+      "bed_temp": 50,
+      "comment": "PETG-CF"
+    },
+    {
+      "id": 41,
+      "registered": "2025-05-12 14:57:41",
+      "manufacturer": "meltbro",
+      "material": "PETG",
+      "material_modifier": "Eisengrau",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 250,
+      "bed_temp": 50,
+      "comment": "High Temperature"
+    },
+    {
+      "id": 32,
+      "registered": "2025-05-12 14:44:42",
+      "manufacturer": "Overture",
+      "material": "PETG",
+      "material_modifier": "Transparent",
+      "density": 1.27,
+      "diameter": 1.75,
+      "print_temp": 240,
+      "bed_temp": 80,
+      "comment": null
+    },
+    {
+      "id": 25,
+      "registered": "2025-05-12 14:33:02",
+      "manufacturer": "OWL-Filament",
+      "material": "PETG",
+      "material_modifier": "Neon-Blau",
+      "density": 1.27,
+      "diameter": 1.75,
+      "print_temp": 240,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 6,
+      "registered": "2025-05-12 13:53:16",
+      "manufacturer": "Creality",
+      "material": "PLA",
+      "material_modifier": "Black",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 31,
+      "registered": "2025-05-12 14:43:22",
+      "manufacturer": "Verbatim",
+      "material": "ABS",
+      "material_modifier": "Grey",
+      "density": 1.27,
+      "diameter": 1.75,
+      "print_temp": 250,
+      "bed_temp": 80,
+      "comment": null
+    },
+    {
+      "id": 26,
+      "registered": "2025-05-12 14:34:27",
+      "manufacturer": "OWL-Filament",
+      "material": "PETG",
+      "material_modifier": "Neon Gelb RAL 1026",
+      "density": 1.27,
+      "diameter": 1.75,
+      "print_temp": 240,
+      "bed_temp": 40,
+      "comment": null
+    },
+    {
+      "id": 28,
+      "registered": "2025-05-12 14:38:29",
+      "manufacturer": "Tecbears",
+      "material": "PETG",
+      "material_modifier": "Black",
+      "density": 1.27,
+      "diameter": 1.75,
+      "print_temp": 240,
+      "bed_temp": 40,
+      "comment": null
+    },
+    {
+      "id": 42,
+      "registered": "2025-05-12 14:58:52",
+      "manufacturer": "meltbro",
+      "material": "ASA",
+      "material_modifier": "Weiß",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": null,
+      "bed_temp": null,
+      "comment": null
+    },
+    {
+      "id": 30,
+      "registered": "2025-05-12 14:41:27",
+      "manufacturer": "JAYO",
+      "material": "PLA",
+      "material_modifier": "Glow in the dark – blue",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 47,
+      "registered": "2025-05-12 15:08:20",
+      "manufacturer": "Vellman",
+      "material": "PLA",
+      "material_modifier": "Bronze",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 50,
+      "comment": null
+    },
+    {
+      "id": 33,
+      "registered": "2025-05-12 14:46:19",
+      "manufacturer": "OWL-Filament",
+      "material": "TPU",
+      "material_modifier": "Weiß",
+      "density": 1.27,
+      "diameter": 1.75,
+      "print_temp": null,
+      "bed_temp": null,
+      "comment": null
+    },
+    {
+      "id": 9,
+      "registered": "2025-05-12 13:59:35",
+      "manufacturer": "JAYO",
+      "material": "PLA",
+      "material_modifier": "High-speed PLA white",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 12,
+      "registered": "2025-05-12 14:06:40",
+      "manufacturer": "GEEETECH",
+      "material": "PLA",
+      "material_modifier": "Silk gold",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 13,
+      "registered": "2025-05-12 14:08:01",
+      "manufacturer": "GEEETECH",
+      "material": "PLA",
+      "material_modifier": "Silk Silver",
+      "density": 1.23,
+      "diameter": 1.78,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 36,
+      "registered": "2025-05-12 14:49:54",
+      "manufacturer": "Extrudr",
+      "material": "PLA",
+      "material_modifier": "Inca Gold",
+      "density": 1.25,
+      "diameter": 1.75,
+      "print_temp": 230,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 45,
+      "registered": "2025-05-12 15:05:05",
+      "manufacturer": "Extrudr",
+      "material": "TPU",
+      "material_modifier": "FLEX - Black - Semisoft",
+      "density": 1.18,
+      "diameter": 1.75,
+      "print_temp": 250,
+      "bed_temp": 90,
+      "comment": null
+    },
+    {
+      "id": 40,
+      "registered": "2025-05-12 14:56:01",
+      "manufacturer": "Extrudr",
+      "material": "TPU",
+      "material_modifier": "FLEX - Anthracite - Medium",
+      "density": 1.2,
+      "diameter": 1.75,
+      "print_temp": 250,
+      "bed_temp": 90,
+      "comment": null
+    },
+    {
+      "id": 7,
+      "registered": "2025-05-12 13:54:32",
+      "manufacturer": "GEEETECH",
+      "material": "PLA",
+      "material_modifier": "Mate black",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 8,
+      "registered": "2025-05-12 13:57:45",
+      "manufacturer": "GEEETECH",
+      "material": "PLA",
+      "material_modifier": "Bone White",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 18,
+      "registered": "2025-05-12 14:17:40",
+      "manufacturer": "GEEETECH",
+      "material": "PLA",
+      "material_modifier": "HS-PLA black",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 48,
+      "registered": "2025-05-20 19:35:41",
+      "manufacturer": "noname",
+      "material": "PLA",
+      "material_modifier": "BW Grün",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": null,
+      "bed_temp": null,
+      "comment": null
+    },
+    {
+      "id": 49,
+      "registered": "2025-05-20 19:37:56",
+      "manufacturer": "noname",
+      "material": "PLA",
+      "material_modifier": "Silber Matt",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": null,
+      "bed_temp": null,
+      "comment": null
+    },
+    {
+      "id": 50,
+      "registered": "2025-05-20 19:40:30",
+      "manufacturer": "noname",
+      "material": "PLA",
+      "material_modifier": "Hellgrau",
+      "density": 1.23,
+      "diameter": 1.74,
+      "print_temp": null,
+      "bed_temp": null,
+      "comment": null
+    },
+    {
+      "id": 51,
+      "registered": "2025-05-20 19:42:56",
+      "manufacturer": "noname",
+      "material": "PLA",
+      "material_modifier": "Sonnengelb",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": null,
+      "bed_temp": null,
+      "comment": null
+    },
+    {
+      "id": 35,
+      "registered": "2025-05-12 14:48:51",
+      "manufacturer": "GEEETECH",
+      "material": "TPU",
+      "material_modifier": "95A Black",
+      "density": 1.75,
+      "diameter": 1.75,
+      "print_temp": null,
+      "bed_temp": null,
+      "comment": null
+    },
+    {
+      "id": 34,
+      "registered": "2025-05-12 14:47:31",
+      "manufacturer": "Creality",
+      "material": "PLA",
+      "material_modifier": "White",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 50,
+      "comment": null
+    },
+    {
+      "id": 53,
+      "registered": "2025-06-03 19:36:23",
+      "manufacturer": "ELEGOO",
+      "material": "PLA",
+      "material_modifier": "Galaxy Black",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": null,
+      "bed_temp": null,
+      "comment": null
+    },
+    {
+      "id": 54,
+      "registered": "2025-06-03 19:38:15",
+      "manufacturer": "ELEGOO",
+      "material": "PLA",
+      "material_modifier": "Marmor",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": null,
+      "bed_temp": null,
+      "comment": null
+    },
+    {
+      "id": 55,
+      "registered": "2025-06-03 19:40:09",
+      "manufacturer": "ELEGOO",
+      "material": "ASA",
+      "material_modifier": "Black",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": null,
+      "bed_temp": null,
+      "comment": null
+    },
+    {
+      "id": 56,
+      "registered": "2026-03-26 10:09:37",
+      "manufacturer": "Sunlu",
+      "material": "PLA+",
+      "material_modifier": "Cherry Red",
+      "density": 1.24,
+      "diameter": 1.75,
+      "print_temp": 210,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 14,
+      "registered": "2025-05-12 14:09:55",
+      "manufacturer": "YourDroid",
+      "material": "PLA",
+      "material_modifier": "White",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    },
+    {
+      "id": 15,
+      "registered": "2025-05-12 14:11:54",
+      "manufacturer": "OWL-Filament",
+      "material": "PETG",
+      "material_modifier": "Grün",
+      "density": 1.27,
+      "diameter": 1.75,
+      "print_temp": 240,
+      "bed_temp": 40,
+      "comment": null
+    },
+    {
+      "id": 16,
+      "registered": "2025-05-12 14:14:48",
+      "manufacturer": "OWL-Filament",
+      "material": "PETG",
+      "material_modifier": "Beige",
+      "density": 1.27,
+      "diameter": 1.75,
+      "print_temp": 240,
+      "bed_temp": 40,
+      "comment": null
+    },
+    {
+      "id": 17,
+      "registered": "2025-05-12 14:16:27",
+      "manufacturer": "OWL-Filament",
+      "material": "PETG",
+      "material_modifier": "Neon Gelb RAL 1026",
+      "density": 1.27,
+      "diameter": 1.75,
+      "print_temp": 240,
+      "bed_temp": 40,
+      "comment": null
+    },
+    {
+      "id": 46,
+      "registered": "2025-05-12 15:06:15",
+      "manufacturer": "Hobbyking",
+      "material": "PETG",
+      "material_modifier": "Green transparent",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 250,
+      "bed_temp": 50,
+      "comment": null
+    },
+    {
+      "id": 52,
+      "registered": "2025-05-27 19:32:18",
+      "manufacturer": "JAYO",
+      "material": "PLA",
+      "material_modifier": "Cherry Red",
+      "density": 1.23,
+      "diameter": 1.75,
+      "print_temp": 220,
+      "bed_temp": 60,
+      "comment": null
+    }
+  ],
+  "spools": [
+    {
+      "id": 1,
+      "registered": "2025-05-12 15:13:48",
+      "first_used": "2025-05-09 22:00:00",
+      "last_used": "2025-05-09 22:00:00",
+      "filament_id": 1,
+      "location_id": 1,
+      "colors": [
+        {
+          "r": 23,
+          "g": 171,
+          "b": 207,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1100.0,
+      "current_weight": 554.0,
+      "net_weight": null,
+      "price": 8.21,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 3,
+      "registered": "2025-05-12 15:18:39",
+      "first_used": "2025-04-28 22:00:00",
+      "last_used": null,
+      "filament_id": 1,
+      "location_id": 1,
+      "colors": [
+        {
+          "r": 23,
+          "g": 171,
+          "b": 207,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1100.0,
+      "current_weight": 1100.0,
+      "net_weight": null,
+      "price": 8.21,
+      "comment": "OVP",
+      "archived": false
+    },
+    {
+      "id": 4,
+      "registered": "2025-05-13 18:05:51",
+      "first_used": "2026-02-06 23:00:00",
+      "last_used": "2026-02-06 23:00:00",
+      "filament_id": 2,
+      "location_id": 1,
+      "colors": [
+        {
+          "r": 247,
+          "g": 105,
+          "b": 105,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1100.0,
+      "current_weight": 564.0,
+      "net_weight": null,
+      "price": 8.21,
+      "comment": "",
+      "archived": false
+    },
+    {
+      "id": 5,
+      "registered": "2025-05-13 18:06:41",
+      "first_used": "2025-04-28 22:00:00",
+      "last_used": null,
+      "filament_id": 2,
+      "location_id": 1,
+      "colors": [
+        {
+          "r": 247,
+          "g": 105,
+          "b": 105,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1100.0,
+      "current_weight": 1100.0,
+      "net_weight": null,
+      "price": 8.21,
+      "comment": "OVP",
+      "archived": false
+    },
+    {
+      "id": 6,
+      "registered": "2025-05-13 18:10:06",
+      "first_used": "2019-10-29 22:00:00",
+      "last_used": null,
+      "filament_id": 3,
+      "location_id": 1,
+      "colors": [
+        {
+          "r": 0,
+          "g": 89,
+          "b": 80,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 50.0,
+      "net_weight": null,
+      "price": 9.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 7,
+      "registered": "2025-05-13 18:12:58",
+      "first_used": "2019-10-29 22:00:00",
+      "last_used": null,
+      "filament_id": 4,
+      "location_id": 1,
+      "colors": [
+        {
+          "r": 148,
+          "g": 36,
+          "b": 76,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 930.0,
+      "net_weight": null,
+      "price": 9.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 8,
+      "registered": "2025-05-13 18:14:52",
+      "first_used": "2019-10-29 22:00:00",
+      "last_used": "2026-02-06 23:00:00",
+      "filament_id": 5,
+      "location_id": 1,
+      "colors": [
+        {
+          "r": 239,
+          "g": 177,
+          "b": 3,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 904.0,
+      "net_weight": null,
+      "price": 9.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 9,
+      "registered": "2025-05-13 18:18:06",
+      "first_used": "2024-11-20 22:00:00",
+      "last_used": "2024-11-20 22:00:00",
+      "filament_id": 19,
+      "location_id": 2,
+      "colors": [
+        {
+          "r": 62,
+          "g": 218,
+          "b": 118,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 795.0,
+      "net_weight": null,
+      "price": 15.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 10,
+      "registered": "2025-05-13 18:20:03",
+      "first_used": "2020-06-21 22:00:00",
+      "last_used": "2024-11-20 22:00:00",
+      "filament_id": 20,
+      "location_id": 3,
+      "colors": [
+        {
+          "r": 12,
+          "g": 129,
+          "b": 80,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 867.0,
+      "net_weight": null,
+      "price": 15.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 11,
+      "registered": "2025-05-13 18:40:03",
+      "first_used": "2019-10-29 22:00:00",
+      "last_used": null,
+      "filament_id": 10,
+      "location_id": 4,
+      "colors": [
+        {
+          "r": 40,
+          "g": 158,
+          "b": 44,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 250.0,
+      "current_weight": 66.0,
+      "net_weight": null,
+      "price": 12.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 12,
+      "registered": "2025-05-16 07:10:42",
+      "first_used": "2019-11-12 22:00:00",
+      "last_used": null,
+      "filament_id": 21,
+      "location_id": 5,
+      "colors": [
+        {
+          "r": 207,
+          "g": 207,
+          "b": 207,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 891.0,
+      "net_weight": null,
+      "price": 15.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 13,
+      "registered": "2025-05-16 07:13:22",
+      "first_used": "2019-11-12 22:00:00",
+      "last_used": "2024-11-11 22:00:00",
+      "filament_id": 29,
+      "location_id": 5,
+      "colors": [
+        {
+          "r": 193,
+          "g": 190,
+          "b": 190,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 180.0,
+      "net_weight": null,
+      "price": 16.18,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 14,
+      "registered": "2025-05-16 07:14:52",
+      "first_used": "2024-11-14 22:00:00",
+      "last_used": null,
+      "filament_id": 39,
+      "location_id": 2,
+      "colors": [
+        {
+          "r": 0,
+          "g": 174,
+          "b": 66,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 23.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 15,
+      "registered": "2025-05-16 07:16:42",
+      "first_used": "2024-11-21 22:00:00",
+      "last_used": null,
+      "filament_id": 22,
+      "location_id": 5,
+      "colors": [
+        {
+          "r": 209,
+          "g": 208,
+          "b": 208,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 15.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 16,
+      "registered": "2025-05-16 07:18:56",
+      "first_used": "2024-12-20 22:00:00",
+      "last_used": "2026-02-06 23:00:00",
+      "filament_id": 11,
+      "location_id": 2,
+      "colors": [
+        {
+          "r": 255,
+          "g": 149,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1100.0,
+      "current_weight": 1055.0,
+      "net_weight": null,
+      "price": 12.29,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 18,
+      "registered": "2025-05-16 07:22:00",
+      "first_used": "2024-12-20 22:00:00",
+      "last_used": "2025-12-22 23:00:00",
+      "filament_id": 27,
+      "location_id": 2,
+      "colors": [],
+      "color_name": null,
+      "initial_weight": 1100.0,
+      "current_weight": 1002.0,
+      "net_weight": null,
+      "price": 15.31,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 19,
+      "registered": "2025-05-16 07:24:00",
+      "first_used": "2025-02-14 22:00:00",
+      "last_used": "2025-02-13 22:00:00",
+      "filament_id": 38,
+      "location_id": 2,
+      "colors": [
+        {
+          "r": 200,
+          "g": 102,
+          "b": 55,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 800.0,
+      "current_weight": 697.0,
+      "net_weight": null,
+      "price": 22.5,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 20,
+      "registered": "2025-05-16 07:26:15",
+      "first_used": "2025-02-13 22:00:00",
+      "last_used": "2025-02-18 22:00:00",
+      "filament_id": 37,
+      "location_id": 2,
+      "colors": [
+        {
+          "r": 194,
+          "g": 215,
+          "b": 83,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 800.0,
+      "current_weight": 540.0,
+      "net_weight": null,
+      "price": 22.5,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 21,
+      "registered": "2025-05-16 07:28:20",
+      "first_used": "2019-11-06 22:00:00",
+      "last_used": "2020-10-14 22:00:00",
+      "filament_id": 44,
+      "location_id": 2,
+      "colors": [
+        {
+          "r": 242,
+          "g": 255,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 28.99,
+      "comment": "OVP",
+      "archived": false
+    },
+    {
+      "id": 24,
+      "registered": "2025-05-16 11:26:08",
+      "first_used": "2021-06-23 22:00:00",
+      "last_used": null,
+      "filament_id": 23,
+      "location_id": 6,
+      "colors": [
+        {
+          "r": 255,
+          "g": 195,
+          "b": 99,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 15.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 25,
+      "registered": "2025-05-16 11:27:42",
+      "first_used": "2024-11-20 22:00:00",
+      "last_used": null,
+      "filament_id": 24,
+      "location_id": 6,
+      "colors": [
+        {
+          "r": 0,
+          "g": 51,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 15.0,
+      "comment": "OVP",
+      "archived": false
+    },
+    {
+      "id": 26,
+      "registered": "2025-05-16 11:29:07",
+      "first_used": "2024-11-20 22:00:00",
+      "last_used": null,
+      "filament_id": 43,
+      "location_id": 3,
+      "colors": [
+        {
+          "r": 212,
+          "g": 212,
+          "b": 212,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 26.5,
+      "comment": "OVP",
+      "archived": false
+    },
+    {
+      "id": 27,
+      "registered": "2025-05-16 11:29:56",
+      "first_used": "2024-11-29 22:00:00",
+      "last_used": null,
+      "filament_id": 41,
+      "location_id": 3,
+      "colors": [
+        {
+          "r": 231,
+          "g": 231,
+          "b": 231,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 25.5,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 28,
+      "registered": "2025-05-16 11:30:56",
+      "first_used": "2024-12-29 22:00:00",
+      "last_used": null,
+      "filament_id": 32,
+      "location_id": 3,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 753.0,
+      "net_weight": null,
+      "price": 18.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 29,
+      "registered": "2025-05-16 11:32:01",
+      "first_used": "2019-10-29 22:00:00",
+      "last_used": null,
+      "filament_id": 25,
+      "location_id": 6,
+      "colors": [
+        {
+          "r": 152,
+          "g": 189,
+          "b": 253,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 15.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 30,
+      "registered": "2025-05-16 17:19:03",
+      "first_used": "2019-10-29 22:00:00",
+      "last_used": "2025-02-13 22:00:00",
+      "filament_id": 6,
+      "location_id": 1,
+      "colors": [],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 108.0,
+      "net_weight": null,
+      "price": 9.3,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 32,
+      "registered": "2025-05-16 17:21:55",
+      "first_used": "2019-10-29 22:00:00",
+      "last_used": null,
+      "filament_id": 31,
+      "location_id": 6,
+      "colors": [
+        {
+          "r": 212,
+          "g": 212,
+          "b": 212,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 17.95,
+      "comment": "OVP",
+      "archived": false
+    },
+    {
+      "id": 33,
+      "registered": "2025-05-16 17:24:23",
+      "first_used": "2019-11-09 22:00:00",
+      "last_used": null,
+      "filament_id": 26,
+      "location_id": 6,
+      "colors": [
+        {
+          "r": 241,
+          "g": 244,
+          "b": 50,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 15.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 34,
+      "registered": "2025-05-16 17:26:15",
+      "first_used": "2019-11-11 22:00:00",
+      "last_used": "2025-12-18 23:00:00",
+      "filament_id": 28,
+      "location_id": 3,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 26.0,
+      "net_weight": null,
+      "price": 16.14,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 35,
+      "registered": "2025-05-16 18:30:47",
+      "first_used": "2024-11-29 22:00:00",
+      "last_used": null,
+      "filament_id": 42,
+      "location_id": 6,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 879.0,
+      "net_weight": null,
+      "price": 25.5,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 36,
+      "registered": "2025-05-16 20:17:43",
+      "first_used": "2024-12-20 22:00:00",
+      "last_used": "2025-02-20 22:00:00",
+      "filament_id": 30,
+      "location_id": 2,
+      "colors": [
+        {
+          "r": 170,
+          "g": 238,
+          "b": 253,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1100.0,
+      "current_weight": 1060.0,
+      "net_weight": null,
+      "price": 18.79,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 37,
+      "registered": "2025-05-16 20:18:56",
+      "first_used": "2019-10-30 22:00:00",
+      "last_used": null,
+      "filament_id": 47,
+      "location_id": 7,
+      "colors": [
+        {
+          "r": 92,
+          "g": 72,
+          "b": 67,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 750.0,
+      "current_weight": 750.0,
+      "net_weight": null,
+      "price": 25.53,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 38,
+      "registered": "2025-05-16 20:20:25",
+      "first_used": "2019-11-10 22:00:00",
+      "last_used": "2025-01-08 22:00:00",
+      "filament_id": 33,
+      "location_id": 7,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 980.0,
+      "net_weight": null,
+      "price": 18.03,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 39,
+      "registered": "2025-05-16 20:21:38",
+      "first_used": "2022-12-20 22:00:00",
+      "last_used": "2025-12-04 23:00:00",
+      "filament_id": 9,
+      "location_id": 5,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1100.0,
+      "current_weight": 700.0,
+      "net_weight": null,
+      "price": 11.57,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 40,
+      "registered": "2025-05-16 20:24:03",
+      "first_used": "2024-12-11 22:00:00",
+      "last_used": null,
+      "filament_id": 12,
+      "location_id": 7,
+      "colors": [
+        {
+          "r": 242,
+          "g": 255,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 500.0,
+      "current_weight": 500.0,
+      "net_weight": null,
+      "price": 12.66,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 41,
+      "registered": "2025-05-16 20:24:55",
+      "first_used": "2024-12-20 22:00:00",
+      "last_used": null,
+      "filament_id": 13,
+      "location_id": 7,
+      "colors": [
+        {
+          "r": 218,
+          "g": 218,
+          "b": 218,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 500.0,
+      "current_weight": 500.0,
+      "net_weight": null,
+      "price": 12.66,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 42,
+      "registered": "2025-05-16 20:30:34",
+      "first_used": "2025-02-13 22:00:00",
+      "last_used": null,
+      "filament_id": 36,
+      "location_id": 7,
+      "colors": [
+        {
+          "r": 245,
+          "g": 208,
+          "b": 51,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 800.0,
+      "current_weight": 760.0,
+      "net_weight": null,
+      "price": 22.5,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 43,
+      "registered": "2025-05-16 20:32:56",
+      "first_used": "2025-02-13 22:00:00",
+      "last_used": "2025-02-21 22:00:00",
+      "filament_id": 45,
+      "location_id": 7,
+      "colors": [
+        {
+          "r": 30,
+          "g": 30,
+          "b": 30,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 750.0,
+      "current_weight": 731.0,
+      "net_weight": null,
+      "price": 30.15,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 44,
+      "registered": "2025-05-16 20:34:46",
+      "first_used": "2025-02-13 22:00:00",
+      "last_used": "2025-02-21 22:00:00",
+      "filament_id": 40,
+      "location_id": 7,
+      "colors": [
+        {
+          "r": 41,
+          "g": 49,
+          "b": 51,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 750.0,
+      "current_weight": 611.0,
+      "net_weight": null,
+      "price": 23.5,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 46,
+      "registered": "2025-05-16 20:41:23",
+      "first_used": "2025-05-15 23:00:00",
+      "last_used": "2025-12-13 23:00:00",
+      "filament_id": 7,
+      "location_id": 7,
+      "colors": [
+        {
+          "r": 8,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 604.0,
+      "net_weight": null,
+      "price": 11.11,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 47,
+      "registered": "2025-05-16 20:42:19",
+      "first_used": "2025-02-20 22:00:00",
+      "last_used": null,
+      "filament_id": 8,
+      "location_id": 5,
+      "colors": [
+        {
+          "r": 244,
+          "g": 238,
+          "b": 206,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 11.11,
+      "comment": "",
+      "archived": false
+    },
+    {
+      "id": 48,
+      "registered": "2025-05-16 20:42:48",
+      "first_used": "2025-02-20 22:00:00",
+      "last_used": null,
+      "filament_id": 18,
+      "location_id": 7,
+      "colors": [
+        {
+          "r": 8,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 13.14,
+      "comment": "OVP",
+      "archived": false
+    },
+    {
+      "id": 49,
+      "registered": "2025-05-20 19:36:26",
+      "first_used": "2025-05-19 22:00:00",
+      "last_used": "2025-12-07 23:00:00",
+      "filament_id": 48,
+      "location_id": 2,
+      "colors": [
+        {
+          "r": 97,
+          "g": 126,
+          "b": 92,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 636.0,
+      "net_weight": null,
+      "price": 9.88,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 50,
+      "registered": "2025-05-20 19:39:15",
+      "first_used": "2025-05-20 19:39:03.600000",
+      "last_used": null,
+      "filament_id": 49,
+      "location_id": 5,
+      "colors": [
+        {
+          "r": 207,
+          "g": 207,
+          "b": 207,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 9.88,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 51,
+      "registered": "2025-05-20 19:40:51",
+      "first_used": "2025-05-20 19:40:45.900000",
+      "last_used": null,
+      "filament_id": 50,
+      "location_id": 3,
+      "colors": [
+        {
+          "r": 237,
+          "g": 236,
+          "b": 236,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 9.88,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 52,
+      "registered": "2025-05-20 19:43:22",
+      "first_used": "2025-05-20 19:43:06.500000",
+      "last_used": null,
+      "filament_id": 51,
+      "location_id": 5,
+      "colors": [
+        {
+          "r": 255,
+          "g": 213,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 9.88,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 53,
+      "registered": "2025-05-20 20:25:03",
+      "first_used": null,
+      "last_used": null,
+      "filament_id": 35,
+      "location_id": 8,
+      "colors": [
+        {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 500.0,
+      "current_weight": 500.0,
+      "net_weight": null,
+      "price": 20.32,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 54,
+      "registered": "2025-05-22 17:26:24",
+      "first_used": "2019-10-29 22:00:00",
+      "last_used": "2024-12-23 22:00:00",
+      "filament_id": 34,
+      "location_id": 8,
+      "colors": [
+        {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 250.0,
+      "current_weight": 84.0,
+      "net_weight": null,
+      "price": 20.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 55,
+      "registered": "2025-06-03 19:37:10",
+      "first_used": "2025-06-06 22:00:00",
+      "last_used": "2025-12-04 23:00:00",
+      "filament_id": 53,
+      "location_id": 5,
+      "colors": [
+        {
+          "r": 93,
+          "g": 105,
+          "b": 126,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 899.0,
+      "net_weight": null,
+      "price": 14.63,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 56,
+      "registered": "2025-06-03 19:38:46",
+      "first_used": "2025-06-06 22:00:00",
+      "last_used": null,
+      "filament_id": 54,
+      "location_id": 5,
+      "colors": [
+        {
+          "r": 202,
+          "g": 202,
+          "b": 202,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 13.86,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 57,
+      "registered": "2025-06-03 19:40:31",
+      "first_used": "2025-08-10 22:00:00",
+      "last_used": "2025-08-11 22:00:00",
+      "filament_id": 55,
+      "location_id": 3,
+      "colors": [
+        {
+          "r": 5,
+          "g": 5,
+          "b": 5,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 15.39,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 58,
+      "registered": "2025-06-03 20:02:50",
+      "first_used": "2021-05-26 22:00:00",
+      "last_used": null,
+      "filament_id": 26,
+      "location_id": 6,
+      "colors": [
+        {
+          "r": 241,
+          "g": 244,
+          "b": 50,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 1000.0,
+      "current_weight": 1000.0,
+      "net_weight": null,
+      "price": 15.0,
+      "comment": null,
+      "archived": false
+    },
+    {
+      "id": 59,
+      "registered": "2026-03-26 10:09:38",
+      "first_used": null,
+      "last_used": null,
+      "filament_id": 56,
+      "location_id": null,
+      "colors": [
+        {
+          "r": 230,
+          "g": 48,
+          "b": 52,
+          "a": 255
+        }
+      ],
+      "color_name": null,
+      "initial_weight": 5000.0,
+      "current_weight": 5000.0,
+      "net_weight": null,
+      "price": 44.39,
+      "comment": null,
+      "archived": false
+    }
+  ],
+  "locations": [
+    {
+      "id": 1,
+      "name": "Box 1"
+    },
+    {
+      "id": 2,
+      "name": "Box 3"
+    },
+    {
+      "id": 3,
+      "name": "Box 6"
+    },
+    {
+      "id": 4,
+      "name": "?"
+    },
+    {
+      "id": 5,
+      "name": "Box 2"
+    },
+    {
+      "id": 6,
+      "name": "Box 4"
+    },
+    {
+      "id": 7,
+      "name": "Box 5"
+    },
+    {
+      "id": 8,
+      "name": "Eimer"
+    }
+  ],
+  "settings": {}
+}

@@ -63,6 +63,7 @@ Input sources
 import argparse
 import json
 import os
+import random
 import sys
 import urllib.error
 import urllib.parse
@@ -96,6 +97,33 @@ def fetch_json(url: str) -> list | dict:
     except urllib.error.URLError as exc:
         sys.exit(f"Could not connect to {url}: {exc.reason}")
     return json.loads(body)
+
+
+# ---------------------------------------------------------------------------
+# Datetime helpers
+# ---------------------------------------------------------------------------
+
+def _to_rfc3339(value: str | None) -> str | None:
+    """Normalise an old-Spoolman datetime string to RFC 3339 / ISO 8601.
+
+    Old Spoolman stores datetimes as ``"YYYY-MM-DD HH:MM:SS"`` (space
+    separator, no timezone).  ``chrono::DateTime<Utc>`` rejects that format;
+    it needs ``"YYYY-MM-DDTHH:MM:SSZ"``.  Strings already containing ``T``
+    or a ``+`` offset are returned unchanged.
+    """
+    if not value:
+        return value
+    s = value.strip()
+    # Already RFC 3339 / ISO 8601 (has T separator or explicit offset/Z)
+    if "T" in s or "+" in s or s.endswith("Z"):
+        return s
+    # "YYYY-MM-DD HH:MM:SS[.ffffff]" → "YYYY-MM-DDTHH:MM:SS[.ffffff]Z"
+    if " " in s:
+        s = s.replace(" ", "T", 1)
+        if not s.endswith("Z"):
+            s += "Z"
+        return s
+    return value
 
 
 # ---------------------------------------------------------------------------
@@ -180,7 +208,7 @@ def _extract_filament(record: dict) -> dict:
     material = record.get("filament.material")
     return {
         "id": record.get("filament.id"),
-        "registered": record.get("filament.registered"),
+        "registered": _to_rfc3339(record.get("filament.registered")),
         "manufacturer": record.get("filament.vendor.name"),
         "material": material,
         "material_modifier": _derive_material_modifier(name, material),
@@ -202,7 +230,7 @@ def _extract_filament_from_filament_export(record: dict) -> dict:
     material = record.get("material")
     return {
         "id": record.get("id"),
-        "registered": record.get("registered"),
+        "registered": _to_rfc3339(record.get("registered")),
         "manufacturer": record.get("vendor.name"),
         "material": material,
         "material_modifier": _derive_material_modifier(name, material),
@@ -226,6 +254,68 @@ def extract_filaments_from_spools(spool_records: list) -> dict:
         if fid is not None and fid not in filaments:
             filaments[fid] = _extract_filament(record)
     return filaments
+
+
+# ---------------------------------------------------------------------------
+# Nested API helpers (for archived spools from /api/v1/spool?allow_archived=true)
+# ---------------------------------------------------------------------------
+
+def _extract_filament_from_api(fil: dict) -> dict:
+    """Build a new-format filament dict from a nested /api/v1/spool filament object."""
+    name = fil.get("name")
+    material = fil.get("material")
+    return {
+        "id": fil.get("id"),
+        "registered": fil.get("registered"),  # already RFC 3339
+        "manufacturer": (fil.get("vendor") or {}).get("name"),
+        "material": material,
+        "material_modifier": _derive_material_modifier(name, material),
+        "density": fil.get("density"),
+        "diameter": fil.get("diameter"),
+        "print_temp": fil.get("settings_extruder_temp"),
+        "bed_temp": fil.get("settings_bed_temp"),
+        "comment": fil.get("comment"),
+    }
+
+
+def _extract_spool_from_api(record: dict, name_to_id_map: dict) -> dict:
+    """Build a new-format spool dict from a nested /api/v1/spool record.
+
+    Used for archived spools that the flat export endpoint omits.
+    Dates are already RFC 3339.  remaining_weight is available directly.
+    """
+    fil = record.get("filament") or {}
+    color_hex = record.get("color_hex") or fil.get("color_hex")
+    multi_color_hexes = record.get("multi_color_hexes") or fil.get("multi_color_hexes")
+    colors = _build_colors(color_hex, multi_color_hexes)
+
+    net_weight = record.get("initial_weight") or fil.get("weight")
+    spool_body = record.get("spool_weight") or fil.get("spool_weight") or 0
+    initial_weight = (net_weight or 0) + spool_body
+
+    used_weight = record.get("used_weight") or 0
+    remaining = (net_weight or 0) - used_weight
+    current_weight = remaining + spool_body
+
+    loc_name = record.get("location")
+    location_id = name_to_id_map.get(loc_name) if loc_name else None
+
+    return {
+        "id": record["id"],
+        "registered": record.get("registered"),
+        "first_used": record.get("first_used"),
+        "last_used": record.get("last_used"),
+        "filament_id": fil.get("id"),
+        "location_id": location_id,
+        "colors": colors,
+        "color_name": record.get("color_name"),
+        "initial_weight": initial_weight,
+        "current_weight": current_weight,
+        "net_weight": net_weight,
+        "price": record.get("price"),
+        "comment": record.get("comment"),
+        "archived": record.get("archived", True),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -261,9 +351,11 @@ def extract_spools(spool_records: list, name_to_id_map: dict) -> list:
     Field changes applied:
     - color_hex / multi_color_hexes → colors (Vec<Rgba> objects)
     - location (string) → location_id (int reference)
-    - used_weight folded into current_weight = initial_weight - used_weight
+    - initial_weight / filament.weight → net_weight (net filament weight)
+    - spool_weight (per-spool, fallback filament.spool_weight) → used to build
+      gross readings: initial_weight = net_weight + spool_body,
+                      current_weight = (net_weight - used_weight) + spool_body
     - price: copied from filament.price when the spool price is null/absent
-    - initial_weight: populated from filament.weight when null/absent
     Dropped: used_weight, spool_weight, multi_color_direction, extra,
              lot_nr, external_id.
     """
@@ -281,14 +373,22 @@ def extract_spools(spool_records: list, name_to_id_map: dict) -> list:
         if price is None:
             price = record.get("filament.price")
 
-        # initial_weight: use spool value when present, else filament.weight.
-        initial_weight = record.get("initial_weight")
-        if initial_weight is None:
-            initial_weight = record.get("filament.weight")
+        # net_weight: the old Spoolman's initial_weight / filament.weight is the
+        # net filament weight (no spool body tare).
+        # spool_weight: per-spool empty-spool body weight (falls back to
+        # filament.spool_weight when not overridden at the spool level).
+        # initial_weight in the new format is the gross scale reading:
+        #   net_weight + spool_body.
+        net_weight = record.get("initial_weight") or record.get("filament.weight")
+        spool_body = record.get("spool_weight") or record.get("filament.spool_weight") or 0
+        initial_weight = (net_weight or 0) + spool_body
 
-        # current_weight derived from initial minus used.
+        # current_weight (new format) = gross scale reading = remaining + spool_body.
+        # Derive remaining first: prefer used_weight arithmetic (most accurate
+        # from old Spoolman), fall back to remaining_weight field if present.
         used_weight = record.get("used_weight") or 0
-        current_weight = (initial_weight or 0) - used_weight
+        remaining = (net_weight or 0) - used_weight
+        current_weight = remaining + spool_body
 
         # location string → location_id reference.
         loc_name = record.get("location")
@@ -296,16 +396,16 @@ def extract_spools(spool_records: list, name_to_id_map: dict) -> list:
 
         spools.append({
             "id": record.get("id"),
-            "registered": record.get("registered"),
-            "first_used": record.get("first_used"),
-            "last_used": record.get("last_used"),
+            "registered": _to_rfc3339(record.get("registered")),
+            "first_used": _to_rfc3339(record.get("first_used")),
+            "last_used": _to_rfc3339(record.get("last_used")),
             "filament_id": record.get("filament.id"),
             "location_id": location_id,
             "colors": colors,
             "color_name": record.get("color_name"),
             "initial_weight": initial_weight,
             "current_weight": current_weight,
-            "net_weight": record.get("net_weight"),
+            "net_weight": net_weight,
             "price": price,
             "comment": record.get("comment"),
             "archived": record.get("archived", False),
@@ -318,6 +418,53 @@ def extract_spools(spool_records: list, name_to_id_map: dict) -> list:
 # ---------------------------------------------------------------------------
 # Output assembly
 # ---------------------------------------------------------------------------
+
+def _new_id(used: set) -> int:
+    """Return a pseudorandom u32 in 1..=2³²-1 not already in *used*.
+
+    Mirrors the Rust implementation: ``rng.random_range(1..=u32::MAX)`` with a
+    collision-check loop.  Uses Python's Mersenne Twister (``random.randint``)
+    to match the pseudorandom (non-cryptographic) intent of the spec.
+    """
+    while True:
+        v = random.randint(1, 0xFFFF_FFFF)
+        if v not in used:
+            used.add(v)
+            return v
+
+
+def randomize_ids(store: dict) -> dict:
+    """Replace all sequential IDs with pseudorandom u32 values.
+
+    Remaps filament IDs, location IDs, and spool IDs, updating every
+    cross-reference (spool.filament_id, spool.location_id) in place.
+    Returns the mutated store dict.
+    """
+    used: set = set()
+
+    fil_map: dict = {}
+    for fil in store["filaments"]:
+        new = _new_id(used)
+        fil_map[fil["id"]] = new
+        fil["id"] = new
+
+    loc_map: dict = {}
+    for loc in store["locations"]:
+        new = _new_id(used)
+        loc_map[loc["id"]] = new
+        loc["id"] = new
+
+    for spool in store["spools"]:
+        spool["id"] = _new_id(used)
+        fid = spool.get("filament_id")
+        if fid is not None:
+            spool["filament_id"] = fil_map.get(fid, fid)
+        lid = spool.get("location_id")
+        if lid is not None:
+            spool["location_id"] = loc_map.get(lid, lid)
+
+    return store
+
 
 def assemble_store(filaments: dict, spools: list, locations: list) -> dict:
     """Assemble the final spoolman.json structure."""
@@ -388,11 +535,22 @@ def main(argv=None) -> None:
 
     filament_records: list = []
 
+    archived_api_records: list = []
+
     if args.api_url:
         # --- API mode: fetch both exports from the running instance -----------
         base = args.api_url.rstrip("/")
         spool_records = fetch_json(f"{base}/api/v1/export/spools?fmt=json")
         filament_records = fetch_json(f"{base}/api/v1/export/filaments?fmt=json")
+        # The export endpoint silently drops archived spools; fetch them
+        # separately from the spool API (nested format).
+        all_api_spools = fetch_json(f"{base}/api/v1/spool?allow_archived=true")
+        archived_api_records = [s for s in all_api_spools if s.get("archived")]
+        print(
+            f"  Found {len(archived_api_records)} archived spool(s) via API "
+            f"(not included in export).",
+            file=__import__("sys").stderr,
+        )
     else:
         # --- File mode: load from local JSON files ----------------------------
         with open(args.spool_export, encoding="utf-8") as fh:
@@ -404,11 +562,24 @@ def main(argv=None) -> None:
     # Extract filaments deduplicated from spool records.
     filaments = extract_filaments_from_spools(spool_records)
 
-    # Collect locations and build name→id mapping.
-    locations, name_to_id_map = collect_locations(spool_records)
+    # Collect locations from export spools; also seed from archived API records
+    # so their location strings get assigned IDs.
+    archived_loc_seeds = [{"location": r.get("location")} for r in archived_api_records]
+    locations, name_to_id_map = collect_locations(spool_records + archived_loc_seeds)
 
-    # Extract spools (needs location map).
+    # Extract active spools (needs location map).
     spools = extract_spools(spool_records, name_to_id_map)
+
+    # Append archived spools (nested API format); deduplicate by id.
+    existing_ids = {s["id"] for s in spools}
+    for record in archived_api_records:
+        if record["id"] not in existing_ids:
+            spools.append(_extract_spool_from_api(record, name_to_id_map))
+            # Ensure the archived spool's filament is in the filaments dict.
+            fil = record.get("filament") or {}
+            fid = fil.get("id")
+            if fid is not None and fid not in filaments:
+                filaments[fid] = _extract_filament_from_api(fil)
 
     # Merge filament export (adds filaments with no spools).
     for record in filament_records:
@@ -416,8 +587,9 @@ def main(argv=None) -> None:
         if fid is not None and fid not in filaments:
             filaments[fid] = _extract_filament_from_filament_export(record)
 
-    # Assemble and write.
+    # Assemble, assign pseudorandom IDs, and write.
     store = assemble_store(filaments, spools, locations)
+    randomize_ids(store)
     write_atomic(args.output, store)
 
     print(

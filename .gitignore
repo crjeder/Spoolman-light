@@ -228,3 +228,6 @@ tests/e2e/playwright-report/
 tests/e2e/dist/
 
 .memsearch/
+spoolman.json
+new_spoolman.json
+old_spoolman.json

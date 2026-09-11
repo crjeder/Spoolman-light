@@ -2,8 +2,11 @@
 # Multi-stage build: compile Rust workspace → minimal runtime image.
 # Replaces the previous Python/Node multi-stage build.
 
-# ── Stage 1: build ────────────────────────────────────────────────────────────
-FROM rust:1-bookworm AS builder
+# ── Stage 1: site (WASM frontend) ─────────────────────────────────────────────
+# The WASM output is architecture-independent, so build it once on the native
+# build host. Running cargo-leptos under QEMU for arm targets takes ~6h and its
+# LTO link runs out of memory on armv7.
+FROM --platform=$BUILDPLATFORM rust:1-bookworm AS site
 
 # Install cargo-leptos build tool, the WASM compilation target, and
 # wasm-bindgen-cli. cargo-leptos downloads wasm-bindgen as a pre-built binary
@@ -19,7 +22,7 @@ COPY . .
 # Empty dir copied into the runtime image to establish /data ownership.
 RUN mkdir -p /build/data
 
-# Build the full workspace: spoolman-server binary + spoolman-client WASM.
+# Build spoolman-client WASM (the native server binary built here is discarded).
 RUN cargo leptos build --release
 
 # cargo-leptos 0.3.x renames spoolman-server_bg.wasm → spoolman-server.wasm in
@@ -31,21 +34,31 @@ RUN cp target/site/pkg/spoolman-server.wasm target/site/pkg/spoolman-server_bg.w
 # CSR bootstrap HTML manually.
 RUN printf '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1" />\n  <title>Spoolman</title>\n  <link rel="icon" type="image/png" href="/spoolman-light-logo.png" />\n  <link rel="stylesheet" href="/pkg/spoolman-server.css" />\n</head>\n<body>\n  <script type="module">\n    import init from "/pkg/spoolman-server.js";\n    init();\n  </script>\n</body>\n</html>\n' > target/site/index.html
 
-# ── Stage 2: runtime ──────────────────────────────────────────────────────────
+# ── Stage 2: server binary (per target platform) ──────────────────────────────
+# Plain cargo build, no cargo-leptos: the server only reads LEPTOS_SITE_ROOT at
+# runtime. Workspace release profile has no LTO, so armv7 stays within memory.
+FROM rust:1-bookworm AS server
+
+WORKDIR /build
+COPY . .
+
+RUN cargo build --release --locked -p spoolman-server
+
+# ── Stage 3: runtime ──────────────────────────────────────────────────────────
 # distroless/cc includes glibc + libstdc++ but no shell or package manager,
 # minimising attack surface. The built-in nonroot user has uid/gid 65532.
 FROM gcr.io/distroless/cc-debian12 AS runtime
 
 # Copy the compiled server binary.
-COPY --from=builder --chown=65532:65532 /build/target/release/spoolman-server /spoolman
+COPY --from=server --chown=65532:65532 /build/target/release/spoolman-server /spoolman
 
 # Copy the compiled WASM frontend assets served by the binary at runtime.
-COPY --from=builder --chown=65532:65532 /build/target/site /site
+COPY --from=site --chown=65532:65532 /build/target/site /site
 
 # Seed /data owned by the nonroot user so a freshly created volume inherits
 # writable ownership instead of root:root (the default for a VOLUME
 # mountpoint created before USER switches away from root).
-COPY --from=builder --chown=65532:65532 /build/data /data
+COPY --from=site --chown=65532:65532 /build/data /data
 
 LABEL org.opencontainers.image.source=https://github.com/Donkie/Spoolman
 LABEL org.opencontainers.image.description="Keep track of your inventory of 3D-printer filament spools."

@@ -25,7 +25,7 @@
 ## 5. Verification
 
 - [x] 5.1 `cargo check -p spoolman-client` (using wasm32 target) compiles without errors
-- [ ] 5.2 Manual test: type a query with no DB results -- filament dropdown disables, name pre-fills
-- [ ] 5.3 Manual test: clear the query -- filament dropdown re-enables, name field retains value
-- [ ] 5.4 Manual test: type a query with results -- normal flow unchanged, filament dropdown active
-- [ ] 5.5 Manual test: select a DB result -- auto-fill and auto-create behavior unchanged
+- [x] 5.2 Manual test: type a query with no DB results -- filament dropdown disables, name pre-fills
+- [x] 5.3 Manual test: clear the query -- filament dropdown re-enables, name field retains value
+- [x] 5.4 Manual test: type a query with results -- normal flow unchanged, filament dropdown active
+- [x] 5.5 Manual test: select a DB result -- auto-fill and auto-create behavior unchanged

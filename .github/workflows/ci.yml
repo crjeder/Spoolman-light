@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - master
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -44,9 +45,10 @@ jobs:
 
   #
   # Build native image
-  # Only push to cache on non-PR runs; PRs build without cache push
+  # Only runs on PRs to validate the build
   #
   build-amd64:
+    if: ${{ github.event_name == 'pull_request' }}
     needs: [check]
     runs-on: ubuntu-latest
     permissions:
@@ -65,19 +67,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Spoolman
-        if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/build-push-action@v6.7.0
-        with:
-          context: .
-          tags: ${{ env.GHCR_IMAGE }}:test
-          outputs: type=docker,dest=/tmp/spoolman.tar
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      # Separate build for pull requests since PRs don't have access to store cache
       - name: Build Spoolman (PR)
-        if: ${{ github.event_name == 'pull_request' }}
         uses: docker/build-push-action@v6.7.0
         with:
           context: .
@@ -90,83 +80,14 @@ jobs:
         with:
           name: spoolman-image
           path: /tmp/spoolman.tar
-  #
-  # Build arm64 image
-  # Don't run this for pull requests
-  # Only push to buildcache and let release job push to registry
-  #
-  #build-arm64:
-  #  if: ${{ github.event_name != 'pull_request' }}
-  #  needs: [check]
-  #  runs-on: ubuntu-latest
-  #  permissions:
-  #    packages: write
-  #  steps:
-  #    - name: Checkout
-  #      uses: actions/checkout@v4.1.7
-  #
-  #    - name: Set up QEMU
-  #      uses: docker/setup-qemu-action@v3.2.0
-  #
-  #    - name: Set up Docker Buildx
-  #      uses: docker/setup-buildx-action@v3.6.1
 
-  #    - name: Log in to the Github Container registry
-  #      uses: docker/login-action@v3.3.0
-  #      with:
-  #        registry: ghcr.io
-  #        username: ${{ github.actor }}
-  #        password: ${{ secrets.GITHUB_TOKEN }}
-
-  #    - name: Build and cache Docker image
-  #      uses: docker/build-push-action@v6.7.0
-  #      with:
-  #        context: .
-  #        platforms: linux/arm64
-  #        cache-from: type=registry,ref=ghcr.io/${{ env.GHCR_IMAGE }}:buildcache-arm64
-  #        cache-to: type=registry,ref=ghcr.io/${{ env.GHCR_IMAGE }}:buildcache-arm64,mode=max
   #
-  # Build arm/v7 image
-  # Don't run this for pull requests
-  # Only push to buildcache and let release job push to registry
-  #
-  #build-armv7:
-  #  if: ${{ github.event_name != 'pull_request' }}
-  #  needs: [check]
-  #  runs-on: ubuntu-latest
-  #  permissions:
-  #    packages: write
-  #  steps:
-  #    - name: Checkout
-  #      uses: actions/checkout@v4.1.7
-
-  #    - name: Set up QEMU
-  #      uses: docker/setup-qemu-action@v3.2.0
-
-  #    - name: Set up Docker Buildx
-  #      uses: docker/setup-buildx-action@v3.6.1
-
-  #    - name: Log in to the Github Container registry
-  #      uses: docker/login-action@v3.3.0
-  #      with:
-  #        registry: ghcr.io
-  #        username: ${{ github.actor }}
-  #        password: ${{ secrets.GITHUB_TOKEN }}
-
-  #    - name: Build and cache Docker image
-  #      uses: docker/build-push-action@v6.7.0
-  #      with:
-  #        context: .
-  #        platforms: linux/arm/v7
-  #        cache-from: type=registry,ref=ghcr.io/${{ env.GHCR_IMAGE }}:buildcache-armv7
-  #        cache-to: type=registry,ref=ghcr.io/${{ env.GHCR_IMAGE }}:buildcache-armv7,mode=max
-  #
-  # Release images to GHCR and Docker Hub if CI passes
-  # Don't run this for pull requests
+  # Release images to GHCR and Docker Hub
+  # Only runs on: push to master, git tags, or manual workflow_dispatch
   #
   publish-images:
     if: ${{ github.event_name != 'pull_request' }}
-    needs: [check, clippy, build-amd64] #, build-arm64, build-armv7]
+    needs: [check, clippy]
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -237,6 +158,7 @@ jobs:
             BUILD_DATE
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
   #
   # Create Github Release if CI was triggered by a tag
   #

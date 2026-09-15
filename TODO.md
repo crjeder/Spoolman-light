@@ -10,6 +10,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [x] multi-color search? — spool color filter matches any of a spool's colors and sorts by closest ΔE (PR #91)
 - [~] add color button next to the existing color field — "+"/"−" multi-color editor in spool create/edit (max 4), server guard; manual/Playwright verification pending. openspec: multi-color-spool-edit
 - [x] reload database button (in settings?) — shipped in 1.7.0 (`POST /api/v1/reload` + Settings button)
+- [ ] integrate https://github.com/Disane87/spoolman-filament-swatch
 
 ## Defects
 - [~] "HTTP 500: Internal Server Error" error on edit — root cause found: `/data` volume created root-owned, non-root container user can't write; fixed in Dockerfile, not yet verified against a real Docker build. -> use the username spoolman
@@ -27,3 +28,4 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [~] keep filters active until session end or user deactivates them. add a remove all filters button — implemented (sessionStorage persistence + "Clear filters" button, spool + filament lists); manual/Playwright verification pending. openspec: persist-spool-filters
 - [x] remove the black square in the heading of the Material column after selecting a filter — dropped the `\u{25A0}` marker; the select already shows the active value
 - [x] color picker: add hex code input — `#rrggbb` text field beside the swatch in spool create/edit, synced to the color signal
+- [ ] repair icons in README

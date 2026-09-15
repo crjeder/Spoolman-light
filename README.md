@@ -224,6 +224,8 @@ A **Spool** is a physical roll of filament. It references a Filament for materia
 - *Used weight* = initial weight − current weight
 - *Remaining filament* = current weight − (initial weight − net weight), i.e. net weight minus used filament
 
+**Why no empty-spool weight database?** Other trackers subtract an empty spool weight taken from a community-maintained catalog. Spoolman light instead has you weigh the full, factory-new spool. That reading is at least the nominal filament weight (e.g. `1000 g`) plus the empty spool, measured on your own scale for your actual spool. This is more reliable than a community-provided measurement of a similar empty spool.
+
 ![Spool list](assets/screenshots/spool-list.png)
 
 ---

@@ -11,6 +11,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [~] add color button next to the existing color field — "+"/"−" multi-color editor in spool create/edit (max 4), server guard; manual/Playwright verification pending. openspec: multi-color-spool-edit
 - [x] reload database button (in settings?) — shipped in 1.7.0 (`POST /api/v1/reload` + Settings button)
 - [ ] integrate https://github.com/Disane87/spoolman-filament-swatch
+- [ ] There is GET /api/v1/export but no way back in. A POST import or a restore button in Settings would pair with the existing reload button
 
 ## Defects
 - [~] "HTTP 500: Internal Server Error" error on edit — root cause found: `/data` volume created root-owned, non-root container user can't write; fixed in Dockerfile, not yet verified against a real Docker build. -> use the username spoolman

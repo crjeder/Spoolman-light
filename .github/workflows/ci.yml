@@ -13,32 +13,27 @@ on:
 
 permissions:
   contents: read
-  packages: read
+
+# Cancel superseded runs on the same branch/PR; never cancel release tag builds.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
 
 env:
   GHCR_IMAGE: crjeder/spoolman-light
 
 jobs:
   #
-  # Rust type-check and lint
+  # Rust lint (clippy also type-checks)
   #
-  check:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.7
 
-      - name: cargo check (types)
-        run: cargo check -p spoolman-types
-
-      - name: cargo check (server)
-        run: cargo check -p spoolman-server
-
-  clippy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4.1.7
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
 
       - name: cargo clippy
         run: cargo clippy -p spoolman-types -p spoolman-server -- -D warnings
@@ -49,10 +44,8 @@ jobs:
   #
   build-amd64:
     if: ${{ github.event_name == 'pull_request' }}
-    needs: [check]
+    needs: [lint]
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.7
@@ -60,26 +53,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3.6.1
 
-      - name: Log in to the Github Container registry
-        uses: docker/login-action@v3.3.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build Spoolman (PR)
         uses: docker/build-push-action@v6.7.0
         with:
           context: .
-          tags: ${{ env.GHCR_IMAGE }}:test
-          outputs: type=docker,dest=/tmp/spoolman.tar
+          push: false
           cache-from: type=gha
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4.4.0
-        with:
-          name: spoolman-image
-          path: /tmp/spoolman.tar
+          cache-to: type=gha,mode=max
 
   #
   # Release images to GHCR and Docker Hub
@@ -87,9 +67,10 @@ jobs:
   #
   publish-images:
     if: ${{ github.event_name != 'pull_request' }}
-    needs: [check, clippy]
+    needs: [lint]
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       packages: write
     steps:
       - name: Checkout
@@ -108,23 +89,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for GHCR
-        id: meta-ghcr
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # edge: every push to master. semver tags + latest: v* tag pushes only.
+      - name: Extract metadata (tags, labels)
+        id: meta
         uses: docker/metadata-action@v5.5.1
         with:
           images: |
             ghcr.io/${{ env.GHCR_IMAGE }}
-          tags: |
-            type=edge
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-
-      - name: Extract metadata (tags, labels) for Docker Hub
-        id: meta-dh
-        uses: docker/metadata-action@v5.5.1
-        with:
-          images: |
             docker.io/${{ vars.DOCKERHUB_USERNAME }}/spoolman-light
           tags: |
             type=edge
@@ -132,48 +109,31 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
 
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3.3.0
-        with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Store git commit and build date
-        run: |
-          echo "GIT_COMMIT=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
-          echo "BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_ENV"
-
       - name: Build and push Docker images
         uses: docker/build-push-action@v6.7.0
         with:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          tags: |
-            ${{ steps.meta-ghcr.outputs.tags }}
-            ${{ steps.meta-dh.outputs.tags }}
-          labels: ${{ steps.meta-ghcr.outputs.labels }}
-          build-args: |
-            GIT_COMMIT
-            BUILD_DATE
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
   #
-  # Create Github Release if CI was triggered by a tag
+  # Create draft Github Release if CI was triggered by a tag
   #
   publish-release:
-    if: ${{ (github.event_name != 'pull_request') && startsWith(github.event.ref, 'refs/tags/v') }}
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: [publish-images]
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Create release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           draft: true
           name: ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          body: "⚠️ TODO ⚠️"
+          generate_release_notes: true

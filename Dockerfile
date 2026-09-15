@@ -60,7 +60,7 @@ COPY --from=site --chown=65532:65532 /build/target/site /site
 # mountpoint created before USER switches away from root).
 COPY --from=site --chown=65532:65532 /build/data /data
 
-LABEL org.opencontainers.image.source=https://github.com/Donkie/Spoolman
+LABEL org.opencontainers.image.source=https://github.com/crjeder/Spoolman-light
 LABEL org.opencontainers.image.description="Keep track of your inventory of 3D-printer filament spools."
 LABEL org.opencontainers.image.licenses=MIT
 

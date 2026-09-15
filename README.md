@@ -301,3 +301,11 @@ This fork deliberately omits features that add complexity without value for home
 - No Prometheus metrics
 - No multi-database support (JSON file only)
 - No QR / label printing page
+
+## Related Projects
+- https://github.com/yanshay/SpoolEase
+- https://github.com/olmos-cmd/Filament-Tracker
+- https://github.com/Tellus75/spool_manager_U1/blob/main/README.en.md
+- https://github.com/XMan0085/Filament-Manager
+- https://github.com/LatinoF/LTFSpoolManager
+- https://github.com/Fire-Devils/filaman-system

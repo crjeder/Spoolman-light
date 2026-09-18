@@ -8,7 +8,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] filament/spool: filamentcolors.xyz color lookup — deferred: API CORS headers absent from their Django app, direct WASM fetch will be blocked; needs a server-side proxy endpoint (/api/v1/proxy/filamentcolors) before this is viable
 - [x] test on mobile
 - [x] multi-color search? — spool color filter matches any of a spool's colors and sorts by closest ΔE (PR #91)
-- [~] add color button next to the existing color field — "+"/"−" multi-color editor in spool create/edit (max 4), server guard; manual/Playwright verification pending. openspec: multi-color-spool-edit
+- [x] add color button next to the existing color field — "+"/"−" multi-color editor in spool create/edit (max 4), server guard. Fixed a WASM panic where "+" disposed row signals instead of adding a row (non-keyed list re-render tore down previous rows' reactive scope); switched to `<For>` keyed by a stable per-row id. openspec: multi-color-spool-edit
 - [x] reload database button (in settings?) — shipped in 1.7.0 (`POST /api/v1/reload` + Settings button)
 - [ ] integrate https://github.com/Disane87/spoolman-filament-swatch
 - [ ] There is GET /api/v1/export but no way back in. A POST import or a restore button in Settings would pair with the existing reload button

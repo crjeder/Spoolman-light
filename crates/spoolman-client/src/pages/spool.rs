@@ -19,13 +19,23 @@ use spoolman_types::requests::CreateFilament;
 
 // ── Color rows ─────────────────────────────────────────────────────────────────
 
-/// One editable spool color: a `#rrggbb` hex signal plus an opacity signal.
-type ColorRow = (RwSignal<String>, RwSignal<u8>);
+/// One editable spool color: a stable id (for `<For>` keying), a `#rrggbb`
+/// hex signal, and an opacity signal.
+type ColorRow = (u32, RwSignal<String>, RwSignal<u8>);
 
 const MAX_COLORS: usize = 4;
 
+/// Stable per-row id, distinct from array position (which shifts on remove).
+/// `<For>` needs this: keying by index would tear down and recreate every
+/// row's signals on each add/remove, disposing them mid-render.
+fn next_row_id() -> u32 {
+    use std::sync::atomic::{AtomicU32, Ordering};
+    static NEXT: AtomicU32 = AtomicU32::new(0);
+    NEXT.fetch_add(1, Ordering::Relaxed)
+}
+
 fn new_color_row() -> ColorRow {
-    (RwSignal::new(String::from("#000000")), RwSignal::new(255u8))
+    (next_row_id(), RwSignal::new(String::from("#000000")), RwSignal::new(255u8))
 }
 
 /// Collect all rows into the `colors` array, applying alpha and dropping rows
@@ -33,7 +43,7 @@ fn new_color_row() -> ColorRow {
 fn rows_to_colors(rows: RwSignal<Vec<ColorRow>>) -> Vec<Rgba> {
     rows.get()
         .into_iter()
-        .filter_map(|(hex, alpha)| {
+        .filter_map(|(_, hex, alpha)| {
             hex_to_rgba(&hex.get()).map(|mut c| {
                 c.a = alpha.get();
                 c
@@ -45,37 +55,48 @@ fn rows_to_colors(rows: RwSignal<Vec<ColorRow>>) -> Vec<Rgba> {
 /// Render the multi-color editor: one `.color-alpha-row` per color, a "−" button
 /// on every row past the first, and a "+" button on the last row until 4 rows exist.
 fn color_rows_editor(rows: RwSignal<Vec<ColorRow>>) -> impl IntoView {
+    // New rows' signals must outlive the "+" button that creates them.
+    let owner = Owner::current().expect("editor has an owner");
     view! {
         <div class="color-rows">
-            {move || {
-                let list = rows.get();
-                let n = list.len();
-                list.into_iter().enumerate().map(|(i, (hex, alpha))| view! {
-                    <span class="color-alpha-row">
-                        <input type="color"
-                            prop:value=move || hex.get()
-                            on:input=move |ev| hex.set(event_target_value(&ev)) />
-                        <input type="text" class="color-hex-input" maxlength="7" placeholder="#rrggbb"
-                            prop:value=move || hex.get()
-                            on:input=move |ev| {
-                                let v = event_target_value(&ev);
-                                if hex_to_rgba(&v).is_some() { hex.set(v); }
-                            } />
-                        <input type="range" min="0" max="255" title="Opacity"
-                            prop:value=move || alpha.get().to_string()
-                            on:input=move |ev| alpha.set(event_target_value(&ev).parse().unwrap_or(255)) />
-                        <span class="alpha-pct">{move || format!("{}%", (alpha.get() as u16 * 100 / 255))}</span>
-                        {(i > 0).then(|| view! {
-                            <button type="button" class="btn-color-row" title="Remove color"
-                                on:click=move |_| rows.update(|v| { v.remove(i); })>"−"</button>
-                        })}
-                        {(i + 1 == n && n < MAX_COLORS).then(|| view! {
-                            <button type="button" class="btn-color-row" title="Add color"
-                                on:click=move |_| rows.update(|v| v.push(new_color_row()))>"+"</button>
-                        })}
-                    </span>
-                }).collect_view()
-            }}
+            <For each=move || rows.get() key=|row| row.0 let:row>
+                {
+                    let (id, hex, alpha) = row;
+                    let owner = owner.clone();
+                    let is_first = move || rows.with(|v| v.first().map(|r| r.0) == Some(id));
+                    let show_add = move || {
+                        rows.with(|v| v.len() < MAX_COLORS && v.last().map(|r| r.0) == Some(id))
+                    };
+                    view! {
+                        <span class="color-alpha-row">
+                            <input type="color"
+                                prop:value=move || hex.get()
+                                on:input=move |ev| hex.set(event_target_value(&ev)) />
+                            <input type="text" class="color-hex-input" maxlength="7" placeholder="#rrggbb"
+                                prop:value=move || hex.get()
+                                on:input=move |ev| {
+                                    let v = event_target_value(&ev);
+                                    if hex_to_rgba(&v).is_some() { hex.set(v); }
+                                } />
+                            <input type="range" min="0" max="255" title="Opacity"
+                                prop:value=move || alpha.get().to_string()
+                                on:input=move |ev| alpha.set(event_target_value(&ev).parse().unwrap_or(255)) />
+                            <span class="alpha-pct">{move || format!("{}%", (alpha.get() as u16 * 100 / 255))}</span>
+                            {move || (!is_first()).then(|| view! {
+                                <button type="button" class="btn-color-row" title="Remove color"
+                                    on:click=move |_| rows.update(|v| v.retain(|r| r.0 != id))>"−"</button>
+                            })}
+                            {move || show_add().then(|| view! {
+                                <button type="button" class="btn-color-row" title="Add color"
+                                    on:click={
+                                        let owner = owner.clone();
+                                        move |_| { let row = owner.with(new_color_row); rows.update(|v| v.push(row)) }
+                                    }>"+"</button>
+                            })}
+                        </span>
+                    }
+                }
+            </For>
         </div>
     }
 }
@@ -762,7 +783,7 @@ pub fn SpoolCreate() -> impl IntoView {
     let on_db_select = Callback::new(move |entry: crate::spoolmandb::SpoolmanEntry| {
         // Fill color fields.
         if let Some(ref hex) = entry.color_hex {
-            color_rows.with_untracked(|v| v[0].0.set(format!("#{hex}")));
+            color_rows.with_untracked(|v| v[0].1.set(format!("#{hex}")));
         }
         color_name.set(entry.name.clone());
         if let Some(w) = entry.weight {
@@ -988,6 +1009,7 @@ pub fn SpoolEdit() -> impl IntoView {
                 .iter()
                 .map(|c| {
                     (
+                        next_row_id(),
                         RwSignal::new(format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b)),
                         RwSignal::new(c.a),
                     )

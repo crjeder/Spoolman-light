@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.2] - 2026-09-20
+
+### Fixed
+
+- The "+" button on multi-color filaments works again.
+- Editing a spool saves correctly.
+
 ## [1.7.1] - 2026-09-15
 
 ### Fixed
@@ -179,7 +186,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prometheus metrics endpoint (`GET /metrics`) and the `SPOOLMAN_METRICS_ENABLED` environment variable.
 - WebSocket support on all REST endpoints — use polling instead.
 
-[Unreleased]: https://github.com/crjeder/Spoolman-light/compare/v1.7.1...HEAD
+[Unreleased]: https://github.com/crjeder/Spoolman-light/compare/v1.7.2...HEAD
+[1.7.2]: https://github.com/crjeder/Spoolman-light/compare/v1.7.1...v1.7.2
 [1.7.1]: https://github.com/crjeder/Spoolman-light/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/crjeder/Spoolman-light/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/crjeder/Spoolman-light/compare/v1.6.0...v1.6.1

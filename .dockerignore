@@ -5,3 +5,10 @@ client/node_modules
 *.pyc
 *.swp
 __pycache__
+
+target/
+.git/
+.claude/
+.worktrees/
+*.tar
+tests/e2e/node_modules

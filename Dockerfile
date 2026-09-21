@@ -34,15 +34,32 @@ RUN cp target/site/pkg/spoolman-server.wasm target/site/pkg/spoolman-server_bg.w
 # CSR bootstrap HTML manually.
 RUN printf '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1" />\n  <title>Spoolman</title>\n  <link rel="icon" type="image/png" href="/spoolman-light-logo.png" />\n  <link rel="stylesheet" href="/pkg/spoolman-server.css" />\n</head>\n<body>\n  <script type="module">\n    import init from "/pkg/spoolman-server.js";\n    init();\n  </script>\n</body>\n</html>\n' > target/site/index.html
 
-# ── Stage 2: server binary (per target platform) ──────────────────────────────
+# ── Stage 2: server binary (cross-compiled on the native build host) ─────────
 # Plain cargo build, no cargo-leptos: the server only reads LEPTOS_SITE_ROOT at
-# runtime. Workspace release profile has no LTO, so armv7 stays within memory.
-FROM rust:1-bookworm AS server
+# runtime. Runs natively and cross-compiles with gcc cross toolchains instead of
+# emulating the target under QEMU. Bookworm on both sides keeps glibc matching
+# the distroless/cc-debian12 runtime.
+FROM --platform=$BUILDPLATFORM rust:1-bookworm AS server
+
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 WORKDIR /build
 COPY . .
 
-RUN cargo build --release --locked -p spoolman-server
+RUN set -eu; \
+    case "${TARGETARCH}${TARGETVARIANT}" in \
+      amd64)  T=x86_64-unknown-linux-gnu;      GCC=gcc ;; \
+      arm64)  T=aarch64-unknown-linux-gnu;     GCC=aarch64-linux-gnu-gcc;  PKG=gcc-aarch64-linux-gnu ;; \
+      armv7)  T=armv7-unknown-linux-gnueabihf; GCC=arm-linux-gnueabihf-gcc; PKG=gcc-arm-linux-gnueabihf ;; \
+      *) echo "unsupported platform ${TARGETARCH}${TARGETVARIANT}" >&2; exit 1 ;; \
+    esac; \
+    if [ -n "${PKG:-}" ]; then apt-get update && apt-get install -y --no-install-recommends "$PKG" && rm -rf /var/lib/apt/lists/*; fi; \
+    rustup target add "$T"; \
+    U=$(echo "$T" | tr 'a-z-' 'A-Z_'); \
+    export "CARGO_TARGET_${U}_LINKER=$GCC" "CC_$(echo "$T" | tr - _)=$GCC"; \
+    cargo build --release --locked -p spoolman-server --target "$T"; \
+    mkdir -p /out && cp "target/$T/release/spoolman-server" /out/spoolman-server
 
 # ── Stage 3: runtime ──────────────────────────────────────────────────────────
 # distroless/cc includes glibc + libstdc++ but no shell or package manager,
@@ -50,7 +67,7 @@ RUN cargo build --release --locked -p spoolman-server
 FROM gcr.io/distroless/cc-debian12 AS runtime
 
 # Copy the compiled server binary.
-COPY --from=server --chown=65532:65532 /build/target/release/spoolman-server /spoolman
+COPY --from=server --chown=65532:65532 /out/spoolman-server /spoolman
 
 # Copy the compiled WASM frontend assets served by the binary at runtime.
 COPY --from=site --chown=65532:65532 /build/target/site /site

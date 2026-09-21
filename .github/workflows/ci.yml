@@ -63,10 +63,10 @@ jobs:
 
   #
   # Release images to GHCR and Docker Hub
-  # Only runs on: push to master, git tags, or manual workflow_dispatch
+  # Only runs on v* git tags
   #
   publish-images:
-    if: ${{ github.event_name != 'pull_request' }}
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: [lint]
     runs-on: ubuntu-latest
     permissions:
@@ -92,7 +92,7 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # edge: every push to master. semver tags + latest: v* tag pushes only.
+      # semver tags only (v* tag pushes).
       - name: Extract metadata (tags, labels)
         id: meta
         uses: docker/metadata-action@v5.5.1
@@ -101,7 +101,6 @@ jobs:
             ghcr.io/${{ env.GHCR_IMAGE }}
             docker.io/${{ vars.DOCKERHUB_USERNAME }}/spoolman-light
           tags: |
-            type=edge
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}

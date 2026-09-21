@@ -50,11 +50,11 @@ COPY . .
 RUN set -eu; \
     case "${TARGETARCH}${TARGETVARIANT}" in \
       amd64)  T=x86_64-unknown-linux-gnu;      GCC=gcc ;; \
-      arm64)  T=aarch64-unknown-linux-gnu;     GCC=aarch64-linux-gnu-gcc;  PKG=gcc-aarch64-linux-gnu ;; \
-      armv7)  T=armv7-unknown-linux-gnueabihf; GCC=arm-linux-gnueabihf-gcc; PKG=gcc-arm-linux-gnueabihf ;; \
+      arm64)  T=aarch64-unknown-linux-gnu;     GCC=aarch64-linux-gnu-gcc;  PKG="gcc-aarch64-linux-gnu libc6-dev-arm64-cross" ;; \
+      armv7)  T=armv7-unknown-linux-gnueabihf; GCC=arm-linux-gnueabihf-gcc; PKG="gcc-arm-linux-gnueabihf libc6-dev-armhf-cross" ;; \
       *) echo "unsupported platform ${TARGETARCH}${TARGETVARIANT}" >&2; exit 1 ;; \
     esac; \
-    if [ -n "${PKG:-}" ]; then apt-get update && apt-get install -y --no-install-recommends "$PKG" && rm -rf /var/lib/apt/lists/*; fi; \
+    if [ -n "${PKG:-}" ]; then apt-get update && apt-get install -y --no-install-recommends $PKG && rm -rf /var/lib/apt/lists/*; fi; \
     rustup target add "$T"; \
     U=$(echo "$T" | tr 'a-z-' 'A-Z_'); \
     export "CARGO_TARGET_${U}_LINKER=$GCC" "CC_$(echo "$T" | tr - _)=$GCC"; \

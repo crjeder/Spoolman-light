@@ -1,8 +1,8 @@
 use crate::{
     api,
     state::{
-        color_distance_algorithm, color_thresholds, date_format_setting, diameter_settings,
-        time_format_setting, ColorAlgorithm,
+        color_distance_algorithm, color_thresholds, date_format_setting, default_view,
+        diameter_settings, time_format_setting, ColorAlgorithm, ViewMode,
     },
 };
 use leptos::prelude::*;
@@ -97,6 +97,10 @@ pub fn SettingsPage() -> impl IntoView {
     let date_fmt = RwSignal::new("medium".to_string());
     let time_fmt = RwSignal::new("none".to_string());
 
+    // Default view — read from shared context; local copy for the form.
+    let dv_ctx = default_view();
+    let default_view_field = RwSignal::new("spool".to_string());
+
     Effect::new(move |_| {
         if let Some(Ok(s)) = settings.get() {
             currency.set(
@@ -134,6 +138,12 @@ pub fn SettingsPage() -> impl IntoView {
                     .cloned()
                     .unwrap_or_else(|| "none".into()),
             );
+            default_view_field.set(
+                s.get("default_view")
+                    .filter(|v| v.as_str() == "color")
+                    .cloned()
+                    .unwrap_or_else(|| "spool".into()),
+            );
         }
     });
 
@@ -153,6 +163,7 @@ pub fn SettingsPage() -> impl IntoView {
         let ballpark_val = thresh_ballpark.get();
         let date_fmt_val = date_fmt.get();
         let time_fmt_val = time_fmt.get();
+        let default_view_val = default_view_field.get();
         spawn_local(async move {
             let r1 = api::put_setting("currency_symbol", currency.get()).await;
             let r2 = api::put_setting(
@@ -171,8 +182,10 @@ pub fn SettingsPage() -> impl IntoView {
             let r8 = api::put_setting("date_format", date_fmt_val.clone()).await;
             let r9 = api::put_setting("time_format", time_fmt_val.clone()).await;
 
-            if matches!((&r1, &r2, &r3, &r4, &r5, &r6, &r7, &r8, &r9),
-                (Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_)))
+            let r10 = api::put_setting("default_view", default_view_val.clone()).await;
+
+            if matches!((&r1, &r2, &r3, &r4, &r5, &r6, &r7, &r8, &r9, &r10),
+                (Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_), Ok(_)))
             {
                 // Update app-wide context signals so other components see the
                 // change without a reload.
@@ -194,9 +207,11 @@ pub fn SettingsPage() -> impl IntoView {
                 date_fmt_ctx.0.set(date_fmt_val);
                 time_fmt_ctx.0.set(time_fmt_val);
 
+                dv_ctx.0.set(Some(if default_view_val == "color" { ViewMode::Color } else { ViewMode::Spool }));
+
                 saved.set(true);
             } else {
-                let first_err = [r1, r2, r3, r4, r5, r6, r7, r8, r9]
+                let first_err = [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10]
                     .into_iter()
                     .find_map(|r| r.err());
                 error.set(first_err.map(|e| e.to_string()));
@@ -275,6 +290,19 @@ pub fn SettingsPage() -> impl IntoView {
                         <option value="none">"None — date only (default)"</option>
                         <option value="short">"Short (e.g. 2:30 PM)"</option>
                         <option value="medium">"Medium (e.g. 2:30:00 PM)"</option>
+                    </select>
+                </label>
+                <label>
+                    "Default view"
+                    <select
+                        prop:value=move || default_view_field.get()
+                        on:change=move |ev| {
+                            saved.set(false);
+                            default_view_field.set(event_target_value(&ev));
+                        }
+                    >
+                        <option value="spool">"Spool table (default)"</option>
+                        <option value="color">"Color swatch grid"</option>
                     </select>
                 </label>
                 <label>

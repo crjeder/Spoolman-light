@@ -234,6 +234,12 @@ A **Spool** is a physical roll of filament. It references a Filament for materia
 
 Locations are named storage spots (dry box, shelf A, printer enclosure, …). Each location shows a live count of spools stored there. Spools can be filtered by location in the spool list.
 
+### Color view
+
+The **Color** sidebar entry (`/colors`) shows spools as a card grid instead of a table — each card filled with the spool's colour(s) and labelled with colour name, filament, material, remaining weight and location. Cards are ordered by hue then lightness, with greys, black and white grouped last. The material filter is shared with the spool table (a checkbox row here, the table's dropdown there); sort and page position are remembered separately per view.
+
+**Default view** (Settings) — `spool` or `color`; decides which view the `/` route renders. Default `spool`.
+
 ## Stack
 
 | Layer | Technology |

@@ -116,6 +116,26 @@ pub fn time_format_setting() -> TimeFormat {
     expect_context::<TimeFormat>()
 }
 
+// ── View mode ───────────────────────────────────────────────────────────────
+
+/// Which spool list rendering is shown at a given route.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum ViewMode {
+    Spool,
+    Color,
+}
+
+/// Reactive `default_view` setting, resolved once the settings resource
+/// loads. `None` until then — `RootView` shows a loading placeholder in the
+/// meantime rather than guessing.
+#[derive(Clone, Copy)]
+pub struct DefaultView(pub RwSignal<Option<ViewMode>>);
+
+/// Read the `DefaultView` from context.
+pub fn default_view() -> DefaultView {
+    expect_context::<DefaultView>()
+}
+
 #[derive(Clone, Debug)]
 pub struct TableState {
     pub sort_field: RwSignal<String>,
@@ -127,12 +147,12 @@ pub struct TableState {
 
 /// Create table state for a named table.  State is persisted in localStorage
 /// under keys like `table.<namespace>.sort_field` etc.
-pub fn use_table_state(namespace: &'static str) -> TableState {
+pub fn use_table_state(namespace: &'static str, default_sort: &'static str) -> TableState {
     let load = |key: &str, default: &str| -> String {
         storage_get(&format!("table.{namespace}.{key}")).unwrap_or_else(|| default.to_string())
     };
 
-    let sort_field = RwSignal::new(load("sort_field", "registered"));
+    let sort_field = RwSignal::new(load("sort_field", default_sort));
     let sort_asc = RwSignal::new(load("sort_asc", "false") == "true");
     let page = RwSignal::new(load("page", "0").parse::<usize>().unwrap_or(0));
     let page_size = RwSignal::new(load("page_size", "25").parse::<usize>().unwrap_or(25));

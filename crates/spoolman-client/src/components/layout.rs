@@ -2,6 +2,8 @@ use leptos::prelude::*;
 use leptos_router::components::A;
 use leptos_router::hooks::use_location;
 
+use crate::state::{default_view, ViewMode};
+
 #[component]
 pub fn Layout(children: Children) -> impl IntoView {
     let dark = use_context::<RwSignal<bool>>().expect("dark mode signal");
@@ -39,9 +41,14 @@ pub fn Layout(children: Children) -> impl IntoView {
 fn Sidebar() -> impl IntoView {
     let dark = use_context::<RwSignal<bool>>().expect("dark mode signal");
     let location = use_location();
+    let dv = default_view();
     let spools_active = move || {
         let path = location.pathname.get();
-        path == "/" || path.starts_with("/spools")
+        path.starts_with("/spools") || (path == "/" && dv.0.get() != Some(ViewMode::Color))
+    };
+    let color_active = move || {
+        let path = location.pathname.get();
+        path == "/colors" || (path == "/" && dv.0.get() == Some(ViewMode::Color))
     };
 
     view! {
@@ -51,6 +58,7 @@ fn Sidebar() -> impl IntoView {
             </div>
             <ul class="nav-links">
                 <li class=move || if spools_active() { "active" } else { "" }><A href="/spools">"Spools"</A></li>
+                <li class=move || if color_active() { "active" } else { "" }><A href="/colors">"Color"</A></li>
                 <li><A href="/filaments">"Filaments"</A></li>
                 <li><A href="/locations">"Locations"</A></li>
                 <li><A href="/settings">"Settings"</A></li>

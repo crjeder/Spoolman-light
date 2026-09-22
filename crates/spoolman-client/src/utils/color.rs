@@ -237,6 +237,43 @@ fn threshold_for_opt(level: &str, algo: ColorAlgorithm) -> Option<f32> {
     }
 }
 
+// ── Hue / lightness ordering ─────────────────────────────────────────────────
+
+/// Convert an `Rgba` to OkLab-derived `(lightness, chroma, hue)`. Hue is
+/// normalised to `[0, 2π)` starting at red (`atan2(b, a)`). Alpha is ignored.
+pub fn rgba_to_oklch(c: &Rgba) -> (f32, f32, f32) {
+    let ok = Oklab::from_linear_rgb(LinearRgb {
+        r: srgb_channel_to_linear(c.r),
+        g: srgb_channel_to_linear(c.g),
+        b: srgb_channel_to_linear(c.b),
+    });
+    let chroma = (ok.a * ok.a + ok.b * ok.b).sqrt();
+    let hue = ok.b.atan2(ok.a).rem_euclid(std::f32::consts::TAU);
+    (ok.l, chroma, hue)
+}
+
+/// Below this OkLab chroma a colour is treated as achromatic (grey/black/white)
+/// for sort purposes — hue is unstable at low chroma.
+const ACHROMATIC_CHROMA: f32 = 0.02;
+
+/// Fallback colour used for an empty `colors` slice — matches the swatch
+/// fallback already painted in the spool table.
+const NO_COLOR_FALLBACK: Rgba = Rgba { r: 200, g: 200, b: 200, a: 255 };
+
+/// Sort key for hue-then-lightness ordering, taken from a spool's first
+/// colour: `(is_achromatic, hue_or_0, lightness)`. Tuple ordering places all
+/// chromatic colours (sorted by hue, then lightness) before achromatic ones
+/// (sorted by lightness alone).
+pub fn hue_sort_key(colors: &[Rgba]) -> (bool, f32, f32) {
+    let c = colors.first().unwrap_or(&NO_COLOR_FALLBACK);
+    let (lightness, chroma, hue) = rgba_to_oklch(c);
+    if chroma < ACHROMATIC_CHROMA {
+        (true, 0.0, lightness)
+    } else {
+        (false, hue, lightness)
+    }
+}
+
 /// Parse a `#rrggbb` hex string (as produced by `<input type="color">`)
 /// into an `Rgba` with alpha = 255. Returns `None` for any other format.
 pub fn hex_to_rgba(hex: &str) -> Option<Rgba> {
@@ -350,6 +387,32 @@ mod tests {
         let (_, _, v) = rgba_to_hsv(&out);
         assert!(v <= 1.0, "value must stay clamped, got {v}");
         assert_eq!(out.r, 255);
+    }
+
+    // ── Hue ordering ────────────────────────────────────────────────────────
+
+    #[test]
+    fn hue_sort_key_orders_chromatic_before_achromatic() {
+        let black = rgba(0, 0, 0);
+        let white = rgba(255, 255, 255);
+        let grey = rgba(128, 128, 128);
+        let red = rgba(255, 0, 0);
+        let blue = rgba(0, 0, 255);
+
+        let mut colors = vec![white.clone(), grey.clone(), blue.clone(), black.clone(), red.clone()];
+        colors.sort_by(|a, b| {
+            hue_sort_key(std::slice::from_ref(a))
+                .partial_cmp(&hue_sort_key(std::slice::from_ref(b)))
+                .unwrap()
+        });
+        assert_eq!(colors, vec![red.clone(), blue.clone(), black.clone(), grey.clone(), white.clone()]);
+
+        colors.sort_by(|a, b| {
+            hue_sort_key(std::slice::from_ref(b))
+                .partial_cmp(&hue_sort_key(std::slice::from_ref(a)))
+                .unwrap()
+        });
+        assert_eq!(colors, vec![white, grey, black, blue, red]);
     }
 
     #[test]

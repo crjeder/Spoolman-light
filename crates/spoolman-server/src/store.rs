@@ -638,6 +638,19 @@ impl JsonStore {
         self.inner.read().unwrap().clone()
     }
 
+    /// Validate an uploaded data file, then atomically replace the on-disk
+    /// file and the in-memory store with it (running any pending migration).
+    ///
+    /// On parse/validation failure, neither the file nor the in-memory store
+    /// is touched.
+    pub fn replace_from_upload(&self, contents: &str) -> Result<()> {
+        let mut data: DataStore = serde_json::from_str(contents)?;
+        self.migrate(&mut data)?;
+        self.flush(&data)?;
+        *self.inner.write().unwrap() = data;
+        Ok(())
+    }
+
     pub fn data_file_path(&self) -> &Path {
         &self.path
     }

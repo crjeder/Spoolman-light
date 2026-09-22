@@ -1,11 +1,17 @@
 use axum::{
+    body::Bytes,
     extract::{Path, State},
+    http::header,
+    response::{IntoResponse, Response},
     routing::{get, post, put},
     Json, Router,
 };
 use serde_json::{json, Value};
 
-use crate::{routes::error::Result, store::JsonStore};
+use crate::{
+    routes::error::Result,
+    store::{JsonStore, StoreError},
+};
 use spoolman_types::requests::PutSetting;
 
 pub fn router() -> Router<JsonStore> {
@@ -16,6 +22,8 @@ pub fn router() -> Router<JsonStore> {
         .route("/setting", get(list_settings))
         .route("/setting/{key}", put(put_setting))
         .route("/reload", post(reload))
+        .route("/database/download", get(download_database))
+        .route("/database/upload", post(upload_database))
 }
 
 async fn info(State(store): State<JsonStore>) -> Json<Value> {
@@ -58,5 +66,32 @@ async fn put_setting(
 
 async fn reload(State(store): State<JsonStore>) -> Result<axum::http::StatusCode> {
     store.reload()?;
+    Ok(axum::http::StatusCode::NO_CONTENT)
+}
+
+async fn download_database(State(store): State<JsonStore>) -> Result<Response> {
+    let path = store.data_file_path();
+    if !path.exists() {
+        return Err(StoreError::NotFound.into());
+    }
+    // `path` is the store's own canonicalized path, not user input.
+    let contents = std::fs::read(path).map_err(StoreError::from)?; // nosemgrep: path-traversal
+    Ok((
+        [
+            (header::CONTENT_TYPE, "application/json"),
+            (
+                header::CONTENT_DISPOSITION,
+                "attachment; filename=\"spoolman.json\"",
+            ),
+        ],
+        contents,
+    )
+        .into_response())
+}
+
+async fn upload_database(State(store): State<JsonStore>, body: Bytes) -> Result<axum::http::StatusCode> {
+    let contents = String::from_utf8(body.to_vec())
+        .map_err(|e| StoreError::Validation(format!("upload is not valid UTF-8: {e}")))?;
+    store.replace_from_upload(&contents)?;
     Ok(axum::http::StatusCode::NO_CONTENT)
 }

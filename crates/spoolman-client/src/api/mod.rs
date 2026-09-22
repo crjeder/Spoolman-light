@@ -155,6 +155,34 @@ pub async fn reload_database() -> Result<(), ApiError> {
     }
 }
 
+pub fn database_download_url() -> &'static str {
+    "/api/v1/database/download"
+}
+
+pub async fn upload_database(contents: String) -> Result<(), ApiError> {
+    let resp = Request::post("/api/v1/database/upload")
+        .header("Content-Type", "application/json")
+        .body(contents)
+        .map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })?
+        .send()
+        .await
+        .map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })?;
+    if resp.ok() || resp.status() == 204 {
+        Ok(())
+    } else {
+        Err(ApiError {
+            status: resp.status(),
+            message: resp.status_text().to_string(),
+        })
+    }
+}
+
 pub async fn put_setting(key: &str, value: String) -> Result<(), ApiError> {
     let body = PutSetting { value };
     let resp = Request::put(&format!("/api/v1/setting/{key}"))

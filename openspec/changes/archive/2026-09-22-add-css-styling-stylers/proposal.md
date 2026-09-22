@@ -1,3 +1,7 @@
+## Superseded
+
+This change's `stylers` proc-macro approach was never implemented. The actual styling requirement was met independently via a plain CSS file (`style/spoolman.css`, wired up through `Leptos.toml`'s `style-file` setting), added across several unrelated feature commits (multi-color editor, color search, finish badges, colour swatch view). That file already covers every selector this change lists (`.app-shell`, `.sidebar`, `.data-table`, `.color-swatch`, `body.dark`, buttons, etc.) and is verified working. No `stylers` code was ever added; adding it now would just duplicate the existing CSS for no visual benefit. Archived as superseded rather than implemented.
+
 ## Why
 
 The Spoolman-light frontend is completely unstyled: all layout class names (`.app-shell`, `.sidebar`, `.main-content`, `.data-table`, `.color-swatch`, `.dark`) are applied in Leptos components but have no CSS rules. Using the `stylers` crate enables scoped, compile-time-checked CSS co-located with components, fixing the blank UI and establishing a styling foundation for future work.

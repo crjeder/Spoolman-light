@@ -31,6 +31,6 @@
 
 ## 7. Verification
 
-- [ ] 7.1 Build the project in WSL/Linux/Docker (`cargo leptos build --release`) and confirm `target/site/pkg/spoolman-server.css` is non-empty
-- [ ] 7.2 Run the app in Docker and visually verify: sidebar is visible, table has borders, buttons are styled, dark mode toggle changes appearance, color swatches show correct colors
+- [x] 7.1 Build the project in WSL/Linux/Docker (`cargo leptos build --release`) and confirm `target/site/pkg/spoolman-server.css` is non-empty
+- [x] 7.2 Run the app in Docker and visually verify: sidebar is visible, table has borders, buttons are styled, dark mode toggle changes appearance, color swatches show correct colors
 - [x] 7.3 Update `TODO.md` to mark B4 as resolved and add an entry to `CHANGELOG.md`

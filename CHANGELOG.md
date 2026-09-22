@@ -91,7 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - "Color" column header in the spool list is now clickable — clicking it (or pressing Enter/Space when focused) activates the color picker filter in the page header. The header shows a pointer cursor and accent hover style to signal interactivity.
 - Playwright test suite (`tests/playwright/`) covering navigation, filament list/detail/create/edit, spool list/detail/create/edit/clone, and API schema validation (38 tests, all passing).
 - Light theme colour palette derived from the Spoolman Light logo: cyan accent (`#4DC8E8`), charcoal text (`#3D4555`), and off-white sidebar background (`#F0F2F5`) replace the previous generic greys and blue. Dark mode tokens are unchanged.
-- CSS styling via `stylers 0.3.2` — every Leptos component now has a scoped `style!` block. Global styles (CSS custom properties, dark-mode overrides, reset, buttons, shared page classes) live in `style/spoolman.css` bundled via `Leptos.toml` `style-file`. The app is no longer completely unstyled (fixes B4).
+- CSS styling for the app shell, sidebar, data tables, buttons, and dark-mode overrides, defined in `style/spoolman.css` and bundled via `Leptos.toml` `style-file`. The app is no longer completely unstyled (fixes B4).
 - Rust integration test suite — 24 tests covering health, filament, spool, location, and settings endpoints via in-process Axum dispatch; runs with `cargo test -p spoolman-server`, no Docker required.
 
 ### Removed

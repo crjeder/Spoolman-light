@@ -9,11 +9,11 @@ use spoolman_types::{
 
 use crate::{
     api,
-    components::{pagination::Pagination, spoolmandb_search::SpoolmanDbSearch, table::ColHeader},
+    components::{pagination::Pagination, spoolmandb_search::SpoolmanDbSearch, swatch_grid::SwatchGrid, table::ColHeader},
     format,
     spoolmandb::parse_material,
-    state::{color_distance_algorithm, color_thresholds, currency_symbol, date_format_setting, time_format_setting, use_table_state},
-    utils::color::{apply_finish_modifier, color_distance, hex_to_rgba},
+    state::{color_distance_algorithm, color_thresholds, currency_symbol, date_format_setting, time_format_setting, use_table_state, ViewMode},
+    utils::color::{apply_finish_modifier, color_distance, hex_to_rgba, hue_sort_key},
 };
 use spoolman_types::requests::CreateFilament;
 
@@ -145,8 +145,11 @@ fn color_rows_editor(rows: RwSignal<Vec<ColorRow>>) -> impl IntoView {
 // ── List ───────────────────────────────────────────────────────────────────────
 
 #[component]
-pub fn SpoolList() -> impl IntoView {
-    let ts = use_table_state("spools");
+pub fn SpoolList(mode: ViewMode) -> impl IntoView {
+    let ts = match mode {
+        ViewMode::Spool => use_table_state("spools", "registered"),
+        ViewMode::Color => use_table_state("colors", "hue"),
+    };
     // Filters persist for the tab session via sessionStorage (see state::session_get).
     let sg = |key: &str, default: &str| {
         crate::state::session_get(&format!("filter.spools.{key}"))
@@ -171,7 +174,13 @@ pub fn SpoolList() -> impl IntoView {
         "registered",
     ]);
 
-    let material_filter = RwSignal::new(sg("material", ""));
+    let material_filter: RwSignal<Vec<String>> = RwSignal::new(
+        sg("material", "")
+            .split(',')
+            .filter(|s| !s.is_empty())
+            .map(String::from)
+            .collect(),
+    );
     let location_filter: RwSignal<Option<u32>> =
         RwSignal::new(sg("location", "").parse::<u32>().ok());
 
@@ -180,7 +189,7 @@ pub fn SpoolList() -> impl IntoView {
         if show_archived.get() { "true" } else { "false" }));
     Effect::new(move |_| crate::state::session_set("filter.spools.color_pick", &color_pick.get()));
     Effect::new(move |_| crate::state::session_set("filter.spools.color_level", &color_level.get()));
-    Effect::new(move |_| crate::state::session_set("filter.spools.material", &material_filter.get()));
+    Effect::new(move |_| crate::state::session_set("filter.spools.material", &material_filter.get().join(",")));
     Effect::new(move |_| crate::state::session_set("filter.spools.location",
         &location_filter.get().map(|id| id.to_string()).unwrap_or_default()));
 
@@ -193,7 +202,7 @@ pub fn SpoolList() -> impl IntoView {
     };
     let clear_filters = move |_| {
         ts.filter.set(String::new());
-        material_filter.set(String::new());
+        material_filter.set(Vec::new());
         location_filter.set(None);
         color_level.set("off".to_string());
         show_archived.set(false);
@@ -277,7 +286,7 @@ pub fn SpoolList() -> impl IntoView {
                     || s.filament
                         .material
                         .as_ref()
-                        .map(|m| m.abbreviation() == mat.as_str())
+                        .map(|m| mat.iter().any(|sel| sel == m.abbreviation()))
                         .unwrap_or(false);
                 let color_ok = if level == "off" {
                     true
@@ -398,6 +407,16 @@ pub fn SpoolList() -> impl IntoView {
                         ord.reverse()
                     }
                 }
+                "hue" => {
+                    let ord = hue_sort_key(&a.spool.colors)
+                        .partial_cmp(&hue_sort_key(&b.spool.colors))
+                        .unwrap_or(Ordering::Equal);
+                    if asc {
+                        ord
+                    } else {
+                        ord.reverse()
+                    }
+                }
                 _ => Ordering::Equal,
             }
         });
@@ -418,7 +437,7 @@ pub fn SpoolList() -> impl IntoView {
     view! {
         <div class="page spool-list">
             <div class="page-header">
-                <h1>"Spools"</h1>
+                <h1>{if mode == ViewMode::Color { "Colors" } else { "Spools" }}</h1>
                 <div class="page-actions">
                     <div class="search-input-wrapper">
                         <input type="text" placeholder="Search…"
@@ -444,6 +463,18 @@ pub fn SpoolList() -> impl IntoView {
                 </div>
             </div>
             <Suspense fallback=|| view! { <p>"Loading…"</p> }>
+                {if mode == ViewMode::Color {
+                    let page_items_signal = Signal::derive(page_items);
+                    view! {
+                        <SwatchGrid
+                            items=page_items_signal
+                            locations=locations
+                            material_filter=material_filter
+                            available_materials=available_materials
+                        />
+                        <Pagination page=ts.page page_size=ts.page_size total=total />
+                    }.into_any()
+                } else { view! {
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -451,40 +482,65 @@ pub fn SpoolList() -> impl IntoView {
                             <th class="material-head">
                                 "Material"
                                 <select class="material-filter-select"
-                                    prop:value=move || material_filter.get()
-                                    on:change=move |ev| material_filter.set(event_target_value(&ev))
+                                    prop:value=move || {
+                                        let cur = material_filter.get();
+                                        if cur.len() == 1 { cur[0].clone() } else { String::new() }
+                                    }
+                                    on:change=move |ev| {
+                                        let v = event_target_value(&ev);
+                                        material_filter.set(if v.is_empty() { Vec::new() } else { vec![v] });
+                                    }
                                 >
                                     <option value="">"All"</option>
                                     {move || {
                                         let cur = material_filter.get();
                                         available_materials.get().into_iter().map(|m| {
-                                            let sel = m == cur;
+                                            let sel = cur.len() == 1 && cur[0] == m;
                                             let m2 = m.clone();
                                             view! { <option value=m selected=sel>{m2}</option> }
                                         }).collect_view()
                                     }}
+                                    {move || {
+                                        let cur = material_filter.get();
+                                        (cur.len() > 1).then(|| {
+                                            let label = format!("Multiple ({})", cur.len());
+                                            view! { <option value="" selected=true>{label}</option> }
+                                        })
+                                    }}
                                 </select>
                             </th>
-                            <th class="color-head">
-                                <span class="color-head-label" role="button" tabindex="0"
-                                    on:click=move |_| popup_open.update(|v| *v = !*v)
-                                    on:keydown=move |ev| {
-                                        let key = ev.key();
-                                        if key == "Enter" || key == " " {
-                                            popup_open.update(|v| *v = !*v);
-                                        }
-                                    }
-                                >
-                                    {move || if color_level.get() != "off" {
-                                        let color = color_pick.get();
-                                        view! {
-                                            "Color "
-                                            <span style=format!("color:{color}")>"\u{25A0}"</span>
-                                        }.into_any()
+                            <th class=move || {
+                                let active = ts.sort_field.get() == "hue";
+                                if active { "col-header active color-head" } else { "col-header color-head" }
+                            }>
+                                <button class="sort-btn" on:click=move |_| {
+                                    if ts.sort_field.get() == "hue" {
+                                        ts.sort_asc.update(|a| *a = !*a);
                                     } else {
-                                        view! { "Color" }.into_any()
-                                    }}
-                                </span>
+                                        ts.sort_field.set("hue".to_string());
+                                        ts.sort_asc.set(true);
+                                    }
+                                }>
+                                    "Color"
+                                    {move || if ts.sort_field.get() == "hue" {
+                                        if ts.sort_asc.get() { " ↑" } else { " ↓" }
+                                    } else { "" }}
+                                </button>
+                                {move || if color_level.get() != "off" {
+                                    let color = color_pick.get();
+                                    view! {
+                                        <span class="color-head-label" role="button" tabindex="0"
+                                            style=format!("color:{color}")
+                                            on:click=move |ev| { ev.stop_propagation(); popup_open.update(|v| *v = !*v); }
+                                        >"\u{25A0}"</span>
+                                    }.into_any()
+                                } else {
+                                    view! {
+                                        <button type="button" class="btn-icon color-head-label" title="Filter by color"
+                                            on:click=move |ev| { ev.stop_propagation(); popup_open.update(|v| *v = !*v); }
+                                        >"\u{1F3A8}"</button>
+                                    }.into_any()
+                                }}
                                 <select class="color-threshold-select"
                                     prop:value=move || color_level.get()
                                     on:click=move |ev| ev.stop_propagation()
@@ -641,6 +697,7 @@ pub fn SpoolList() -> impl IntoView {
                     </tbody>
                 </table>
                 <Pagination page=ts.page page_size=ts.page_size total=total />
+                }.into_any() }}
             </Suspense>
         </div>
     }

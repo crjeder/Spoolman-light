@@ -43,7 +43,7 @@ fn MaterialSelect(value: RwSignal<String>) -> impl IntoView {
 
 #[component]
 pub fn FilamentList() -> impl IntoView {
-    let ts = use_table_state("filaments");
+    let ts = use_table_state("filaments", "registered");
     let material_filter = RwSignal::new(String::new());
     let ds = diameter_settings();
     let show_diameter = move || !ds.uniform.get();

@@ -10,7 +10,7 @@ use crate::{
         settings::SettingsPage,
         spool::{SpoolCreate, SpoolEdit, SpoolList, SpoolShow},
     },
-    state::{ColorAlgorithm, ColorDistanceAlgorithm, ColorThresholds, CurrencySymbol, DateFormat, DiameterSettings, TimeFormat},
+    state::{ColorAlgorithm, ColorDistanceAlgorithm, ColorThresholds, CurrencySymbol, DateFormat, DefaultView, DiameterSettings, TimeFormat, ViewMode},
     utils::color::default_threshold_for,
 };
 
@@ -55,6 +55,10 @@ pub fn App() -> impl IntoView {
         din99d_ballpark:    RwSignal::new(default_threshold_for("ballpark", ColorAlgorithm::Din99d)),
     };
     provide_context(thresholds);
+
+    // Provide the default-view setting globally (resolved once settings load).
+    let default_view_signal = RwSignal::new(Option::<ViewMode>::None);
+    provide_context(DefaultView(default_view_signal));
 
     // Fetch persisted settings and update the diameter + currency signals.
     let settings_res = LocalResource::new(|| async { crate::api::fetch_settings().await });
@@ -106,6 +110,10 @@ pub fn App() -> impl IntoView {
             thresholds.din99d_same.set(load_thresh("color_threshold_din99d_same",           "same",     ColorAlgorithm::Din99d));
             thresholds.din99d_close.set(load_thresh("color_threshold_din99d_close",         "close",    ColorAlgorithm::Din99d));
             thresholds.din99d_ballpark.set(load_thresh("color_threshold_din99d_ballpark",   "ballpark", ColorAlgorithm::Din99d));
+            default_view_signal.set(Some(match s.get("default_view").map(String::as_str) {
+                Some("color") => ViewMode::Color,
+                _ => ViewMode::Spool,
+            }));
         }
     });
 
@@ -113,11 +121,12 @@ pub fn App() -> impl IntoView {
         <Router>
             <crate::components::layout::Layout>
                 <Routes fallback=|| view! { <p>"404 Not Found"</p> }>
-                    <Route path=path!("/")                   view=SpoolList />
-                    <Route path=path!("/spools")             view=SpoolList />
+                    <Route path=path!("/")                   view=RootView />
+                    <Route path=path!("/spools")             view=|| view! { <SpoolList mode=ViewMode::Spool /> } />
                     <Route path=path!("/spools/new")         view=SpoolCreate />
                     <Route path=path!("/spools/:id")         view=SpoolShow />
                     <Route path=path!("/spools/:id/edit")    view=SpoolEdit />
+                    <Route path=path!("/colors")             view=|| view! { <SpoolList mode=ViewMode::Color /> } />
                     <Route path=path!("/filaments")          view=FilamentList />
                     <Route path=path!("/filaments/new")      view=FilamentCreate />
                     <Route path=path!("/filaments/:id")      view=FilamentShow />
@@ -128,6 +137,19 @@ pub fn App() -> impl IntoView {
                 </Routes>
             </crate::components::layout::Layout>
         </Router>
+    }
+}
+
+/// The `/` route: renders the view named by `default_view` once it resolves
+/// from the settings resource, so a fresh load never flashes the table
+/// before swapping to the grid (or vice versa).
+#[component]
+fn RootView() -> impl IntoView {
+    let dv = use_context::<DefaultView>().expect("DefaultView provided by App");
+    move || match dv.0.get() {
+        None => view! { <p>"Loading…"</p> }.into_any(),
+        Some(ViewMode::Spool) => view! { <SpoolList mode=ViewMode::Spool /> }.into_any(),
+        Some(ViewMode::Color) => view! { <SpoolList mode=ViewMode::Color /> }.into_any(),
     }
 }
 

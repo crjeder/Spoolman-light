@@ -520,6 +520,63 @@ body.dark .success {
     opacity: 0.8;
 }
 
+/* ── Color swatch grid ─────────────────────────────────────────────────────── */
+
+.material-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin: 8px 0 16px;
+}
+
+.swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+.swatch-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--fg);
+    background: var(--bg);
+}
+
+.swatch-card:hover {
+    border-color: var(--accent);
+}
+
+.swatch-card.archived {
+    opacity: 0.55;
+    font-style: italic;
+}
+
+.swatch-card-fill {
+    height: 90px;
+    border-bottom: 1px solid var(--border);
+}
+
+.swatch-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+}
+
+.swatch-card-meta strong {
+    font-size: 0.9rem;
+}
+
+.swatch-card-meta span {
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
 .color-hex {
     font-family: monospace;
     font-size: 0.85em;

@@ -155,6 +155,33 @@ pub async fn reload_database() -> Result<(), ApiError> {
     }
 }
 
+pub async fn import_database(json: &str) -> Result<(), ApiError> {
+    let value: serde_json::Value = serde_json::from_str(json).map_err(|e| ApiError {
+        status: 0,
+        message: format!("invalid JSON: {e}"),
+    })?;
+    let resp = Request::post("/api/v1/import")
+        .json(&value)
+        .map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })?
+        .send()
+        .await
+        .map_err(|e| ApiError {
+            status: 0,
+            message: e.to_string(),
+        })?;
+    if resp.ok() || resp.status() == 204 {
+        Ok(())
+    } else {
+        Err(ApiError {
+            status: resp.status(),
+            message: resp.status_text().to_string(),
+        })
+    }
+}
+
 pub async fn put_setting(key: &str, value: String) -> Result<(), ApiError> {
     let body = PutSetting { value };
     let resp = Request::put(&format!("/api/v1/setting/{key}"))

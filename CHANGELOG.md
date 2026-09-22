@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `POST /api/v1/import` accepts a full database backup (as produced by `GET /api/v1/export`), validates it, and replaces all filaments, spools, locations and settings. Rejects malformed bodies and backups from a newer schema version without touching the current data.
+- Settings page has a "Restore from backup" control next to "Reload database": pick a JSON export file, confirm, and it's imported and applied immediately.
+
 ## [1.7.3] - 2026-09-21
 
 ### Fixed
@@ -194,7 +201,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prometheus metrics endpoint (`GET /metrics`) and the `SPOOLMAN_METRICS_ENABLED` environment variable.
 - WebSocket support on all REST endpoints — use polling instead.
 
-[Unreleased]: https://github.com/crjeder/Spoolman-light/compare/v1.7.2...HEAD
+[Unreleased]: https://github.com/crjeder/Spoolman-light/compare/v1.7.3...HEAD
+[1.7.3]: https://github.com/crjeder/Spoolman-light/compare/v1.7.2...v1.7.3
 [1.7.2]: https://github.com/crjeder/Spoolman-light/compare/v1.7.1...v1.7.2
 [1.7.1]: https://github.com/crjeder/Spoolman-light/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/crjeder/Spoolman-light/compare/v1.6.1...v1.7.0

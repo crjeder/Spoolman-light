@@ -6,13 +6,14 @@ use axum::{
 use serde_json::{json, Value};
 
 use crate::{routes::error::Result, store::JsonStore};
-use spoolman_types::requests::PutSetting;
+use spoolman_types::{models::DataStore, requests::PutSetting};
 
 pub fn router() -> Router<JsonStore> {
     Router::new()
         .route("/info", get(info))
         .route("/material", get(list_materials))
         .route("/export", get(export))
+        .route("/import", post(import))
         .route("/setting", get(list_settings))
         .route("/setting/{key}", put(put_setting))
         .route("/reload", post(reload))
@@ -39,6 +40,14 @@ async fn list_materials(State(store): State<JsonStore>) -> Json<Vec<String>> {
 async fn export(State(store): State<JsonStore>) -> Json<Value> {
     let ds = store.get_full_store();
     Json(serde_json::to_value(ds).unwrap_or_default())
+}
+
+async fn import(
+    State(store): State<JsonStore>,
+    Json(body): Json<DataStore>,
+) -> Result<axum::http::StatusCode> {
+    store.import(body)?;
+    Ok(axum::http::StatusCode::NO_CONTENT)
 }
 
 async fn list_settings(

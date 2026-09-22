@@ -508,6 +508,18 @@ body.dark .success {
     border: 1px solid var(--border);
 }
 
+.finish-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 0 5px;
+    font-size: 0.75em;
+    line-height: 1.5;
+    vertical-align: middle;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    opacity: 0.8;
+}
+
 .color-hex {
     font-family: monospace;
     font-size: 0.85em;

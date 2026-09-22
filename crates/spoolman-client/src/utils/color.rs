@@ -1,6 +1,6 @@
 use deltae::{DEMethod::DE2000, DeltaE, LabValue};
 use oklab::{LinearRgb, Oklab};
-use spoolman_types::models::Rgba;
+use spoolman_types::models::{Rgba, SurfaceFinish};
 
 // ── Algorithm selector ──────────────────────────────────────────────────────
 
@@ -131,6 +131,63 @@ fn din99d_distance(a: &Rgba, b: &Rgba) -> f32 {
     (dl * dl + da * da + db * db).sqrt()
 }
 
+// ── Surface finish modifier ────────────────────────────────────────────
+
+/// Convert an `Rgba` to (hue in [0,360), saturation in [0,1], value in [0,1]).
+/// Alpha is ignored.
+fn rgba_to_hsv(c: &Rgba) -> (f32, f32, f32) {
+    let r = c.r as f32 / 255.0;
+    let g = c.g as f32 / 255.0;
+    let b = c.b as f32 / 255.0;
+    let max = r.max(g).max(b);
+    let min = r.min(g).min(b);
+    let delta = max - min;
+
+    let h = if delta == 0.0 {
+        0.0
+    } else if max == r {
+        60.0 * (((g - b) / delta) % 6.0)
+    } else if max == g {
+        60.0 * ((b - r) / delta + 2.0)
+    } else {
+        60.0 * ((r - g) / delta + 4.0)
+    };
+    let h = if h < 0.0 { h + 360.0 } else { h };
+    let s = if max == 0.0 { 0.0 } else { delta / max };
+    (h, s, max)
+}
+
+/// Inverse of `rgba_to_hsv`. `alpha` is carried through unchanged.
+fn hsv_to_rgba(h: f32, s: f32, v: f32, alpha: u8) -> Rgba {
+    let c = v * s;
+    let x = c * (1.0 - (((h / 60.0) % 2.0) - 1.0).abs());
+    let m = v - c;
+    let (r, g, b) = match h {
+        h if h < 60.0 => (c, x, 0.0),
+        h if h < 120.0 => (x, c, 0.0),
+        h if h < 180.0 => (0.0, c, x),
+        h if h < 240.0 => (0.0, x, c),
+        h if h < 300.0 => (x, 0.0, c),
+        _ => (c, 0.0, x),
+    };
+    let to_u8 = |v: f32| (((v + m) * 255.0).round().clamp(0.0, 255.0)) as u8;
+    Rgba { r: to_u8(r), g: to_u8(g), b: to_u8(b), a: alpha }
+}
+
+/// Predict how a stored color actually appears given the spool's surface finish.
+///
+/// Matte scatters light (desaturate, lift brightness); gloss concentrates it
+/// (saturate, slightly darken). Hue is unchanged; S and V are clamped to [0, 1].
+pub fn apply_finish_modifier(color: &Rgba, finish: SurfaceFinish) -> Rgba {
+    let (s_mul, v_mul) = match finish {
+        SurfaceFinish::Matte => (0.85, 1.10),
+        SurfaceFinish::Standard => return color.clone(),
+        SurfaceFinish::Gloss => (1.15, 0.95),
+    };
+    let (h, s, v) = rgba_to_hsv(color);
+    hsv_to_rgba(h, (s * s_mul).clamp(0.0, 1.0), (v * v_mul).clamp(0.0, 1.0), color.a)
+}
+
 // ── Public API ──────────────────────────────────────────────────────────────
 
 /// Perceptual color difference between two sRGB colours using the specified
@@ -258,5 +315,48 @@ mod tests {
     #[test]
     fn threshold_same_oklab_is_0_10() {
         assert_eq!(default_threshold_for("same", ColorAlgorithm::OkLab), 0.10);
+    }
+
+    // ── Surface finish modifier ─────────────────────────────────────
+
+    #[test]
+    fn finish_standard_is_identity() {
+        let c = rgba(200, 40, 90);
+        assert_eq!(apply_finish_modifier(&c, SurfaceFinish::Standard), c);
+    }
+
+    #[test]
+    fn finish_matte_desaturates_and_brightens() {
+        let red = rgba(200, 0, 0);
+        let (_, s0, v0) = rgba_to_hsv(&red);
+        let (_, s1, v1) = rgba_to_hsv(&apply_finish_modifier(&red, SurfaceFinish::Matte));
+        assert!(s1 < s0, "expected lower saturation: {s0} -> {s1}");
+        assert!(v1 > v0, "expected higher value: {v0} -> {v1}");
+    }
+
+    #[test]
+    fn finish_gloss_saturates_and_darkens() {
+        let red = rgba(200, 60, 60);
+        let (_, s0, v0) = rgba_to_hsv(&red);
+        let (_, s1, v1) = rgba_to_hsv(&apply_finish_modifier(&red, SurfaceFinish::Gloss));
+        assert!(s1 > s0, "expected higher saturation: {s0} -> {s1}");
+        assert!(v1 < v0, "expected lower value: {v0} -> {v1}");
+    }
+
+    #[test]
+    fn finish_matte_clamps_value_at_one() {
+        let bright = rgba(255, 250, 250);
+        let out = apply_finish_modifier(&bright, SurfaceFinish::Matte);
+        let (_, _, v) = rgba_to_hsv(&out);
+        assert!(v <= 1.0, "value must stay clamped, got {v}");
+        assert_eq!(out.r, 255);
+    }
+
+    #[test]
+    fn finish_roundtrips_hue() {
+        let c = rgba(30, 140, 200);
+        let (h0, _, _) = rgba_to_hsv(&c);
+        let (h1, _, _) = rgba_to_hsv(&apply_finish_modifier(&c, SurfaceFinish::Gloss));
+        assert!((h0 - h1).abs() < 2.0, "hue drifted: {h0} -> {h1}");
     }
 }

@@ -413,6 +413,7 @@ impl JsonStore {
             location_id: Some(location_id),
             colors: req.colors,
             color_name: req.color_name,
+            finish: req.finish.unwrap_or_default(),
             initial_weight: req.initial_weight,
             current_weight: req.initial_weight,
             net_weight: req.net_weight,
@@ -449,6 +450,9 @@ impl JsonStore {
             spool.colors = colors;
         }
         apply_option_nullable(&mut spool.color_name, req.color_name);
+        if let Some(finish) = req.finish {
+            spool.finish = finish;
+        }
         apply_option_nullable_u32(&mut spool.location_id, req.location_id);
         if let Some(w) = req.current_weight {
             spool.current_weight = w;
@@ -515,6 +519,7 @@ impl JsonStore {
             location_id: spool.location_id,
             colors: spool.colors.clone(),
             color_name: spool.color_name.clone(),
+            finish: spool.finish,
             initial_weight: spool.initial_weight,
             current_weight: spool.initial_weight,
             net_weight: spool.net_weight,

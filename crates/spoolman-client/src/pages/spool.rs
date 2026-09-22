@@ -3,7 +3,7 @@ use leptos::prelude::*;
 use leptos::task::spawn_local;
 use leptos_router::hooks::{use_navigate, use_params_map};
 use spoolman_types::{
-    models::Rgba,
+    models::{Rgba, SurfaceFinish},
     requests::{CreateSpool, UpdateSpool},
 };
 
@@ -13,7 +13,7 @@ use crate::{
     format,
     spoolmandb::parse_material,
     state::{color_distance_algorithm, color_thresholds, currency_symbol, date_format_setting, time_format_setting, use_table_state},
-    utils::color::{color_distance, hex_to_rgba},
+    utils::color::{apply_finish_modifier, color_distance, hex_to_rgba},
 };
 use spoolman_types::requests::CreateFilament;
 
@@ -22,6 +22,47 @@ use spoolman_types::requests::CreateFilament;
 /// One editable spool color: a stable id (for `<For>` keying), a `#rrggbb`
 /// hex signal, and an opacity signal.
 type ColorRow = (u32, RwSignal<String>, RwSignal<u8>);
+
+fn finish_label(f: SurfaceFinish) -> &'static str {
+    match f {
+        SurfaceFinish::Matte => "Matte",
+        SurfaceFinish::Standard => "Standard",
+        SurfaceFinish::Gloss => "Gloss",
+    }
+}
+
+fn finish_from_value(v: &str) -> SurfaceFinish {
+    match v {
+        "matte" => SurfaceFinish::Matte,
+        "gloss" => SurfaceFinish::Gloss,
+        _ => SurfaceFinish::Standard,
+    }
+}
+
+fn finish_value(f: SurfaceFinish) -> &'static str {
+    match f {
+        SurfaceFinish::Matte => "matte",
+        SurfaceFinish::Standard => "standard",
+        SurfaceFinish::Gloss => "gloss",
+    }
+}
+
+/// Finish `<select>` bound to `finish`. Shared by the add and edit spool forms.
+fn finish_select(finish: RwSignal<SurfaceFinish>) -> impl IntoView {
+    view! {
+        <label>
+            "Finish"
+            <select
+                prop:value=move || finish_value(finish.get())
+                on:change=move |ev| finish.set(finish_from_value(&event_target_value(&ev)))
+            >
+                <option value="matte">"Matte"</option>
+                <option value="standard">"Standard"</option>
+                <option value="gloss">"Gloss"</option>
+            </select>
+        </label>
+    }
+}
 
 const MAX_COLORS: usize = 4;
 
@@ -247,7 +288,7 @@ pub fn SpoolList() -> impl IntoView {
                             s.spool
                                 .colors
                                 .iter()
-                                .any(|c| color_distance(c, &target, cda.0.get()) <= thresh)
+                                .any(|c| color_distance(&apply_finish_modifier(c, s.spool.finish), &target, cda.0.get()) <= thresh)
                         }
                         None => true, // invalid hex — don't filter
                     }
@@ -272,7 +313,7 @@ pub fn SpoolList() -> impl IntoView {
                     s.spool
                         .colors
                         .iter()
-                        .map(|c| color_distance(c, &target, cda.0.get()))
+                        .map(|c| color_distance(&apply_finish_modifier(c, s.spool.finish), &target, cda.0.get()))
                         .fold(f32::MAX, f32::min)
                 };
                 items.sort_by(|a, b| {
@@ -550,6 +591,10 @@ pub fn SpoolList() -> impl IntoView {
                                             </span>
                                         }).collect_view()}
                                         {sr.spool.color_name.clone().unwrap_or_default()}
+                                        {match sr.spool.finish {
+                                            SurfaceFinish::Standard => None,
+                                            f => Some(view! { <span class="finish-badge">{finish_label(f)}</span> }),
+                                        }}
                                     </td>
                                     <td class="num">{rem}</td>
                                     <td class="num">{ppg}</td>
@@ -697,6 +742,7 @@ pub fn SpoolShow() -> impl IntoView {
                                 }
                             }).collect_view()}</dd>
                             <dt>"Color name"</dt><dd>{sr.spool.color_name.clone().unwrap_or_default()}</dd>
+                            <dt>"Finish"</dt><dd>{finish_label(sr.spool.finish)}</dd>
                             <dt>"Initial weight"</dt><dd>{format::format_weight(sr.spool.initial_weight)}</dd>
                             <dt>"Net weight"</dt><dd>{sr.spool.net_weight.map(format::format_weight).unwrap_or_else(|| "—".into())}</dd>
                             <dt>"Current weight"</dt><dd>{format::format_weight(sr.spool.current_weight)}</dd>
@@ -728,6 +774,7 @@ pub fn SpoolCreate() -> impl IntoView {
     let filament_id = RwSignal::new(0u32);
     let color_rows = RwSignal::new(vec![new_color_row()]);
     let color_name = RwSignal::new(String::new());
+    let finish = RwSignal::new(SurfaceFinish::default());
     let initial_weight = RwSignal::new(String::new());
     let net_weight = RwSignal::new(String::new());
     let price = RwSignal::new(String::new());
@@ -856,6 +903,7 @@ pub fn SpoolCreate() -> impl IntoView {
                 filament_id: filament_id.get(),
                 colors: rows_to_colors(color_rows),
                 color_name: Some(color_name.get()).filter(|s| !s.is_empty()),
+                finish: Some(finish.get()),
                 location_id: location_id.get(),
                 initial_weight: weight,
                 net_weight: net_weight.get().parse().ok(),
@@ -925,6 +973,7 @@ pub fn SpoolCreate() -> impl IntoView {
                     "Color name"
                     <input type="text" prop:value=move || color_name.get() on:input=move |ev| color_name.set(event_target_value(&ev)) />
                 </label>
+                {finish_select(finish)}
                 <label>
                     "Initial weight (g)"
                     <input type="number" step="0.1"
@@ -983,6 +1032,7 @@ pub fn SpoolEdit() -> impl IntoView {
     let price = RwSignal::new(String::new());
     let color_rows = RwSignal::new(vec![new_color_row()]);
     let color_name = RwSignal::new(String::new());
+    let finish = RwSignal::new(SurfaceFinish::default());
     let location_id = RwSignal::new(Option::<u32>::None);
     let first_used = RwSignal::new(String::new());
     let last_used = RwSignal::new(String::new());
@@ -1017,6 +1067,7 @@ pub fn SpoolEdit() -> impl IntoView {
                 .collect();
             color_rows.set(if rows.is_empty() { vec![new_color_row()] } else { rows });
             color_name.set(sr.spool.color_name.clone().unwrap_or_default());
+            finish.set(sr.spool.finish);
             location_id.set(sr.spool.location_id);
             let today = || Utc::now().format("%Y-%m-%d").to_string();
             first_used_was_none.set(sr.spool.first_used.is_none());
@@ -1069,6 +1120,7 @@ pub fn SpoolEdit() -> impl IntoView {
                 price: price.get().parse::<f32>().ok(),
                 colors: Some(rows_to_colors(color_rows)),
                 color_name: Some(color_name.get()),
+                finish: Some(finish.get()),
                 location_id: location_id.get(),
                 first_used: parse_dt(prune_default(first_used.get(), first_used_was_none.get())),
                 last_used: parse_dt(prune_default(last_used.get(), last_used_was_none.get())),
@@ -1115,6 +1167,7 @@ pub fn SpoolEdit() -> impl IntoView {
                         prop:value=move || color_name.get()
                         on:input=move |ev| color_name.set(event_target_value(&ev)) />
                 </label>
+                {finish_select(finish)}
                 <label>
                     "Location"
                     <Suspense fallback=|| view! { <select /> }>

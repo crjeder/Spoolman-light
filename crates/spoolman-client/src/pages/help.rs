@@ -18,12 +18,6 @@ pub fn HelpPage() -> impl IntoView {
                    "Spoolman calculates how much filament has been used and how much remains."</p>
             </section>
             <section>
-                <h2>"NFC tags (OpenTag3D / OpenPrintTag)"</h2>
-                <p>"Spoolman doesn't write NFC tags itself — use a separate NFC writer app. "
-                   "Write your spool's URL, "<code>"<host>/api/v1/spool/<id>"</code>" (no "<code>"https://"</code>" prefix), "
-                   "as the Online Data URL field so the tag scans directly to that spool's data."</p>
-            </section>
-            <section>
                 <h2>"Data file"</h2>
                 <p>"All data is stored in "<code>"spoolman.json"</code>" in the platform data directory. "
                    "The path is shown at "<code>"/api/v1/info"</code>" (open this URL directly in a new tab — "

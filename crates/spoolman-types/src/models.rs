@@ -11,6 +11,20 @@ pub struct Rgba {
     pub a: u8,
 }
 
+// ── SurfaceFinish ─────────────────────────────────────────────────────────
+
+/// Surface finish of a spool, used to predict how its stored color actually appears.
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq, Default)]
+#[serde(rename_all = "lowercase")]
+pub enum SurfaceFinish {
+    /// Scatters light: appears desaturated and brighter.
+    Matte,
+    #[default]
+    Standard,
+    /// Concentrates light: appears saturated and slightly darker.
+    Gloss,
+}
+
 // ── MaterialType ───────────────────────────────────────────────────────────────
 
 /// Filament material type, based on the OpenPrintTag material_type_enum specification.
@@ -419,6 +433,9 @@ pub struct Spool {
     /// Purchase price of this spool. Currency semantics are defined by the `currency_symbol` setting.
     #[serde(default)]
     pub price: Option<f32>,
+    /// Surface finish, used to adjust the stored color for appearance-based search.
+    #[serde(default)]
+    pub finish: SurfaceFinish,
     pub registered: DateTime<Utc>,
     pub first_used: Option<DateTime<Utc>>,
     pub last_used: Option<DateTime<Utc>>,

@@ -1,4 +1,4 @@
-use crate::models::{MaterialType, Rgba};
+use crate::models::{MaterialType, Rgba, SurfaceFinish};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -46,6 +46,7 @@ pub struct CreateSpool {
     pub filament_id: u32,
     pub colors: Vec<Rgba>,
     pub color_name: Option<String>,
+    pub finish: Option<SurfaceFinish>,
     pub location_id: Option<u32>,
     pub initial_weight: f32,
     pub net_weight: Option<f32>,
@@ -59,6 +60,7 @@ pub struct CreateSpool {
 pub struct UpdateSpool {
     pub colors: Option<Vec<Rgba>>,
     pub color_name: Option<String>,
+    pub finish: Option<SurfaceFinish>,
     pub location_id: Option<u32>,
     pub current_weight: Option<f32>,
     pub net_weight: Option<f32>,

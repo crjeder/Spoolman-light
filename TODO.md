@@ -2,6 +2,17 @@
 
 Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the appropriate release.
 
+## Verification pending (archived changes)
+
+Archived 2026-09-22 with their manual verification steps still open:
+
+- [ ] e2e harness (`docker-playwright-testsuite`): run `scripts/run-e2e.sh` end to end, confirm a broken test exits non-zero and the `spoolman_data` dev volume is untouched
+- [ ] integration tests (`update-integration-tests-rust-stack`): run `python tests_integration/run.py sqlite` and fix any assertion mismatches
+- [ ] icon buttons (`replace-buttons-with-icons`): visually check filament list, location list, spool detail and pagination
+- [ ] spool price (`spool-price-field`): check the `Price/kg` column renders, sorts, and shows a dash when no price
+- [ ] filament link (`spool-details-filament-link`): check the link on the spool detail page navigates correctly (the spool list column 1 deliberately links to the spool, not the filament)
+- [ ] location required (`validate-location-required-spool`): the change is archived but the client-side submit-disable is NOT in the code - the spool create/edit submit buttons are never disabled on a missing location. Server-side 422 enforcement is in place. Re-implement or drop the client-side part.
+
 ## Enhancements
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
 - [ ] filament create/edit + spool create: SpoolmanDB lookup — fetch https://donkie.github.io/SpoolmanDB/filaments.json, cache in localStorage (24h TTL + ETag), client-side search, auto-fill filament fields; in spool create auto-create missing filament and notify user
@@ -31,4 +42,4 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [x] color picker: add hex code input — `#rrggbb` text field beside the swatch in spool create/edit, synced to the color signal
 - [ ] repair icons in README
 - [ ] burger menu is not implemented
-- [ ] color swatches not available in 1.7.6 was ok in 1.7.5
+- [ ] color swatches: issues: page 2 of 1 when filter changes. filters from spool are applied but should not

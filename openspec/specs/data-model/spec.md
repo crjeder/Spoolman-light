@@ -1,7 +1,12 @@
-## ADDED Requirements
+# data-model Specification
+
+## Purpose
+Defines the shared entity structures (Spool, Filament, Location) and their fields.
+
+## Requirements
 
 ### Requirement: Spool entity structure
-A Spool SHALL have: id (random u32), filament_id (u32), location_id (Option<u32>), colors (Vec<Rgba>, len 1–4), color_name (Option<String>), initial_weight (f32, grams), current_weight (f32, grams), net_weight (Option<f32>, grams), registered (DateTime UTC), first_used (Option<DateTime>), last_used (Option<DateTime>), comment (Option<String>), archived (bool).
+A Spool SHALL have: id (random u32), filament_id (u32), location_id (Option<u32>), colors (Vec<Rgba>, len 1–4), color_name (Option<String>), initial_weight (f32, grams), current_weight (f32, grams), net_weight (Option<f32>, grams), price (Option<f32>), registered (DateTime UTC), first_used (Option<DateTime>), last_used (Option<DateTime>), comment (Option<String>), archived (bool).
 
 #### Scenario: Spool created with required fields
 - **WHEN** a spool is created with filament_id, colors, initial_weight, and current_weight
@@ -18,6 +23,14 @@ A Spool SHALL have: id (random u32), filament_id (u32), location_id (Option<u32>
 #### Scenario: Spool net weight is optional
 - **WHEN** a spool is created without net_weight
 - **THEN** net_weight is stored as None and weight percentage metrics are omitted from the response
+
+#### Scenario: Spool price is optional
+- **WHEN** a spool is created without price
+- **THEN** price is stored as None and the derived price metric is omitted from the response
+
+#### Scenario: Existing spools without price deserialize correctly
+- **WHEN** the server reads a spoolman.json that has spool entries without a price field
+- **THEN** those spools are loaded with price: None and no error occurs
 
 ### Requirement: Filament entity structure
 A Filament SHALL have: id (random u32), manufacturer (Option<String>), material (Option<String>), material_modifier (Option<String>), diameter (f32, mm, default 1.75), density (f32, g/cm³), print_temp (Option<i32>, °C), bed_temp (Option<i32>, °C), spool_weight (Option<f32>, grams), min_print_temp (Option<i32>), max_print_temp (Option<i32>), min_bed_temp (Option<i32>), max_bed_temp (Option<i32>), registered (DateTime UTC), comment (Option<String>). Filament SHALL NOT have color fields. Filament SHALL NOT have a net_weight field.

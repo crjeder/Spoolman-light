@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-09-22
+
+### Added
+
+- Spools can record a purchase price. The spool create and edit forms gain an
+  optional `Price` field, and the spool list gains a sortable `Price/kg` column
+  that shows the price per kilogram derived from net weight (falling back to
+  initial weight). Spools without a price show a dash.
+- The filament name on the spool detail page is now a link straight to that
+  filament's detail page.
+
+### Changed
+
+- Row and detail actions across the filament list, location list, spool detail
+  view and pagination are icon buttons with hover tooltips instead of text
+  labels, so tables stay readable on narrow screens.
+- `scripts/convert_export.py` now produces data for the current Rust model:
+  colours become RGBA objects, locations are collected into a top-level
+  `locations` array referenced by `location_id`, `current_weight` is derived
+  from `used_weight`, vendor/temperature fields are renamed to
+  `manufacturer`/`print_temp`/`bed_temp`, and fields the server no longer knows
+  (`extra`, `spool_weight`, `used_weight`) are dropped instead of emitted.
+
 ## [1.7.7] - 2026-09-22
 
 ### Added

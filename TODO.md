@@ -6,7 +6,7 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
 - [ ] filament create/edit + spool create: SpoolmanDB lookup — fetch https://donkie.github.io/SpoolmanDB/filaments.json, cache in localStorage (24h TTL + ETag), client-side search, auto-fill filament fields; in spool create auto-create missing filament and notify user
 - [ ] filament/spool: filamentcolors.xyz color lookup — deferred: API CORS headers absent from their Django app, direct WASM fetch will be blocked; needs a server-side proxy endpoint (/api/v1/proxy/filamentcolors) before this is viable
-- [x] test on mobile
+- [x] test on mobile — sidebar is responsive: below 768px it collapses off-canvas behind a burger toggle with backdrop/Escape/navigate dismissal (openspec: responsive-sidebar-burger). Tables and forms still scroll horizontally on a phone; a general responsive pass is a separate change.
 - [x] multi-color search? — spool color filter matches any of a spool's colors and sorts by closest ΔE (PR #91)
 - [x] add color button next to the existing color field — "+"/"−" multi-color editor in spool create/edit (max 4), server guard. Fixed a WASM panic where "+" disposed row signals instead of adding a row (non-keyed list re-render tore down previous rows' reactive scope); switched to `<For>` keyed by a stable per-row id. openspec: multi-color-spool-edit
 - [x] reload database button (in settings?) — shipped in 1.7.0 (`POST /api/v1/reload` + Settings button)
@@ -30,3 +30,5 @@ Items to address. Move completed items to [CHANGELOG.md](CHANGELOG.md) under the
 - [x] remove the black square in the heading of the Material column after selecting a filter — dropped the `\u{25A0}` marker; the select already shows the active value
 - [x] color picker: add hex code input — `#rrggbb` text field beside the swatch in spool create/edit, synced to the color signal
 - [ ] repair icons in README
+- [ ] burger menu is not implemented
+- [ ] color swatches not available in 1.7.6 was ok in 1.7.5

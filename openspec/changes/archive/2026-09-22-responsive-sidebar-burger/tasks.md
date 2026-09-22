@@ -14,10 +14,10 @@
 
 ## 3. E2E tests
 
-- [ ] 3.1 Check whether `tests/e2e/playwright.config.ts` pins a viewport; decide between updating the three sidebar tests in place and adding a phone-width project (see the open question in `design.md`).
-- [ ] 3.2 Update the three sidebar tests in `tests/e2e/tests/navigation.spec.ts` ("Sidebar nav links exist", "Clicking Filaments nav link…", "Clicking Locations nav link…") to open the burger first when running narrow.
-- [ ] 3.3 Add narrow-viewport coverage: sidebar hidden on load, burger opens it, backdrop click closes it, activating an entry navigates and closes it.
-- [ ] 3.4 Add a desktop-viewport assertion that no burger button is rendered.
+- [x] 3.1 Resolved: `playwright.config.ts` has a single `chromium` project using `devices['Desktop Chrome']` (1280x720), i.e. above the breakpoint. The three existing sidebar tests therefore pass unchanged. Narrow coverage is added as a `test.describe` with `test.use({ viewport: { width: 375, height: 812 } })` rather than a second project, so only the narrow tests pay the extra run.
+- [x] 3.2 No change needed: those three tests run at desktop width (see 3.1), where the sidebar is permanently visible.
+- [x] 3.3 Added `Navigation at phone width` in `tests/e2e/tests/navigation.spec.ts`: hidden on load, burger opens as overlay (content bounding box unchanged, backdrop visible, `aria-expanded` flips), backdrop click closes, Escape closes, activating Filaments navigates and closes, open state does not survive a reload.
+- [x] 3.4 Added `Navigation at desktop width` asserting `nav.sidebar` visible and `button.burger` hidden. The button is present in the DOM at all widths (markup is identical by design) and hidden by CSS, so the assertion is `toBeHidden()`.
 
 ## 4. Verification
 
@@ -25,4 +25,4 @@
 - [ ] 4.2 `./scripts/run-e2e.sh` green. Blocked: `docker-compose.test.yml`'s shell entrypoint (`/bin/sh -c ...`) cannot run against the distroless runtime image (no `/bin/sh`), pre-existing and unrelated to this change — see flagged follow-up.
 - [x] 4.3 Manually verify at 375px: full-width content, burger opens and closes, dark-mode toggle and version reachable, no horizontal scroll introduced by the sidebar itself. (verified via `docker compose -f docker-compose.yml` + browser at 375x812)
 - [x] 4.4 Manually verify at 1280px that the layout is visually unchanged from before this change.
-- [ ] 4.5 Update the "test on mobile" note in `TODO.md` to record that the sidebar is now responsive, and add the CHANGELOG entry when archiving.
+- [x] 4.5 `TODO.md` "test on mobile" note updated; CHANGELOG entry added under `[1.7.7]` at archive time.

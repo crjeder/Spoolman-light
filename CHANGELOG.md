@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.7] - 2026-09-22
+
+### Added
+
+- The sidebar is now responsive. On screens narrower than 768px it is hidden by
+  default and opens as an overlay from a burger button in the top-left corner,
+  so page content gets the full width of a phone screen instead of losing half
+  of it to navigation. Close the menu by tapping the dimmed area beside it,
+  pressing Escape, or picking a destination. Tablets in portrait and anything
+  wider keep the sidebar exactly as before.
+
 ## [1.7.6] - 2026-09-22
 
 ### Added

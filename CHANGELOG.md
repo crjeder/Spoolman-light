@@ -5,10 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.7.4] - 2026-09-22
 
 ### Added
 
+- `GET /api/v1/database/download` streams the current `spoolman.json` as a file attachment, and the Settings page has a "Download database" link next to "Reload database", so an operator can grab a backup without filesystem or container access.
 - `POST /api/v1/import` accepts a full database backup (as produced by `GET /api/v1/export`), validates it, and replaces all filaments, spools, locations and settings. Rejects malformed bodies and backups from a newer schema version without touching the current data.
 - Settings page has a "Restore from backup" control next to "Reload database": pick a JSON export file, confirm, and it's imported and applied immediately.
 

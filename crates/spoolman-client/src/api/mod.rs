@@ -155,6 +155,10 @@ pub async fn reload_database() -> Result<(), ApiError> {
     }
 }
 
+pub fn database_download_url() -> &'static str {
+    "/api/v1/database/download"
+}
+
 pub async fn import_database(json: &str) -> Result<(), ApiError> {
     let value: serde_json::Value = serde_json::from_str(json).map_err(|e| ApiError {
         status: 0,

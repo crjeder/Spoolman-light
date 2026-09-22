@@ -332,6 +332,7 @@ pub fn SettingsPage() -> impl IntoView {
                 {move || reload_error.get().map(|e| view! { <p class="error">{e}</p> })}
                 {move || reload_saved.get().then(|| view! { <p class="success">"Database reloaded."</p> })}
                 <button type="button" class="btn" on:click=on_reload>"Reload database"</button>
+                <a class="btn" href=api::database_download_url() download="spoolman.json">"Download database"</a>
                 {move || restore_error.get().map(|e| view! { <p class="error">{e}</p> })}
                 {move || restore_saved.get().then(|| view! { <p class="success">"Database restored."</p> })}
                 <label class="btn">

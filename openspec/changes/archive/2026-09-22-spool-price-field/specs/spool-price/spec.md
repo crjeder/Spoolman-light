@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Store spool purchase price
-A Spool MAY have an optional `price: Option<f32>` field representing the purchase price in the user's preferred currency. The field is optional; its absence means the user has not recorded a price for that spool.
+A Spool SHALL support an optional `price: Option<f32>` field representing the purchase price in the user's preferred currency. The field is optional; its absence means the user has not recorded a price for that spool.
 
 #### Scenario: Spool created with price
 - **WHEN** POST /api/v1/spool is called with a `price` value

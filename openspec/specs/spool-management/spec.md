@@ -1,5 +1,8 @@
-## ADDED Requirements
+# spool-management Specification
 
+## Purpose
+Defines spool listing, CRUD, weight metrics, archiving, and the spool list/detail UI.
+## Requirements
 ### Requirement: List spools
 The system SHALL provide an endpoint to list spools with server-side filtering, sorting, and pagination. Archived spools SHALL be excluded by default and included only when explicitly requested. The client SHALL support filtering by location by passing `location_id` to the list endpoint.
 
@@ -307,3 +310,49 @@ The spool create and edit forms SHALL allow entering between 1 and 4 spool color
 #### Scenario: Existing multi-color spool populates all rows
 - **WHEN** a spool with `colors = [#ff0000, #00ff00]` is loaded into the edit form
 - **THEN** the form shows two color rows pre-filled with `#ff0000` and `#00ff00`
+
+### Requirement: Spool detail view action icon buttons
+The spool detail view SHALL display its action buttons (Edit, Clone, Delete) as icon-only buttons using the standard icon set, consistent with the spool list row actions. The Delete button SHALL use a two-step inline confirmation. All icon buttons SHALL carry `title` attributes. Form submit buttons on the create and edit forms ("Create", "Save", "Cancel") are NOT icon buttons and SHALL remain as labelled `.btn` elements.
+
+#### Scenario: Edit button navigates to spool edit page from detail view
+- **WHEN** the user clicks the ✏ icon button on the spool detail view
+- **THEN** the browser navigates to `/spools/:id/edit`
+
+#### Scenario: Clone button triggers clone action
+- **WHEN** the user clicks the ⧉ icon button on the spool detail view
+- **THEN** a new spool is created as a clone and the user is navigated to the new spool's page
+
+#### Scenario: Delete button arms on first click in detail view
+- **WHEN** the user clicks the 🗑 icon button on the spool detail view
+- **THEN** a confirmation state appears with a confirm 🗑 button and a ✕ cancel button; no deletion occurs yet
+
+#### Scenario: Delete confirmed from detail view
+- **WHEN** the delete is armed on the detail view and the user clicks the confirm button
+- **THEN** the spool is deleted and the browser navigates to the spool list
+
+#### Scenario: No text labels on detail view action buttons
+- **WHEN** the user views the spool detail page
+- **THEN** the action buttons display only icon characters — no "Edit", "Clone", "Delete", or "Cancel" text is visible
+
+### Requirement: Location is required on spool create form
+The spool create form SHALL require a location to be selected before submission is allowed. The submit button SHALL be disabled when no location is selected.
+
+#### Scenario: Submit disabled without location
+- **WHEN** the spool create form is open and no location is selected
+- **THEN** the submit button is disabled and the form cannot be submitted
+
+#### Scenario: Submit enabled after location selected
+- **WHEN** the user selects a location in the spool create form
+- **THEN** the submit button becomes enabled
+
+### Requirement: Location is required on spool edit form
+The spool edit form SHALL require a location to be selected before submission is allowed. The submit button SHALL be disabled when no location is selected.
+
+#### Scenario: Submit disabled without location in edit form
+- **WHEN** the spool edit form is open and no location is selected
+- **THEN** the submit button is disabled and the form cannot be submitted
+
+#### Scenario: Submit enabled after location selected in edit form
+- **WHEN** the user selects a location in the spool edit form
+- **THEN** the submit button becomes enabled
+

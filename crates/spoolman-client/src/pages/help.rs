@@ -19,15 +19,17 @@ pub fn HelpPage() -> impl IntoView {
             </section>
             <section>
                 <h2>"NFC tags (OpenTag3D / OpenPrintTag)"</h2>
-                <p>"Write your spool URL to an NFC tag so you can scan it directly from the printer. "
-                   "The spool detail URL is "<code>"/api/v1/spool/<id>"</code>
-                   " — use this as the Online Data URL field in your NFC writer."</p>
+                <p>"Spoolman doesn't write NFC tags itself — use a separate NFC writer app. "
+                   "Write your spool's URL, "<code>"<host>/api/v1/spool/<id>"</code>" (no "<code>"https://"</code>" prefix), "
+                   "as the Online Data URL field so the tag scans directly to that spool's data."</p>
             </section>
             <section>
                 <h2>"Data file"</h2>
                 <p>"All data is stored in "<code>"spoolman.json"</code>" in the platform data directory. "
-                   "The path is shown at "
-                   <a href="/api/v1/info">"/api/v1/info"</a>"."</p>
+                   "The path is shown at "<code>"/api/v1/info"</code>" (open this URL directly in a new tab — "
+                   "it's a backend endpoint, not a page in this app)."</p>
+                <p>"There is no in-app data upload/restore. To import or restore data, stop the server, "
+                   "replace "<code>"spoolman.json"</code>" at that path, and restart."</p>
             </section>
             <section>
                 <h2>"Environment variables"</h2>

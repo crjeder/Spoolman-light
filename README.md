@@ -293,6 +293,8 @@ docker run -p 8000:8000 -v /path/to/data:/data \
 | GET | `/health` | Health check |
 | GET | `/info` | Server version and data file path |
 
+There is no data-upload/restore endpoint or UI. To import or restore `spoolman.json`, stop the server, replace the file at the path reported by `/info`, and restart.
+
 ## What's removed vs upstream Spoolman
 
 This fork deliberately omits features that add complexity without value for home use:

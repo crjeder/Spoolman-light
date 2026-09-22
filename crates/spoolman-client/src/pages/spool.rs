@@ -174,8 +174,13 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
         "registered",
     ]);
 
+    // None means the user never touched this tab's material filter, so it
+    // should default to "all materials selected" once the list is known.
+    let material_pref = crate::state::session_get("filter.spools.material");
     let material_filter: RwSignal<Vec<String>> = RwSignal::new(
-        sg("material", "")
+        material_pref
+            .as_deref()
+            .unwrap_or("")
             .split(',')
             .filter(|s| !s.is_empty())
             .map(String::from)
@@ -192,21 +197,6 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
     Effect::new(move |_| crate::state::session_set("filter.spools.material", &material_filter.get().join(",")));
     Effect::new(move |_| crate::state::session_set("filter.spools.location",
         &location_filter.get().map(|id| id.to_string()).unwrap_or_default()));
-
-    let filters_active = move || {
-        !ts.filter.get().is_empty()
-            || !material_filter.get().is_empty()
-            || location_filter.get().is_some()
-            || color_level.get() != "off"
-            || show_archived.get()
-    };
-    let clear_filters = move |_| {
-        ts.filter.set(String::new());
-        material_filter.set(Vec::new());
-        location_filter.set(None);
-        color_level.set("off".to_string());
-        show_archived.set(false);
-    };
 
     let version = RwSignal::new(0u32);
     let confirm_delete: RwSignal<Option<u32>> = RwSignal::new(None);
@@ -232,6 +222,33 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
         mats.dedup();
         mats
     });
+
+    // The user never touched this tab's material filter — once the material
+    // list is known, default the filter to "all selected" so the checkboxes
+    // start checked (functionally equivalent to the prior empty = "no filter").
+    if material_pref.is_none() {
+        Effect::new(move |_| {
+            let mats = available_materials.get();
+            if !mats.is_empty() && material_filter.get_untracked().is_empty() {
+                material_filter.set(mats);
+            }
+        });
+    }
+
+    let filters_active = move || {
+        !ts.filter.get().is_empty()
+            || material_filter.get().len() != available_materials.get().len()
+            || location_filter.get().is_some()
+            || color_level.get() != "off"
+            || show_archived.get()
+    };
+    let clear_filters = move |_| {
+        ts.filter.set(String::new());
+        material_filter.set(available_materials.get_untracked());
+        location_filter.set(None);
+        color_level.set("off".to_string());
+        show_archived.set(false);
+    };
 
     let on_delete = move |id: u32| {
         spawn_local(async move {

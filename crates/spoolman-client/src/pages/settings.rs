@@ -7,6 +7,8 @@ use crate::{
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
+use wasm_bindgen::JsCast;
+use web_sys::{window, HtmlInputElement};
 
 #[component]
 pub fn SettingsPage() -> impl IntoView {
@@ -26,6 +28,50 @@ pub fn SettingsPage() -> impl IntoView {
             match api::reload_database().await {
                 Ok(()) => reload_saved.set(true),
                 Err(e) => reload_error.set(Some(e.to_string())),
+            }
+        });
+    };
+
+    // Restore-database action — separate status signals, mirroring reload.
+    let restore_saved = RwSignal::new(false);
+    let restore_error = RwSignal::new(Option::<String>::None);
+    let on_restore_file = move |ev: web_sys::Event| {
+        restore_saved.set(false);
+        restore_error.set(None);
+        let input: HtmlInputElement = ev.target().unwrap().unchecked_into();
+        let Some(file_list) = input.files() else {
+            return;
+        };
+        let Some(web_file) = file_list.get(0) else {
+            return;
+        };
+        input.set_value("");
+        if !window()
+            .unwrap()
+            .confirm_with_message(
+                "This replaces ALL current spools, filaments, locations and settings with the contents of the selected file. Continue?",
+            )
+            .unwrap_or(false)
+        {
+            return;
+        }
+        spawn_local(async move {
+            let file = gloo_file::File::from(web_file);
+            let text = match gloo_file::futures::read_as_text(&file).await {
+                Ok(t) => t,
+                Err(e) => {
+                    restore_error.set(Some(e.to_string()));
+                    return;
+                }
+            };
+            match api::import_database(&text).await {
+                Ok(()) => {
+                    restore_saved.set(true);
+                    if let Some(w) = window() {
+                        let _ = w.location().reload();
+                    }
+                }
+                Err(e) => restore_error.set(Some(e.to_string())),
             }
         });
     };
@@ -286,6 +332,15 @@ pub fn SettingsPage() -> impl IntoView {
                 {move || reload_error.get().map(|e| view! { <p class="error">{e}</p> })}
                 {move || reload_saved.get().then(|| view! { <p class="success">"Database reloaded."</p> })}
                 <button type="button" class="btn" on:click=on_reload>"Reload database"</button>
+                {move || restore_error.get().map(|e| view! { <p class="error">{e}</p> })}
+                {move || restore_saved.get().then(|| view! { <p class="success">"Database restored."</p> })}
+                <label class="btn">
+                    "Restore from backup"
+                    <input type="file" accept="application/json,.json"
+                        style="display: none"
+                        on:change=on_restore_file
+                    />
+                </label>
             </section>
         </div>
     }

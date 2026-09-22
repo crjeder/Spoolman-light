@@ -1,7 +1,7 @@
 use chrono::Utc;
 use rand::RngExt;
 use spoolman_types::{
-    models::{DataStore, Filament, Location, Spool},
+    models::{DataStore, Filament, Location, Spool, StoreMeta},
     requests::{
         CreateFilament, CreateLocation, CreateSpool, UpdateFilament, UpdateLocation, UpdateSpool,
     },
@@ -75,6 +75,27 @@ impl JsonStore {
     /// On any read/parse error the in-memory store is left untouched.
     pub fn reload(&self) -> Result<()> {
         let data = self.read_and_migrate()?;
+        *self.inner.write().unwrap() = data;
+        Ok(())
+    }
+
+    /// Replace the entire store with `data` (e.g. from a previously exported
+    /// backup), migrating it to the current schema, flushing to disk, and
+    /// then swapping the in-memory copy.
+    ///
+    /// Rejects a `data.meta.schema_version` newer than the current schema
+    /// version. On any error the on-disk file and in-memory store are left
+    /// untouched.
+    pub fn import(&self, mut data: DataStore) -> Result<()> {
+        let current_version = StoreMeta::default().schema_version;
+        if data.meta.schema_version > current_version {
+            return Err(StoreError::Validation(format!(
+                "unsupported schema_version {} (server supports up to {})",
+                data.meta.schema_version, current_version
+            )));
+        }
+        self.migrate(&mut data)?;
+        self.flush(&data)?;
         *self.inner.write().unwrap() = data;
         Ok(())
     }
@@ -636,19 +657,6 @@ impl JsonStore {
 
     pub fn get_full_store(&self) -> DataStore {
         self.inner.read().unwrap().clone()
-    }
-
-    /// Validate an uploaded data file, then atomically replace the on-disk
-    /// file and the in-memory store with it (running any pending migration).
-    ///
-    /// On parse/validation failure, neither the file nor the in-memory store
-    /// is touched.
-    pub fn replace_from_upload(&self, contents: &str) -> Result<()> {
-        let mut data: DataStore = serde_json::from_str(contents)?;
-        self.migrate(&mut data)?;
-        self.flush(&data)?;
-        *self.inner.write().unwrap() = data;
-        Ok(())
     }
 
     pub fn data_file_path(&self) -> &Path {

@@ -1,5 +1,4 @@
 use axum::{
-    body::Bytes,
     extract::{Path, State},
     http::header,
     response::{IntoResponse, Response},
@@ -12,18 +11,18 @@ use crate::{
     routes::error::Result,
     store::{JsonStore, StoreError},
 };
-use spoolman_types::requests::PutSetting;
+use spoolman_types::{models::DataStore, requests::PutSetting};
 
 pub fn router() -> Router<JsonStore> {
     Router::new()
         .route("/info", get(info))
         .route("/material", get(list_materials))
         .route("/export", get(export))
+        .route("/import", post(import))
         .route("/setting", get(list_settings))
         .route("/setting/{key}", put(put_setting))
         .route("/reload", post(reload))
         .route("/database/download", get(download_database))
-        .route("/database/upload", post(upload_database))
 }
 
 async fn info(State(store): State<JsonStore>) -> Json<Value> {
@@ -47,6 +46,14 @@ async fn list_materials(State(store): State<JsonStore>) -> Json<Vec<String>> {
 async fn export(State(store): State<JsonStore>) -> Json<Value> {
     let ds = store.get_full_store();
     Json(serde_json::to_value(ds).unwrap_or_default())
+}
+
+async fn import(
+    State(store): State<JsonStore>,
+    Json(body): Json<DataStore>,
+) -> Result<axum::http::StatusCode> {
+    store.import(body)?;
+    Ok(axum::http::StatusCode::NO_CONTENT)
 }
 
 async fn list_settings(
@@ -87,11 +94,4 @@ async fn download_database(State(store): State<JsonStore>) -> Result<Response> {
         contents,
     )
         .into_response())
-}
-
-async fn upload_database(State(store): State<JsonStore>, body: Bytes) -> Result<axum::http::StatusCode> {
-    let contents = String::from_utf8(body.to_vec())
-        .map_err(|e| StoreError::Validation(format!("upload is not valid UTF-8: {e}")))?;
-    store.replace_from_upload(&contents)?;
-    Ok(axum::http::StatusCode::NO_CONTENT)
 }

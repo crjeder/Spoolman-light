@@ -159,10 +159,13 @@ pub fn database_download_url() -> &'static str {
     "/api/v1/database/download"
 }
 
-pub async fn upload_database(contents: String) -> Result<(), ApiError> {
-    let resp = Request::post("/api/v1/database/upload")
-        .header("Content-Type", "application/json")
-        .body(contents)
+pub async fn import_database(json: &str) -> Result<(), ApiError> {
+    let value: serde_json::Value = serde_json::from_str(json).map_err(|e| ApiError {
+        status: 0,
+        message: format!("invalid JSON: {e}"),
+    })?;
+    let resp = Request::post("/api/v1/import")
+        .json(&value)
         .map_err(|e| ApiError {
             status: 0,
             message: e.to_string(),

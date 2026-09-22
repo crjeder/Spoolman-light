@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Settings page has a "Database file" section to download the current `spoolman.json` and upload a replacement, so backup/restore no longer requires filesystem or container access. Uploads are validated before the live database is replaced, and the app reloads its in-memory data immediately.
+- `GET /api/v1/database/download` streams the current `spoolman.json` as a file attachment, and the Settings page has a "Download database" link next to "Reload database", so an operator can grab a backup without filesystem or container access.
+- `POST /api/v1/import` accepts a full database backup (as produced by `GET /api/v1/export`), validates it, and replaces all filaments, spools, locations and settings. Rejects malformed bodies and backups from a newer schema version without touching the current data.
+- Settings page has a "Restore from backup" control next to "Reload database": pick a JSON export file, confirm, and it's imported and applied immediately.
 
 ## [1.7.3] - 2026-09-21
 
@@ -200,7 +202,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prometheus metrics endpoint (`GET /metrics`) and the `SPOOLMAN_METRICS_ENABLED` environment variable.
 - WebSocket support on all REST endpoints — use polling instead.
 
-[Unreleased]: https://github.com/crjeder/Spoolman-light/compare/v1.7.2...HEAD
+[Unreleased]: https://github.com/crjeder/Spoolman-light/compare/v1.7.3...HEAD
+[1.7.3]: https://github.com/crjeder/Spoolman-light/compare/v1.7.2...v1.7.3
 [1.7.2]: https://github.com/crjeder/Spoolman-light/compare/v1.7.1...v1.7.2
 [1.7.1]: https://github.com/crjeder/Spoolman-light/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/crjeder/Spoolman-light/compare/v1.6.1...v1.7.0

@@ -8,8 +8,7 @@ use crate::{
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use wasm_bindgen::JsCast;
-use wasm_bindgen_futures::JsFuture;
-use web_sys::HtmlInputElement;
+use web_sys::{window, HtmlInputElement};
 
 #[component]
 pub fn SettingsPage() -> impl IntoView {
@@ -33,45 +32,47 @@ pub fn SettingsPage() -> impl IntoView {
         });
     };
 
-    // Database file upload — separate status signals, same pattern as reload.
-    let upload_saved = RwSignal::new(false);
-    let upload_error = RwSignal::new(Option::<String>::None);
-    let on_upload_change = move |ev: web_sys::Event| {
-        upload_saved.set(false);
-        upload_error.set(None);
-        let Some(input) = ev.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok()) else {
+    // Restore-database action — separate status signals, mirroring reload.
+    let restore_saved = RwSignal::new(false);
+    let restore_error = RwSignal::new(Option::<String>::None);
+    let on_restore_file = move |ev: web_sys::Event| {
+        restore_saved.set(false);
+        restore_error.set(None);
+        let input: HtmlInputElement = ev.target().unwrap().unchecked_into();
+        let Some(file_list) = input.files() else {
             return;
         };
-        let Some(file) = input.files().and_then(|list| list.get(0)) else {
+        let Some(web_file) = file_list.get(0) else {
             return;
         };
-        if !web_sys::window()
-            .and_then(|w| {
-                w.confirm_with_message(
-                    "Uploading a database file replaces the current data. Continue?",
-                )
-                .ok()
-            })
+        input.set_value("");
+        if !window()
+            .unwrap()
+            .confirm_with_message(
+                "This replaces ALL current spools, filaments, locations and settings with the contents of the selected file. Continue?",
+            )
             .unwrap_or(false)
         {
-            input.set_value("");
             return;
         }
         spawn_local(async move {
-            let text_promise = file.text();
-            let result = match JsFuture::from(text_promise).await {
-                Ok(js_text) => js_text.as_string(),
-                Err(_) => None,
+            let file = gloo_file::File::from(web_file);
+            let text = match gloo_file::futures::read_as_text(&file).await {
+                Ok(t) => t,
+                Err(e) => {
+                    restore_error.set(Some(e.to_string()));
+                    return;
+                }
             };
-            let Some(contents) = result else {
-                upload_error.set(Some("failed to read the selected file".into()));
-                return;
-            };
-            match api::upload_database(contents).await {
-                Ok(()) => upload_saved.set(true),
-                Err(e) => upload_error.set(Some(e.to_string())),
+            match api::import_database(&text).await {
+                Ok(()) => {
+                    restore_saved.set(true);
+                    if let Some(w) = window() {
+                        let _ = w.location().reload();
+                    }
+                }
+                Err(e) => restore_error.set(Some(e.to_string())),
             }
-            input.set_value("");
         });
     };
 
@@ -331,15 +332,15 @@ pub fn SettingsPage() -> impl IntoView {
                 {move || reload_error.get().map(|e| view! { <p class="error">{e}</p> })}
                 {move || reload_saved.get().then(|| view! { <p class="success">"Database reloaded."</p> })}
                 <button type="button" class="btn" on:click=on_reload>"Reload database"</button>
-            </section>
-            <section class="database-file-section">
-                <h2>"Database file"</h2>
                 <a class="btn" href=api::database_download_url() download="spoolman.json">"Download database"</a>
-                {move || upload_error.get().map(|e| view! { <p class="error">{e}</p> })}
-                {move || upload_saved.get().then(|| view! { <p class="success">"Database uploaded."</p> })}
-                <label>
-                    "Upload database"
-                    <input type="file" accept="application/json" on:change=on_upload_change />
+                {move || restore_error.get().map(|e| view! { <p class="error">{e}</p> })}
+                {move || restore_saved.get().then(|| view! { <p class="success">"Database restored."</p> })}
+                <label class="btn">
+                    "Restore from backup"
+                    <input type="file" accept="application/json,.json"
+                        style="display: none"
+                        on:change=on_restore_file
+                    />
                 </label>
             </section>
         </div>

@@ -18,9 +18,9 @@ async fn download_returns_current_store() {
     assert_eq!(body["locations"].as_array().unwrap().len(), 1);
 }
 
-/// Uploading a valid store replaces the live data and is reflected immediately.
+/// A downloaded file round-trips through the import endpoint (backup/restore pair).
 #[tokio::test]
-async fn upload_replaces_store() {
+async fn import_replaces_store() {
     let (app, _dir) = common::make_app();
     common::create_location(&app).await; // ensure the file exists on disk before downloading
 
@@ -28,13 +28,8 @@ async fn upload_replaces_store() {
     let mut replacement = downloaded;
     replacement["settings"]["currency_symbol"] = serde_json::json!("$");
 
-    let (status, _) = common::request(
-        &app,
-        Method::POST,
-        "/api/v1/database/upload",
-        Some(replacement),
-    )
-    .await;
+    let (status, _) =
+        common::request(&app, Method::POST, "/api/v1/import", Some(replacement)).await;
     assert_eq!(status, StatusCode::NO_CONTENT);
 
     let (status, body) = common::request(&app, Method::GET, "/api/v1/setting", None).await;
@@ -42,9 +37,9 @@ async fn upload_replaces_store() {
     assert_eq!(body["currency_symbol"], "$");
 }
 
-/// A malformed upload is rejected and leaves existing data untouched.
+/// A malformed import is rejected and leaves existing data untouched.
 #[tokio::test]
-async fn upload_rejects_malformed_body() {
+async fn import_rejects_malformed_body() {
     let (app, _dir) = common::make_app();
     common::request(
         &app,
@@ -56,7 +51,7 @@ async fn upload_rejects_malformed_body() {
 
     let req = Request::builder()
         .method(Method::POST)
-        .uri("/api/v1/database/upload")
+        .uri("/api/v1/import")
         .header("content-type", "application/json")
         .body(Body::from("not valid json"))
         .unwrap();

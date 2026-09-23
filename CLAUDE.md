@@ -90,7 +90,6 @@ when archiving the change, update [CHANGELOG.md](CHANGELOG.md):
 - Put entries under a new version
 - Follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format — write for humans, not diffs
 - Use [TODO.md](TODO.md) to track pending work
-- Never push to the upstream repository unless specifically instructed
 
 ## Gotchas
 
@@ -98,7 +97,6 @@ when archiving the change, update [CHANGELOG.md](CHANGELOG.md):
 - **Semgrep path-traversal false positive** — the "Path Traversal with Actix" rule fires on any `std::fs` op whose path originates from a function parameter, even after `canonicalize()`. `// nosemgrep` and `.semgrepignore` are ignored by the MCP hook (`semgrep mcp -k post-tool-cli-scan`). Scope suppressions carefully; don't restructure valid path code to avoid them.
 - **Do not add `leptos` to `spoolman-server/Cargo.toml`** — Leptos is a client-only dependency. The server crate must not depend on it.
 - **JSON file storage** — data stored in `spoolman.json` in platform user-data dir; no DB env vars needed.
-- **NFC tag URL format** — Spool Online Data URL is `<host>/api/v1/spool/<id>` without `https://` (OpenTag3D / OpenPrintTag spec).
 - **Random u32 IDs** — Rust data model uses random u32 IDs with collision check on insert (not sequential).
 - **Branch cleanup requires prune** — run `git fetch --prune` before checking for `[gone]` branches; without it, deleted remote branches don't show `[gone]` in `git branch -v`.
 

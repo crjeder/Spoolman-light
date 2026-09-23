@@ -29,6 +29,7 @@ fn finish_label(f: SurfaceFinish) -> &'static str {
         SurfaceFinish::Matte => "Matte",
         SurfaceFinish::Standard => "Standard",
         SurfaceFinish::Gloss => "Gloss",
+        SurfaceFinish::Silk => "Silk",
     }
 }
 
@@ -36,6 +37,7 @@ fn finish_from_value(v: &str) -> SurfaceFinish {
     match v {
         "matte" => SurfaceFinish::Matte,
         "gloss" => SurfaceFinish::Gloss,
+        "silk" => SurfaceFinish::Silk,
         _ => SurfaceFinish::Standard,
     }
 }
@@ -45,6 +47,7 @@ fn finish_value(f: SurfaceFinish) -> &'static str {
         SurfaceFinish::Matte => "matte",
         SurfaceFinish::Standard => "standard",
         SurfaceFinish::Gloss => "gloss",
+        SurfaceFinish::Silk => "silk",
     }
 }
 
@@ -60,6 +63,7 @@ fn finish_select(finish: RwSignal<SurfaceFinish>) -> impl IntoView {
                 <option value="matte">"Matte"</option>
                 <option value="standard">"Standard"</option>
                 <option value="gloss">"Gloss"</option>
+                <option value="silk">"Silk"</option>
             </select>
         </label>
     }

@@ -183,6 +183,8 @@ pub fn apply_finish_modifier(color: &Rgba, finish: SurfaceFinish) -> Rgba {
         SurfaceFinish::Matte => (0.85, 1.10),
         SurfaceFinish::Standard => return color.clone(),
         SurfaceFinish::Gloss => (1.15, 0.95),
+        // ponytail: silk reuses gloss's curve, tune separately if silk swatches look off
+        SurfaceFinish::Silk => (1.15, 1.05),
     };
     let (h, s, v) = rgba_to_hsv(color);
     hsv_to_rgba(h, (s * s_mul).clamp(0.0, 1.0), (v * v_mul).clamp(0.0, 1.0), color.a)

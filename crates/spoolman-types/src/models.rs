@@ -23,6 +23,8 @@ pub enum SurfaceFinish {
     Standard,
     /// Concentrates light: appears saturated and slightly darker.
     Gloss,
+    /// Sheen with a shifting highlight: appears saturated and brighter than gloss.
+    Silk,
 }
 
 // ── MaterialType ───────────────────────────────────────────────────────────────

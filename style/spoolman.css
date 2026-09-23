@@ -610,25 +610,19 @@ body.dark .success {
 }
 
 .swatch-card-fill {
-    position: relative;
     height: 90px;
     border-bottom: 1px solid var(--border);
 }
 
 .swatch-pin {
-    position: absolute;
-    top: 4px;
-    right: 4px;
     border: none;
-    background: rgba(0, 0, 0, 0.35);
-    color: rgba(255, 255, 255, 0.6);
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
+    background: none;
+    color: var(--muted);
     cursor: pointer;
     font-size: 0.9rem;
+    line-height: 1;
+    padding: 0;
+    margin-left: 4px;
 }
 
 .swatch-pin.pinned {
@@ -645,6 +639,8 @@ body.dark .success {
 
 .swatch-card-meta strong {
     font-size: 0.9rem;
+    display: flex;
+    align-items: center;
 }
 
 .swatch-card-meta span {

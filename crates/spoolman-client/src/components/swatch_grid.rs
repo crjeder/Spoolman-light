@@ -106,15 +106,16 @@ pub fn SwatchGrid(
                 let card_class = if sr.spool.archived { "swatch-card archived" } else { "swatch-card" };
                 view! {
                     <a href=format!("/spools/{id}") class=card_class>
-                        <div class="swatch-card-fill" style=style>
-                            <button type="button" class="swatch-pin"
-                                class:pinned=move || pinned.get().contains(&id)
-                                title="Pin to palette"
-                                on:click=move |ev| { ev.prevent_default(); toggle_pin(id) }
-                            >"★"</button>
-                        </div>
+                        <div class="swatch-card-fill" style=style></div>
                         <div class="swatch-card-meta">
-                            <strong>{color_label}</strong>
+                            <strong>
+                                {color_label}
+                                <button type="button" class="swatch-pin"
+                                    class:pinned=move || pinned.get().contains(&id)
+                                    title="Pin to palette"
+                                    on:click=move |ev| { ev.prevent_default(); toggle_pin(id) }
+                                >"★"</button>
+                            </strong>
                             <span>{name}</span>
                             <span>{material}" · "{rem}</span>
                             <span>{location}</span>

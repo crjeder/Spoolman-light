@@ -1,8 +1,8 @@
 use chrono::{DateTime, NaiveDate, Utc};
-use leptos::ev;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use leptos_router::hooks::{use_navigate, use_params_map};
+use wasm_bindgen::JsCast;
 use spoolman_types::{
     models::{Rgba, SurfaceFinish},
     requests::{CreateSpool, UpdateSpool},
@@ -484,27 +484,35 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
     });
     let colors_items = move || sorted().into_iter().take(colors_visible.get()).collect::<Vec<_>>();
 
-    window_event_listener(ev::scroll, move |_| {
-        if mode != ViewMode::Color {
-            return;
+    // The app shell scrolls `.main-content`, not `window` (`.app-shell` is
+    // `height: 100vh; overflow: hidden`), so the listener must live on that
+    // element rather than on `window`.
+    if mode == ViewMode::Color {
+        if let Some(main) = web_sys::window()
+            .and_then(|w| w.document())
+            .and_then(|d| d.query_selector(".main-content").ok().flatten())
+        {
+            let closure = wasm_bindgen::closure::Closure::<dyn Fn()>::new(move || {
+                if colors_visible.get_untracked() >= total.get_untracked() {
+                    return;
+                }
+                let near_bottom = web_sys::window()
+                    .and_then(|w| w.document())
+                    .and_then(|d| d.query_selector(".main-content").ok().flatten())
+                    .is_some_and(|el: web_sys::Element| {
+                        el.scroll_top() as f64 + el.client_height() as f64 >= el.scroll_height() as f64 - 300.0
+                    });
+                if near_bottom {
+                    colors_visible.update(|v| *v += ts.page_size.get_untracked());
+                }
+            });
+            let _ = main.add_event_listener_with_callback("scroll", closure.as_ref().unchecked_ref());
+            // ponytail: leaked on route switches (Closure isn't Send/Sync, so
+            // it can't go through Leptos's on_cleanup); upgrade to a proper
+            // teardown if this page starts remounting often enough to matter.
+            closure.forget();
         }
-        if colors_visible.get_untracked() >= total.get_untracked() {
-            return;
-        }
-        let near_bottom = web_sys::window().is_some_and(|w| {
-            let scroll_y = w.scroll_y().unwrap_or(0.0);
-            let inner_h = w.inner_height().ok().and_then(|v| v.as_f64()).unwrap_or(0.0);
-            let doc_h = w
-                .document()
-                .and_then(|d| d.body())
-                .map(|b| b.scroll_height() as f64)
-                .unwrap_or(0.0);
-            scroll_y + inner_h >= doc_h - 300.0
-        });
-        if near_bottom {
-            colors_visible.update(|v| *v += ts.page_size.get_untracked());
-        }
-    });
+    }
 
     view! {
         <div class="page spool-list">
@@ -561,10 +569,6 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
                             pinned=pinned
                             pinned_only=pinned_only
                         />
-                        <p class="load-more-hint">
-                            {move || (colors_visible.get() < total.get())
-                                .then(|| "Scroll for more…")}
-                        </p>
                     }.into_any()
                 } else { view! {
                 <table class="data-table">

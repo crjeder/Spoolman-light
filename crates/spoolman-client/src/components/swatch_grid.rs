@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use leptos::prelude::*;
 use spoolman_types::responses::{LocationResponse, SpoolResponse};
 
@@ -31,13 +33,17 @@ fn fill_style(colors: &[spoolman_types::models::Rgba]) -> String {
 /// Colour swatch grid: one card per spool, filled with its colour(s) and
 /// labelled with colour name, filament, material, remaining weight and
 /// location. A material checkbox row above the grid writes into the shared
-/// `material_filter` set.
+/// `material_filter` set. Each card has a star button toggling membership in
+/// `pinned`; "Pinned only" filters the grid to that set (palette export is
+/// rendered by the caller, since it needs the un-paginated spool list).
 #[component]
 pub fn SwatchGrid(
     items: Signal<Vec<SpoolResponse>>,
     locations: LocalResource<Result<Vec<LocationResponse>, ApiError>>,
     material_filter: RwSignal<Vec<String>>,
     available_materials: Signal<Vec<String>>,
+    pinned: RwSignal<HashSet<u32>>,
+    pinned_only: RwSignal<bool>,
 ) -> impl IntoView {
     let toggle_material = move |m: String| {
         material_filter.update(|set| {
@@ -45,6 +51,13 @@ pub fn SwatchGrid(
                 set.remove(pos);
             } else {
                 set.push(m);
+            }
+        });
+    };
+    let toggle_pin = move |id: u32| {
+        pinned.update(|set| {
+            if !set.remove(&id) {
+                set.insert(id);
             }
         });
     };
@@ -64,6 +77,13 @@ pub fn SwatchGrid(
                     </label>
                 }
             }).collect_view()}
+            <label class="checkbox-label">
+                <input type="checkbox"
+                    prop:checked=move || pinned_only.get()
+                    on:change=move |ev| pinned_only.set(event_target_checked(&ev))
+                />
+                "Pinned only"
+            </label>
         </div>
         <div class="swatch-grid">
             {move || items.get().into_iter().map(|sr| {
@@ -86,7 +106,13 @@ pub fn SwatchGrid(
                 let card_class = if sr.spool.archived { "swatch-card archived" } else { "swatch-card" };
                 view! {
                     <a href=format!("/spools/{id}") class=card_class>
-                        <div class="swatch-card-fill" style=style></div>
+                        <div class="swatch-card-fill" style=style>
+                            <button type="button" class="swatch-pin"
+                                class:pinned=move || pinned.get().contains(&id)
+                                title="Pin to palette"
+                                on:click=move |ev| { ev.prevent_default(); toggle_pin(id) }
+                            >"★"</button>
+                        </div>
                         <div class="swatch-card-meta">
                             <strong>{color_label}</strong>
                             <span>{name}</span>

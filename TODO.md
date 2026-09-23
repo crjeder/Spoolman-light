@@ -22,7 +22,7 @@ Archived 2026-09-22 with their manual verification steps still open:
 - [x] add color button next to the existing color field — "+"/"−" multi-color editor in spool create/edit (max 4), server guard. Fixed a WASM panic where "+" disposed row signals instead of adding a row (non-keyed list re-render tore down previous rows' reactive scope); switched to `<For>` keyed by a stable per-row id. openspec: multi-color-spool-edit
 - [x] reload database button (in settings?) — shipped in 1.7.0 (`POST /api/v1/reload` + Settings button)
 - [x] integrate https://github.com/Disane87/spoolman-filament-swatch — ported natively as the `/colors` swatch grid view instead of embedding/proxying the upstream app (would need CORS); not ported: its carousel/swipe UI, pin-favourites and palette export
-- [ ] swatch view: pin favourites / palette export — see `spool-color-swatch-view` openspec change
+- [x] swatch view: pin favourites / palette export — star toggle per card persisted to localStorage, "Pinned only" filter, "Export palette" downloads pinned spools as JSON (name + hex colors)
 
 ## Defects
 - [~] "HTTP 500: Internal Server Error" error on edit — root cause found: `/data` volume created root-owned, non-root container user can't write; fixed in Dockerfile, not yet verified against a real Docker build. -> use the username spoolman

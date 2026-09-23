@@ -1,5 +1,7 @@
 //! Shared reactive state — table state with localStorage persistence.
 
+use std::collections::HashSet;
+
 use leptos::prelude::*;
 use web_sys::window;
 
@@ -194,6 +196,25 @@ pub fn use_table_state(namespace: &'static str, default_sort: &'static str) -> T
         page_size,
         filter,
     }
+}
+
+const PINNED_SPOOLS_KEY: &str = "pinned.spools";
+
+/// Pinned spool ids for the swatch view's favourites/palette-export feature.
+/// Persisted in localStorage as a comma-separated list, global across tabs
+/// and views (a pin made in the color view stays pinned everywhere).
+pub fn use_pinned_spools() -> RwSignal<HashSet<u32>> {
+    let initial: HashSet<u32> = storage_get(PINNED_SPOOLS_KEY)
+        .unwrap_or_default()
+        .split(',')
+        .filter_map(|s| s.parse().ok())
+        .collect();
+    let pinned = RwSignal::new(initial);
+    Effect::new(move |_| {
+        let joined = pinned.get().iter().map(u32::to_string).collect::<Vec<_>>().join(",");
+        storage_set(PINNED_SPOOLS_KEY, &joined);
+    });
+    pinned
 }
 
 fn storage_get(key: &str) -> Option<String> {

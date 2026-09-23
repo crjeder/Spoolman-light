@@ -1112,7 +1112,7 @@ pub fn SpoolCreate() -> impl IntoView {
                     "Comment"
                     <textarea on:input=move |ev| comment.set(event_target_value(&ev))></textarea>
                 </label>
-                <button type="submit" class="btn btn-primary ">"Create"</button>
+                <button type="submit" class="btn btn-primary " disabled=move || location_id.get().is_none()>"Create"</button>
                 <a href="/spools" class="btn ">"Cancel"</a>
             </form>
         </div>
@@ -1311,7 +1311,7 @@ pub fn SpoolEdit() -> impl IntoView {
                         on:input=move |ev| comment.set(event_target_value(&ev))>
                     </textarea>
                 </label>
-                <button type="submit" class="btn btn-primary ">"Save"</button>
+                <button type="submit" class="btn btn-primary " disabled=move || location_id.get().is_none()>"Save"</button>
                 <a href=move || format!("/spools/{}", id()) class="btn ">"Cancel"</a>
             </form>
         </div>

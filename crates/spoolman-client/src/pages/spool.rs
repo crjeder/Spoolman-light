@@ -12,7 +12,7 @@ use crate::{
     components::{pagination::Pagination, spoolmandb_search::SpoolmanDbSearch, swatch_grid::SwatchGrid, table::ColHeader},
     format,
     spoolmandb::parse_material,
-    state::{color_distance_algorithm, color_thresholds, currency_symbol, date_format_setting, time_format_setting, use_table_state, ViewMode},
+    state::{color_distance_algorithm, color_thresholds, currency_symbol, date_format_setting, time_format_setting, use_pinned_spools, use_table_state, ViewMode},
     utils::color::{apply_finish_modifier, color_distance, hex_to_rgba, hue_sort_key},
 };
 use spoolman_types::requests::CreateFilament;
@@ -188,6 +188,8 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
     );
     let location_filter: RwSignal<Option<u32>> =
         RwSignal::new(sg("location", "").parse::<u32>().ok());
+    let pinned = use_pinned_spools();
+    let pinned_only = RwSignal::new(false);
 
     // Persist each filter back to sessionStorage on change (default value = cleared).
     Effect::new(move |_| crate::state::session_set("filter.spools.show_archived",
@@ -242,6 +244,7 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
             || material_filter.get().len() != available_materials.get().len()
             || (mode == ViewMode::Spool && location_filter.get().is_some())
             || (mode == ViewMode::Spool && color_level.get() != "off")
+            || (mode == ViewMode::Color && pinned_only.get())
             || show_archived.get()
     };
     let clear_filters = move |_| {
@@ -249,6 +252,7 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
         material_filter.set(available_materials.get_untracked());
         location_filter.set(None);
         color_level.set("off".to_string());
+        pinned_only.set(false);
         show_archived.set(false);
     };
 
@@ -325,7 +329,8 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
                         None => true, // invalid hex — don't filter
                     }
                 };
-                text_ok && material_ok && color_ok
+                let pin_ok = mode != ViewMode::Color || !pinned_only.get() || pinned.get().contains(&s.spool.id);
+                text_ok && material_ok && color_ok && pin_ok
             })
             .collect::<Vec<_>>()
     };
@@ -482,6 +487,21 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
                     {move || filters_active().then(|| view! {
                         <button type="button" class="btn" on:click=clear_filters>"Clear filters"</button>
                     })}
+                    {move || (mode == ViewMode::Color && !pinned.get().is_empty()).then(|| {
+                        let palette: Vec<_> = spools.get().and_then(|r| r.ok()).unwrap_or_default()
+                            .into_iter()
+                            .filter(|sr| pinned.get().contains(&sr.spool.id))
+                            .map(|sr| serde_json::json!({
+                                "name": sr.spool.color_name,
+                                "colors": sr.spool.colors.iter().map(|c| format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b)).collect::<Vec<_>>(),
+                            }))
+                            .collect();
+                        let json = serde_json::to_string_pretty(&palette).unwrap_or_default();
+                        let href = format!("data:application/json;charset=utf-8,{}", js_sys::encode_uri_component(&json));
+                        view! {
+                            <a class="btn" href=href download="palette.json">"Export palette"</a>
+                        }
+                    })}
                     <a href="/spools/new" class="btn btn-primary ">"+ New Spool"</a>
                 </div>
             </div>
@@ -494,6 +514,8 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
                             locations=locations
                             material_filter=material_filter
                             available_materials=available_materials
+                            pinned=pinned
+                            pinned_only=pinned_only
                         />
                         <Pagination page=ts.page page_size=ts.page_size total=total />
                     }.into_any()
@@ -1090,7 +1112,7 @@ pub fn SpoolCreate() -> impl IntoView {
                     "Comment"
                     <textarea on:input=move |ev| comment.set(event_target_value(&ev))></textarea>
                 </label>
-                <button type="submit" class="btn btn-primary ">"Create"</button>
+                <button type="submit" class="btn btn-primary " disabled=move || location_id.get().is_none()>"Create"</button>
                 <a href="/spools" class="btn ">"Cancel"</a>
             </form>
         </div>
@@ -1289,7 +1311,7 @@ pub fn SpoolEdit() -> impl IntoView {
                         on:input=move |ev| comment.set(event_target_value(&ev))>
                     </textarea>
                 </label>
-                <button type="submit" class="btn btn-primary ">"Save"</button>
+                <button type="submit" class="btn btn-primary " disabled=move || location_id.get().is_none()>"Save"</button>
                 <a href=move || format!("/spools/{}", id()) class="btn ">"Cancel"</a>
             </form>
         </div>

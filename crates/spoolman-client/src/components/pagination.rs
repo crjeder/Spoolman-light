@@ -17,6 +17,15 @@ pub fn Pagination(
 
     let next_disabled = move || page.get() + 1 >= total_pages();
 
+    // If a filter shrinks the result set, the remembered page can land past
+    // the new last page — snap back to it instead of showing an empty page.
+    Effect::new(move |_| {
+        let last = total_pages().saturating_sub(1);
+        if page.get() > last {
+            page.set(last);
+        }
+    });
+
     view! {
         <div class="pagination">
             <button class="btn btn-icon" title="Previous page"

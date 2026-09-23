@@ -41,5 +41,4 @@ Archived 2026-09-22 with their manual verification steps still open:
 - [x] remove the black square in the heading of the Material column after selecting a filter — dropped the `\u{25A0}` marker; the select already shows the active value
 - [x] color picker: add hex code input — `#rrggbb` text field beside the swatch in spool create/edit, synced to the color signal
 - [ ] repair icons in README
-- [ ] burger menu is not implemented
-- [ ] color swatches: issues: page 2 of 1 when filter changes. filters from spool are applied but should not
+- [x] color swatches: issues: page 2 of 1 when filter changes. filters from spool are applied but should not — Pagination clamps `page` to the last valid page when a filter shrinks the result set (fixes all three table/grid views); location and color-distance filters (table-only controls, no UI in the swatch view) no longer restrict or re-sort the color grid

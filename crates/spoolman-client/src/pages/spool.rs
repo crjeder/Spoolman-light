@@ -205,7 +205,9 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
 
     let spools = LocalResource::new(move || {
         let archived = show_archived.get();
-        let loc_id = location_filter.get();
+        // Location filter is a spool-table-only control; the swatch view has
+        // no UI to see or change it, so it must not silently restrict the grid.
+        let loc_id = if mode == ViewMode::Color { None } else { location_filter.get() };
         let _ = version.get();
         async move { api::list_spools(archived, loc_id).await }
     });
@@ -238,8 +240,8 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
     let filters_active = move || {
         !ts.filter.get().is_empty()
             || material_filter.get().len() != available_materials.get().len()
-            || location_filter.get().is_some()
-            || color_level.get() != "off"
+            || (mode == ViewMode::Spool && location_filter.get().is_some())
+            || (mode == ViewMode::Spool && color_level.get() != "off")
             || show_archived.get()
     };
     let clear_filters = move |_| {
@@ -259,10 +261,14 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
         });
     };
 
+    // The color-distance filter is a spool-table-only control with no UI in
+    // the swatch view, so it must not silently restrict or re-sort the grid.
+    let effective_color_level = move || if mode == ViewMode::Color { "off".to_string() } else { color_level.get() };
+
     let filtered = move || {
         let f = ts.filter.get().to_lowercase();
         let pick = color_pick.get();
-        let level = color_level.get();
+        let level = effective_color_level();
         let mat = material_filter.get();
         let loc_names: Vec<(u32, String)> = locations
             .get()
@@ -328,7 +334,7 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
     let sort_asc = ts.sort_asc;
     let sorted = move || {
         let mut items = filtered();
-        let level = color_level.get();
+        let level = effective_color_level();
         let pick = color_pick.get();
 
         // When a color level is active and the hex is valid, sort by ascending

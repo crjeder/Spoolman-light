@@ -1,4 +1,5 @@
 use chrono::{DateTime, NaiveDate, Utc};
+use leptos::ev;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use leptos_router::hooks::{use_navigate, use_params_map};
@@ -462,6 +463,45 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
             .collect::<Vec<_>>()
     };
 
+    // Colors view: endless scroll instead of pagination. `colors_visible`
+    // grows as the user nears the bottom of the page; it resets whenever a
+    // filter narrows/widens the result set.
+    let colors_visible = RwSignal::new(ts.page_size.get_untracked());
+    Effect::new(move |_| {
+        let _ = (
+            ts.filter.get(),
+            material_filter.get(),
+            pinned_only.get(),
+            show_archived.get(),
+            ts.sort_field.get(),
+            ts.sort_asc.get(),
+        );
+        colors_visible.set(ts.page_size.get_untracked());
+    });
+    let colors_items = move || sorted().into_iter().take(colors_visible.get()).collect::<Vec<_>>();
+
+    window_event_listener(ev::scroll, move |_| {
+        if mode != ViewMode::Color {
+            return;
+        }
+        if colors_visible.get_untracked() >= total.get_untracked() {
+            return;
+        }
+        let near_bottom = web_sys::window().is_some_and(|w| {
+            let scroll_y = w.scroll_y().unwrap_or(0.0);
+            let inner_h = w.inner_height().ok().and_then(|v| v.as_f64()).unwrap_or(0.0);
+            let doc_h = w
+                .document()
+                .and_then(|d| d.body())
+                .map(|b| b.scroll_height() as f64)
+                .unwrap_or(0.0);
+            scroll_y + inner_h >= doc_h - 300.0
+        });
+        if near_bottom {
+            colors_visible.update(|v| *v += ts.page_size.get_untracked());
+        }
+    });
+
     view! {
         <div class="page spool-list">
             <div class="page-header">
@@ -507,17 +547,20 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
             </div>
             <Suspense fallback=|| view! { <p>"Loading…"</p> }>
                 {if mode == ViewMode::Color {
-                    let page_items_signal = Signal::derive(page_items);
+                    let colors_items_signal = Signal::derive(colors_items);
                     view! {
                         <SwatchGrid
-                            items=page_items_signal
+                            items=colors_items_signal
                             locations=locations
                             material_filter=material_filter
                             available_materials=available_materials
                             pinned=pinned
                             pinned_only=pinned_only
                         />
-                        <Pagination page=ts.page page_size=ts.page_size total=total />
+                        <p class="load-more-hint">
+                            {move || (colors_visible.get() < total.get())
+                                .then(|| "Scroll for more…")}
+                        </p>
                     }.into_any()
                 } else { view! {
                 <table class="data-table">

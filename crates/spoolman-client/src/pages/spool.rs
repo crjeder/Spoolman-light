@@ -487,7 +487,12 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
     // The app shell scrolls `.main-content`, not `window` (`.app-shell` is
     // `height: 100vh; overflow: hidden`), so the listener must live on that
     // element rather than on `window`.
-    if mode == ViewMode::Color {
+    // Effect (not inline): the component body runs while building `<main>`,
+    // before it is attached to the DOM, so the selector would find nothing.
+    Effect::new(move |_| {
+        if mode != ViewMode::Color {
+            return;
+        }
         if let Some(main) = web_sys::window()
             .and_then(|w| w.document())
             .and_then(|d| d.query_selector(".main-content").ok().flatten())
@@ -512,7 +517,7 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
             // teardown if this page starts remounting often enough to matter.
             closure.forget();
         }
-    }
+    });
 
     view! {
         <div class="page spool-list">

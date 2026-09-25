@@ -506,6 +506,22 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
     // The app shell scrolls `.main-content`, not `window` (`.app-shell` is
     // `height: 100vh; overflow: hidden`), so the listener must live on that
     // element rather than on `window`.
+    // Grows the list when near the bottom, or when it doesn't overflow at all
+    // (tall window: no scrollbar, so no scroll event would ever fire).
+    let grow_if_needed = move || {
+        if colors_visible.get_untracked() >= total.get_untracked() {
+            return;
+        }
+        let needs_more = web_sys::window()
+            .and_then(|w| w.document())
+            .and_then(|d| d.query_selector(".main-content").ok().flatten())
+            .is_some_and(|el: web_sys::Element| {
+                el.scroll_top() as f64 + el.client_height() as f64 >= el.scroll_height() as f64 - 300.0
+            });
+        if needs_more {
+            colors_visible.update(|v| *v += ts.page_size.get_untracked());
+        }
+    };
     // Effect (not inline): the component body runs while building `<main>`,
     // before it is attached to the DOM, so the selector would find nothing.
     Effect::new(move |_| {
@@ -516,26 +532,21 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
             .and_then(|w| w.document())
             .and_then(|d| d.query_selector(".main-content").ok().flatten())
         {
-            let closure = wasm_bindgen::closure::Closure::<dyn Fn()>::new(move || {
-                if colors_visible.get_untracked() >= total.get_untracked() {
-                    return;
-                }
-                let near_bottom = web_sys::window()
-                    .and_then(|w| w.document())
-                    .and_then(|d| d.query_selector(".main-content").ok().flatten())
-                    .is_some_and(|el: web_sys::Element| {
-                        el.scroll_top() as f64 + el.client_height() as f64 >= el.scroll_height() as f64 - 300.0
-                    });
-                if near_bottom {
-                    colors_visible.update(|v| *v += ts.page_size.get_untracked());
-                }
-            });
+            let closure = wasm_bindgen::closure::Closure::<dyn Fn()>::new(grow_if_needed);
             let _ = main.add_event_listener_with_callback("scroll", closure.as_ref().unchecked_ref());
             // ponytail: leaked on route switches (Closure isn't Send/Sync, so
             // it can't go through Leptos's on_cleanup); upgrade to a proper
             // teardown if this page starts remounting often enough to matter.
             closure.forget();
         }
+    });
+    // Re-check after each render so a tall viewport keeps filling until it overflows.
+    Effect::new(move |_| {
+        if mode != ViewMode::Color {
+            return;
+        }
+        let _ = (colors_visible.get(), total.get());
+        request_animation_frame(grow_if_needed);
     });
 
     view! {

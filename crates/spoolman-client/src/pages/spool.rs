@@ -1025,7 +1025,6 @@ pub fn SpoolCreate() -> impl IntoView {
                     density: if entry.density > 0.0 { entry.density } else { 1.24 },
                     print_temp: entry.extruder_temp.map(|t| t as i32),
                     bed_temp: entry.bed_temp.map(|t| t as i32),
-                    spool_weight: entry.spool_weight,
                     min_print_temp: None,
                     max_print_temp: None,
                     min_bed_temp: None,

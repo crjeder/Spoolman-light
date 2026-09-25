@@ -309,7 +309,6 @@ pub fn FilamentShow() -> impl IntoView {
                             <dt>"Density"</dt><dd>{format::format_density(f.density)}</dd>
                             <dt>"Print temp"</dt><dd>{f.print_temp.map(|t| format!("{}°C", t)).unwrap_or_default()}</dd>
                             <dt>"Bed temp"</dt><dd>{f.bed_temp.map(|t| format!("{}°C", t)).unwrap_or_default()}</dd>
-                            <dt>"Spool weight"</dt><dd>{f.spool_weight.map(format::format_weight).unwrap_or_default()}</dd>
                             <dt>"Comment"</dt><dd>{f.comment.clone().unwrap_or_default()}</dd>
                         </dl>
                     }.into_any(),
@@ -359,7 +358,6 @@ pub fn FilamentCreate() -> impl IntoView {
                 density: density.get().parse().unwrap_or(1.24),
                 print_temp: print_temp.get().parse().ok(),
                 bed_temp: bed_temp.get().parse().ok(),
-                spool_weight: None,
                 min_print_temp: None,
                 max_print_temp: None,
                 min_bed_temp: None,

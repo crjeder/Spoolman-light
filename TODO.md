@@ -42,4 +42,4 @@ Archived 2026-09-22 with their manual verification steps still open:
 - [x] color picker: add hex code input — `#rrggbb` text field beside the swatch in spool create/edit, synced to the color signal
 - [x] repair icons in README
 - [x] color swatches: issues: page 2 of 1 when filter changes. filters from spool are applied but should not — Pagination clamps `page` to the last valid page when a filter shrinks the result set (fixes all three table/grid views); location and color-distance filters (table-only controls, no UI in the swatch view) no longer restrict or re-sort the color grid
-- [ ] color view: move the star into descripion field
+- [x] color view: move the star into descripion field

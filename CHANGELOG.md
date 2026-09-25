@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2026-09-25
+
+### Added
+
+- Spools can be archived and unarchived from the spool list and the spool
+  detail page with an icon button. Archiving a spool that still holds filament
+  asks for confirmation first, with a warning; empty spools archive straight
+  away. A spool counts as empty when its remaining filament is zero (or its
+  current weight is zero when no net weight is known).
+
 ## [1.9.0] - 2026-09-23
 
 ### Added

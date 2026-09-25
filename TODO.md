@@ -11,6 +11,7 @@ Archived 2026-09-22 with their manual verification steps still open:
 - [ ] icon buttons (`replace-buttons-with-icons`): visually check filament list, location list, spool detail and pagination
 - [ ] spool price (`spool-price-field`): check the `Price/kg` column renders, sorts, and shows a dash when no price
 - [ ] filament link (`spool-details-filament-link`): check the link on the spool detail page navigates correctly (the spool list column 1 deliberately links to the spool, not the filament)
+- [ ] archive spool (`archive-spool`): run `scripts/run-e2e.sh` in WSL to check `tests/e2e/tests/archive.spec.ts`; eyeball the actions cell width with the extra button
 - [x] location required (`validate-location-required-spool`): spool create/edit submit buttons now `disabled` when `location_id` is unset. Server-side 422 enforcement was already in place.
 
 ## Enhancements

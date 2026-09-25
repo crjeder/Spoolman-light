@@ -501,7 +501,7 @@ body.dark .success {
 .data-table td.actions {
     white-space: nowrap;
     /* room for the extra Cancel button so the row's buttons don't shift when Delete asks for confirmation */
-    min-width: 10rem;
+    min-width: 13rem;
 }
 
 .data-table th.num,

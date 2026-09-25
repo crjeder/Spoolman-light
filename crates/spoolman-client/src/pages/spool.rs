@@ -6,6 +6,7 @@ use wasm_bindgen::JsCast;
 use spoolman_types::{
     models::{Rgba, SurfaceFinish},
     requests::{CreateSpool, UpdateSpool},
+    responses::SpoolResponse,
 };
 
 use crate::{
@@ -147,6 +148,13 @@ fn color_rows_editor(rows: RwSignal<Vec<ColorRow>>) -> impl IntoView {
     }
 }
 
+/// True when no filament is left; falls back to the scale reading when net weight is unknown.
+fn is_empty(sr: &SpoolResponse) -> bool {
+    sr.remaining_filament.unwrap_or(sr.spool.current_weight) <= 0.0
+}
+
+const NOT_EMPTY_WARNING: &str = "Spool is not empty - archive anyway?";
+
 // ── List ───────────────────────────────────────────────────────────────────────
 
 #[component]
@@ -207,6 +215,7 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
 
     let version = RwSignal::new(0u32);
     let confirm_delete: RwSignal<Option<u32>> = RwSignal::new(None);
+    let confirm_archive: RwSignal<Option<u32>> = RwSignal::new(None);
 
     let locations = LocalResource::new(|| async { api::list_locations().await });
 
@@ -266,6 +275,16 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
             if api::delete_spool(id).await.is_ok() {
                 version.update(|v| *v += 1);
                 confirm_delete.set(None);
+            }
+        });
+    };
+
+    let on_archive = move |id: u32, archived: bool| {
+        confirm_archive.set(None);
+        spawn_local(async move {
+            let body = UpdateSpool { archived: Some(archived), ..Default::default() };
+            if api::update_spool(id, &body).await.is_ok() {
+                version.update(|v| *v += 1);
             }
         });
     };
@@ -736,6 +755,8 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
                                 .map(|p| format::format_currency(p as f64, &cur_sym.0.get()))
                                 .unwrap_or_else(|| "—".into());
                             let material = sr.filament.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default();
+                            let archived = sr.spool.archived;
+                            let empty = is_empty(&sr);
                             view! {
                                 <tr class=if sr.spool.archived { "archived" } else { "" }>
                                     <td><a href=format!("/spools/{id}")>{name}</a></td>
@@ -770,6 +791,34 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
                                         <a href=format!("/spools/{id}") class="btn btn-icon" title="View">"\u{1F441}"</a>
                                         " "
                                         <a href=format!("/spools/{id}/edit") class="btn btn-icon" title="Edit">"\u{270F}"</a>
+                                        " "
+                                        {move || if archived {
+                                            view! {
+                                                <button class="btn btn-icon"
+                                                    on:click=move |_| on_archive(id, false)
+                                                    title="Unarchive"
+                                                >"\u{21A9}"</button>
+                                            }.into_any()
+                                        } else if confirm_archive.get() == Some(id) {
+                                            view! {
+                                                <button class="btn btn-icon btn-danger"
+                                                    on:click=move |_| on_archive(id, true)
+                                                    title=NOT_EMPTY_WARNING
+                                                >"\u{1F4E6}"</button>
+                                                " "
+                                                <button class="btn btn-icon"
+                                                    on:click=move |_| confirm_archive.set(None)
+                                                    title="Cancel"
+                                                >"\u{2715}"</button>
+                                            }.into_any()
+                                        } else {
+                                            view! {
+                                                <button class="btn btn-icon"
+                                                    on:click=move |_| if empty { on_archive(id, true) } else { confirm_archive.set(Some(id)) }
+                                                    title="Archive"
+                                                >"\u{1F4E6}"</button>
+                                            }.into_any()
+                                        }}
                                         " "
                                         {move || if confirm_delete.get() == Some(id) {
                                             view! {
@@ -815,6 +864,7 @@ pub fn SpoolShow() -> impl IntoView {
     let cur_sym = currency_symbol();
     let navigate = use_navigate();
     let confirm_delete = RwSignal::new(false);
+    let confirm_archive = RwSignal::new(false);
     let df = date_format_setting();
     let tf = time_format_setting();
 
@@ -844,6 +894,18 @@ pub fn SpoolShow() -> impl IntoView {
         });
     });
 
+    let archive_state = move || spool.get().and_then(|r| r.ok()).map(|sr| (sr.spool.archived, is_empty(&sr)));
+    let set_archived = move |archived: bool| {
+        confirm_archive.set(false);
+        let id = id();
+        spawn_local(async move {
+            let body = UpdateSpool { archived: Some(archived), ..Default::default() };
+            if api::update_spool(id, &body).await.is_ok() {
+                spool.refetch();
+            }
+        });
+    };
+
     view! {
         <div class="page spool-show">
             // Action buttons are outside the reactive Suspense block because
@@ -854,6 +916,21 @@ pub fn SpoolShow() -> impl IntoView {
                 <div class="page-actions">
                     <a href=move || format!("/spools/{}/edit", id()) class="btn btn-icon" title="Edit">"\u{270F}"</a>
                     <button on:click=move |e| on_clone.with_value(|f| f(e)) class="btn btn-icon" title="Clone">"\u{29C9}"</button>
+                    {move || archive_state().map(|(archived, empty)| if archived {
+                        view! {
+                            <button on:click=move |_| set_archived(false) class="btn btn-icon" title="Unarchive">"\u{21A9}"</button>
+                        }.into_any()
+                    } else if confirm_archive.get() {
+                        view! {
+                            <span class="error">{NOT_EMPTY_WARNING}</span>
+                            <button on:click=move |_| set_archived(true) class="btn btn-icon btn-danger" title="Confirm archive">"\u{1F4E6}"</button>
+                            <button on:click=move |_| confirm_archive.set(false) class="btn btn-icon" title="Cancel">"\u{2715}"</button>
+                        }.into_any()
+                    } else {
+                        view! {
+                            <button on:click=move |_| if empty { set_archived(true) } else { confirm_archive.set(true) } class="btn btn-icon" title="Archive">"\u{1F4E6}"</button>
+                        }.into_any()
+                    })}
                     {move || if confirm_delete.get() {
                         view! {
                             <button on:click=move |e| on_delete.with_value(|f| f(e)) class="btn btn-icon btn-danger" title="Confirm delete">"\u{1F5D1}"</button>

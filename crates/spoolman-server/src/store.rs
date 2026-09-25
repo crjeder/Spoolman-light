@@ -274,7 +274,6 @@ impl JsonStore {
             density: req.density,
             print_temp: req.print_temp,
             bed_temp: req.bed_temp,
-            spool_weight: req.spool_weight,
             min_print_temp: req.min_print_temp,
             max_print_temp: req.max_print_temp,
             min_bed_temp: req.min_bed_temp,
@@ -305,7 +304,6 @@ impl JsonStore {
         }
         apply_option(&mut filament.print_temp, req.print_temp);
         apply_option(&mut filament.bed_temp, req.bed_temp);
-        apply_option(&mut filament.spool_weight, req.spool_weight);
         apply_option(&mut filament.min_print_temp, req.min_print_temp);
         apply_option(&mut filament.max_print_temp, req.max_print_temp);
         apply_option(&mut filament.min_bed_temp, req.min_bed_temp);

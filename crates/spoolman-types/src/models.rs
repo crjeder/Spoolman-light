@@ -406,8 +406,6 @@ pub struct Filament {
     pub print_temp: Option<i32>,
     /// Nominal bed temperature in °C.
     pub bed_temp: Option<i32>,
-    /// Empty spool weight in grams (informational, not used for tracking).
-    pub spool_weight: Option<f32>,
     pub min_print_temp: Option<i32>,
     pub max_print_temp: Option<i32>,
     pub min_bed_temp: Option<i32>,

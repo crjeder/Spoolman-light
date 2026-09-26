@@ -258,6 +258,10 @@ pub fn rgba_to_oklch(c: &Rgba) -> (f32, f32, f32) {
 /// for sort purposes — hue is unstable at low chroma.
 const ACHROMATIC_CHROMA: f32 = 0.02;
 
+/// Below this OkLab lightness a colour is near-black: any tint (e.g. #0a0000
+/// "black" filament) is imperceptible, so it sorts with the greys.
+const NEAR_BLACK_LIGHTNESS: f32 = 0.2;
+
 /// Fallback colour used for an empty `colors` slice — matches the swatch
 /// fallback already painted in the spool table.
 const NO_COLOR_FALLBACK: Rgba = Rgba { r: 200, g: 200, b: 200, a: 255 };
@@ -269,7 +273,7 @@ const NO_COLOR_FALLBACK: Rgba = Rgba { r: 200, g: 200, b: 200, a: 255 };
 pub fn hue_sort_key(colors: &[Rgba]) -> (bool, f32, f32) {
     let c = colors.first().unwrap_or(&NO_COLOR_FALLBACK);
     let (lightness, chroma, hue) = rgba_to_oklch(c);
-    if chroma < ACHROMATIC_CHROMA {
+    if chroma < ACHROMATIC_CHROMA || lightness < NEAR_BLACK_LIGHTNESS {
         (true, 0.0, lightness)
     } else {
         (false, hue, lightness)

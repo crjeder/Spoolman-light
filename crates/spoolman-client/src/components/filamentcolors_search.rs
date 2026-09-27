@@ -25,13 +25,14 @@ pub fn FilamentColorsSearch(on_select: Callback<FilamentColorsSwatch>) -> impl I
         if q.is_empty() {
             return vec![];
         }
-        let q_lower = q.to_lowercase();
+        let tokens: Vec<String> = q.to_lowercase().split_whitespace().map(String::from).collect();
         match db.get() {
             Some(Ok(entries)) => entries
                 .into_iter()
                 .filter(|e| {
-                    e.manufacturer.name.to_lowercase().contains(&q_lower)
-                        || e.color_name.to_lowercase().contains(&q_lower)
+                    let mfr = e.manufacturer.name.to_lowercase();
+                    let color = e.color_name.to_lowercase();
+                    tokens.iter().all(|t| mfr.contains(t) || color.contains(t))
                 })
                 .take(10)
                 .collect(),

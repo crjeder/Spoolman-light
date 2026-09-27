@@ -11,7 +11,8 @@ use spoolman_types::{
 
 use crate::{
     api,
-    components::{pagination::Pagination, spoolmandb_search::SpoolmanDbSearch, swatch_grid::SwatchGrid, table::ColHeader},
+    components::{color_swatch::color_swatch_view, filamentcolors_search::FilamentColorsSearch, pagination::Pagination, spoolmandb_search::SpoolmanDbSearch, swatch_grid::SwatchGrid, table::ColHeader},
+    filamentcolors::FilamentColorsSwatch,
     format,
     spoolmandb::parse_material,
     state::{color_distance_algorithm, color_thresholds, currency_symbol, date_format_setting, time_format_setting, use_pinned_spools, use_table_state, ViewMode},
@@ -773,12 +774,7 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
                                     <td><a href=format!("/spools/{id}")>{name}</a></td>
                                     <td>{material}</td>
                                     <td>
-                                        {colors.into_iter().map(|c| view! {
-                                            <span class="color-swatch"
-                                                style=format!("background:rgba({},{},{},{})",
-                                                    c.r, c.g, c.b, c.a as f32/255.0)>
-                                            </span>
-                                        }).collect_view()}
+                                        {color_swatch_view(&colors, sr.spool.swatch_image.as_deref())}
                                         {sr.spool.color_name.clone().unwrap_or_default()}
                                         {match sr.spool.finish {
                                             SurfaceFinish::Standard => None,
@@ -977,16 +973,21 @@ pub fn SpoolShow() -> impl IntoView {
                                         .unwrap_or_else(|| loc_id.to_string()),
                                 }
                             }</dd>
-                            <dt>"Colors"</dt><dd>{sr.spool.colors.iter().map(|c| {
-                                let hex = format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b);
-                                view! {
-                                    <span class="color-swatch"
-                                        style=format!("background:rgba({},{},{},{})",
-                                            c.r, c.g, c.b, c.a as f32/255.0)>
-                                    </span>
-                                    <span class="color-hex">{hex}</span>
+                            <dt>"Colors"</dt><dd>{
+                                match sr.spool.swatch_image.clone() {
+                                    Some(id) => color_swatch_view(&sr.spool.colors, Some(&id)),
+                                    None => sr.spool.colors.iter().map(|c| {
+                                        let hex = format!("#{:02x}{:02x}{:02x}", c.r, c.g, c.b);
+                                        view! {
+                                            <span class="color-swatch"
+                                                style=format!("background:rgba({},{},{},{})",
+                                                    c.r, c.g, c.b, c.a as f32/255.0)>
+                                            </span>
+                                            <span class="color-hex">{hex}</span>
+                                        }
+                                    }).collect_view().into_any(),
                                 }
-                            }).collect_view()}</dd>
+                            }</dd>
                             <dt>"Color name"</dt><dd>{sr.spool.color_name.clone().unwrap_or_default()}</dd>
                             <dt>"Finish"</dt><dd>{finish_label(sr.spool.finish)}</dd>
                             <dt>"Initial weight"</dt><dd>{format::format_weight(sr.spool.initial_weight)}</dd>
@@ -1027,6 +1028,8 @@ pub fn SpoolCreate() -> impl IntoView {
     let location_id = RwSignal::new(Option::<u32>::None);
     let comment = RwSignal::new(String::new());
     let error = RwSignal::new(Option::<String>::None);
+    // Set when a filamentcolors.xyz swatch image has been downloaded and stored server-side.
+    let swatch_image: RwSignal<Option<String>> = RwSignal::new(None);
     // Cache of known filaments — updated when LocalResource resolves and when auto-create adds one.
     let filaments_list: RwSignal<Vec<spoolman_types::models::Filament>> = RwSignal::new(vec![]);
     // Notification shown when a filament is auto-created by the DB lookup.
@@ -1135,6 +1138,24 @@ pub fn SpoolCreate() -> impl IntoView {
         }
     });
 
+    // filamentcolors.xyz selection: apply the measured colour and download its swatch image.
+    let on_fc_select = Callback::new(move |swatch: FilamentColorsSwatch| {
+        if let Some(rgba) = crate::utils::color::hex_to_rgba(&format!("#{}", swatch.hex_color)) {
+            let hex = format!("#{:02x}{:02x}{:02x}", rgba.r, rgba.g, rgba.b);
+            color_rows.with_untracked(|v| v[0].1.set(hex));
+        }
+        color_name.set(swatch.color_name.clone());
+        if let Some(url) = swatch.card_img.clone() {
+            swatch_image.set(None);
+            spawn_local(async move {
+                match api::store_swatch_image(&url).await {
+                    Ok(id) => swatch_image.set(Some(id)),
+                    Err(e) => error.set(Some(e.to_string())),
+                }
+            });
+        }
+    });
+
     let on_submit = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();
         if location_id.get().is_none() {
@@ -1148,6 +1169,7 @@ pub fn SpoolCreate() -> impl IntoView {
                 filament_id: filament_id.get(),
                 colors: rows_to_colors(color_rows),
                 color_name: Some(color_name.get()).filter(|s| !s.is_empty()),
+                swatch_image: swatch_image.get_untracked(),
                 finish: Some(finish.get()),
                 location_id: location_id.get(),
                 initial_weight: weight,
@@ -1180,6 +1202,7 @@ pub fn SpoolCreate() -> impl IntoView {
                 on_select=on_db_select
                 on_search_state=Callback::new(move |state| search_state.set(state))
             />
+            <FilamentColorsSearch on_select=on_fc_select />
             <form on:submit=on_submit>
                 <label>
                     "Filament"
@@ -1286,6 +1309,7 @@ pub fn SpoolEdit() -> impl IntoView {
     let last_used_was_none = RwSignal::new(false);
     let comment = RwSignal::new(String::new());
     let error = RwSignal::new(Option::<String>::None);
+    let swatch_image: RwSignal<Option<String>> = RwSignal::new(None);
 
     // Pre-fill once loaded.
     Effect::new(move |_| {
@@ -1312,6 +1336,7 @@ pub fn SpoolEdit() -> impl IntoView {
                 .collect();
             color_rows.set(if rows.is_empty() { vec![new_color_row()] } else { rows });
             color_name.set(sr.spool.color_name.clone().unwrap_or_default());
+            swatch_image.set(sr.spool.swatch_image.clone());
             finish.set(sr.spool.finish);
             location_id.set(sr.spool.location_id);
             let today = || Utc::now().format("%Y-%m-%d").to_string();
@@ -1330,6 +1355,24 @@ pub fn SpoolEdit() -> impl IntoView {
                     .unwrap_or_else(today),
             );
             comment.set(sr.spool.comment.clone().unwrap_or_default());
+        }
+    });
+
+    // filamentcolors.xyz selection: apply the measured colour and download its swatch image.
+    let on_fc_select = Callback::new(move |swatch: FilamentColorsSwatch| {
+        if let Some(rgba) = crate::utils::color::hex_to_rgba(&format!("#{}", swatch.hex_color)) {
+            let hex = format!("#{:02x}{:02x}{:02x}", rgba.r, rgba.g, rgba.b);
+            color_rows.with_untracked(|v| v[0].1.set(hex));
+        }
+        color_name.set(swatch.color_name.clone());
+        if let Some(url) = swatch.card_img.clone() {
+            swatch_image.set(None);
+            spawn_local(async move {
+                match api::store_swatch_image(&url).await {
+                    Ok(id) => swatch_image.set(Some(id)),
+                    Err(e) => error.set(Some(e.to_string())),
+                }
+            });
         }
     });
 
@@ -1365,6 +1408,7 @@ pub fn SpoolEdit() -> impl IntoView {
                 price: price.get().parse::<f32>().ok(),
                 colors: Some(rows_to_colors(color_rows)),
                 color_name: Some(color_name.get()),
+                swatch_image: swatch_image.get_untracked(),
                 finish: Some(finish.get()),
                 location_id: location_id.get(),
                 first_used: parse_dt(prune_default(first_used.get(), first_used_was_none.get())),
@@ -1383,6 +1427,7 @@ pub fn SpoolEdit() -> impl IntoView {
         <div class="page spool-edit">
             <h1>"Edit Spool"</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
+            <FilamentColorsSearch on_select=on_fc_select />
             <form on:submit=on_submit>
                 <label>
                     "Current weight (g)"

@@ -564,6 +564,19 @@ body.dark .success {
     border: 1px solid var(--border);
 }
 
+.color-swatch-image {
+    object-fit: cover;
+}
+
+.filamentcolors-thumb {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
 .finish-badge {
     display: inline-block;
     margin-left: 6px;

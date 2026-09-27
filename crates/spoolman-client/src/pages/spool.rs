@@ -756,7 +756,11 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
                     <tbody>
                         {move || page_items().into_iter().map(|sr| {
                             let id = sr.spool.id;
-                            let name = sr.filament.display_name();
+                            let name = [sr.filament.manufacturer.as_deref(), sr.filament.material_modifier.as_deref()]
+                                .into_iter()
+                                .flatten()
+                                .collect::<Vec<_>>()
+                                .join(" ");
                             let colors = if sr.spool.colors.is_empty() {
                                 vec![Rgba { r: 200, g: 200, b: 200, a: 255 }]
                             } else {
@@ -919,7 +923,10 @@ pub fn SpoolShow() -> impl IntoView {
             // on_clone and on_delete use the `id` signal directly, not `sr`.
             // Placing them inside {move ||...} would make that closure FnOnce.
             <div class="page-header">
-                <h1>"Spool #"{move || id()}</h1>
+                <h1>{move || spool.get().and_then(|r| r.ok()).map(|sr| {
+                    [sr.filament.manufacturer.clone(), sr.filament.material.as_ref().map(|m| m.abbreviation().to_string())]
+                        .into_iter().flatten().collect::<Vec<_>>().join(" ")
+                }).filter(|s| !s.is_empty()).unwrap_or_else(|| format!("Spool #{}", id()))}</h1>
                 <div class="page-actions">
                     <a href=move || format!("/spools/{}/edit", id()) class="btn btn-icon" title="Edit">"\u{270F}"</a>
                     <button on:click=move |e| on_clone.with_value(|f| f(e)) class="btn btn-icon" title="Clone">"\u{29C9}"</button>
@@ -1425,7 +1432,10 @@ pub fn SpoolEdit() -> impl IntoView {
 
     view! {
         <div class="page spool-edit">
-            <h1>"Edit Spool"</h1>
+            <h1>{move || spool.get().and_then(|r| r.ok()).map(|sr| {
+                [sr.filament.manufacturer.clone(), sr.filament.material.as_ref().map(|m| m.abbreviation().to_string())]
+                    .into_iter().flatten().collect::<Vec<_>>().join(" ")
+            }).filter(|s| !s.is_empty()).unwrap_or_else(|| "Edit Spool".to_string())}</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
             <FilamentColorsSearch on_select=on_fc_select />
             <form on:submit=on_submit>

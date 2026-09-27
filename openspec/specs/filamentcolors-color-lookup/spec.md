@@ -29,7 +29,9 @@ The system SHALL fetch swatch data from the filamentcolors.xyz public API (`http
 - **THEN** the search panel displays an "unavailable" message
 
 ### Requirement: filamentcolors.xyz search panel on spool create/edit
-The system SHALL display an inline "Search filamentcolors.xyz" panel on the Spool Create and Spool Edit forms, alongside the existing SpoolmanDB search panel. The panel SHALL contain a text input and, as the user types, SHALL filter the cached swatch list client-side (case-insensitive match against manufacturer and color name) and display up to 10 matching results, each showing a thumbnail, manufacturer, and color name. The panel is optional: the form SHALL remain fully usable without ever opening or using it.
+The system SHALL display an inline "Search filamentcolors.xyz" panel on the Spool Create and Spool Edit forms, alongside the existing SpoolmanDB search panel. The panel SHALL contain a text input and, as the user types, SHALL filter the cached swatch list client-side and display up to 10 matching results, each showing a thumbnail, manufacturer, and color name. The panel is optional: the form SHALL remain fully usable without ever opening or using it.
+
+The filter SHALL split the query on whitespace into tokens and match a swatch when every token is a case-insensitive substring of the swatch's manufacturer or color name (checked independently per token, so a query combining both fields, e.g. `<manufacturer> <color>`, matches swatches where each word is found in either field).
 
 #### Scenario: Panel is present on Spool Create
 - **WHEN** the user navigates to the New Spool page
@@ -42,6 +44,10 @@ The system SHALL display an inline "Search filamentcolors.xyz" panel on the Spoo
 #### Scenario: Typing filters results
 - **WHEN** the user types a query into the panel's search input
 - **THEN** up to 10 matching swatches are listed, each with a thumbnail, manufacturer, and color name
+
+#### Scenario: Combined manufacturer and color query matches
+- **WHEN** the user types `Prusament Galaxy Black` (manufacturer and color name as a single query)
+- **THEN** swatches whose manufacturer contains "Prusament" and whose color name contains "Galaxy" and "Black" are listed
 
 #### Scenario: No matches shows empty state
 - **WHEN** the query matches no cached swatches

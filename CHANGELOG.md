@@ -5,17 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.0] - 2026-09-27
-
-### Added
-
-- Optional filamentcolors.xyz lookup on the spool create and edit forms,
-  alongside the existing SpoolmanDB search. Selecting a swatch sets the
-  spool's colour to its measured value and downloads its photo, which is then
-  shown in place of the flat colour swatch in the spool list, spool detail
-  view, and `/colors` grid wherever a spool has one.
-
-## [1.10.0] - 2026-09-25
+## [1.9.4] - 2026-09-27
 
 ### Added
 
@@ -24,6 +14,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   asks for confirmation first, with a warning; empty spools archive straight
   away. A spool counts as empty when its remaining filament is zero (or its
   current weight is zero when no net weight is known).
+
+### Fixed
+
+- The colors view did not load more swatches on mount when the initial page
+  was too short to fill the viewport, leaving the list stuck below its total
+  count until the user scrolled.
+- The delete confirm button in table row actions no longer shifts neighboring
+  buttons, since the actions cell now reserves its width up front.
+
+### Removed
+
+- The unused `spool_weight` field was dropped from the filament model,
+  requests, server store and client UI. Existing data files that still
+  contain it continue to load.
+
+## [1.9.2] - 2026-09-27
+
+### Added
+
+- The colors view loads more swatches as you scroll instead of paginating,
+  and the pin toggle moved into the color card's description.
+
+### Fixed
+
+- The colors view's scroll listener was attached before its scroll
+  container existed in the DOM, so scrolling past the first page never
+  loaded more swatches. It is now attached after the page mounts.
 
 ## [1.9.0] - 2026-09-23
 

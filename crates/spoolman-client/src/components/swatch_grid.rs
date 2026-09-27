@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use leptos::prelude::*;
 use spoolman_types::responses::{LocationResponse, SpoolResponse};
 
-use crate::{api::ApiError, format};
+use crate::{api::{swatch_image_url, ApiError}, format};
 
 /// CSS `background` value for a spool's colour(s): a flat fill for one colour,
 /// an equal-width hard-stop gradient for two to four. Empty `colors` falls
@@ -102,7 +102,13 @@ pub fn SwatchGrid(
                         .and_then(|ls| ls.into_iter().find(|l| l.location.id == lid))
                         .map(|l| l.location.name)
                 }).unwrap_or_else(|| "\u{2014}".to_string());
-                let style = fill_style(&sr.spool.colors);
+                let style = match &sr.spool.swatch_image {
+                    Some(id) => format!(
+                        "background-image: url('{}'); background-size: cover; background-position: center",
+                        swatch_image_url(id)
+                    ),
+                    None => fill_style(&sr.spool.colors),
+                };
                 let card_class = if sr.spool.archived { "swatch-card archived" } else { "swatch-card" };
                 view! {
                     <a href=format!("/spools/{id}") class=card_class>

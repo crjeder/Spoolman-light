@@ -7,7 +7,7 @@ Provide a colour-first alternative to the spool table: a card grid at `/colors` 
 ## Requirements
 
 ### Requirement: Colour swatch view renders spools as a card grid
-The frontend SHALL provide a colour swatch view at the `/colors` route, rendering the spool list as a grid of cards instead of a table. Each card SHALL display the spool's colour(s) as its fill, and SHALL be labelled with the colour name (falling back to the first colour's `#rrggbb` value when `color_name` is absent), the filament display name, the material abbreviation, the remaining weight and the location name. Each card SHALL link to `/spools/{id}`. Archived spools SHALL be visually de-emphasised in the same way archived table rows are.
+The frontend SHALL provide a colour swatch view at the `/colors` route, rendering the spool list as a grid of cards instead of a table. Each card SHALL display the spool's colour(s) as its fill, and SHALL be labelled with the colour name (falling back to the first colour's `#rrggbb` value when `color_name` is absent), the filament display name, the material abbreviation, the remaining weight and the location name. Each card SHALL link to `/spools/{id}`. Archived spools SHALL be visually de-emphasised in the same way archived table rows are. When a spool has a `swatch_image` reference, its card SHALL use the stored swatch image as its fill instead of the flat colour fill.
 
 #### Scenario: Grid renders one card per spool
 - **WHEN** the user navigates to `/colors` and the spool list contains 12 spools within the current page size
@@ -28,6 +28,14 @@ The frontend SHALL provide a colour swatch view at the `/colors` route, renderin
 #### Scenario: Archived spool card is de-emphasised
 - **WHEN** archived spools are shown and one of them is rendered as a card
 - **THEN** that card carries the archived styling used for archived table rows
+
+#### Scenario: Card uses swatch image when present
+- **WHEN** a spool has a `swatch_image` reference
+- **THEN** its card is filled with the stored swatch image instead of the flat colour fill
+
+#### Scenario: Card without swatch image uses flat colour fill
+- **WHEN** a spool has no `swatch_image` reference
+- **THEN** its card renders the flat colour fill as before this feature existed
 
 ### Requirement: Multi-colour spools render as hard-stop bands
 A card for a spool with a single colour SHALL be filled with that colour. A card for a spool with two to four colours SHALL be filled with equal-width bands of those colours, left to right, with hard stops and no blending. A spool with no stored colours SHALL be filled with the same neutral fallback colour used by the spool table.

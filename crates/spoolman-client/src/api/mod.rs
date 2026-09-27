@@ -220,6 +220,30 @@ pub async fn search_spoolmandb(q: &str) -> Result<Vec<SpoolmanDbEntry>, ApiError
     .await
 }
 
+// ── Swatch images (filamentcolors.xyz) ──────────────────────────────────────────
+
+#[derive(serde::Serialize)]
+struct StoreSwatchImageRequest<'a> {
+    url: &'a str,
+}
+
+#[derive(serde::Deserialize)]
+struct StoreSwatchImageResponse {
+    id: String,
+}
+
+/// Ask the server to download and store a swatch image, returning its stable id.
+pub async fn store_swatch_image(url: &str) -> Result<String, ApiError> {
+    let resp: StoreSwatchImageResponse =
+        post_json("/api/v1/swatch-image", &StoreSwatchImageRequest { url }).await?;
+    Ok(resp.id)
+}
+
+/// URL to fetch a previously stored swatch image by its id.
+pub fn swatch_image_url(id: &str) -> String {
+    format!("/api/v1/swatch-image/{id}")
+}
+
 fn urlencoding_encode(s: &str) -> String {
     s.chars()
         .flat_map(|c| {

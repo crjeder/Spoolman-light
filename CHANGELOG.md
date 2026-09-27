@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.0] - 2026-09-27
+
+### Added
+
+- Optional filamentcolors.xyz lookup on the spool create and edit forms,
+  alongside the existing SpoolmanDB search. Selecting a swatch sets the
+  spool's colour to its measured value and downloads its photo, which is then
+  shown in place of the flat colour swatch in the spool list, spool detail
+  view, and `/colors` grid wherever a spool has one.
+
 ## [1.10.0] - 2026-09-25
 
 ### Added

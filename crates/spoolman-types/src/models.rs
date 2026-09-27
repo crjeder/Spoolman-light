@@ -424,6 +424,9 @@ pub struct Spool {
     pub colors: Vec<Rgba>,
     /// Human-readable color name (e.g. "Galaxy Black").
     pub color_name: Option<String>,
+    /// Reference (stored filename) to a downloaded filamentcolors.xyz swatch image, if any.
+    #[serde(default)]
+    pub swatch_image: Option<String>,
     /// Total weight at creation time (spool + filament), in grams (scale reading).
     pub initial_weight: f32,
     /// Latest scale reading (spool + filament), in grams.

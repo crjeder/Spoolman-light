@@ -4,6 +4,7 @@ pub mod health;
 pub mod location;
 pub mod other;
 pub mod spool;
+pub mod swatch_image;
 
 use crate::{config::Config, store::JsonStore};
 use axum::{
@@ -37,6 +38,7 @@ pub fn build_router(store: JsonStore, cfg: &Config) -> Router {
         .nest("/api/v1/filament", filament::router())
         .nest("/api/v1/spool", spool::router())
         .nest("/api/v1/location", location::router())
+        .nest("/api/v1/swatch-image", swatch_image::router())
         .nest("/api/v1", other::router())
         .merge(health::router())
         .with_state(store);

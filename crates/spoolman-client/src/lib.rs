@@ -1,6 +1,7 @@
 pub mod api;
 pub mod app;
 pub mod components;
+pub mod filamentcolors;
 pub mod format;
 pub mod pages;
 pub mod spoolmandb;

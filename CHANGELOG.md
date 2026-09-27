@@ -15,6 +15,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   away. A spool counts as empty when its remaining filament is zero (or its
   current weight is zero when no net weight is known).
 
+## [1.9.2] - 2026-09-27
+
+### Added
+
+- The colors view loads more swatches as you scroll instead of paginating,
+  and the pin toggle moved into the color card's description.
+
+### Fixed
+
+- The colors view's scroll listener was attached before its scroll
+  container existed in the DOM, so scrolling past the first page never
+  loaded more swatches. It is now attached after the page mounts.
+
 ## [1.9.0] - 2026-09-23
 
 ### Added

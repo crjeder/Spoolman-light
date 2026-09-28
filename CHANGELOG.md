@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The filamentcolors.xyz search now splits a `<manufacturer> <color>` query
   into separate words and matches each against either field, instead of
   requiring the whole query as one substring.
+- Near-black colours with a faint tint (e.g. `#0a0000`) now sort with the
+  greys in the colors view instead of among the reds.
 
 ## [1.9.4] - 2026-09-27
 

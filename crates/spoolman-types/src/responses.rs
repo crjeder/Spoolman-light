@@ -20,7 +20,7 @@ impl SpoolResponse {
     pub fn new(spool: Spool, filament: Filament) -> Self {
         // initial_weight of 0 means "not set yet" (e.g. imported data) — weight math is meaningless until it is.
         let has_initial_weight = spool.initial_weight != 0.0;
-        let used_weight = has_initial_weight.then(|| spool.initial_weight - spool.current_weight);
+        let used_weight = has_initial_weight.then_some(spool.initial_weight - spool.current_weight);
         let remaining_filament = used_weight.and_then(|uw| spool.net_weight.map(|nw| nw - uw));
         let price_per_kg = if has_initial_weight {
             spool.price.map(|p| {

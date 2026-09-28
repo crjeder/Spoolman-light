@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.1] - 2026-09-28
+
+### Added
+
+- The spool detail and edit pages now show the spool's ID.
+- A spool's initial weight can be edited once from the edit page when it is
+  0 (e.g. imported data missing the value); setting it also defaults the
+  current weight to the same value.
+
+### Fixed
+
+- A spool's `first_used` date is now stamped along with `last_used` on its
+  first weight update, instead of staying unset forever.
+- Used weight, remaining filament, and price/kg are no longer computed (and
+  shown) for spools whose initial weight is 0, which previously produced a
+  negative "used" amount.
+
 ## [1.10.0] - 2026-09-28
 
 ### Changed

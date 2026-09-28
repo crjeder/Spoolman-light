@@ -6,11 +6,11 @@ use serde::{Deserialize, Serialize};
 pub struct SpoolResponse {
     #[serde(flatten)]
     pub spool: Spool,
-    /// used_weight = initial_weight - current_weight
-    pub used_weight: f32,
-    /// remaining_filament = spool.net_weight - used_weight (None if net_weight unknown)
+    /// used_weight = initial_weight - current_weight (None until initial_weight is set)
+    pub used_weight: Option<f32>,
+    /// remaining_filament = spool.net_weight - used_weight (None if net_weight or initial_weight unknown)
     pub remaining_filament: Option<f32>,
-    /// price_per_kg = spool.price / net_weight_kg (fallback: initial_weight_kg); None when price absent
+    /// price_per_kg = spool.price / net_weight_kg (fallback: initial_weight_kg); None when price or initial_weight absent
     pub price_per_kg: Option<f32>,
     /// The associated filament (embedded for convenience).
     pub filament: Filament,
@@ -18,12 +18,18 @@ pub struct SpoolResponse {
 
 impl SpoolResponse {
     pub fn new(spool: Spool, filament: Filament) -> Self {
-        let used_weight = spool.initial_weight - spool.current_weight;
-        let remaining_filament = spool.net_weight.map(|nw| nw - used_weight);
-        let price_per_kg = spool.price.map(|p| {
-            let weight_kg = spool.net_weight.unwrap_or(spool.initial_weight) / 1000.0;
-            p / weight_kg
-        });
+        // initial_weight of 0 means "not set yet" (e.g. imported data) — weight math is meaningless until it is.
+        let has_initial_weight = spool.initial_weight != 0.0;
+        let used_weight = has_initial_weight.then_some(spool.initial_weight - spool.current_weight);
+        let remaining_filament = used_weight.and_then(|uw| spool.net_weight.map(|nw| nw - uw));
+        let price_per_kg = if has_initial_weight {
+            spool.price.map(|p| {
+                let weight_kg = spool.net_weight.unwrap_or(spool.initial_weight) / 1000.0;
+                p / weight_kg
+            })
+        } else {
+            None
+        };
         Self {
             spool,
             filament,

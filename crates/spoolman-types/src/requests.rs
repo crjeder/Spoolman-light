@@ -63,6 +63,8 @@ pub struct UpdateSpool {
     pub swatch_image: Option<String>,
     pub finish: Option<SurfaceFinish>,
     pub location_id: Option<u32>,
+    /// Only applied when the spool's current initial_weight is 0 (i.e. not yet set).
+    pub initial_weight: Option<f32>,
     pub current_weight: Option<f32>,
     pub net_weight: Option<f32>,
     pub price: Option<f32>,

@@ -969,6 +969,7 @@ pub fn SpoolShow() -> impl IntoView {
                     }
                     Ok(sr) => view! {
                         <dl class="detail-grid">
+                            <dt>"ID"</dt><dd>{sr.spool.id.to_string()}</dd>
                             <dt>"Filament"</dt><dd><a href=format!("/filaments/{}", sr.filament.id)>{sr.filament.display_name()}</a></dd>
                             <dt>"Location"</dt><dd>{
                                 move || match sr.spool.location_id {
@@ -1000,10 +1001,14 @@ pub fn SpoolShow() -> impl IntoView {
                             <dt>"Initial weight"</dt><dd>{format::format_weight(sr.spool.initial_weight)}</dd>
                             <dt>"Net weight"</dt><dd>{sr.spool.net_weight.map(format::format_weight).unwrap_or_else(|| "—".into())}</dd>
                             <dt>"Current weight"</dt><dd>{format::format_weight(sr.spool.current_weight)}</dd>
-                            <dt>"Used"</dt><dd>{format::format_weight(sr.used_weight)}</dd>
-                            <dt>"Remaining filament"</dt><dd>{sr.remaining_filament.map(format::format_weight).unwrap_or_else(|| "unknown".into())}</dd>
+                            {(sr.spool.initial_weight != 0.0).then(|| view! {
+                                <dt>"Used"</dt><dd>{sr.used_weight.map(format::format_weight).unwrap_or_default()}</dd>
+                                <dt>"Remaining filament"</dt><dd>{sr.remaining_filament.map(format::format_weight).unwrap_or_else(|| "unknown".into())}</dd>
+                            })}
                             <dt>"Price"</dt><dd>{sr.spool.price.map(|p| format::format_currency(p as f64, &cur_sym.0.get())).unwrap_or_else(|| "—".into())}</dd>
-                            <dt>"Price/kg"</dt><dd>{sr.price_per_kg.map(|p| format::format_currency(p as f64, &cur_sym.0.get())).unwrap_or_else(|| "—".into())}</dd>
+                            {(sr.spool.initial_weight != 0.0).then(|| view! {
+                                <dt>"Price/kg"</dt><dd>{sr.price_per_kg.map(|p| format::format_currency(p as f64, &cur_sym.0.get())).unwrap_or_else(|| "—".into())}</dd>
+                            })}
                             <dt>"Registered"</dt><dd>{format::format_date(sr.spool.registered, &df.0.get(), &tf.0.get())}</dd>
                             <dt>"First used"</dt><dd>{sr.spool.first_used.map(|dt| format::format_date(dt, &df.0.get(), &tf.0.get())).unwrap_or_default()}</dd>
                             <dt>"Last used"</dt><dd>{sr.spool.last_used.map(|dt| format::format_date(dt, &df.0.get(), &tf.0.get())).unwrap_or_default()}</dd>
@@ -1302,6 +1307,8 @@ pub fn SpoolEdit() -> impl IntoView {
     let locations = LocalResource::new(|| async { api::list_locations().await });
     let navigate = use_navigate();
 
+    let initial_weight = RwSignal::new(String::new());
+    let initial_weight_editable = RwSignal::new(false);
     let current_weight = RwSignal::new(String::new());
     let net_weight = RwSignal::new(String::new());
     let price = RwSignal::new(String::new());
@@ -1321,6 +1328,8 @@ pub fn SpoolEdit() -> impl IntoView {
     // Pre-fill once loaded.
     Effect::new(move |_| {
         if let Some(Ok(sr)) = spool.get() {
+            initial_weight_editable.set(sr.spool.initial_weight == 0.0);
+            initial_weight.set(sr.spool.initial_weight.to_string());
             current_weight.set(sr.spool.current_weight.to_string());
             net_weight.set(
                 sr.spool
@@ -1410,6 +1419,7 @@ pub fn SpoolEdit() -> impl IntoView {
                     .map(|ndt| ndt.and_utc())
             };
             let body = UpdateSpool {
+                initial_weight: initial_weight.get().parse::<f32>().ok(),
                 current_weight: current_weight.get().parse::<f32>().ok(),
                 net_weight: net_weight.get().parse::<f32>().ok(),
                 price: price.get().parse::<f32>().ok(),
@@ -1439,6 +1449,22 @@ pub fn SpoolEdit() -> impl IntoView {
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
             <FilamentColorsSearch on_select=on_fc_select />
             <form on:submit=on_submit>
+                <label>
+                    "ID"
+                    <input type="text" readonly=true prop:value=move || id().to_string() />
+                </label>
+                {move || initial_weight_editable.get().then(|| view! {
+                    <label>
+                        "Initial weight (g)"
+                        <input type="number" step="0.1"
+                            prop:value=move || initial_weight.get()
+                            on:input=move |ev| {
+                                let v = event_target_value(&ev);
+                                current_weight.set(v.clone());
+                                initial_weight.set(v);
+                            } />
+                    </label>
+                })}
                 <label>
                     "Current weight (g)"
                     <input type="number" step="0.1"

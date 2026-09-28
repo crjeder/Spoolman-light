@@ -454,6 +454,11 @@ impl JsonStore {
             spool.finish = finish;
         }
         apply_option_nullable_u32(&mut spool.location_id, req.location_id);
+        if let Some(w) = req.initial_weight {
+            if spool.initial_weight == 0.0 {
+                spool.initial_weight = w;
+            }
+        }
         if let Some(w) = req.current_weight {
             spool.current_weight = w;
         }
@@ -469,6 +474,9 @@ impl JsonStore {
         }
         if weight_changed && req.last_used.is_none() {
             spool.last_used = Some(Utc::now());
+        }
+        if weight_changed && spool.first_used.is_none() {
+            spool.first_used = Some(Utc::now());
         }
         let spool = spool.clone();
         let filament = store

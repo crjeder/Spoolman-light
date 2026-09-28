@@ -46,6 +46,6 @@ Archived 2026-09-22 with their manual verification steps still open:
 - [x] color view: move the star into description field
 - [x] delete spool only works in spool overview
 - [x] means to archive spools 
-- [ ] spollmanDB: strip colors from selection and deduplicate; allow search for "{manufacturer} {material}"
+- [x] spollmanDB: strip colors from selection and deduplicate; allow search for "{manufacturer} {material}"
 - [x] spool weight is still displayed in filament details
 - [ ] split "db" in two parts: live and archived (because this constantly grows), load only when "show archived is ticked" and warn about size when above threshold

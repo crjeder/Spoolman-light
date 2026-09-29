@@ -471,6 +471,9 @@ impl JsonStore {
         apply_option_nullable(&mut spool.comment, req.comment);
         if let Some(archived) = req.archived {
             spool.archived = archived;
+            if archived {
+                spool.location_id = None;
+            }
         }
         if weight_changed && req.last_used.is_none() {
             spool.last_used = Some(Utc::now());

@@ -29,17 +29,31 @@ pub fn SpoolmanDbSearch(
         if q.is_empty() {
             return vec![];
         }
-        let q_lower = q.to_lowercase();
+        let tokens: Vec<String> = q.split_whitespace().map(str::to_lowercase).collect();
+        let diam = crate::state::diameter_settings();
+        let only_diameter = diam.uniform.get().then(|| diam.default_mm.get() as f32);
         match db.get() {
-            Some(Ok(entries)) => entries
-                .into_iter()
-                .filter(|e| {
-                    e.manufacturer.to_lowercase().contains(&q_lower)
-                        || e.material.to_lowercase().contains(&q_lower)
-                        || e.name.to_lowercase().contains(&q_lower)
-                })
-                .take(10)
-                .collect(),
+            Some(Ok(entries)) => {
+                // One row per manufacturer + material + diameter; colors are not part of a filament.
+                let mut seen = std::collections::HashSet::new();
+                entries
+                    .into_iter()
+                    .filter(|e| {
+                        let mfr = e.manufacturer.to_lowercase();
+                        let mat = e.material.to_lowercase();
+                        tokens.iter().all(|t| mfr.contains(t) || mat.contains(t))
+                    })
+                    .filter(|e| only_diameter.map_or(true, |d| (e.diameter - d).abs() < 0.01))
+                    .filter(|e| {
+                        seen.insert((
+                            e.manufacturer.to_lowercase(),
+                            e.material.to_lowercase(),
+                            (e.diameter * 100.0).round() as u32,
+                        ))
+                    })
+                    .take(10)
+                    .collect()
+            }
             _ => vec![],
         }
     };
@@ -87,8 +101,8 @@ pub fn SpoolmanDbSearch(
                                     {items.into_iter().map(|entry| {
                                         let entry_clone = entry.clone();
                                         let label = format!(
-                                            "{} \u{00b7} {} \u{00b7} {}",
-                                            entry.manufacturer, entry.material, entry.name
+                                            "{} \u{00b7} {} \u{00b7} {} mm",
+                                            entry.manufacturer, entry.material, entry.diameter
                                         );
                                         view! {
                                             <li>

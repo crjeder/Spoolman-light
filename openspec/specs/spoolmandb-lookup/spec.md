@@ -73,7 +73,7 @@ The system SHALL display an inline "Search filament database" panel above the fo
 ---
 
 ### Requirement: Search filters SpoolmanDB entries client-side
-As the user types in the search input, the system SHALL filter the locally cached SpoolmanDB entries and display up to 10 matching results. Filtering SHALL be case-insensitive and SHALL match against manufacturer name, material string, and color/variant name. Each result SHALL display as "Manufacturer · Material · Color name".
+As the user types in the search input, the system SHALL filter the locally cached SpoolmanDB entries and display up to 10 matching results. Filtering SHALL be case-insensitive and SHALL be whitespace-tokenised, each token matching manufacturer or material (e.g. "polymaker pla"). Results SHALL be deduplicated by manufacturer, material and diameter, and SHALL display as "Manufacturer · Material · Diameter mm" without any color name.
 
 #### Scenario: Typing filters results
 - **WHEN** the user types a query into the search input

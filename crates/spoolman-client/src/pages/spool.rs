@@ -1089,11 +1089,6 @@ pub fn SpoolCreate() -> impl IntoView {
 
     // SpoolmanDB selection: auto-fill color/weight, find or create matching filament.
     let on_db_select = Callback::new(move |entry: crate::spoolmandb::SpoolmanEntry| {
-        // Fill color fields.
-        if let Some(ref hex) = entry.color_hex {
-            color_rows.with_untracked(|v| v[0].1.set(format!("#{hex}")));
-        }
-        color_name.set(entry.name.clone());
         if let Some(w) = entry.weight {
             net_weight.set(w.to_string());
         }

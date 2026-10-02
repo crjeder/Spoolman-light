@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - With "Same diameter for all filaments" enabled, the SpoolmanDB lookup only
   lists the default diameter.
 
+- Filament material "CoPE" (e.g. from SpoolmanDB) is now recognised as `CPE`
+  (Copolyester) instead of an unknown material.
+
 ## [1.10.2] - 2026-09-29
 
 ### Fixed

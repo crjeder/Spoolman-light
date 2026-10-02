@@ -39,6 +39,25 @@ jobs:
         run: cargo clippy -p spoolman-types -p spoolman-server -- -D warnings
 
   #
+  # Public API compatibility of the shared types crate vs. the PR base
+  # (crate is not published to crates.io, so baseline is a git rev)
+  #
+  semver:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+        with:
+          fetch-depth: 0
+
+      - name: cargo semver-checks
+        uses: obi1kenobi/cargo-semver-checks-action@v2
+        with:
+          package: spoolman-types
+          baseline-rev: ${{ github.event.pull_request.base.sha }}
+
+  #
   # Release images to GHCR and Docker Hub
   # Only runs on v* git tags
   #

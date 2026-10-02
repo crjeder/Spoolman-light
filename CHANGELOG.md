@@ -5,11 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.2] - 2026-10-02
+## [1.10.3] - 2026-10-02
 
 ### Fixed
 
-- Filament material "CoPE" (e.g. from SpoolmanDB) is now recognised as `CPE` (Copolyester) instead of an unknown material.
+- The SpoolmanDB lookup now lists one row per manufacturer + material +
+  diameter instead of repeating the same entry once per colour/weight, and
+  matches whitespace-separated words against manufacturer and material.
+- Selecting a SpoolmanDB entry no longer fills in a colour.
+- With "Same diameter for all filaments" enabled, the SpoolmanDB lookup only
+  lists the default diameter.
+- Filament material "CoPE" (e.g. from SpoolmanDB) is now recognised as `CPE`
+  (Copolyester) instead of an unknown material.
+
+## [1.10.2] - 2026-09-29
+
+### Fixed
+
+- Price/kg is now computed from the net weight only, and remaining filament
+  defaults to the net weight when no initial weight is set.
+- Archiving a spool now clears its location.
 
 ## [1.10.1] - 2026-09-28
 

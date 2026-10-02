@@ -234,6 +234,15 @@ mod tests {
     }
 
     #[test]
+    fn cope_alias() {
+        assert_eq!(parse_material("CoPE"), (MaterialType::Cpe, None));
+        assert_eq!(
+            parse_material("CoPE-CF"),
+            (MaterialType::Cpe, Some("CF".to_string()))
+        );
+    }
+
+    #[test]
     fn gf_suffix() {
         let (mat, modi) = parse_material("ABS-GF");
         assert_eq!(mat, MaterialType::Abs);

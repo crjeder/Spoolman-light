@@ -336,7 +336,7 @@ impl MaterialType {
             "PA11" => Self::Pa11,
             "PA12" => Self::Pa12,
             "PA66" => Self::Pa66,
-            "CPE" => Self::Cpe,
+            "CPE" | "CoPE" | "COPE" => Self::Cpe,
             "TPE" => Self::Tpe,
             "HIPS" => Self::Hips,
             "PHA" => Self::Pha,

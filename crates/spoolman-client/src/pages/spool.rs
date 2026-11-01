@@ -547,7 +547,7 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
             return;
         }
         let _ = (colors_visible.get(), total.get());
-        request_animation_frame(grow_if_needed);
+        let _ = request_animation_frame(grow_if_needed);
     });
 
     view! {

@@ -72,6 +72,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.7
 
+      - name: Check tag matches workspace version
+        run: |
+          ver=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name=="spoolman-server") | .version')
+          [ "${GITHUB_REF_NAME#v}" = "$ver" ] || { echo "tag $GITHUB_REF_NAME != workspace version $ver"; exit 1; }
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3.6.1
 

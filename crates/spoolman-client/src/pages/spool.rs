@@ -1209,7 +1209,10 @@ pub fn SpoolCreate() -> impl IntoView {
                 on_select=on_db_select
                 on_search_state=Callback::new(move |state| search_state.set(state))
             />
-            <FilamentColorsSearch on_select=on_fc_select />
+            <FilamentColorsSearch on_select=on_fc_select manufacturer=Signal::derive(move || {
+                let id = filament_id.get();
+                filaments_list.with(|l| l.iter().find(|f| f.id == id).and_then(|f| f.manufacturer.clone()))
+            }) />
             <form on:submit=on_submit>
                 <label>
                     "Filament"
@@ -1442,7 +1445,9 @@ pub fn SpoolEdit() -> impl IntoView {
                     .into_iter().flatten().collect::<Vec<_>>().join(" ")
             }).filter(|s| !s.is_empty()).unwrap_or_else(|| "Edit Spool".to_string())}</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
-            <FilamentColorsSearch on_select=on_fc_select />
+            <FilamentColorsSearch on_select=on_fc_select manufacturer=Signal::derive(move || {
+                spool.get().and_then(|r| r.ok()).and_then(|sr| sr.filament.manufacturer.clone())
+            }) />
             <form on:submit=on_submit>
                 <label>
                     "ID"

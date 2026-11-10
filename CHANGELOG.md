@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-11-10
+
 ### Changed
 
+- The filamentcolors.xyz search on the New Spool and Edit Spool pages now lists
+  swatches from the selected filament's manufacturer first; other manufacturers
+  only fill the remaining result slots.
 - The crate version now lives in one place (`[workspace.package]` in the root
   `Cargo.toml`). Releases use `scripts/bump-version.sh <major|minor|patch>`,
   and CI refuses to publish a `v*` tag that does not match that version.

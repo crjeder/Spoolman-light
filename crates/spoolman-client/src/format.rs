@@ -48,9 +48,9 @@ pub fn format_weight(grams: f32) -> String {
 }
 
 /// Format a density value with the browser locale, appending " g/cm³".
-/// Uses up to 3 fractional digits (trailing zeros suppressed).
+/// Always uses exactly 2 fractional digits (rounded).
 pub fn format_density(g_per_cm3: f32) -> String {
-    format!("{} g/cm³", sm_format_decimal(f64::from(g_per_cm3), 0, 3))
+    format!("{} g/cm³", sm_format_decimal(f64::from(g_per_cm3), 2, 2))
 }
 
 /// Format a diameter in millimetres with the browser locale, appending " mm".

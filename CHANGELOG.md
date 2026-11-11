@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Saving the Edit Spool form now sets "Last used" to today unless you changed
+  that date yourself.
+
 ## [1.11.0] - 2026-11-10
 
 ### Changed

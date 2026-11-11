@@ -1318,7 +1318,7 @@ pub fn SpoolEdit() -> impl IntoView {
     let last_used = RwSignal::new(String::new());
     // Track whether the loaded spool had no date, so an untouched "today" default is not persisted.
     let first_used_was_none = RwSignal::new(false);
-    let last_used_was_none = RwSignal::new(false);
+    let last_used_loaded = RwSignal::new(String::new());
     let comment = RwSignal::new(String::new());
     let error = RwSignal::new(Option::<String>::None);
     let swatch_image: RwSignal<Option<String>> = RwSignal::new(None);
@@ -1355,19 +1355,19 @@ pub fn SpoolEdit() -> impl IntoView {
             location_id.set(sr.spool.location_id);
             let today = || Utc::now().format("%Y-%m-%d").to_string();
             first_used_was_none.set(sr.spool.first_used.is_none());
-            last_used_was_none.set(sr.spool.last_used.is_none());
             first_used.set(
                 sr.spool
                     .first_used
                     .map(|d| d.format("%Y-%m-%d").to_string())
                     .unwrap_or_else(today),
             );
-            last_used.set(
-                sr.spool
-                    .last_used
-                    .map(|d| d.format("%Y-%m-%d").to_string())
-                    .unwrap_or_else(today),
-            );
+            let lu = sr
+                .spool
+                .last_used
+                .map(|d| d.format("%Y-%m-%d").to_string())
+                .unwrap_or_else(today);
+            last_used_loaded.set(lu.clone());
+            last_used.set(lu);
             comment.set(sr.spool.comment.clone().unwrap_or_default());
         }
     });
@@ -1416,6 +1416,12 @@ pub fn SpoolEdit() -> impl IntoView {
                     .and_then(|d| d.and_hms_opt(0, 5, 0))
                     .map(|ndt| ndt.and_utc())
             };
+            // Untouched field means "now": saving an edit counts as use.
+            let last_used_str = if last_used.get() == last_used_loaded.get() {
+                Utc::now().format("%Y-%m-%d").to_string()
+            } else {
+                last_used.get()
+            };
             let body = UpdateSpool {
                 initial_weight: initial_weight.get().parse::<f32>().ok(),
                 current_weight: current_weight.get().parse::<f32>().ok(),
@@ -1427,7 +1433,7 @@ pub fn SpoolEdit() -> impl IntoView {
                 finish: Some(finish.get()),
                 location_id: location_id.get(),
                 first_used: parse_dt(prune_default(first_used.get(), first_used_was_none.get())),
-                last_used: parse_dt(prune_default(last_used.get(), last_used_was_none.get())),
+                last_used: parse_dt(last_used_str),
                 comment: Some(comment.get()),
                 ..Default::default()
             };

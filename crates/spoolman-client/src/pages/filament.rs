@@ -2,12 +2,14 @@ use crate::{
     api,
     components::{pagination::Pagination, spoolmandb_search::SpoolmanDbSearch, table::ColHeader},
     format,
+    slicer_profile,
     spoolmandb::parse_material,
     state::{date_format_setting, diameter_settings, time_format_setting, use_table_state},
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use leptos_router::hooks::use_params_map;
+use wasm_bindgen::JsCast;
 use spoolman_types::{
     models::MaterialType,
     requests::{CreateFilament, UpdateFilament},
@@ -334,6 +336,7 @@ pub fn FilamentCreate() -> impl IntoView {
     let bed_temp = RwSignal::new(String::new());
     let comment = RwSignal::new(String::new());
     let error = RwSignal::new(Option::<String>::None);
+    let profile_input = NodeRef::<leptos::html::Input>::new();
 
     let on_submit = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();
@@ -390,11 +393,46 @@ pub fn FilamentCreate() -> impl IntoView {
         }
     });
 
+    let on_profile_file = move |ev: web_sys::Event| {
+        let input: web_sys::HtmlInputElement = ev.target().unwrap().unchecked_into();
+        let Some(web_file) = input.files().and_then(|l| l.get(0)) else {
+            return;
+        };
+        input.set_value("");
+        spawn_local(async move {
+            let file = gloo_file::File::from(web_file);
+            let parsed = match gloo_file::futures::read_as_text(&file).await {
+                Ok(t) => slicer_profile::parse_orca(&t),
+                Err(e) => Err(e.to_string()),
+            };
+            match parsed {
+                Err(e) => error.set(Some(e)),
+                Ok(p) => {
+                    error.set(None);
+                    if let Some(v) = p.manufacturer { manufacturer.set(v); }
+                    if let Some(v) = p.material { material.set(v); }
+                    if let Some(v) = p.modifier { modifier.set(v); }
+                    if let (false, Some(v)) = (ds.uniform.get_untracked(), p.diameter) { diameter.set(v.to_string()); }
+                    if let Some(v) = p.density.filter(|d| *d > 0.0) { density.set(v.to_string()); }
+                    if let Some(v) = p.print_temp { print_temp.set(v.to_string()); }
+                    if let Some(v) = p.bed_temp { bed_temp.set(v.to_string()); }
+                }
+            }
+        });
+    };
+
     view! {
         <div class="page filament-create">
             <h1>"New Filament"</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
             <SpoolmanDbSearch on_select=on_db_select />
+            <div>
+                <input type="file" accept=".json,application/json" class="profile-file" style="display:none"
+                    node_ref=profile_input on:change=on_profile_file />
+                <button type="button" class="btn"
+                    on:click=move |_| { if let Some(i) = profile_input.get() { i.click(); } }
+                >"Import profile"</button>
+            </div>
             <form on:submit=on_submit>
                 <label>"Manufacturer"<input type="text" prop:value=move || manufacturer.get() on:input=move |ev| manufacturer.set(event_target_value(&ev)) /></label>
                 <label>"Material"

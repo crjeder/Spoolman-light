@@ -4,6 +4,7 @@ pub mod components;
 pub mod filamentcolors;
 pub mod format;
 pub mod pages;
+pub mod slicer_profile;
 pub mod spoolmandb;
 pub mod state;
 pub mod utils;

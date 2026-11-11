@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.12.0] - 2026-11-11
+
+### Added
+
+- "Import profile" button on the New Filament form: load an OrcaSlicer filament
+  profile (.json) from the manufacturer to pre-fill manufacturer, material,
+  modifier, diameter, density, print temperature and bed temperature.
+
 ### Fixed
 
 - Saving the Edit Spool form now sets "Last used" to today unless you changed

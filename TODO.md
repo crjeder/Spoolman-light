@@ -51,3 +51,4 @@ Archived 2026-09-22 with their manual verification steps still open:
 - [ ] split "db" in two parts: live and archived (because this constantly grows), load only when "show archived is ticked" and warn about size when above threshold
 - [ ] import filament profiles (.json)
 - [ ] DB search with all words in all fields (filamentDB, filamentcolors.xyz)
+- [ ] quick edit mode for spools: only current weight, location, last used and comment are shonwn and changeable. full edit mode available for admin / super user? hidden under "advanced"?

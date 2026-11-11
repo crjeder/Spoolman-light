@@ -39,4 +39,41 @@ test.describe('Spools', () => {
     const after = await spools.getSpoolCount();
     expect(after).toBe(before - 1);
   });
+
+  test.describe('edit form last used', () => {
+    async function openEditWithLocation(page, request) {
+      const res = await request.get('/api/v1/spool');
+      const spool = (await res.json()).find((s) => !s.archived && s.location_id != null);
+      expect(spool).toBeTruthy();
+      await page.goto(`/spools/${spool.id}/edit`);
+      await expect(page.getByLabel('Current weight (g)')).not.toHaveValue('');
+      return spool.id;
+    }
+
+    test('saving a weight change sets last used to today', async ({ page, request }) => {
+      const id = await openEditWithLocation(page, request);
+      await page.getByLabel('Last used').fill('2020-01-01');
+      await page.getByRole('button', { name: 'Save' }).click();
+      await page.waitForURL('**/spools');
+
+      await page.goto(`/spools/${id}/edit`);
+      await expect(page.getByLabel('Last used')).toHaveValue('2020-01-01');
+      await page.getByLabel('Current weight (g)').fill('123');
+      await page.getByRole('button', { name: 'Save' }).click();
+      await page.waitForURL('**/spools');
+
+      const spool = await (await request.get(`/api/v1/spool/${id}`)).json();
+      expect(spool.last_used.slice(0, 10)).toBe(new Date().toISOString().slice(0, 10));
+    });
+
+    test('manually chosen last used is kept', async ({ page, request }) => {
+      const id = await openEditWithLocation(page, request);
+      await page.getByLabel('Last used').fill('2020-02-02');
+      await page.getByRole('button', { name: 'Save' }).click();
+      await page.waitForURL('**/spools');
+
+      const spool = await (await request.get(`/api/v1/spool/${id}`)).json();
+      expect(spool.last_used.slice(0, 10)).toBe('2020-02-02');
+    });
+  });
 });

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.12.1] - 2026-11-11
+
+### Changed
+- Filament density is now always shown with two decimals (e.g. `1.20 g/cm³`) in the filaments table and detail view.
+
 ## [1.12.0] - 2026-11-11
 
 ### Added

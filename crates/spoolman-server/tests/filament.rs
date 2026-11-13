@@ -151,3 +151,31 @@ async fn delete_filament_blocked_by_spool_returns_409() {
     .await;
     assert_eq!(status, StatusCode::CONFLICT);
 }
+
+#[tokio::test]
+async fn chamber_temp_round_trips() {
+    let (app, _dir) = common::make_app();
+    let (status, body) = common::request(
+        &app,
+        Method::POST,
+        "/api/v1/filament",
+        Some(json!({ "density": 1.24, "min_chamber_temp": 40, "max_chamber_temp": 60 })),
+    )
+    .await;
+    assert_eq!(status, StatusCode::CREATED);
+    assert_eq!(body["min_chamber_temp"], 40);
+    assert_eq!(body["max_chamber_temp"], 60);
+}
+
+#[tokio::test]
+async fn min_temp_above_max_is_rejected() {
+    let (app, _dir) = common::make_app();
+    let (status, _) = common::request(
+        &app,
+        Method::POST,
+        "/api/v1/filament",
+        Some(json!({ "density": 1.24, "min_print_temp": 230, "max_print_temp": 200 })),
+    )
+    .await;
+    assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
+}

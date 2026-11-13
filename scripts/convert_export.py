@@ -7,7 +7,7 @@ flat list of objects with dot-separated keys embedding filament and vendor data
 The new Spoolman stores data in a single JSON file with this shape::
 
     {
-        "meta": {"schema_version": 2},
+        "meta": {"schema_version": 3},
         "filaments": [...],
         "spools":    [...],
         "locations": [...],
@@ -198,8 +198,8 @@ def _extract_filament(record: dict) -> dict:
 
     Field mapping applied:
     - filament.vendor.name  → manufacturer
-    - filament.settings_extruder_temp → print_temp
-    - filament.settings_bed_temp      → bed_temp
+    - filament.settings_extruder_temp → min_print_temp, max_print_temp
+    - filament.settings_bed_temp      → min_bed_temp, max_bed_temp
     - filament.name + filament.material → material_modifier (derived)
     Dropped: name, extra, article_number, external_id, spool_weight, weight,
              color_hex, multi_color_hexes, multi_color_direction, price.
@@ -214,8 +214,10 @@ def _extract_filament(record: dict) -> dict:
         "material_modifier": _derive_material_modifier(name, material),
         "density": record.get("filament.density"),
         "diameter": record.get("filament.diameter"),
-        "print_temp": record.get("filament.settings_extruder_temp"),
-        "bed_temp": record.get("filament.settings_bed_temp"),
+        "min_print_temp": record.get("filament.settings_extruder_temp"),
+        "max_print_temp": record.get("filament.settings_extruder_temp"),
+        "min_bed_temp": record.get("filament.settings_bed_temp"),
+        "max_bed_temp": record.get("filament.settings_bed_temp"),
         "comment": record.get("filament.comment"),
     }
 
@@ -236,8 +238,10 @@ def _extract_filament_from_filament_export(record: dict) -> dict:
         "material_modifier": _derive_material_modifier(name, material),
         "density": record.get("density"),
         "diameter": record.get("diameter"),
-        "print_temp": record.get("settings_extruder_temp"),
-        "bed_temp": record.get("settings_bed_temp"),
+        "min_print_temp": record.get("settings_extruder_temp"),
+        "max_print_temp": record.get("settings_extruder_temp"),
+        "min_bed_temp": record.get("settings_bed_temp"),
+        "max_bed_temp": record.get("settings_bed_temp"),
         "comment": record.get("comment"),
     }
 
@@ -272,8 +276,10 @@ def _extract_filament_from_api(fil: dict) -> dict:
         "material_modifier": _derive_material_modifier(name, material),
         "density": fil.get("density"),
         "diameter": fil.get("diameter"),
-        "print_temp": fil.get("settings_extruder_temp"),
-        "bed_temp": fil.get("settings_bed_temp"),
+        "min_print_temp": fil.get("settings_extruder_temp"),
+        "max_print_temp": fil.get("settings_extruder_temp"),
+        "min_bed_temp": fil.get("settings_bed_temp"),
+        "max_bed_temp": fil.get("settings_bed_temp"),
         "comment": fil.get("comment"),
     }
 
@@ -469,7 +475,7 @@ def randomize_ids(store: dict) -> dict:
 def assemble_store(filaments: dict, spools: list, locations: list) -> dict:
     """Assemble the final spoolman.json structure."""
     return {
-        "meta": {"schema_version": 2},
+        "meta": {"schema_version": 3},
         "filaments": list(filaments.values()),
         "spools": spools,
         "locations": locations,

@@ -26,6 +26,12 @@ test.describe('Filament profile import', () => {
     await expect(form.locator('select')).toHaveValue('PLA');
     await expect(form.locator('input[type="text"]').first()).toHaveValue('Polymaker');
     await expect(form.locator('input[step="0.001"]')).toHaveValue('1.28');
+    const numbers = form.locator('input[type="number"]');
+    // diameter, density, then min/max print, min/max bed
+    await expect(numbers.nth(2)).toHaveValue('220');
+    await expect(numbers.nth(3)).toHaveValue('220');
+    await expect(numbers.nth(4)).toHaveValue('60');
+    await expect(numbers.nth(5)).toHaveValue('60');
   });
 
   test('invalid file shows an error', async ({ page }) => {

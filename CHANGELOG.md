@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-11-13
+
+### Added
+- Filaments have a chamber temperature range (min and max).
+
+### Changed
+- **BREAKING:** filament print and bed temperatures are now min/max ranges. `print_temp` and `bed_temp` are removed from the API; use `min_print_temp`/`max_print_temp` and `min_bed_temp`/`max_bed_temp`. Existing data files are migrated automatically (schema v3): a stored single value becomes both min and max.
+- The filament forms show min and max inputs; the detail view shows ranges (e.g. `190-220°C`).
+- The server rejects a filament whose min temperature exceeds its max (422).
+
 ## [1.12.1] - 2026-11-11
 
 ### Changed

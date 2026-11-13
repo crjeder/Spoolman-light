@@ -12,12 +12,12 @@ pub struct CreateFilament {
     #[serde(default = "default_diameter")]
     pub diameter: f32,
     pub density: f32,
-    pub print_temp: Option<i32>,
-    pub bed_temp: Option<i32>,
     pub min_print_temp: Option<i32>,
     pub max_print_temp: Option<i32>,
     pub min_bed_temp: Option<i32>,
     pub max_bed_temp: Option<i32>,
+    pub min_chamber_temp: Option<i32>,
+    pub max_chamber_temp: Option<i32>,
     pub comment: Option<String>,
 }
 
@@ -28,12 +28,12 @@ pub struct UpdateFilament {
     pub material_modifier: Option<String>,
     pub diameter: Option<f32>,
     pub density: Option<f32>,
-    pub print_temp: Option<i32>,
-    pub bed_temp: Option<i32>,
     pub min_print_temp: Option<i32>,
     pub max_print_temp: Option<i32>,
     pub min_bed_temp: Option<i32>,
     pub max_bed_temp: Option<i32>,
+    pub min_chamber_temp: Option<i32>,
+    pub max_chamber_temp: Option<i32>,
     pub comment: Option<String>,
 }
 

@@ -144,8 +144,9 @@ A **Filament** is a material specification shared across one or more spools — 
 | **Modifier** | No | Additional descriptor beyond the base material, e.g. `Matte`, `Silk`, `CF` (carbon-fibre), `HF` (high-flow), `+` |
 | **Diameter (mm)** | Yes | Filament diameter. Default `1.75`. Hidden when *uniform diameter* mode is enabled in Settings. |
 | **Density (g/cm³)** | Yes | Used to derive remaining filament weight from current scale readings. Default `1.24` (PLA). Common values: PLA 1.24, PETG 1.27, ABS 1.05, TPU 1.20. |
-| **Print temp (°C)** | No | Nominal nozzle temperature |
-| **Bed temp (°C)** | No | Nominal bed temperature |
+| **Min / Max print temp (°C)** | No | Recommended nozzle temperature range |
+| **Min / Max bed temp (°C)** | No | Recommended bed temperature range |
+| **Min / Max chamber temp (°C)** | No | Recommended chamber temperature range |
 | **Comment** | No | Free-text notes |
 
 **SpoolmanDB lookup** — the search bar at the top of the form queries the [SpoolmanDB](https://www.spoolman.se/filaments) online database. Selecting a result auto-fills all fields, saving manual entry.

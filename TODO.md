@@ -24,6 +24,10 @@ Archived 2026-09-22 with their manual verification steps still open:
 - [x] reload database button (in settings?) — shipped in 1.7.0 (`POST /api/v1/reload` + Settings button)
 - [x] integrate https://github.com/Disane87/spoolman-filament-swatch — ported natively as the `/colors` swatch grid view instead of embedding/proxying the upstream app (would need CORS); not ported: its carousel/swipe UI, pin-favourites and palette export
 - [x] swatch view: pin favourites / palette export — star toggle per card persisted to localStorage, "Pinned only" filter, "Export palette" downloads pinned spools as JSON (name + hex colors)
+- [ ] future: more filament profile sources in New Filament dialog (explored 2026-11-13, deferred):
+  - [SliceHub](https://slicehub.org/): best fit. Undocumented `GET /api/materials` (+ `/api/materials/{id}`) gives brand, type, productLine, nozzle/bed temp min/max, density (mostly null). No CORS header -> needs a server proxy route + cache. Unofficial API, may break.
+  - [SimplyPrint slicer-profiles-db](https://github.com/SimplyPrint/slicer-profiles-db): mostly upstream Orca/Bambu vendor profiles (already covered by "Import profile"), no index, 233 MB repo, versioned wrapper format `parse_orca` can't read, no license. Not worth it.
+  - [3DFilamentProfiles](https://3dfilamentprofiles.com/): no public API found, Vercel bot checkpoint. Its downloads are Bambu/Orca `.json`, so "Import profile" should already work - verify with a real file.
 
 ## Defects
 - [~] "HTTP 500: Internal Server Error" error on edit — root cause found: `/data` volume created root-owned, non-root container user can't write; fixed in Dockerfile, not yet verified against a real Docker build. -> use the username spoolman

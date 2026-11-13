@@ -125,6 +125,7 @@ impl JsonStore {
 
     /// Migrate the store to the current schema version if needed.
     ///
+    /// v2 → v3: fold single print/bed temps into min/max.
     /// v1 → v2: move `net_weight` from each `Filament` onto its referencing `Spool`s.
     fn migrate(&self, data: &mut DataStore) -> Result<()> {
         if data.meta.schema_version < 2 {
@@ -145,6 +146,21 @@ impl JsonStore {
             data.meta.schema_version = 2;
             self.flush(data)?;
             tracing::info!("migration to schema v2 complete");
+        }
+        if data.meta.schema_version < 3 {
+            tracing::info!("migrating data store from schema v2 to v3 (single temps -> min/max)");
+            for f in &mut data.filaments {
+                if let Some(t) = f.print_temp.take() {
+                    f.min_print_temp.get_or_insert(t);
+                    f.max_print_temp.get_or_insert(t);
+                }
+                if let Some(t) = f.bed_temp.take() {
+                    f.min_bed_temp.get_or_insert(t);
+                    f.max_bed_temp.get_or_insert(t);
+                }
+            }
+            data.meta.schema_version = 3;
+            self.flush(data)?;
         }
         Ok(())
     }
@@ -272,15 +288,18 @@ impl JsonStore {
             diameter: req.diameter,
             net_weight: None,
             density: req.density,
-            print_temp: req.print_temp,
-            bed_temp: req.bed_temp,
+            print_temp: None,
+            bed_temp: None,
             min_print_temp: req.min_print_temp,
             max_print_temp: req.max_print_temp,
             min_bed_temp: req.min_bed_temp,
             max_bed_temp: req.max_bed_temp,
+            min_chamber_temp: req.min_chamber_temp,
+            max_chamber_temp: req.max_chamber_temp,
             registered: Utc::now(),
             comment: req.comment,
         };
+        check_temp_ranges(&filament)?;
         store.filaments.push(filament.clone());
         self.flush(&store)?;
         Ok(filament)
@@ -293,6 +312,7 @@ impl JsonStore {
             .iter_mut()
             .find(|f| f.id == id)
             .ok_or(StoreError::NotFound)?;
+        let backup = filament.clone();
         apply_option(&mut filament.manufacturer, req.manufacturer);
         apply_option(&mut filament.material, req.material);
         apply_option(&mut filament.material_modifier, req.material_modifier);
@@ -302,13 +322,17 @@ impl JsonStore {
         if let Some(v) = req.density {
             filament.density = v;
         }
-        apply_option(&mut filament.print_temp, req.print_temp);
-        apply_option(&mut filament.bed_temp, req.bed_temp);
         apply_option(&mut filament.min_print_temp, req.min_print_temp);
         apply_option(&mut filament.max_print_temp, req.max_print_temp);
         apply_option(&mut filament.min_bed_temp, req.min_bed_temp);
         apply_option(&mut filament.max_bed_temp, req.max_bed_temp);
+        apply_option(&mut filament.min_chamber_temp, req.min_chamber_temp);
+        apply_option(&mut filament.max_chamber_temp, req.max_chamber_temp);
         apply_option(&mut filament.comment, req.comment);
+        if let Err(e) = check_temp_ranges(filament) {
+            *filament = backup;
+            return Err(e);
+        }
         let filament = filament.clone();
         self.flush(&store)?;
         Ok(filament)
@@ -775,5 +799,55 @@ fn apply_option_nullable_dt(
 ) {
     if let Some(v) = value {
         *field = Some(v);
+    }
+}
+
+/// Reject filaments where any min temperature exceeds its max.
+fn check_temp_ranges(f: &Filament) -> Result<()> {
+    for (name, lo, hi) in [
+        ("print", f.min_print_temp, f.max_print_temp),
+        ("bed", f.min_bed_temp, f.max_bed_temp),
+        ("chamber", f.min_chamber_temp, f.max_chamber_temp),
+    ] {
+        if let (Some(lo), Some(hi)) = (lo, hi) {
+            if lo > hi {
+                return Err(StoreError::Validation(format!("min {name} temp exceeds max")));
+            }
+        }
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod temp_migration_tests {
+    use super::*;
+
+    fn v2_file(extra: &str) -> String {
+        format!(
+            r#"{{"meta":{{"schema_version":2}},"filaments":[{{"id":1,"density":1.24,"diameter":1.75,
+            "print_temp":215,"bed_temp":60,{extra}"registered":"2024-01-01T00:00:00Z"}}],
+            "spools":[],"locations":[],"settings":{{}}}}"#
+        )
+    }
+
+    #[test]
+    fn v2_single_temps_become_min_max() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("d.json");
+        std::fs::write(&path, v2_file("")).unwrap();
+        let f = JsonStore::load(&path).unwrap().get_filament(1).unwrap();
+        assert_eq!((f.min_print_temp, f.max_print_temp), (Some(215), Some(215)));
+        assert_eq!((f.min_bed_temp, f.max_bed_temp), (Some(60), Some(60)));
+        let written = std::fs::read_to_string(&path).unwrap();
+        assert!(!written.contains("\"print_temp\"") && written.contains("\"schema_version\": 3"));
+    }
+
+    #[test]
+    fn v2_migration_keeps_existing_min() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("d.json");
+        std::fs::write(&path, v2_file(r#""min_print_temp":200,"#)).unwrap();
+        let f = JsonStore::load(&path).unwrap().get_filament(1).unwrap();
+        assert_eq!((f.min_print_temp, f.max_print_temp), (Some(200), Some(215)));
     }
 }

@@ -1121,12 +1121,12 @@ pub fn SpoolCreate() -> impl IntoView {
                     material_modifier: modifier_opt.filter(|s| !s.is_empty()),
                     diameter: entry_diameter,
                     density: if entry.density > 0.0 { entry.density } else { 1.24 },
-                    print_temp: entry.extruder_temp.map(|t| t as i32),
-                    bed_temp: entry.bed_temp.map(|t| t as i32),
-                    min_print_temp: None,
-                    max_print_temp: None,
-                    min_bed_temp: None,
-                    max_bed_temp: None,
+                    min_print_temp: entry.extruder_temp.map(|t| t as i32),
+                    max_print_temp: entry.extruder_temp.map(|t| t as i32),
+                    min_bed_temp: entry.bed_temp.map(|t| t as i32),
+                    max_bed_temp: entry.bed_temp.map(|t| t as i32),
+                    min_chamber_temp: None,
+                    max_chamber_temp: None,
                     comment: None,
                 };
                 match api::create_filament(&body).await {

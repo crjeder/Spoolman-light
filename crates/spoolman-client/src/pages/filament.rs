@@ -309,8 +309,9 @@ pub fn FilamentShow() -> impl IntoView {
                             <dt>"Modifier"</dt><dd>{f.material_modifier.clone().unwrap_or_default()}</dd>
                             <dt>"Diameter"</dt><dd>{format::format_mm(f.diameter)}</dd>
                             <dt>"Density"</dt><dd>{format::format_density(f.density)}</dd>
-                            <dt>"Print temp"</dt><dd>{f.print_temp.map(|t| format!("{}°C", t)).unwrap_or_default()}</dd>
-                            <dt>"Bed temp"</dt><dd>{f.bed_temp.map(|t| format!("{}°C", t)).unwrap_or_default()}</dd>
+                            <dt>"Print temp"</dt><dd>{temp_range(f.min_print_temp, f.max_print_temp)}</dd>
+                            <dt>"Bed temp"</dt><dd>{temp_range(f.min_bed_temp, f.max_bed_temp)}</dd>
+                            <dt>"Chamber temp"</dt><dd>{temp_range(f.min_chamber_temp, f.max_chamber_temp)}</dd>
                             <dt>"Comment"</dt><dd>{f.comment.clone().unwrap_or_default()}</dd>
                         </dl>
                     }.into_any(),
@@ -332,8 +333,12 @@ pub fn FilamentCreate() -> impl IntoView {
     // Initialise diameter from the configured default.
     let diameter = RwSignal::new(ds.default_mm.get_untracked().to_string());
     let density = RwSignal::new("1.24".to_string());
-    let print_temp = RwSignal::new(String::new());
-    let bed_temp = RwSignal::new(String::new());
+    let min_print_temp = RwSignal::new(String::new());
+    let max_print_temp = RwSignal::new(String::new());
+    let min_bed_temp = RwSignal::new(String::new());
+    let max_bed_temp = RwSignal::new(String::new());
+    let min_chamber_temp = RwSignal::new(String::new());
+    let max_chamber_temp = RwSignal::new(String::new());
     let comment = RwSignal::new(String::new());
     let error = RwSignal::new(Option::<String>::None);
     let profile_input = NodeRef::<leptos::html::Input>::new();
@@ -359,12 +364,12 @@ pub fn FilamentCreate() -> impl IntoView {
                 material_modifier: Some(modifier.get()).filter(|s| !s.is_empty()),
                 diameter: resolved_diameter,
                 density: density.get().parse().unwrap_or(1.24),
-                print_temp: print_temp.get().parse().ok(),
-                bed_temp: bed_temp.get().parse().ok(),
-                min_print_temp: None,
-                max_print_temp: None,
-                min_bed_temp: None,
-                max_bed_temp: None,
+                min_print_temp: min_print_temp.get().parse().ok(),
+                max_print_temp: max_print_temp.get().parse().ok(),
+                min_bed_temp: min_bed_temp.get().parse().ok(),
+                max_bed_temp: max_bed_temp.get().parse().ok(),
+                min_chamber_temp: min_chamber_temp.get().parse().ok(),
+                max_chamber_temp: max_chamber_temp.get().parse().ok(),
                 comment: Some(comment.get()).filter(|s| !s.is_empty()),
             };
             match api::create_filament(&body).await {
@@ -386,10 +391,12 @@ pub fn FilamentCreate() -> impl IntoView {
             density.set(entry.density.to_string());
         }
         if let Some(t) = entry.extruder_temp {
-            print_temp.set(t.to_string());
+            min_print_temp.set(t.to_string());
+            max_print_temp.set(t.to_string());
         }
         if let Some(t) = entry.bed_temp {
-            bed_temp.set(t.to_string());
+            min_bed_temp.set(t.to_string());
+            max_bed_temp.set(t.to_string());
         }
     });
 
@@ -414,8 +421,8 @@ pub fn FilamentCreate() -> impl IntoView {
                     if let Some(v) = p.modifier { modifier.set(v); }
                     if let (false, Some(v)) = (ds.uniform.get_untracked(), p.diameter) { diameter.set(v.to_string()); }
                     if let Some(v) = p.density.filter(|d| *d > 0.0) { density.set(v.to_string()); }
-                    if let Some(v) = p.print_temp { print_temp.set(v.to_string()); }
-                    if let Some(v) = p.bed_temp { bed_temp.set(v.to_string()); }
+                    if let Some(v) = p.print_temp { min_print_temp.set(v.to_string()); max_print_temp.set(v.to_string()); }
+                    if let Some(v) = p.bed_temp { min_bed_temp.set(v.to_string()); max_bed_temp.set(v.to_string()); }
                 }
             }
         });
@@ -443,8 +450,12 @@ pub fn FilamentCreate() -> impl IntoView {
                     <label>"Diameter (mm)"<input type="number" step="0.01" prop:value=move || diameter.get() on:input=move |ev| diameter.set(event_target_value(&ev)) /></label>
                 })}
                 <label>"Density (g/cm³)"<input type="number" step="0.001" prop:value=move || density.get() on:input=move |ev| density.set(event_target_value(&ev)) /></label>
-                <label>"Print temp (°C)"<input type="number" prop:value=move || print_temp.get() on:input=move |ev| print_temp.set(event_target_value(&ev)) /></label>
-                <label>"Bed temp (°C)"<input type="number" prop:value=move || bed_temp.get() on:input=move |ev| bed_temp.set(event_target_value(&ev)) /></label>
+                <label>"Min print temp (°C)"<input type="number" prop:value=move || min_print_temp.get() on:input=move |ev| min_print_temp.set(event_target_value(&ev)) /></label>
+                <label>"Max print temp (°C)"<input type="number" prop:value=move || max_print_temp.get() on:input=move |ev| max_print_temp.set(event_target_value(&ev)) /></label>
+                <label>"Min bed temp (°C)"<input type="number" prop:value=move || min_bed_temp.get() on:input=move |ev| min_bed_temp.set(event_target_value(&ev)) /></label>
+                <label>"Max bed temp (°C)"<input type="number" prop:value=move || max_bed_temp.get() on:input=move |ev| max_bed_temp.set(event_target_value(&ev)) /></label>
+                <label>"Min chamber temp (°C)"<input type="number" prop:value=move || min_chamber_temp.get() on:input=move |ev| min_chamber_temp.set(event_target_value(&ev)) /></label>
+                <label>"Max chamber temp (°C)"<input type="number" prop:value=move || max_chamber_temp.get() on:input=move |ev| max_chamber_temp.set(event_target_value(&ev)) /></label>
                 <label>"Comment"<textarea on:input=move |ev| comment.set(event_target_value(&ev))></textarea></label>
                 <button type="submit" class="btn btn-primary ">"Create"</button>
                 <a href="/filaments" class="btn ">"Cancel"</a>
@@ -468,8 +479,12 @@ pub fn FilamentEdit() -> impl IntoView {
     let modifier = RwSignal::new(String::new());
     let diameter = RwSignal::new("1.75".to_string());
     let density = RwSignal::new("1.24".to_string());
-    let print_temp = RwSignal::new(String::new());
-    let bed_temp = RwSignal::new(String::new());
+    let min_print_temp = RwSignal::new(String::new());
+    let max_print_temp = RwSignal::new(String::new());
+    let min_bed_temp = RwSignal::new(String::new());
+    let max_bed_temp = RwSignal::new(String::new());
+    let min_chamber_temp = RwSignal::new(String::new());
+    let max_chamber_temp = RwSignal::new(String::new());
     let comment = RwSignal::new(String::new());
     let error = RwSignal::new(Option::<String>::None);
 
@@ -485,8 +500,12 @@ pub fn FilamentEdit() -> impl IntoView {
             modifier.set(f.material_modifier.clone().unwrap_or_default());
             diameter.set(f.diameter.to_string());
             density.set(f.density.to_string());
-            print_temp.set(f.print_temp.map(|t| t.to_string()).unwrap_or_default());
-            bed_temp.set(f.bed_temp.map(|t| t.to_string()).unwrap_or_default());
+            min_print_temp.set(f.min_print_temp.map(|t| t.to_string()).unwrap_or_default());
+            max_print_temp.set(f.max_print_temp.map(|t| t.to_string()).unwrap_or_default());
+            min_bed_temp.set(f.min_bed_temp.map(|t| t.to_string()).unwrap_or_default());
+            max_bed_temp.set(f.max_bed_temp.map(|t| t.to_string()).unwrap_or_default());
+            min_chamber_temp.set(f.min_chamber_temp.map(|t| t.to_string()).unwrap_or_default());
+            max_chamber_temp.set(f.max_chamber_temp.map(|t| t.to_string()).unwrap_or_default());
             comment.set(f.comment.clone().unwrap_or_default());
         }
     });
@@ -507,8 +526,12 @@ pub fn FilamentEdit() -> impl IntoView {
                 material_modifier: Some(modifier.get()).filter(|s| !s.is_empty()),
                 diameter: diameter.get().parse().ok(),
                 density: density.get().parse().ok(),
-                print_temp: print_temp.get().parse().ok(),
-                bed_temp: bed_temp.get().parse().ok(),
+                min_print_temp: min_print_temp.get().parse().ok(),
+                max_print_temp: max_print_temp.get().parse().ok(),
+                min_bed_temp: min_bed_temp.get().parse().ok(),
+                max_bed_temp: max_bed_temp.get().parse().ok(),
+                min_chamber_temp: min_chamber_temp.get().parse().ok(),
+                max_chamber_temp: max_chamber_temp.get().parse().ok(),
                 comment: Some(comment.get()).filter(|s| !s.is_empty()),
                 ..Default::default()
             };
@@ -531,10 +554,12 @@ pub fn FilamentEdit() -> impl IntoView {
             density.set(entry.density.to_string());
         }
         if let Some(t) = entry.extruder_temp {
-            print_temp.set(t.to_string());
+            min_print_temp.set(t.to_string());
+            max_print_temp.set(t.to_string());
         }
         if let Some(t) = entry.bed_temp {
-            bed_temp.set(t.to_string());
+            min_bed_temp.set(t.to_string());
+            max_bed_temp.set(t.to_string());
         }
     });
 
@@ -556,12 +581,25 @@ pub fn FilamentEdit() -> impl IntoView {
                     <label>"Diameter (mm)"<input type="number" step="0.01" prop:value=move || diameter.get() on:input=move |ev| diameter.set(event_target_value(&ev)) /></label>
                 })}
                 <label>"Density (g/cm³)"<input type="number" step="0.001" prop:value=move || density.get() on:input=move |ev| density.set(event_target_value(&ev)) /></label>
-                <label>"Print temp (°C)"<input type="number" prop:value=move || print_temp.get() on:input=move |ev| print_temp.set(event_target_value(&ev)) /></label>
-                <label>"Bed temp (°C)"<input type="number" prop:value=move || bed_temp.get() on:input=move |ev| bed_temp.set(event_target_value(&ev)) /></label>
+                <label>"Min print temp (°C)"<input type="number" prop:value=move || min_print_temp.get() on:input=move |ev| min_print_temp.set(event_target_value(&ev)) /></label>
+                <label>"Max print temp (°C)"<input type="number" prop:value=move || max_print_temp.get() on:input=move |ev| max_print_temp.set(event_target_value(&ev)) /></label>
+                <label>"Min bed temp (°C)"<input type="number" prop:value=move || min_bed_temp.get() on:input=move |ev| min_bed_temp.set(event_target_value(&ev)) /></label>
+                <label>"Max bed temp (°C)"<input type="number" prop:value=move || max_bed_temp.get() on:input=move |ev| max_bed_temp.set(event_target_value(&ev)) /></label>
+                <label>"Min chamber temp (°C)"<input type="number" prop:value=move || min_chamber_temp.get() on:input=move |ev| min_chamber_temp.set(event_target_value(&ev)) /></label>
+                <label>"Max chamber temp (°C)"<input type="number" prop:value=move || max_chamber_temp.get() on:input=move |ev| max_chamber_temp.set(event_target_value(&ev)) /></label>
                 <label>"Comment"<textarea prop:value=move || comment.get() on:input=move |ev| comment.set(event_target_value(&ev))></textarea></label>
                 <button type="submit" class="btn btn-primary ">"Save"</button>
                 <a href=move || format!("/filaments/{}", id()) class="btn ">"Cancel"</a>
             </form>
         </div>
+    }
+}
+
+/// Format a min/max temperature pair: "190-220°C", a single value, or empty.
+fn temp_range(min: Option<i32>, max: Option<i32>) -> String {
+    match (min, max) {
+        (Some(a), Some(b)) if a != b => format!("{a}-{b}°C"),
+        (Some(t), _) | (_, Some(t)) => format!("{t}°C"),
+        _ => String::new(),
     }
 }

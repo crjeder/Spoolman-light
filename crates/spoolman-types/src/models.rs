@@ -402,14 +402,20 @@ pub struct Filament {
     pub net_weight: Option<f32>,
     /// Density in g/cm³.
     pub density: f32,
-    /// Nominal print temperature in °C.
+    /// Legacy field (schema v2) - read during migration only, never written.
+    #[serde(default, skip_serializing)]
     pub print_temp: Option<i32>,
-    /// Nominal bed temperature in °C.
+    /// Legacy field (schema v2) - read during migration only, never written.
+    #[serde(default, skip_serializing)]
     pub bed_temp: Option<i32>,
     pub min_print_temp: Option<i32>,
     pub max_print_temp: Option<i32>,
     pub min_bed_temp: Option<i32>,
     pub max_bed_temp: Option<i32>,
+    #[serde(default)]
+    pub min_chamber_temp: Option<i32>,
+    #[serde(default)]
+    pub max_chamber_temp: Option<i32>,
     pub registered: DateTime<Utc>,
     pub comment: Option<String>,
 }
@@ -473,7 +479,7 @@ pub struct DataStore {
 
 impl Default for StoreMeta {
     fn default() -> Self {
-        Self { schema_version: 2 }
+        Self { schema_version: 3 }
     }
 }
 

@@ -131,7 +131,7 @@ def test_basic_conversion():
     store = conv.assemble_store(filaments, spools, locations)
 
     # Top-level shape.
-    assert store["meta"]["schema_version"] == 2
+    assert store["meta"]["schema_version"] == 3
     assert isinstance(store["filaments"], list)
     assert isinstance(store["spools"], list)
     assert isinstance(store["locations"], list)
@@ -144,8 +144,8 @@ def test_basic_conversion():
     assert fil["manufacturer"] == "Prusament"   # not "vendor"
     assert fil["material"] == "PLA"
     assert fil["material_modifier"] == "Basic"
-    assert fil["print_temp"] == 210             # not "settings_extruder_temp"
-    assert fil["bed_temp"] == 60                # not "settings_bed_temp"
+    assert fil["min_print_temp"] == fil["max_print_temp"] == 210  # not "settings_extruder_temp"
+    assert fil["min_bed_temp"] == fil["max_bed_temp"] == 60  # not "settings_bed_temp"
     # Old fields must not appear.
     assert "vendor" not in fil
     assert "name" not in fil
@@ -219,7 +219,7 @@ def test_atomic_write():
     with tempfile.TemporaryDirectory() as tmpdir:
         out = os.path.join(tmpdir, "spoolman.json")
         data = {
-            "meta": {"schema_version": 2},
+            "meta": {"schema_version": 3},
             "filaments": [],
             "spools": [],
             "locations": [],
@@ -230,7 +230,7 @@ def test_atomic_write():
         assert not os.path.exists(out + ".tmp")
         with open(out) as fh:
             loaded = json.load(fh)
-        assert loaded["meta"]["schema_version"] == 2
+        assert loaded["meta"]["schema_version"] == 3
         assert loaded["locations"] == []
     print("  test_atomic_write: PASS")
 
@@ -297,7 +297,7 @@ def test_cli_end_to_end():
         conv.main([spool_path, "--output", out_path])
         with open(out_path) as fh:
             store = json.load(fh)
-        assert store["meta"]["schema_version"] == 2
+        assert store["meta"]["schema_version"] == 3
         assert len(store["filaments"]) == 1
         assert len(store["spools"]) == 1
         assert len(store["locations"]) == 1

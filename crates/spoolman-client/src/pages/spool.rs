@@ -156,6 +156,19 @@ fn is_empty(sr: &SpoolResponse) -> bool {
 
 const NOT_EMPTY_WARNING: &str = "Spool is not empty - archive anyway?";
 
+/// Split a location-sorted list into consecutive runs of equal `location_id`.
+fn group_by_location(items: Vec<SpoolResponse>) -> Vec<(Option<u32>, Vec<SpoolResponse>)> {
+    let mut groups: Vec<(Option<u32>, Vec<SpoolResponse>)> = Vec::new();
+    for sr in items {
+        let lid = sr.spool.location_id;
+        match groups.last_mut() {
+            Some((k, v)) if *k == lid => v.push(sr),
+            _ => groups.push((lid, vec![sr])),
+        }
+    }
+    groups
+}
+
 // ── List ───────────────────────────────────────────────────────────────────────
 
 #[component]
@@ -204,6 +217,8 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
         RwSignal::new(sg("location", "").parse::<u32>().ok());
     let pinned = use_pinned_spools();
     let pinned_only = RwSignal::new(false);
+    // Expanded location groups (in-memory only); None = spools without location.
+    let expanded: RwSignal<std::collections::HashSet<Option<u32>>> = RwSignal::new(Default::default());
 
     // Persist each filter back to sessionStorage on change (default value = cleared).
     Effect::new(move |_| crate::state::session_set("filter.spools.show_archived",
@@ -294,6 +309,9 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
     // the swatch view, so it must not silently restrict or re-sort the grid.
     let effective_color_level = move || if mode == ViewMode::Color { "off".to_string() } else { color_level.get() };
 
+    // Sorting by Location collapses the table into one row per location.
+    let grouped = move || mode == ViewMode::Spool && ts.sort_field.get() == "location";
+
     let filtered = move || {
         let f = ts.filter.get().to_lowercase();
         let pick = color_pick.get();
@@ -369,7 +387,7 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
 
         // When a color level is active and the hex is valid, sort by ascending
         // minimum ΔE*00 distance (closest match first).
-        if level != "off" {
+        if level != "off" && !grouped() {
             if let Some(target) = hex_to_rgba(&pick) {
                 let min_delta = |s: &spoolman_types::responses::SpoolResponse| {
                     s.spool
@@ -476,11 +494,21 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
         items
     };
 
-    let total = Signal::derive(move || filtered().len());
+    let total = Signal::derive(move || {
+        if grouped() { group_by_location(filtered()).len() } else { filtered().len() }
+    });
     let page_items = move || {
         let items = sorted();
         let start = ts.page.get() * ts.page_size.get();
         items
+            .into_iter()
+            .skip(start)
+            .take(ts.page_size.get())
+            .collect::<Vec<_>>()
+    };
+    let groups_page = move || {
+        let start = ts.page.get() * ts.page_size.get();
+        group_by_location(sorted())
             .into_iter()
             .skip(start)
             .take(ts.page_size.get())
@@ -549,6 +577,108 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
         let _ = (colors_visible.get(), total.get());
         let _ = request_animation_frame(grow_if_needed);
     });
+
+    let spool_row = move |sr: SpoolResponse| {
+                    let id = sr.spool.id;
+                    let name = [sr.filament.manufacturer.as_deref(), sr.filament.material_modifier.as_deref()]
+                        .into_iter()
+                        .flatten()
+                        .collect::<Vec<_>>()
+                        .join(" ");
+                    let colors = if sr.spool.colors.is_empty() {
+                        vec![Rgba { r: 200, g: 200, b: 200, a: 255 }]
+                    } else {
+                        sr.spool.colors.clone()
+                    };
+                    let rem = sr.remaining_filament.map(format::format_weight).unwrap_or_default();
+                    let ppg = sr.price_per_kg
+                        .map(|p| format::format_currency(p as f64, &cur_sym.0.get()))
+                        .unwrap_or_else(|| "—".into());
+                    let material = sr.filament.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default();
+                    let archived = sr.spool.archived;
+                    let empty = is_empty(&sr);
+                    view! {
+                        <tr class=if sr.spool.archived { "archived" } else { "" }>
+                            <td><a href=format!("/spools/{id}")>{name}</a></td>
+                            <td>{material}</td>
+                            <td>
+                                {color_swatch_view(&colors, sr.spool.swatch_image.as_deref())}
+                                {sr.spool.color_name.clone().unwrap_or_default()}
+                                {match sr.spool.finish {
+                                    SurfaceFinish::Standard => None,
+                                    f => Some(view! { <span class="finish-badge">{finish_label(f)}</span> }),
+                                }}
+                            </td>
+                            <td class="num">{rem}</td>
+                            <td class="num">{ppg}</td>
+                            <td>{
+                                move || match sr.spool.location_id {
+                                    None => "—".to_string(),
+                                    Some(lid) => locations.get()
+                                        .and_then(|r| r.ok())
+                                        .and_then(|ls| ls.into_iter().find(|lr| lr.location.id == lid))
+                                        .map(|lr| lr.location.name.clone())
+                                        .unwrap_or_else(|| lid.to_string()),
+                                }
+                            }</td>
+                            <td>{format::format_date(sr.spool.registered, &df.0.get(), &tf.0.get())}</td>
+                            <td class="actions">
+                                <a href=format!("/spools/{id}") class="btn btn-icon" title="View">"\u{1F441}"</a>
+                                " "
+                                <a href=format!("/spools/{id}/edit") class="btn btn-icon" title="Edit">"\u{270F}"</a>
+                                " "
+                                {move || if archived {
+                                    view! {
+                                        <button class="btn btn-icon"
+                                            on:click=move |_| on_archive(id, false)
+                                            title="Unarchive"
+                                        >"\u{21A9}"</button>
+                                    }.into_any()
+                                } else if confirm_archive.get() == Some(id) {
+                                    view! {
+                                        <button class="btn btn-icon btn-danger"
+                                            on:click=move |_| on_archive(id, true)
+                                            title=NOT_EMPTY_WARNING
+                                        >"\u{1F4E6}"</button>
+                                        " "
+                                        <button class="btn btn-icon"
+                                            on:click=move |_| confirm_archive.set(None)
+                                            title="Cancel"
+                                        >"\u{2715}"</button>
+                                    }.into_any()
+                                } else {
+                                    view! {
+                                        <button class="btn btn-icon"
+                                            on:click=move |_| if empty { on_archive(id, true) } else { confirm_archive.set(Some(id)) }
+                                            title="Archive"
+                                        >"\u{1F4E6}"</button>
+                                    }.into_any()
+                                }}
+                                " "
+                                {move || if confirm_delete.get() == Some(id) {
+                                    view! {
+                                        <button class="btn btn-icon btn-danger"
+                                            on:click=move |_| on_delete(id)
+                                            title="Confirm delete"
+                                        >"\u{1F5D1}"</button>
+                                        " "
+                                        <button class="btn btn-icon"
+                                            on:click=move |_| confirm_delete.set(None)
+                                            title="Cancel"
+                                        >"\u{2715}"</button>
+                                    }.into_any()
+                                } else {
+                                    view! {
+                                        <button class="btn btn-icon btn-danger"
+                                            on:click=move |_| confirm_delete.set(Some(id))
+                                            title="Delete"
+                                        >"\u{1F5D1}"</button>
+                                    }.into_any()
+                                }}
+                            </td>
+                        </tr>
+                    }
+    };
 
     view! {
         <div class="page spool-list">
@@ -754,107 +884,54 @@ pub fn SpoolList(mode: ViewMode) -> impl IntoView {
                         </tr>
                     </thead>
                     <tbody>
-                        {move || page_items().into_iter().map(|sr| {
-                            let id = sr.spool.id;
-                            let name = [sr.filament.manufacturer.as_deref(), sr.filament.material_modifier.as_deref()]
-                                .into_iter()
-                                .flatten()
-                                .collect::<Vec<_>>()
-                                .join(" ");
-                            let colors = if sr.spool.colors.is_empty() {
-                                vec![Rgba { r: 200, g: 200, b: 200, a: 255 }]
-                            } else {
-                                sr.spool.colors.clone()
-                            };
-                            let rem = sr.remaining_filament.map(format::format_weight).unwrap_or_default();
-                            let ppg = sr.price_per_kg
-                                .map(|p| format::format_currency(p as f64, &cur_sym.0.get()))
-                                .unwrap_or_else(|| "—".into());
-                            let material = sr.filament.material.as_ref().map(|m| m.abbreviation().to_string()).unwrap_or_default();
-                            let archived = sr.spool.archived;
-                            let empty = is_empty(&sr);
-                            view! {
-                                <tr class=if sr.spool.archived { "archived" } else { "" }>
-                                    <td><a href=format!("/spools/{id}")>{name}</a></td>
-                                    <td>{material}</td>
-                                    <td>
-                                        {color_swatch_view(&colors, sr.spool.swatch_image.as_deref())}
-                                        {sr.spool.color_name.clone().unwrap_or_default()}
-                                        {match sr.spool.finish {
-                                            SurfaceFinish::Standard => None,
-                                            f => Some(view! { <span class="finish-badge">{finish_label(f)}</span> }),
-                                        }}
-                                    </td>
-                                    <td class="num">{rem}</td>
-                                    <td class="num">{ppg}</td>
-                                    <td>{
-                                        move || match sr.spool.location_id {
-                                            None => "—".to_string(),
-                                            Some(lid) => locations.get()
-                                                .and_then(|r| r.ok())
-                                                .and_then(|ls| ls.into_iter().find(|lr| lr.location.id == lid))
-                                                .map(|lr| lr.location.name.clone())
-                                                .unwrap_or_else(|| lid.to_string()),
-                                        }
-                                    }</td>
-                                    <td>{format::format_date(sr.spool.registered, &df.0.get(), &tf.0.get())}</td>
-                                    <td class="actions">
-                                        <a href=format!("/spools/{id}") class="btn btn-icon" title="View">"\u{1F441}"</a>
-                                        " "
-                                        <a href=format!("/spools/{id}/edit") class="btn btn-icon" title="Edit">"\u{270F}"</a>
-                                        " "
-                                        {move || if archived {
-                                            view! {
-                                                <button class="btn btn-icon"
-                                                    on:click=move |_| on_archive(id, false)
-                                                    title="Unarchive"
-                                                >"\u{21A9}"</button>
-                                            }.into_any()
-                                        } else if confirm_archive.get() == Some(id) {
-                                            view! {
-                                                <button class="btn btn-icon btn-danger"
-                                                    on:click=move |_| on_archive(id, true)
-                                                    title=NOT_EMPTY_WARNING
-                                                >"\u{1F4E6}"</button>
-                                                " "
-                                                <button class="btn btn-icon"
-                                                    on:click=move |_| confirm_archive.set(None)
-                                                    title="Cancel"
-                                                >"\u{2715}"</button>
-                                            }.into_any()
-                                        } else {
-                                            view! {
-                                                <button class="btn btn-icon"
-                                                    on:click=move |_| if empty { on_archive(id, true) } else { confirm_archive.set(Some(id)) }
-                                                    title="Archive"
-                                                >"\u{1F4E6}"</button>
-                                            }.into_any()
-                                        }}
-                                        " "
-                                        {move || if confirm_delete.get() == Some(id) {
-                                            view! {
-                                                <button class="btn btn-icon btn-danger"
-                                                    on:click=move |_| on_delete(id)
-                                                    title="Confirm delete"
-                                                >"\u{1F5D1}"</button>
-                                                " "
-                                                <button class="btn btn-icon"
-                                                    on:click=move |_| confirm_delete.set(None)
-                                                    title="Cancel"
-                                                >"\u{2715}"</button>
-                                            }.into_any()
-                                        } else {
-                                            view! {
-                                                <button class="btn btn-icon btn-danger"
-                                                    on:click=move |_| confirm_delete.set(Some(id))
-                                                    title="Delete"
-                                                >"\u{1F5D1}"</button>
-                                            }.into_any()
-                                        }}
-                                    </td>
-                                </tr>
-                            }
-                        }).collect_view()}
+                        {move || if grouped() {
+                            let loc_names: Vec<(u32, String)> = locations.get()
+                                .and_then(|r| r.ok())
+                                .map(|ls| ls.into_iter().map(|lr| (lr.location.id, lr.location.name)).collect())
+                                .unwrap_or_default();
+                            let open = expanded.get();
+                            let search = ts.filter.get();
+                            let mats = material_filter.get();
+                            let mat_text = if mats.len() != available_materials.get().len() { mats.join(", ") } else { String::new() };
+                            let pick = (color_level.get() != "off").then(|| color_pick.get());
+                            groups_page().into_iter().flat_map(|(lid, items)| {
+                                let name = match lid {
+                                    None => "No location".to_string(),
+                                    Some(id) => loc_names.iter().find(|(i, _)| *i == id)
+                                        .map(|(_, n)| n.clone())
+                                        .unwrap_or_else(|| id.to_string()),
+                                };
+                                let is_open = open.contains(&lid);
+                                let n = items.len();
+                                let label = format!(
+                                    "{} {}: {} {}",
+                                    if is_open { "-" } else { "+" },
+                                    name,
+                                    n,
+                                    if n == 1 { "entry" } else { "entries" },
+                                );
+                                let header = view! {
+                                    <tr class="group-row"
+                                        on:click=move |_| expanded.update(|s| { if !s.remove(&lid) { s.insert(lid); } })
+                                    >
+                                        <td>{search.clone()}</td>
+                                        <td>{mat_text.clone()}</td>
+                                        <td>{pick.clone().map(|c| view! {
+                                            <span class="color-swatch" style=format!("background:{c}")></span>
+                                        })}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{label}</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }.into_any();
+                                let rows = if is_open { items } else { Vec::new() };
+                                std::iter::once(header).chain(rows.into_iter().map(|sr| spool_row(sr).into_any()))
+                            }).collect_view().into_any()
+                        } else {
+                            page_items().into_iter().map(&spool_row).collect_view().into_any()
+                        }}
                     </tbody>
                 </table>
                 <Pagination page=ts.page page_size=ts.page_size total=total />

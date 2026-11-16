@@ -468,7 +468,7 @@ impl JsonStore {
             .find(|s| s.id == id)
             .ok_or(StoreError::NotFound)?;
 
-        let weight_changed = req.current_weight.is_some();
+        let weight_changed = req.current_weight.is_some_and(|w| w != spool.current_weight);
         if let Some(colors) = req.colors {
             spool.colors = colors;
         }

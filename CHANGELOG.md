@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-11-16
+
+### Added
+- Sorting the spool table by Location groups it into collapsed per-location rows (`+ Box 3: 7 entries`) that expand on click; active filter values are shown in the group row.
+
 ## [2.0.0] - 2026-11-13
 
 ### Added

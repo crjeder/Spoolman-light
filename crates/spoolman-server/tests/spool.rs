@@ -125,6 +125,46 @@ async fn update_spool_weight_sets_last_used() {
 }
 
 #[tokio::test]
+async fn update_spool_unchanged_weight_keeps_last_used_unset() {
+    let (app, _dir) = common::make_app();
+    let fid = create_filament(&app).await;
+    let lid = common::create_location(&app).await;
+    let (_, created) =
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
+    let sid = created["id"].as_u64().unwrap();
+
+    let (status, body) = common::request(
+        &app,
+        Method::PATCH,
+        &format!("/api/v1/spool/{sid}"),
+        Some(json!({ "current_weight": 1000.0, "comment": "x" })),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    assert!(body["last_used"].is_null());
+    assert!(body["first_used"].is_null());
+}
+
+#[tokio::test]
+async fn update_spool_explicit_last_used_wins_over_weight_change() {
+    let (app, _dir) = common::make_app();
+    let fid = create_filament(&app).await;
+    let lid = common::create_location(&app).await;
+    let (_, created) =
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
+    let sid = created["id"].as_u64().unwrap();
+
+    let (_, body) = common::request(
+        &app,
+        Method::PATCH,
+        &format!("/api/v1/spool/{sid}"),
+        Some(json!({ "current_weight": 800.0, "last_used": "2020-01-02T00:05:00Z" })),
+    )
+    .await;
+    assert!(body["last_used"].as_str().unwrap().starts_with("2020-01-02"));
+}
+
+#[tokio::test]
 async fn clone_spool_returns_201_with_different_id() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;

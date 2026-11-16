@@ -1319,6 +1319,8 @@ pub fn SpoolEdit() -> impl IntoView {
     // Track whether the loaded spool had no date, so an untouched "today" default is not persisted.
     let first_used_was_none = RwSignal::new(false);
     let last_used_loaded = RwSignal::new(String::new());
+    let last_used_was_none = RwSignal::new(false);
+    let current_weight_loaded = RwSignal::new(String::new());
     let comment = RwSignal::new(String::new());
     let error = RwSignal::new(Option::<String>::None);
     let swatch_image: RwSignal<Option<String>> = RwSignal::new(None);
@@ -1329,6 +1331,7 @@ pub fn SpoolEdit() -> impl IntoView {
             initial_weight_editable.set(sr.spool.initial_weight == 0.0);
             initial_weight.set(sr.spool.initial_weight.to_string());
             current_weight.set(sr.spool.current_weight.to_string());
+            current_weight_loaded.set(sr.spool.current_weight.to_string());
             net_weight.set(
                 sr.spool
                     .net_weight
@@ -1361,6 +1364,7 @@ pub fn SpoolEdit() -> impl IntoView {
                     .map(|d| d.format("%Y-%m-%d").to_string())
                     .unwrap_or_else(today),
             );
+            last_used_was_none.set(sr.spool.last_used.is_none());
             let lu = sr
                 .spool
                 .last_used
@@ -1416,9 +1420,13 @@ pub fn SpoolEdit() -> impl IntoView {
                     .and_then(|d| d.and_hms_opt(0, 5, 0))
                     .map(|ndt| ndt.and_utc())
             };
-            // Untouched field means "now": saving an edit counts as use.
-            let last_used_str = if last_used.get() == last_used_loaded.get() {
+            // User-chosen date wins; otherwise refresh to today only if the weight changed.
+            let last_used_str = if last_used.get() != last_used_loaded.get() {
+                last_used.get()
+            } else if current_weight.get() != current_weight_loaded.get() {
                 Utc::now().format("%Y-%m-%d").to_string()
+            } else if last_used_was_none.get() {
+                String::new()
             } else {
                 last_used.get()
             };
@@ -1451,10 +1459,55 @@ pub fn SpoolEdit() -> impl IntoView {
                     .into_iter().flatten().collect::<Vec<_>>().join(" ")
             }).filter(|s| !s.is_empty()).unwrap_or_else(|| "Edit Spool".to_string())}</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
+            <form on:submit=on_submit>
+                <label>
+                    "Current weight (g)"
+                    <input type="number" step="0.1"
+                        prop:value=move || current_weight.get()
+                        on:input=move |ev| current_weight.set(event_target_value(&ev)) />
+                </label>
+                <label>
+                    "Location"
+                    <Suspense fallback=|| view! { <select /> }>
+                        <select
+                            prop:value=move || location_id.get().map(|id| id.to_string()).unwrap_or_default()
+                            on:change=move |ev| {
+                                location_id.set(event_target_value(&ev).parse::<u32>().ok());
+                            }
+                        >
+                            <option value="">"— none —"</option>
+                            {move || locations.get().and_then(|r| r.ok()).map(|ls| {
+                                let cur = location_id.get();
+                                ls.into_iter().map(|l| {
+                                    let lid = l.location.id;
+                                    view! {
+                                        <option value=lid.to_string() selected=cur == Some(lid)>{l.location.name}</option>
+                                    }
+                                }).collect_view()
+                            })}
+                        </select>
+                    </Suspense>
+                </label>
+                <label>
+                    "Last used"
+                    <input type="date"
+                        prop:value=move || last_used.get()
+                        on:input=move |ev| last_used.set(event_target_value(&ev)) />
+                </label>
+                <label>
+                    "Comment"
+                    <textarea
+                        prop:value=move || comment.get()
+                        on:input=move |ev| comment.set(event_target_value(&ev))>
+                    </textarea>
+                </label>
+                <details class="advanced">
+                    <summary>"Advanced"</summary>
+            <div on:keydown=|ev: web_sys::KeyboardEvent| if ev.key() == "Enter" { ev.prevent_default() }>
             <FilamentColorsSearch on_select=on_fc_select manufacturer=Signal::derive(move || {
                 spool.get().and_then(|r| r.ok()).and_then(|sr| sr.filament.manufacturer.clone())
             }) />
-            <form on:submit=on_submit>
+            </div>
                 <label>
                     "ID"
                     <input type="text" readonly=true prop:value=move || id().to_string() />
@@ -1471,12 +1524,6 @@ pub fn SpoolEdit() -> impl IntoView {
                             } />
                     </label>
                 })}
-                <label>
-                    "Current weight (g)"
-                    <input type="number" step="0.1"
-                        prop:value=move || current_weight.get()
-                        on:input=move |ev| current_weight.set(event_target_value(&ev)) />
-                </label>
                 <label>
                     "Net weight (g)"
                     <input type="number" step="1"
@@ -1501,46 +1548,12 @@ pub fn SpoolEdit() -> impl IntoView {
                 </label>
                 {finish_select(finish)}
                 <label>
-                    "Location"
-                    <Suspense fallback=|| view! { <select /> }>
-                        <select
-                            prop:value=move || location_id.get().map(|id| id.to_string()).unwrap_or_default()
-                            on:change=move |ev| {
-                                location_id.set(event_target_value(&ev).parse::<u32>().ok());
-                            }
-                        >
-                            <option value="">"— none —"</option>
-                            {move || locations.get().and_then(|r| r.ok()).map(|ls| {
-                                let cur = location_id.get();
-                                ls.into_iter().map(|l| {
-                                    let lid = l.location.id;
-                                    view! {
-                                        <option value=lid.to_string() selected=cur == Some(lid)>{l.location.name}</option>
-                                    }
-                                }).collect_view()
-                            })}
-                        </select>
-                    </Suspense>
-                </label>
-                <label>
                     "First used"
                     <input type="date"
                         prop:value=move || first_used.get()
                         on:input=move |ev| first_used.set(event_target_value(&ev)) />
                 </label>
-                <label>
-                    "Last used"
-                    <input type="date"
-                        prop:value=move || last_used.get()
-                        on:input=move |ev| last_used.set(event_target_value(&ev)) />
-                </label>
-                <label>
-                    "Comment"
-                    <textarea
-                        prop:value=move || comment.get()
-                        on:input=move |ev| comment.set(event_target_value(&ev))>
-                    </textarea>
-                </label>
+                </details>
                 <button type="submit" class="btn btn-primary " disabled=move || location_id.get().is_none()>"Save"</button>
                 <a href=move || format!("/spools/{}", id()) class="btn ">"Cancel"</a>
             </form>

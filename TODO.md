@@ -15,7 +15,7 @@ Archived 2026-09-22 with their manual verification steps still open:
 - [x] location required (`validate-location-required-spool`): spool create/edit submit buttons now `disabled` when `location_id` is unset. Server-side 422 enforcement was already in place.
 
 ## Enhancements
-- [~] spool table: group by location — sorting by Location shows collapsed per-location rows (`+ Box 3: 7 entries`) that expand on click, with active filter values in the group row; shipped in 2.1.0 (openspec: spools-location-grouping). Playwright tests in `spool-location-grouping.spec.ts` not yet run; run `scripts/run-e2e.sh` in WSL.
+- [~] spool table: group by location — sorting by Location shows collapsed per-location rows (`+ Box 3: 7 entries`) that expand on click, with active filter values in the group row; shipped in 2.2.0 (openspec: spools-location-grouping). Playwright tests in `spool-location-grouping.spec.ts` not yet run; run `scripts/run-e2e.sh` in WSL.
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
 - [x] filament create/edit + spool create: SpoolmanDB lookup — fetch https://donkie.github.io/SpoolmanDB/filaments.json, cache in localStorage (24h TTL + ETag), client-side search, auto-fill filament fields; in spool create auto-create missing filament and notify user
 - [~] filament/spool: filamentcolors.xyz color lookup — implemented (search panel on spool create/edit, measured hex color + swatch image applied, server-side image storage) and archived 2026-09-27 (openspec: filamentcolors-color-lookup). Search now accepts `<manufacturer> <color>` as a query (whitespace-split, per-token match against either field) via PR #133. Manual verification (7.2-7.4: swatch apply/render, dedupe on re-select) still pending.
@@ -56,4 +56,4 @@ Archived 2026-09-22 with their manual verification steps still open:
 - [ ] split "db" in two parts: live and archived (because this constantly grows), load only when "show archived is ticked" and warn about size when above threshold
 - [x] import filament profiles (.json) - OrcaSlicer format; other slicers pending
 - [ ] DB search with all words in all fields (filamentDB, filamentcolors.xyz)
-- [ ] quick edit mode for spools: only current weight, location, last used and comment are shonwn and changeable. full edit mode available for admin / super user? hidden under "advanced"?
+- [x] quick edit mode for spools: only current weight, location, last used and comment are shonwn and changeable. full edit mode available for admin / super user? hidden under "advanced"?

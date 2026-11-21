@@ -66,7 +66,30 @@ test.describe('Spools', () => {
       expect(spool.last_used.slice(0, 10)).toBe(new Date().toISOString().slice(0, 10));
     });
 
-    test('manually chosen last used is kept', async ({ page, request }) => {
+    test('saving without a weight change keeps last used', async ({ page, request }) => {
+      const id = await openEditWithLocation(page, request);
+      await page.getByLabel('Last used').fill('2020-03-03');
+      await page.getByRole('button', { name: 'Save' }).click();
+      await page.waitForURL('**/spools');
+
+      await page.goto(`/spools/${id}/edit`);
+      await expect(page.getByLabel('Last used')).toHaveValue('2020-03-03');
+      await page.getByLabel('Comment').fill('quick edit');
+      await page.getByRole('button', { name: 'Save' }).click();
+      await page.waitForURL('**/spools');
+
+      const spool = await (await request.get(`/api/v1/spool/${id}`)).json();
+      expect(spool.last_used.slice(0, 10)).toBe('2020-03-03');
+    });
+
+    test('quick mode hides advanced fields until expanded', async ({ page, request }) => {
+      await openEditWithLocation(page, request);
+      await expect(page.getByLabel('Price')).toBeHidden();
+      await page.locator('details.advanced > summary').click();
+      await expect(page.getByLabel('Price')).toBeVisible();
+    });
+
+    test('manually chosen last used is kept',async ({ page, request }) => {
       const id = await openEditWithLocation(page, request);
       await page.getByLabel('Last used').fill('2020-02-02');
       await page.getByRole('button', { name: 'Save' }).click();

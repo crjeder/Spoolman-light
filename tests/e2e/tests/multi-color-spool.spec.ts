@@ -40,8 +40,9 @@ test.describe('Multi-color spool edit', () => {
     await editLink.click();
     await page.waitForURL('**/spools/*/edit');
     await page.waitForLoadState('networkidle');
+    await page.locator('details.advanced > summary').click();
 
-    const rows = page.locator('.color-rows .color-alpha-row');
+    const rows =page.locator('.color-rows .color-alpha-row');
     await rows.first().waitFor({ state: 'visible' });
     const initialCount = await rows.count();
     test.skip(initialCount >= 4, 'first spool already has the max number of colors');

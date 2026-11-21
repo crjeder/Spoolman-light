@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-11-16
+
+### Added
+- Sorting the spool table by Location groups it into collapsed per-location rows (`+ Box 3: 7 entries`) that expand on click; active filter values are shown in the group row.
+
+## [2.1.0] - 2026-11-16
+
+### Added
+- Spool edit page opens in a quick mode showing only current weight, location, last used and comment. All other fields are under a collapsed "Advanced" section.
+
+### Changed
+- "Last used" is now refreshed only when the current weight changes. Saving a spool without a weight change (for example, editing only the comment) no longer updates it. The API applies the same rule: the automatic `last_used`/`first_used` stamp on PATCH happens only when `current_weight` differs from the stored value.
+
 ## [2.0.0] - 2026-11-13
 
 ### Added

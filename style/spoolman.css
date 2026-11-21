@@ -493,6 +493,11 @@ body.dark .success {
     background: var(--row-hover);
 }
 
+.data-table tr.group-row {
+    cursor: pointer;
+    font-weight: 600;
+}
+
 .data-table tr.archived td {
     opacity: 0.55;
     font-style: italic;

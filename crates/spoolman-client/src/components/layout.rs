@@ -74,7 +74,10 @@ fn Sidebar(menu_open: RwSignal<bool>) -> impl IntoView {
             <div class="sidebar-header">
                 <span class="logo">"Spoolman"</span>
             </div>
-            <ul class="nav-links" on:click=move |_| menu_open.set(false)>
+            <ul class="nav-links" on:click=move |_| {
+                crate::state::clear_session_filters();
+                menu_open.set(false);
+            }>
                 <li class=move || if spools_active() { "active" } else { "" }><A href="/spools">"Spools"</A></li>
                 <li class=move || if color_active() { "active" } else { "" }><A href="/colors">"Color"</A></li>
                 <li><A href="/filaments">"Filaments"</A></li>

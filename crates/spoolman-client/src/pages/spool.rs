@@ -1,4 +1,4 @@
-use chrono::{DateTime, NaiveDate, Utc};
+use chrono::{DateTime, NaiveDate, NaiveDateTime, Utc};
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use leptos_router::hooks::{use_navigate, use_params_map};
@@ -1380,10 +1380,16 @@ pub fn SpoolEdit() -> impl IntoView {
     let id = move || params.with(|p| p.get("id").and_then(|v| v.parse::<u32>().ok()).unwrap_or(0));
     let spool = LocalResource::new(move || { let id = id(); async move { api::get_spool(id).await } });
     let locations = LocalResource::new(|| async { api::list_locations().await });
+    let filaments = LocalResource::new(|| async { api::list_filaments(None).await });
     let navigate = use_navigate();
 
+    let filament_id = RwSignal::new(0u32);
+    let registered = RwSignal::new(String::new());
+    let registered_loaded = RwSignal::new(String::new());
+    let archived = RwSignal::new(false);
     let initial_weight = RwSignal::new(String::new());
-    let initial_weight_editable = RwSignal::new(false);
+    // Initial weight sits above current weight while unset (0), otherwise under Advanced.
+    let initial_weight_unset = RwSignal::new(false);
     let current_weight = RwSignal::new(String::new());
     let net_weight = RwSignal::new(String::new());
     let price = RwSignal::new(String::new());
@@ -1405,7 +1411,12 @@ pub fn SpoolEdit() -> impl IntoView {
     // Pre-fill once loaded.
     Effect::new(move |_| {
         if let Some(Ok(sr)) = spool.get() {
-            initial_weight_editable.set(sr.spool.initial_weight == 0.0);
+            filament_id.set(sr.spool.filament_id);
+            let reg = sr.spool.registered.format("%Y-%m-%dT%H:%M").to_string();
+            registered_loaded.set(reg.clone());
+            registered.set(reg);
+            archived.set(sr.spool.archived);
+            initial_weight_unset.set(sr.spool.initial_weight == 0.0);
             initial_weight.set(sr.spool.initial_weight.to_string());
             current_weight.set(sr.spool.current_weight.to_string());
             current_weight_loaded.set(sr.spool.current_weight.to_string());
@@ -1473,7 +1484,7 @@ pub fn SpoolEdit() -> impl IntoView {
 
     let on_submit = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();
-        if location_id.get().is_none() {
+        if location_id.get().is_none() && !archived.get() {
             error.set(Some("Location is required.".into()));
             return;
         }
@@ -1507,7 +1518,15 @@ pub fn SpoolEdit() -> impl IntoView {
             } else {
                 last_used.get()
             };
+            // Only send registered when changed, so untouched seconds are not truncated.
+            let registered_val = (registered.get() != registered_loaded.get())
+                .then(|| NaiveDateTime::parse_from_str(&registered.get(), "%Y-%m-%dT%H:%M").ok())
+                .flatten()
+                .map(|ndt| ndt.and_utc());
             let body = UpdateSpool {
+                filament_id: Some(filament_id.get()),
+                registered: registered_val,
+                archived: Some(archived.get()),
                 initial_weight: initial_weight.get().parse::<f32>().ok(),
                 current_weight: current_weight.get().parse::<f32>().ok(),
                 net_weight: net_weight.get().parse::<f32>().ok(),
@@ -1537,6 +1556,18 @@ pub fn SpoolEdit() -> impl IntoView {
             }).filter(|s| !s.is_empty()).unwrap_or_else(|| "Edit Spool".to_string())}</h1>
             {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
             <form on:submit=on_submit>
+                {move || initial_weight_unset.get().then(|| view! {
+                    <label>
+                        "Initial weight (g)"
+                        <input type="number" step="0.1"
+                            prop:value=move || initial_weight.get()
+                            on:input=move |ev| {
+                                let v = event_target_value(&ev);
+                                current_weight.set(v.clone());
+                                initial_weight.set(v);
+                            } />
+                    </label>
+                })}
                 <label>
                     "Current weight (g)"
                     <input type="number" step="0.1"
@@ -1589,16 +1620,35 @@ pub fn SpoolEdit() -> impl IntoView {
                     "ID"
                     <input type="text" readonly=true prop:value=move || id().to_string() />
                 </label>
-                {move || initial_weight_editable.get().then(|| view! {
+                <label>
+                    "Filament"
+                    <Suspense fallback=|| view! { <select /> }>
+                        <select
+                            prop:value=move || filament_id.get().to_string()
+                            on:change=move |ev| {
+                                if let Ok(v) = event_target_value(&ev).parse::<u32>() {
+                                    filament_id.set(v);
+                                }
+                            }
+                        >
+                            {move || filaments.get().and_then(|r| r.ok()).map(|fs| {
+                                let cur = filament_id.get();
+                                fs.into_iter().map(|f| {
+                                    let fid = f.id;
+                                    view! {
+                                        <option value=fid.to_string() selected=cur == fid>{f.display_name()}</option>
+                                    }
+                                }).collect_view()
+                            })}
+                        </select>
+                    </Suspense>
+                </label>
+                {move || (!initial_weight_unset.get()).then(|| view! {
                     <label>
                         "Initial weight (g)"
                         <input type="number" step="0.1"
                             prop:value=move || initial_weight.get()
-                            on:input=move |ev| {
-                                let v = event_target_value(&ev);
-                                current_weight.set(v.clone());
-                                initial_weight.set(v);
-                            } />
+                            on:input=move |ev| initial_weight.set(event_target_value(&ev)) />
                     </label>
                 })}
                 <label>
@@ -1630,8 +1680,20 @@ pub fn SpoolEdit() -> impl IntoView {
                         prop:value=move || first_used.get()
                         on:input=move |ev| first_used.set(event_target_value(&ev)) />
                 </label>
+                <label>
+                    "Registered"
+                    <input type="datetime-local"
+                        prop:value=move || registered.get()
+                        on:input=move |ev| registered.set(event_target_value(&ev)) />
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox"
+                        prop:checked=move || archived.get()
+                        on:change=move |ev| archived.set(event_target_checked(&ev)) />
+                    "Archived"
+                </label>
                 </details>
-                <button type="submit" class="btn btn-primary " disabled=move || location_id.get().is_none()>"Save"</button>
+                <button type="submit" class="btn btn-primary " disabled=move || location_id.get().is_none() && !archived.get()>"Save"</button>
                 <a href=move || format!("/spools/{}", id()) class="btn ">"Cancel"</a>
             </form>
         </div>

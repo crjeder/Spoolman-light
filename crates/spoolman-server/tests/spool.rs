@@ -165,6 +165,58 @@ async fn update_spool_explicit_last_used_wins_over_weight_change() {
 }
 
 #[tokio::test]
+async fn update_spool_advanced_fields() {
+    let (app, _dir) = common::make_app();
+    let fid = create_filament(&app).await;
+    let fid2 = create_filament(&app).await;
+    let lid = common::create_location(&app).await;
+    let (_, created) =
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
+    let sid = created["id"].as_u64().unwrap();
+
+    let (status, body) = common::request(
+        &app,
+        Method::PATCH,
+        &format!("/api/v1/spool/{sid}"),
+        Some(json!({
+            "filament_id": fid2,
+            "initial_weight": 1200.0,
+            "registered": "2021-03-04T10:20:00Z"
+        })),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    assert_eq!(body["filament_id"].as_u64().unwrap(), fid2);
+    assert_eq!(body["filament"]["id"].as_u64().unwrap(), fid2);
+    assert!((body["initial_weight"].as_f64().unwrap() - 1200.0).abs() < 0.01);
+    assert!((body["current_weight"].as_f64().unwrap() - 1000.0).abs() < 0.01);
+    assert!(body["registered"].as_str().unwrap().starts_with("2021-03-04T10:20"));
+}
+
+#[tokio::test]
+async fn update_spool_unknown_filament_returns_422() {
+    let (app, _dir) = common::make_app();
+    let fid = create_filament(&app).await;
+    let lid = common::create_location(&app).await;
+    let (_, created) =
+        common::request(&app, Method::POST, "/api/v1/spool", Some(spool_body(fid, lid))).await;
+    let sid = created["id"].as_u64().unwrap();
+
+    let (status, _) = common::request(
+        &app,
+        Method::PATCH,
+        &format!("/api/v1/spool/{sid}"),
+        Some(json!({ "filament_id": 999999, "comment": "x" })),
+    )
+    .await;
+    assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
+    let (_, body) =
+        common::request(&app, Method::GET, &format!("/api/v1/spool/{sid}"), None).await;
+    assert_eq!(body["filament_id"].as_u64().unwrap(), fid);
+    assert!(body["comment"].is_null());
+}
+
+#[tokio::test]
 async fn clone_spool_returns_201_with_different_id() {
     let (app, _dir) = common::make_app();
     let fid = create_filament(&app).await;

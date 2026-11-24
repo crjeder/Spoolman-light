@@ -16,6 +16,7 @@ Archived 2026-09-22 with their manual verification steps still open:
 
 ## Enhancements
 - [ ] minimum weigth left search
+- [~] spool edit: all fields editable under Advanced (openspec: spool-advanced-edit-all-fields). New Playwright test `advanced registered date is saved` in `spools.spec.ts` not yet run; run `scripts/run-e2e.sh` in WSL and eyeball the filament select / archived checkbox.
 - [~] spool table: group by location — sorting by Location shows collapsed per-location rows (`+ Box 3: 7 entries`) that expand on click, with active filter values in the group row; shipped in 2.2.0 (openspec: spools-location-grouping). Playwright tests in `spool-location-grouping.spec.ts` not yet run; run `scripts/run-e2e.sh` in WSL.
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
 - [x] filament create/edit + spool create: SpoolmanDB lookup — fetch https://donkie.github.io/SpoolmanDB/filaments.json, cache in localStorage (24h TTL + ETag), client-side search, auto-fill filament fields; in spool create auto-create missing filament and notify user
@@ -49,7 +50,7 @@ Archived 2026-09-22 with their manual verification steps still open:
 - [x] color picker: add hex code input — `#rrggbb` text field beside the swatch in spool create/edit, synced to the color signal
 - [x] repair icons in README
 - [x] color swatches: issues: page 2 of 1 when filter changes. filters from spool are applied but should not — Pagination clamps `page` to the last valid page when a filter shrinks the result set (fixes all three table/grid views); location and color-distance filters (table-only controls, no UI in the swatch view) no longer restrict or re-sort the color grid
-- [~] filters leaked between Spools and Color tabs (material filter from Color shown in grouped Spools) — all `filter.*` sessionStorage keys cleared on any menu click; shipped in 2.2.1 (openspec: reset-spool-filters-on-navigation). Playwright tests in `filter-reset-on-nav.spec.ts` not yet run; run `scripts/run-e2e.sh` in WSL.
+- [~] filters leaked between Spools and Color tabs (material filter from Color shown in grouped Spools) — all `filter.*` sessionStorage keys cleared on any menu click; shipped in 3.0.1 (openspec: reset-spool-filters-on-navigation). Playwright tests in `filter-reset-on-nav.spec.ts` not yet run; run `scripts/run-e2e.sh` in WSL.
 - [x] color view: move the star into description field
 - [x] delete spool only works in spool overview
 - [x] means to archive spools 

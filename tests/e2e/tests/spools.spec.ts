@@ -89,6 +89,17 @@ test.describe('Spools', () => {
       await expect(page.getByLabel('Price')).toBeVisible();
     });
 
+    test('advanced registered date is saved', async ({ page, request }) => {
+      const id = await openEditWithLocation(page, request);
+      await page.locator('details.advanced > summary').click();
+      await page.getByLabel('Registered').fill('2021-03-04T10:20');
+      await page.getByRole('button', { name: 'Save' }).click();
+      await page.waitForURL('**/spools');
+
+      const spool = await (await request.get(`/api/v1/spool/${id}`)).json();
+      expect(spool.registered.slice(0, 16)).toBe('2021-03-04T10:20');
+    });
+
     test('manually chosen last used is kept',async ({ page, request }) => {
       const id = await openEditWithLocation(page, request);
       await page.getByLabel('Last used').fill('2020-02-02');

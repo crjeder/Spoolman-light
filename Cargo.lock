@@ -2551,7 +2551,7 @@ dependencies = [
 
 [[package]]
 name = "spoolman-client"
-version = "2.2.0"
+version = "2.2.1"
 dependencies = [
  "chrono",
  "console_error_panic_hook",
@@ -2572,7 +2572,7 @@ dependencies = [
 
 [[package]]
 name = "spoolman-server"
-version = "2.2.0"
+version = "2.2.1"
 dependencies = [
  "axum",
  "chrono",
@@ -2594,7 +2594,7 @@ dependencies = [
 
 [[package]]
 name = "spoolman-types"
-version = "2.2.0"
+version = "2.2.1"
 dependencies = [
  "chrono",
  "serde",

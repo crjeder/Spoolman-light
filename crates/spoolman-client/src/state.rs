@@ -238,6 +238,20 @@ pub fn session_get(key: &str) -> Option<String> {
         .and_then(|s| s.get_item(key).ok().flatten())
 }
 
+/// Remove every persisted list filter (`filter.*` keys) from `sessionStorage`.
+pub fn clear_session_filters() {
+    let Some(storage) = window().and_then(|w| w.session_storage().ok().flatten()) else {
+        return;
+    };
+    let keys: Vec<String> = (0..storage.length().unwrap_or(0))
+        .filter_map(|i| storage.key(i).ok().flatten())
+        .filter(|k| k.starts_with("filter."))
+        .collect();
+    for k in keys {
+        let _ = storage.remove_item(&k);
+    }
+}
+
 /// Write a value to `sessionStorage`. A no-op if storage is unavailable.
 /// Callers store a filter's default value to represent "cleared".
 pub fn session_set(key: &str, value: &str) {

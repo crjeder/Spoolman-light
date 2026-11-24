@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2026-11-24
+
+### Fixed
+- List filters now reset when switching menu item or tab. Previously the Color tab's material filter leaked into the Spools tab (including the location-grouped view). Filters still persist across reloads and detail-page round trips.
+
 ## [2.2.0] - 2026-11-16
 
 ### Added

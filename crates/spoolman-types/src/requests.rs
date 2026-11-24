@@ -58,16 +58,17 @@ pub struct CreateSpool {
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct UpdateSpool {
+    pub filament_id: Option<u32>,
     pub colors: Option<Vec<Rgba>>,
     pub color_name: Option<String>,
     pub swatch_image: Option<String>,
     pub finish: Option<SurfaceFinish>,
     pub location_id: Option<u32>,
-    /// Only applied when the spool's current initial_weight is 0 (i.e. not yet set).
     pub initial_weight: Option<f32>,
     pub current_weight: Option<f32>,
     pub net_weight: Option<f32>,
     pub price: Option<f32>,
+    pub registered: Option<DateTime<Utc>>,
     pub first_used: Option<DateTime<Utc>>,
     pub last_used: Option<DateTime<Utc>>,
     pub comment: Option<String>,

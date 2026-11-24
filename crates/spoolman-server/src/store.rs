@@ -459,6 +459,11 @@ impl JsonStore {
                 return Err(StoreError::Validation("location_id does not exist".into()));
             }
         }
+        if let Some(fid) = req.filament_id {
+            if !store.filaments.iter().any(|f| f.id == fid) {
+                return Err(StoreError::Validation("filament_id does not exist".into()));
+            }
+        }
         if req.colors.as_ref().is_some_and(|c| c.len() > 4) {
             return Err(StoreError::Validation("a spool may have at most 4 colors".into()));
         }
@@ -469,6 +474,12 @@ impl JsonStore {
             .ok_or(StoreError::NotFound)?;
 
         let weight_changed = req.current_weight.is_some_and(|w| w != spool.current_weight);
+        if let Some(fid) = req.filament_id {
+            spool.filament_id = fid;
+        }
+        if let Some(r) = req.registered {
+            spool.registered = r;
+        }
         if let Some(colors) = req.colors {
             spool.colors = colors;
         }
@@ -479,9 +490,7 @@ impl JsonStore {
         }
         apply_option_nullable_u32(&mut spool.location_id, req.location_id);
         if let Some(w) = req.initial_weight {
-            if spool.initial_weight == 0.0 {
-                spool.initial_weight = w;
-            }
+            spool.initial_weight = w;
         }
         if let Some(w) = req.current_weight {
             spool.current_weight = w;

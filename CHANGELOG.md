@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-11-24
+
+### Added
+- Spool edit: the Advanced section now lets you change every spool field except the ID, including the filament, registered date/time and archived flag.
+
+### Changed
+- Spool edit: initial weight is shown above current weight only while it is unset (0); once set it can be corrected under Advanced without touching the current weight.
+- **Breaking:** API `PATCH /api/v1/spool/<id>` accepts `filament_id` (must exist) and `registered`, and now always applies `initial_weight` (it used to be ignored unless the stored value was 0).
+
 ## [2.2.0] - 2026-11-16
 
 ### Added

@@ -16,6 +16,7 @@ Archived 2026-09-22 with their manual verification steps still open:
 
 ## Enhancements
 - [ ] minimum weigth left search
+- [~] spool edit: all fields editable under Advanced (openspec: spool-advanced-edit-all-fields). New Playwright test `advanced registered date is saved` in `spools.spec.ts` not yet run; run `scripts/run-e2e.sh` in WSL and eyeball the filament select / archived checkbox.
 - [~] spool table: group by location — sorting by Location shows collapsed per-location rows (`+ Box 3: 7 entries`) that expand on click, with active filter values in the group row; shipped in 2.2.0 (openspec: spools-location-grouping). Playwright tests in `spool-location-grouping.spec.ts` not yet run; run `scripts/run-e2e.sh` in WSL.
 - [ ] NFC / QR sticker integration — [OpenSpoolMan](https://github.com/drndos/openspoolman) or [OpenTag3D](https://opentag3d.com/) compatible; spool NFC URL already maps to `/api/v1/spool/<id>`
 - [x] filament create/edit + spool create: SpoolmanDB lookup — fetch https://donkie.github.io/SpoolmanDB/filaments.json, cache in localStorage (24h TTL + ETag), client-side search, auto-fill filament fields; in spool create auto-create missing filament and notify user
